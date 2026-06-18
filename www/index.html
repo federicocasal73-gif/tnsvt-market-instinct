@@ -262,6 +262,10 @@ body{position:relative}
 .action-short:hover{background:linear-gradient(135deg,rgba(248,113,113,.3),rgba(248,113,113,.15));border-color:var(--red);box-shadow:0 0 20px rgba(248,113,113,.2)}
 .action-skip{background:var(--panel2);color:var(--text3);border:1.5px solid var(--border)}
 .action-skip:hover{border-color:var(--text2);color:var(--text2)}
+.lev-btn{padding:3px 5px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:9px;font-weight:700;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .15s;flex:1;text-align:center}
+.lev-btn:hover{border-color:var(--violet);color:var(--violet)}
+.lev-btn.lev-active{background:rgba(168,160,200,.15);border-color:var(--violet);color:var(--violet);box-shadow:0 0 8px rgba(168,160,200,.15)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--violet);cursor:pointer;border:2px solid var(--bg)}
 
 /* ASSET SELECTOR */
 .asset-pills{display:flex;gap:6px;overflow-x:auto;padding:0 16px;scrollbar-width:none}
@@ -1221,6 +1225,9 @@ body{position:relative}
           <div style="font-size:8px;color:var(--text3);letter-spacing:1.5px">WALLET</div>
           <div id="torneoWalletBalance" style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--green)">$0.00</div>
         </div>
+        <div id="admin-torneo-btn" style="display:none;text-align:center">
+          <button onclick="goScreen('s-admin-torneos')" style="padding:4px 8px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:16px;cursor:pointer;line-height:1" title="Admin Torneos">⚙️</button>
+        </div>
       </div>
       <div id="torneosNotAuth" style="display:none;margin-top:8px;padding:8px 10px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:6px;font-size:11px;color:#fca5a5">⚠ No estás conectado a TNSVT. Configurá tu código en <b>Perfil → Sync TNSVT</b> para inscribirte.</div>
     </div>
@@ -1245,41 +1252,229 @@ body{position:relative}
     </div>
 
     <div style="padding:12px 16px 20px;border-top:1px solid var(--border);margin-top:6px;background:rgba(168,160,200,.04)">
-      <button class="btn btn-secondary btn-lg" style="width:100%;margin-bottom:4px" onclick="startTorneo()">🎮 Modo Práctica (sin premios)</button>
-      <div style="text-align:center;font-size:10px;color:var(--text3);margin-top:4px">Práctica libre · +200 XP · No afecta tu wallet</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <div style="flex:1">
+          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;margin-bottom:3px">TIER</div>
+          <select id="practice-tier" style="width:100%;padding:5px 6px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:10px;font-family:inherit">
+            <option value="free">🆓 Gratuito ($0|$25k|5x)</option>
+            <option value="beginner">🟢 Principiante ($5|$50k|10x)</option>
+            <option value="intermediate">🔵 Intermedio ($25|$100k|25x)</option>
+            <option value="pro">🟣 Pro ($100|$250k|50x)</option>
+            <option value="elite">🔴 Elite ($500|$1M|100x)</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:8px;color:var(--text3);letter-spacing:1px;margin-bottom:3px">FORMATO</div>
+          <select id="practice-format" style="width:100%;padding:5px 6px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:10px;font-family:inherit">
+            <option value="classic">🏆 Clásico</option>
+            <option value="survival">🛡️ Supervivencia</option>
+            <option value="knockout">⚔️ Eliminatorio</option>
+            <option value="consistency">📊 Consistencia</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-lg" style="width:100%;margin-bottom:4px" onclick="startTorneo()">🎮 Iniciar Práctica</button>
+      <div style="text-align:center;font-size:10px;color:var(--text3);margin-top:4px">Práctica libre · +200 XP base · No afecta tu wallet</div>
     </div>
   </div>
 
   <!-- TORNEO GAME -->
   <div id="torneo-game" style="display:none;flex-direction:column">
-    <div class="game-hud">
-      <div class="hud-item">
-        <div class="hud-val gold" id="tr-score">0</div>
-        <div class="hud-lbl">Score</div>
+    <!-- Portfolio HUD -->
+    <div class="game-hud" style="flex-wrap:wrap;gap:4px 8px;padding:6px 12px">
+      <div class="hud-item" style="flex:1;min-width:100px">
+        <div class="hud-val" id="tr-portfolio" style="font-size:15px;color:var(--gold)">$50,000</div>
+        <div class="hud-lbl">Portfolio</div>
+      </div>
+      <div class="hud-item" style="flex:1;min-width:80px">
+        <div class="hud-val" id="tr-pnl" style="font-size:13px;color:var(--green)">+$0.00</div>
+        <div class="hud-lbl" id="tr-pnl-pct">+0.00%</div>
       </div>
       <div class="hud-item">
-        <div class="hud-val" id="tr-round">1/10</div>
+        <div class="hud-val" id="tr-round" style="font-size:13px">1/10</div>
         <div class="hud-lbl">Ronda</div>
       </div>
       <div class="hud-item">
-        <div class="hud-val" id="tr-timer">20</div>
+        <div class="hud-val" id="tr-timer" style="font-size:13px">20</div>
         <div class="hud-lbl">Seg</div>
       </div>
-      <div class="hud-item">
-        <div class="hud-val" id="tr-pos">—</div>
-        <div class="hud-lbl">Posición</div>
+      <div class="hud-item" style="display:none" id="tr-tier-badge">
+        <div class="hud-val" style="font-size:11px">🆓 Gratuito</div>
+        <div class="hud-lbl">Tier</div>
+      </div>
+      <div class="hud-item" style="display:none" id="tr-format-badge">
+        <div class="hud-val" style="font-size:11px">🏆 Clásico</div>
+        <div class="hud-lbl">Formato</div>
+      </div>
+      <div class="hud-item" style="display:none" id="tr-stage-badge">
+        <div class="hud-val" id="tr-stage-label" style="font-size:11px;color:var(--violet)">Clasificación</div>
+        <div class="hud-lbl" id="tr-stage-round">Ronda 1/12</div>
+      </div>
+      <div class="hud-item" id="tr-jackpot-badge">
+        <div class="hud-val" style="font-size:11px;color:var(--gold)" id="tr-jackpot-display">$0</div>
+        <div class="hud-lbl">Jackpot</div>
       </div>
     </div>
-    <div style="padding:0 16px 8px;margin-top:8px">
+    <!-- Position info bar -->
+    <div id="tr-position-bar" style="display:none;padding:4px 12px;background:rgba(168,160,200,.06);border-bottom:1px solid var(--border);font-size:11px;font-family:'JetBrains Mono',monospace;justify-content:space-between">
+      <span id="tr-pos-detail">—</span>
+      <span id="tr-pos-upnl" style="font-weight:700">$0.00</span>
+    </div>
+    <!-- News banner -->
+    <div id="tr-news-banner" style="display:none;padding:4px 12px;background:rgba(255,200,50,.08);border-bottom:1px solid rgba(255,200,50,.2);font-size:10px;color:var(--gold);font-family:'JetBrains Mono',monospace;align-items:center;gap:6px">
+      <span>📰</span><span id="tr-news-text"></span>
+    </div>
+    <!-- Chart -->
+    <div style="padding:0 12px 4px;margin-top:4px">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-        <canvas id="torneo-chart" height="230"></canvas>
+        <div style="padding:4px 10px 0;display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">
+          <span id="tr-asset-name">BTC/USDT</span>
+          <span id="tr-current-price">—</span>
+        </div>
+        <canvas id="torneo-chart" height="200"></canvas>
       </div>
     </div>
-    <div class="action-row">
-      <button class="action-btn action-long" onclick="torneoPlay('long')">▲ LONG</button>
-      <button class="action-btn action-skip" onclick="torneoPlay('skip')" style="flex:.6">—</button>
-      <button class="action-btn action-short" onclick="torneoPlay('short')">▼ SHORT</button>
+    <!-- Trade Panel -->
+    <div id="tr-trade-panel" style="padding:4px 12px 8px;flex:1;display:flex;flex-direction:column;gap:6px">
+      <!-- Size & Leverage row -->
+      <div style="display:flex;gap:6px;align-items:center">
+        <div style="flex:1">
+          <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">TAMAÑO</div>
+          <input type="range" id="tr-size" min="10" max="100" step="10" value="50" style="width:100%;accent-color:var(--violet);height:4px">
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:-2px">
+            <span>10%</span><span id="tr-size-label" style="color:var(--violet);font-weight:700">50%</span><span>100%</span>
+          </div>
+        </div>
+        <div style="width:80px">
+          <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">APALANC.</div>
+          <div style="display:flex;gap:2px">
+            <button class="lev-btn" data-lev="1" onclick="torneoSetLev(1)">1x</button>
+            <button class="lev-btn" data-lev="2" onclick="torneoSetLev(2)">2x</button>
+            <button class="lev-btn lev-active" data-lev="5" onclick="torneoSetLev(5)">5x</button>
+            <button class="lev-btn" data-lev="10" onclick="torneoSetLev(10)">10x</button>
+            <button class="lev-btn" data-lev="25" onclick="torneoSetLev(25)">25x</button>
+          </div>
+        </div>
+      </div>
+      <!-- SL / TP row -->
+      <div style="display:flex;gap:6px">
+        <div style="flex:1">
+          <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">STOP LOSS</div>
+          <input type="text" id="tr-sl" placeholder="—" style="width:100%;padding:4px 6px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--red);font-size:11px;font-family:'JetBrains Mono',monospace">
+        </div>
+        <div style="flex:1">
+          <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">TAKE PROFIT</div>
+          <input type="text" id="tr-tp" placeholder="—" style="width:100%;padding:4px 6px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--green);font-size:11px;font-family:'JetBrains Mono',monospace">
+        </div>
+      </div>
+      <!-- Bounty row -->
+      <div style="display:flex;gap:6px;align-items:center;padding:2px 0">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px">🎯 BOUNTY</div>
+        <select id="tr-bounty-target" style="flex:1;padding:3px 4px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:10px">
+          <option value="">Sin bounty</option>
+        </select>
+        <div style="display:flex;gap:2px">
+          <button class="bounty-amt" onclick="setBounty(5)" style="padding:2px 6px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:9px;cursor:pointer">$5</button>
+          <button class="bounty-amt" onclick="setBounty(25)" style="padding:2px 6px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:9px;cursor:pointer">$25</button>
+          <button class="bounty-amt" onclick="setBounty(100)" style="padding:2px 6px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:9px;cursor:pointer">$100</button>
+        </div>
+      </div>
+      <!-- Leaderboard toggle -->
+      <div style="display:flex;justify-content:flex-end">
+        <button onclick="toggleLeaderboard()" style="padding:2px 8px;background:rgba(168,160,200,.06);border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:9px;cursor:pointer">📊 LB</button>
+      </div>
+      <!-- Direction buttons -->
+      <div style="display:flex;gap:6px;margin-top:2px">
+        <button class="action-btn action-long" onclick="torneoPlay('long')" style="padding:10px;font-size:13px">▲ LONG</button>
+        <button class="action-btn action-skip" onclick="torneoPlay('skip')" style="flex:.4;padding:10px;font-size:13px">⏭</button>
+        <button class="action-btn action-short" onclick="torneoPlay('short')" style="padding:10px;font-size:13px">▼ SHORT</button>
+      </div>
     </div>
+    <!-- Leaderboard panel (hidden by default) -->
+    <div id="tr-leaderboard" style="display:none;padding:4px 12px 8px;border-top:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:1px">📊 LEADERBOARD</div>
+        <button onclick="toggleLeaderboard()" style="padding:1px 6px;background:0;border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:8px;cursor:pointer">✕</button>
+      </div>
+      <div id="tr-lb-body"></div>
+    </div>
+    <!-- Waiting state (shown after trade placed) -->
+    <div id="tr-waiting" style="display:none;flex:1;align-items:center;justify-content:center;padding:24px;text-align:center">
+      <div>
+        <div style="font-size:32px;margin-bottom:8px" id="tr-result-emoji">⏳</div>
+        <div style="font-size:14px;color:var(--text);font-weight:600" id="tr-result-text">Esperando resultado...</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px" id="tr-result-detail"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SCREEN: ADMIN TORNEOS ======================== -->
+<div class="screen" id="s-admin-torneos">
+  <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
+    <button onclick="goScreen('s-torneos')" style="padding:4px 8px;background:var(--panel);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;font-size:14px">←</button>
+    <div style="flex:1">
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px">ADMIN</div>
+      <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700">Crear Torneo</div>
+    </div>
+  </div>
+  <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+    <div>
+      <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">NOMBRE *</div>
+      <input id="admin-t-name" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px" placeholder="Ej: Torneo Mensual Julio">
+    </div>
+    <div>
+      <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">DESCRIPCIÓN</div>
+      <textarea id="admin-t-desc" rows="2" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;resize:none;font-family:inherit" placeholder="Opcional"></textarea>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div style="flex:1">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">ENTRY FEE (USD) *</div>
+        <input id="admin-t-fee" type="number" min="0" step="0.01" value="5" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px">
+      </div>
+      <div style="flex:1">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">DURACIÓN (DÍAS) *</div>
+        <input id="admin-t-days" type="number" min="1" max="365" value="7" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div style="flex:1">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">TIER</div>
+        <select id="admin-t-tier" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px">
+          <option value="free">🆓 Gratuito</option>
+          <option value="beginner">🟢 Principiante</option>
+          <option value="intermediate">🔵 Intermedio</option>
+          <option value="pro" selected>🟣 Pro</option>
+          <option value="elite">🔴 Elite</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">FORMATO</div>
+        <select id="admin-t-format" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px">
+          <option value="classic">🏆 Clásico</option>
+          <option value="survival">🛡️ Supervivencia</option>
+          <option value="knockout">⚔️ Eliminatorio</option>
+          <option value="consistency">📊 Consistencia</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div style="flex:1">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">JUGADORES MÁX</div>
+        <input id="admin-t-max" type="number" min="2" max="1000" value="100" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px">
+      </div>
+      <div style="flex:1">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:3px">DIST. PREMIOS</div>
+        <input id="admin-t-dist" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px" value="60,30,10" placeholder="60,30,10">
+      </div>
+      <div style="flex:1;display:flex;align-items:flex-end;padding-bottom:4px">
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);cursor:pointer">
+          <input type="checkbox" id="admin-t-start" checked> Iniciar ya
+        </label>
+      </div>
+    </div>
+    <button onclick="adminCreateTorneo()" style="margin-top:6px;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);border:0;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">🚀 CREAR TORNEO</button>
+    <div id="admin-t-result" style="font-size:11px;text-align:center;padding:6px;color:var(--text3)"></div>
   </div>
 </div>
 
@@ -1986,6 +2181,11 @@ const STATE = {
   shopOwned: new Set(['a1']),
   missionsCompleted: new Set(),
 };
+// Carga XP guardada
+try { const saved=localStorage.getItem('tnsvt_xp'); if(saved) STATE.xp=Number(saved)||2340; } catch(e){}
+// Carga items comprados
+try { const s=localStorage.getItem('tnsvt_shop'); if(s){ JSON.parse(s).forEach(id=>STATE.shopOwned.add(id)); } } catch(e){}
+try { const e=localStorage.getItem('tnsvt_equipped'); if(e){ Object.assign(EQUIPPED,JSON.parse(e)); } } catch(e){}
 // Carga estado VIP desde localStorage (debe ir DESPUES de STATE)
 loadVipState();
 
@@ -2025,7 +2225,7 @@ async function fetchPrices(){
   // ── CoinGecko: cripto en tiempo real con 24h data ──
   try{
     const ids='bitcoin,ethereum,solana,binancecoin,ripple';
-    const r=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true&include_last_updated_at=true`,{signal:AbortSignal.timeout(7000)});
+    const r=await tnsvtFetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true&include_last_updated_at=true`,{signal:AbortSignal.timeout(7000)});
     if(!r.ok) throw new Error('CG error');
     const d=await r.json();
     STATE.prevPrices={...STATE.prices};
@@ -2059,7 +2259,7 @@ async function fetch24hCandles(sym){
   const id = CG[sym];
   if(id){
     try{
-      const r = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1`,{signal:AbortSignal.timeout(8000)});
+      const r = await tnsvtFetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1`,{signal:AbortSignal.timeout(8000)});
       if(!r.ok) throw new Error('CG 24h error');
       const d = await r.json();
       // d.prices = [[ts, price], ...]
@@ -2238,7 +2438,7 @@ function goScreen(id){
   if(id==='s-arena') initArena();
   if(id==='s-fractal'){ document.getElementById('fractal-lobby').style.display='block'; document.getElementById('fractal-game').style.display='none'; }
   if(id==='s-glosario') initGlosario();
-  if(id==='s-torneos') { document.getElementById('torneo-lobby').style.display='';document.getElementById('torneo-game').style.display='none'; if(typeof loadActiveTorneos==='function') loadActiveTorneos(); }
+  if(id==='s-torneos') { document.getElementById('torneo-lobby').style.display='';document.getElementById('torneo-game').style.display='none'; if(typeof loadActiveTorneos==='function') loadActiveTorneos(); const abtn=document.getElementById('admin-torneo-btn'); if(abtn) abtn.style.display=(TNSVT_CONFIG.enabled&&TNSVT_CONFIG.adminPassword)?'flex':'none'; }
 }
 
 // VIP-gated wrapper. Use for screens that require VIP.
@@ -3051,21 +3251,182 @@ function histPlay(action){
 }
 
 // ============================================================
-// TORNEO
+// TORNEO — Portfolio-based trading
 // ============================================================
 let torneoCandles=[];
 let torneoTimerInt=null;
 let torneoWaited=false;
-let torneoState={score:0,round:1,positions:[1247,1196,1087,923,874,756,645,534,423,312,201,145,88,43,21,12,7,5,3,1]};
+let torneoLev=5;
 let currentTorneo=null;
+let torneoState={
+  portfolio:50000, peakPortfolio:50000, round:1, totalRounds:12,
+  trades:[], position:null, eliminated:false, drawdownPct:0
+};
+
+function torneoSetLev(lev){
+  torneoLev=lev;
+  document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===lev));
+}
+
+function torneoUpdateHUD(){
+  const s=torneoState;
+  const startingEq=getStageEquity(s.stage,s.tier);
+  const pnl=s.portfolio-startingEq;
+  const pnlPct=startingEq>0?(pnl/startingEq*100):0;
+  document.getElementById('tr-portfolio').textContent='$'+s.portfolio.toFixed(2);
+  const pnlEl=document.getElementById('tr-pnl');
+  pnlEl.textContent=(pnl>=0?'+':'')+'$'+pnl.toFixed(2);
+  pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
+  document.getElementById('tr-pnl-pct').textContent=(pnlPct>=0?'+':'')+pnlPct.toFixed(2)+'%';
+  document.getElementById('tr-round').textContent=s.round+'/'+s.totalRounds;
+  document.getElementById('tr-size-label').textContent=document.getElementById('tr-size').value+'%';
+  // Position bar
+  const posBar=document.getElementById('tr-position-bar');
+  if(s.position){
+    posBar.style.display='flex';
+    const p=s.position;
+    const entryPx=p.entryPrice.toFixed(p.entryPrice<1?4:2);
+    const dirIcon=p.direction==='long'?'▲':'▼';
+    const dirColor=p.direction==='long'?'var(--green)':'var(--red)';
+    document.getElementById('tr-pos-detail').innerHTML=`${dirIcon} <span style="color:${dirColor}">${p.direction.toUpperCase()}</span> ${p.asset} ${p.size}% · ${entryPx} · ${p.leverage}x`;
+    // Calculate unrealized PnL
+    const lastCandle=torneoCandles[torneoCandles.length-1];
+    if(lastCandle){
+      const exitPx=lastCandle.c;
+      const rawPct=(exitPx-p.entryPrice)/p.entryPrice;
+      const dir=p.direction==='long'?1:-1;
+      const posPct=rawPct*dir*p.leverage*(p.size/100)*100;
+      const uPnl=s.portfolio*posPct/100;
+      document.getElementById('tr-pos-upnl').textContent=(uPnl>=0?'+':'')+'$'+uPnl.toFixed(2);
+      document.getElementById('tr-pos-upnl').style.color=uPnl>=0?'var(--green)':'var(--red)';
+    }
+  } else {
+    posBar.style.display='none';
+  }
+}
+
+const TORNADO_TIERS={
+  free:{label:'Gratuito',entryFee:0,startingEquity:25000,startingLev:5,minLev:1,maxLev:5,icon:'🆓'},
+  beginner:{label:'Principiante',entryFee:5,startingEquity:50000,startingLev:5,minLev:1,maxLev:10,icon:'🟢'},
+  intermediate:{label:'Intermedio',entryFee:25,startingEquity:100000,startingLev:10,minLev:1,maxLev:25,icon:'🔵'},
+  pro:{label:'Pro',entryFee:100,startingEquity:250000,startingLev:10,minLev:1,maxLev:50,icon:'🟣'},
+  elite:{label:'Elite',entryFee:500,startingEquity:1000000,startingLev:25,minLev:1,maxLev:100,icon:'🔴'}
+};
+const TORNADO_FORMATS={
+  classic:{label:'Clásico',desc:'Mayor PnL gana',icon:'🏆'},
+  survival:{label:'Supervivencia',desc:'Drawdown mata',icon:'🛡️'},
+  knockout:{label:'Eliminatorio',desc:'Vs AI cada ronda',icon:'⚔️'},
+  consistency:{label:'Consistencia',desc:'Score Sharpe',icon:'📊'}
+};
+const STAGE_LABELS={qualifying:'Clasificación',semifinal:'Semifinal',final:'Final'};
+
+function getTier(t){return TORNADO_TIERS[t]||TORNADO_TIERS.free;}
+function getFormat(f){return TORNADO_FORMATS[f]||TORNADO_FORMATS.classic;}
+
+// ==== PHASE 3: News Events, Jackpot, Bounty, Leaderboard ====
+const NEWS_EVENTS=[
+  {headline:'Fed recorta tasas 25pb',impact:'bullish',volMul:1.3},
+  {headline:'Inflación baja más de lo esperado',impact:'bullish',volMul:1.2},
+  {headline:'Rumbo a recesión — PIB negativo',impact:'bearish',volMul:1.4},
+  {headline:'Guerra comercial escala aranceles',impact:'bearish',volMul:1.5},
+  {headline:'BTC ETF rompe récord de inflows',impact:'bullish',volMul:1.6},
+  {headline:'China inyecta liquidez por $50B',impact:'bullish',volMul:1.2},
+  {headline:'Petróleo sube por tensión geopolítica',impact:'bearish',volMul:1.3},
+  {headline:'Rally de fin de año impulsa mercados',impact:'bullish',volMul:1.1},
+  {headline:'Temporada de earnings supera expectativas',impact:'bullish',volMul:1.2},
+  {headline:'Banco central sube tasas inesperadamente',impact:'bearish',volMul:1.5},
+  {headline:'Índice de confianza del consumidor colapsa',impact:'bearish',volMul:1.3},
+  {headline:'Cripto adopción masiva — nuevo récord',impact:'bullish',volMul:1.7},
+  {headline:'Volatilidad extrema por vencimiento de opciones',impact:'volatile',volMul:2.0},
+  {headline:'Estabilidad — mercados laterales',impact:'neutral',volMul:0.7},
+  {headline:'Acuerdo comercial UE-EEUU impulsa exportaciones',impact:'bullish',volMul:1.2},
+  {headline:'Default soberano sacude mercados emergentes',impact:'bearish',volMul:1.6},
+];
+function getRandomNews(){const n=NEWS_EVENTS[Math.floor(Math.random()*NEWS_EVENTS.length)];return{...n,round:0};}
+
+// Progressive jackpot — shared global
+let globalJackpot=0;
+const JACKPOT_FEE_PCT=0.05; // 5% of entry fee goes to jackpot
+const JACKPOT_WIN_PNL=80; // requiere +80% PnL mínimo
+
+// Bounty system
+let currentBounty=null;
+const BOUNTY_AI_NAMES=['TraderPro','CryptoKing','BullRider','MoonShot','AlphaWhale','Satoshi','DiamondHands','Python','QuantMaster','LamboTrader'];
+
+// Live leaderboard — AI competitors
+let lbCompetitors=[];
+
+// ==== Leaderboard helpers ====
+function generateCompetitors(count){
+  const names=BOUNTY_AI_NAMES.slice();
+  lbCompetitors=[];
+  for(let i=0;i<count&&names.length;i++){
+    const ni=Math.floor(Math.random()*names.length);
+    lbCompetitors.push({name:names.splice(ni,1)[0],pnlPct:0,startEquity:50000,portfolio:50000,eliminated:false,color:['var(--gold)','var(--green)','var(--red)','var(--violet)','var(--orange)','var(--cyan)'][i%6]});
+  }
+}
+function updateCompetitors(roundResult){
+  lbCompetitors.forEach(c=>{
+    if(c.eliminated)return;
+    const r=(Math.random()*12-5)*(roundResult>0?1:-1)*(0.5+Math.random());
+    c.portfolio+=c.startEquity*(r/100);
+    c.pnlPct=((c.portfolio-c.startEquity)/c.startEquity)*100;
+    if(c.portfolio<=0||Math.random()<0.03)c.eliminated=true;
+  });
+}
+function renderLeaderboard(){
+  const el=document.getElementById('tr-lb-body');if(!el)return;
+  const sorted=[...lbCompetitors].sort((a,b)=>b.pnlPct-a.pnlPct);
+  const playerPnl=torneoState?(((torneoState.portfolio-getStageEquity(torneoState.stage,torneoState.tier))/getStageEquity(torneoState.stage,torneoState.tier))*100):0;
+  const all=[{name:'👤 Tú',pnlPct:playerPnl,color:'var(--gold)',eliminated:torneoState?.eliminated},...sorted];
+  all.sort((a,b)=>b.pnlPct-a.pnlPct);
+  el.innerHTML=all.map((c,i)=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-bottom:1px solid rgba(168,160,200,.08);font-size:10px;font-family:JetBrains Mono,monospace;opacity:'+(c.eliminated?0.4:1)+'">'
+    +'<span style="color:var(--text3);width:16px">#'+(i+1)+'</span>'
+    +'<span style="flex:1;color:'+c.color+';font-weight:'+(c.name==='👤 Tú'?'700':'400')+'">'+c.name+'</span>'
+    +'<span style="color:'+(c.pnlPct>=0?'var(--green)':'var(--red)')+'">'+(c.pnlPct>=0?'+':'')+c.pnlPct.toFixed(1)+'%</span>'
+    +(c.eliminated?'<span style="color:var(--red);margin-left:4px">💀</span>':'')
+    +'</div>').join('');
+}
+function getStageEquity(s,tierKey){return {qualifying:0.5,semifinal:0.75,final:1}[s]*getTier(tierKey).startingEquity||50000;}
+
+function toggleLeaderboard(){
+  const el=document.getElementById('tr-leaderboard');
+  if(el) el.style.display=el.style.display==='none'?'block':'none';
+}
+function populateBountyTargets(){
+  const sel=document.getElementById('tr-bounty-target');if(!sel)return;
+  const current=sel.value;
+  sel.innerHTML='<option value="">Sin bounty</option>'+lbCompetitors.map(c=>'<option value="'+c.name+'">'+c.name+' ('+(c.pnlPct>=0?'+':'')+c.pnlPct.toFixed(1)+'%)</option>').join('');
+  if(current) sel.value=current;
+}
+function setBounty(amount){
+  const sel=document.getElementById('tr-bounty-target');if(!sel)return;
+  const target=sel.value;
+  if(!target){if(window.showToast) showToast('🎯 Seleccioná un target primero');return;}
+  torneoState.bountyTarget=target;
+  torneoState.bountyAmount=amount;
+  if(window.showToast) showToast('🎯 Bounty $'+amount+' en '+target);
+  document.querySelectorAll('.bounty-amt').forEach(b=>b.style.borderColor=b.textContent==='$'+amount?'var(--gold)':'var(--border)');
+}
 
 function startTorneo(){
-  currentTorneo=null; // practice mode - no real tournament
-  torneoState = {score:0,round:1,positions:[...Array(1248)].map((_,i)=>i+1)};
+  currentTorneo=null;
+  const tierKey=document.getElementById('practice-tier')?.value||'free';
+  const fmtKey=document.getElementById('practice-format')?.value||'classic';
+  const tier=getTier(tierKey);
+  torneoState={portfolio:tier.startingEquity,peakPortfolio:tier.startingEquity,round:1,totalRounds:12,
+    trades:[],position:null,eliminated:false,drawdownPct:0,
+    stage:'qualifying',stageRound:1,totalStageRounds:12,
+    tier:tierKey,format:fmtKey,knockoutOpponent:null,consistencyScores:[],
+    currentNews:null,bountyTarget:null,bountyAmount:0,jackpotWon:false};
+  torneoLev=tier.startingLev;
+  document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===torneoLev));
   document.getElementById('torneo-lobby').style.display='none';
-  const g = document.getElementById('torneo-game');
+  const g=document.getElementById('torneo-game');
   g.style.display='flex';
-  STATE.torneo.score=0;STATE.torneo.round=1;
+  document.getElementById('tr-trade-panel').style.display='flex';
+  document.getElementById('tr-waiting').style.display='none';
+  torneoUpdateHUD();
   torneoNextRound();
 }
 
@@ -3076,7 +3437,7 @@ async function joinTorneo(id){
   }
   if(window.showToast) showToast('⏳ Inscribiendo...');
   try {
-    const r = await fetch(TNSVT_CONFIG.serverUrl.replace(/\/$/,'') + '/api/tournaments/' + id + '/join', {
+    const r = await tnsvtFetch(TNSVT_CONFIG.serverUrl.replace(/\/$/,'') + '/api/tournaments/' + id + '/join', {
       method: 'POST',
       headers: { 'Content-Type':'application/json', 'X-Game-Code': TNSVT_CONFIG.code },
       body: JSON.stringify({ starting_equity: 50000 }),
@@ -3092,18 +3453,364 @@ async function joinTorneo(id){
       return;
     }
     if(window.showToast) showToast('✅ Inscrito al torneo #' + id + '. Suerte!');
-    currentTorneo = { id: d.tournament_id, starting_equity: parseFloat(d.starting_equity), entry_fee: parseFloat(d.entry_fee_paid) };
-    // Carga wallet balance despues del join
+    // Add 5% of entry fee to global jackpot
+    const entryPaid=parseFloat(d.entry_fee_paid||0);
+    if(entryPaid>0) globalJackpot+=entryPaid*JACKPOT_FEE_PCT;
+    const tierKey=(d.tier||'free').toLowerCase();
+    const fmtKey=(d.format||'classic').toLowerCase();
+    const tier=getTier(tierKey);
+    currentTorneo={id:d.tournament_id,starting_equity:parseFloat(d.starting_equity),entry_fee:parseFloat(d.entry_fee_paid),tier:tierKey,format:fmtKey};
     loadTorneoWallet();
-    // Inicia el juego
-    torneoState = {score:0,round:1,positions:[...Array(1248)].map((_,i)=>i+1)};
+    const eq=parseFloat(d.starting_equity)||tier.startingEquity;
+    torneoState={portfolio:eq,peakPortfolio:eq,round:1,totalRounds:12,
+      trades:[],position:null,eliminated:false,drawdownPct:0,
+      stage:'qualifying',stageRound:1,totalStageRounds:12,
+      tier:tierKey,format:fmtKey,knockoutOpponent:null,consistencyScores:[],
+      currentNews:null,bountyTarget:null,bountyAmount:0,jackpotWon:false};
+    torneoLev=tier.startingLev;
+    document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===torneoLev));
+    document.getElementById('tr-tier-badge').style.display='flex';
+    document.getElementById('tr-tier-badge').querySelector('.hud-val').textContent=tier.icon+' '+tier.label;
+    document.getElementById('tr-format-badge').style.display='flex';
+    document.getElementById('tr-format-badge').querySelector('.hud-val').textContent=getFormat(fmtKey).icon+' '+getFormat(fmtKey).label;
+    document.getElementById('tr-stage-badge').style.display='flex';
+    document.getElementById('tr-stage-label').textContent=STAGE_LABELS.qualifying;
+    document.getElementById('tr-stage-round').textContent='Ronda 1/12';
+    document.getElementById('tr-format-badge').querySelector('.hud-val').textContent=getFormat(fmtKey).icon+' '+getFormat(fmtKey).label;
+    document.getElementById('tr-stage-badge').style.display='flex';
+    document.getElementById('tr-stage-label').textContent=STAGE_LABELS.qualifying;
+    document.getElementById('tr-stage-round').textContent='Ronda 1/12';
     document.getElementById('torneo-lobby').style.display='none';
-    const g = document.getElementById('torneo-game');
-    g.style.display='flex';
-    STATE.torneo.score=0;STATE.torneo.round=1;
+    document.getElementById('torneo-game').style.display='flex';
+    document.getElementById('tr-trade-panel').style.display='flex';
+    document.getElementById('tr-waiting').style.display='none';
+    torneoUpdateHUD();
     torneoNextRound();
   } catch(e){
     if(window.showToast) showToast('❌ Error: ' + e.message);
+  }
+}
+
+function torneoNextRound(){
+  if(torneoState.eliminated){ torneoFinish(); return; }
+  torneoWaited=false;
+  const s=torneoState;
+  // Stage transition
+  const stageRounds={qualifying:12,semifinal:12,final:12};
+  const totalStage=stageRounds[s.stage]||12;
+  if(s.stageRound>totalStage){
+    s.stage='semifinal';s.stageRound=1;
+    s.portfolio=getStageEquity('semifinal',s.tier);
+    s.peakPortfolio=s.portfolio;
+    s.round=1;
+    if(window.showToast) showToast('🏆 Avanzaste a Semifinal!');
+  }
+  if(s.stage==='semifinal'&&s.stageRound>totalStage){
+    s.stage='final';s.stageRound=1;
+    s.portfolio=getStageEquity('final',s.tier);
+    s.peakPortfolio=s.portfolio;
+    s.round=1;
+    if(window.showToast) showToast('🏆 Llegaste a la Final!');
+  }
+  // Knockout: generate opponent return this round
+  if(s.format==='knockout'){
+    s.knockoutOpponent={pnlPct:(Math.random()*20-10),returnPct:0};
+  }
+  // News event for this round
+  const news=getRandomNews();news.round=s.round;
+  s.currentNews=news;
+  const newsEl=document.getElementById('tr-news-banner');
+  const newsText=document.getElementById('tr-news-text');
+  if(newsEl&&newsText){
+    newsEl.style.display='flex';
+    newsText.textContent=news.headline+' ['+news.impact.toUpperCase()+']';
+    newsEl.style.background=news.impact==='bullish'?'rgba(50,200,100,.08)':(news.impact==='bearish'?'rgba(255,80,80,.08)':'rgba(168,160,200,.06)');
+    newsEl.style.borderBottomColor=news.impact==='bullish'?'rgba(50,200,100,.2)':(news.impact==='bearish'?'rgba(255,80,80,.2)':'rgba(168,160,200,.15)');
+  }
+  // Jackpot display
+  const jEl=document.getElementById('tr-jackpot-display');
+  if(jEl) jEl.textContent='$'+globalJackpot.toFixed(2);
+  // Leaderboard
+  if(!lbCompetitors.length&&s.round===1) generateCompetitors(5);
+  renderLeaderboard();
+  // Populate bounty dropdown
+  populateBountyTargets();
+  // Generate candle with news impact
+  const sym=SV_ASSETS[Math.floor(Math.random()*SV_ASSETS.length)];
+  const a=ASSETS[sym];
+  const base=STATE.prices[sym]||a.base;
+  const baseTrend=s.round>6?-1:(s.round>3?1:0);
+  const newsTrend=news.impact==='bullish'?1:(news.impact==='bearish'?-1:0);
+  const trend=baseTrend+newsTrend*0.5;
+  const volMul=news.volMul||1;
+  torneoCandles=genCandles(40,base,a.vol*1.2*volMul,trend);
+  renderCandleChart('torneo-chart',torneoCandles);
+  document.getElementById('tr-asset-name').textContent=sym+'/USDT';
+  document.getElementById('tr-current-price').textContent='$'+base.toFixed(base<1?4:2);
+  document.getElementById('tr-stage-label').textContent=STAGE_LABELS[s.stage]||s.stage;
+  document.getElementById('tr-stage-round').textContent='Ronda '+s.stageRound+'/'+totalStage;
+  torneoUpdateHUD();
+  if(torneoTimerInt)clearInterval(torneoTimerInt);
+  let t=25;document.getElementById('tr-timer').textContent=t;
+  const trEl=document.getElementById('tr-timer');
+  torneoTimerInt=setInterval(()=>{
+    t--;trEl.textContent=t;trEl.style.color=t<=5?'var(--red)':'var(--text)';
+    if(t<=0){clearInterval(torneoTimerInt);if(!torneoWaited)torneoPlay('skip');}
+  },1000);
+}
+
+function torneoCalcPnl(entryPrice, exitPrice, direction, sizePct, leverage){
+  const rawPct=(exitPrice-entryPrice)/entryPrice;
+  const dir=direction==='long'?1:-1;
+  const posPct=rawPct*dir*leverage*(sizePct/100);
+  return { pnlPct:posPct*100, pnlUsd:torneoState.portfolio*posPct };
+}
+
+function torneoPlay(direction){
+  if(torneoWaited)return;
+  torneoWaited=true;
+  clearInterval(torneoTimerInt);
+  const s=torneoState;
+  if(s.eliminated){ torneoFinish(); return; }
+  const lastCandle=torneoCandles[torneoCandles.length-1];
+  const entryPrice=lastCandle.c;
+  const sym=document.getElementById('tr-asset-name').textContent.replace('/USDT','');
+  const sizePct=parseInt(document.getElementById('tr-size').value);
+  const lev=torneoLev;
+  // Parse SL/TP
+  const slRaw=document.getElementById('tr-sl').value.trim();
+  const tpRaw=document.getElementById('tr-tp').value.trim();
+  let slPrice=null, tpPrice=null;
+  if(slRaw){
+    if(slRaw.includes('%')) slPrice=entryPrice*(1+(direction==='long'?-1:1)*parseFloat(slRaw)/100);
+    else slPrice=parseFloat(slRaw);
+  }
+  if(tpRaw){
+    if(tpRaw.includes('%')) tpPrice=entryPrice*(1+(direction==='long'?1:-1)*parseFloat(tpRaw)/100);
+    else tpPrice=parseFloat(tpRaw);
+  }
+  // Skip
+  if(direction==='skip'){
+    s.position=null;
+    document.getElementById('tr-trade-panel').style.display='none';
+    document.getElementById('tr-waiting').style.display='flex';
+    document.getElementById('tr-result-emoji').textContent='⏭';
+    document.getElementById('tr-result-text').textContent='Salteaste esta ronda';
+    document.getElementById('tr-result-detail').textContent='Sin pérdida ni ganancia';
+    setTimeout(()=>nextRound(),1200);
+    return;
+  }
+  // Simulate candle movement to exit
+  const exitCandle=torneoCandles[torneoCandles.length-1];
+  const high=exitCandle.h; const low=exitCandle.l; const close=exitCandle.c;
+  let exitPrice=close;
+  let exitReason='close';
+  // Check SL
+  if(slPrice){
+    if((direction==='long'&&low<=slPrice)||(direction==='short'&&high>=slPrice)){
+      exitPrice=slPrice; exitReason='sl';
+    }
+  }
+  // Check TP (unless SL already hit)
+  if(exitReason!=='sl'&&tpPrice){
+    if((direction==='long'&&high>=tpPrice)||(direction==='short'&&low<=tpPrice)){
+      exitPrice=tpPrice; exitReason='tp';
+    }
+  }
+  const pnl=torneoCalcPnl(entryPrice,exitPrice,direction,sizePct,lev);
+  s.portfolio+=pnl.pnlUsd;
+  if(s.portfolio>s.peakPortfolio) s.peakPortfolio=s.portfolio;
+  s.drawdownPct=((s.peakPortfolio-s.portfolio)/s.peakPortfolio)*100;
+  s.trades.push({asset:sym,entryPrice,exitPrice,direction,size:sizePct,leverage:lev,pnlUsd:pnl.pnlUsd,pnlPct:pnl.pnlPct,exitReason});
+  s.position=null;
+  // Format: consistency — track score
+  if(s.format==='consistency') s.consistencyScores.push(pnl.pnlPct);
+  // Format: knockout — generate opponent return
+  if(s.format==='knockout'&&s.knockoutOpponent){
+    s.knockoutOpponent.returnPct=(Math.random()*16-8)*(Math.random()>0.6?-1:1);
+  }
+  // Update leaderboard competitors
+  updateCompetitors(pnl.pnlPct);
+  renderLeaderboard();
+  // Bounty check — if player outperformed bounty target this round
+  if(s.bountyTarget&&s.bountyAmount>0){
+    const target=lbCompetitors.find(c=>c.name===s.bountyTarget);
+    if(target&&pnl.pnlPct>target.pnlPct){
+      if(window.showToast) showToast('🎯 Bounty cobrado! +$'+s.bountyAmount+' por superar a '+s.bountyTarget);
+      s.portfolio+=s.bountyAmount;
+      s.bountyAmount=0;s.bountyTarget=null;
+    }
+  }
+  // Check elimination
+  if(s.portfolio<=0){
+    s.eliminated=true; s.portfolio=0;
+  }
+  // Format: survival — check drawdown elimination
+  if(s.format==='survival'&&s.drawdownPct>=50){
+    s.eliminated=true;
+  }
+  // Format: knockout — check if opponent won the round
+  if(s.format==='knockout'&&s.knockoutOpponent){
+    const playerRoundPnl=pnl.pnlPct||0;
+    const oppRoundPnl=s.knockoutOpponent.returnPct||0;
+    if(direction==='skip'||playerRoundPnl<=oppRoundPnl){
+      s.eliminated=true;
+    }
+  }
+  // Show result
+  document.getElementById('tr-trade-panel').style.display='none';
+  document.getElementById('tr-waiting').style.display='flex';
+  const emoji=pnl.pnlUsd>0?'✅':(pnl.pnlUsd<0?'❌':'➖');
+  const reasonLabel={sl:'Stop Loss',tp:'Take Profit',close:'Cierre'};
+  let resultText=(pnl.pnlUsd>=0?'+':'')+'$'+pnl.pnlUsd.toFixed(2)+' ('+(pnl.pnlPct>=0?'+':'')+pnl.pnlPct.toFixed(2)+'%)';
+  let resultDetail=`${direction==='long'?'▲ LONG':'▼ SHORT'} ${sym} ${sizePct}% ${lev}x · ${reasonLabel[exitReason]}`;
+  if(s.format==='knockout'&&s.knockoutOpponent){
+    const oppPnl=s.knockoutOpponent.returnPct;
+    resultText+=' vs AI '+(oppPnl>=0?'+':'')+oppPnl.toFixed(2)+'%';
+    resultDetail+=' | '+(pnl.pnlPct>oppPnl?'✅ Ganaste la ronda':'❌ Perdiste la ronda');
+  }
+  if(s.eliminated) resultDetail+='<br><span style="color:var(--red);font-weight:700">💀 ELIMINADO</span>';
+  document.getElementById('tr-result-emoji').textContent=emoji;
+  document.getElementById('tr-result-text').textContent=resultText;
+  document.getElementById('tr-result-detail').innerHTML=resultDetail;
+  torneoUpdateHUD();
+  setTimeout(()=>nextRound(),1800);
+}
+
+function nextRound(){
+  document.getElementById('tr-trade-panel').style.display='flex';
+  document.getElementById('tr-waiting').style.display='none';
+  document.getElementById('tr-sl').value='';
+  document.getElementById('tr-tp').value='';
+  const s=torneoState;
+  if(s.eliminated||(s.stage==='final'&&s.stageRound>=12)){
+    torneoFinish();
+  } else {
+    s.round++;s.stageRound++;
+    torneoNextRound();
+  }
+}
+
+function torneoFinish(){
+  const s=torneoState;
+  const tier=getTier(s.tier);
+  const fmt=getFormat(s.format);
+  const startingEq=getStageEquity(s.stage,s.tier);
+  const totalPnl=s.portfolio-startingEq;
+  const totalPnlPct=startingEq>0?(totalPnl/startingEq)*100:0;
+  const wins=s.trades.filter(t=>t.pnlUsd>0).length;
+  const losses=s.trades.filter(t=>t.pnlUsd<0).length;
+  const winRate=s.trades.length?((wins/s.trades.length)*100).toFixed(0):0;
+  const bestTrade=Math.max(...s.trades.map(t=>t.pnlPct),0);
+  const worstTrade=Math.min(...s.trades.map(t=>t.pnlPct),0);
+  // Consistency score: avg return / std dev * sqrt(rounds)
+  let consistencyScore=0;
+  if(s.format==='consistency'&&s.consistencyScores.length>1){
+    const avg=s.consistencyScores.reduce((a,b)=>a+b,0)/s.consistencyScores.length;
+    const variance=s.consistencyScores.reduce((a,b)=>a+(b-avg)**2,0)/s.consistencyScores.length;
+    const std=Math.sqrt(variance)||1;
+    consistencyScore=(avg/std)*Math.sqrt(s.consistencyScores.length);
+  }
+  const effPnlPct=s.format==='consistency'?consistencyScore:totalPnlPct;
+  let xp=Math.max(0,Math.floor(200+effPnlPct*5));
+  let rank='Top 10';
+  if(effPnlPct>=100){xp=3000;rank='🏆 Leyenda';}
+  else if(effPnlPct>=50){xp=2000;rank='🥇 1° Lugar';}
+  else if(effPnlPct>=25){xp=1000;rank='🥈 2° Lugar';}
+  else if(effPnlPct>=10){xp=500;rank='🥉 3° Lugar';}
+  else if(effPnlPct>=0){xp=300;rank='Top 10';}
+  else {xp=Math.max(50,200+Math.floor(effPnlPct*2));rank='Participante';}
+  addXP(xp);
+  tnsvtSync('torneo', Math.max(0,s.portfolio), xp, { position:rank, round:s.round, pnl:totalPnlPct.toFixed(2), stage:s.stage, format:s.format });
+  // Stage advancement check
+  if(!s.eliminated&&s.stage!=='final'&&s.stageRound>=12){
+    const nextStage=s.stage==='qualifying'?'semifinal':'final';
+    s.stage=nextStage;s.stageRound=1;
+    s.portfolio=getStageEquity(nextStage,s.tier);
+    s.peakPortfolio=s.portfolio;
+    s.round=1;s.eliminated=false;
+    if(window.showToast) showToast('🏆 Avanzaste a '+(nextStage==='semifinal'?'Semifinal':'Final')+'!');
+    torneoNextRound();
+    return;
+  }
+  // Backend equity update
+  if(currentTorneo && TNSVT_CONFIG.enabled && TNSVT_CONFIG.code){
+    const cTorneo=currentTorneo;
+    currentTorneo=null;
+    tnsvtFetch(TNSVT_CONFIG.serverUrl.replace(/\/$/,'') + '/api/tournaments/' + cTorneo.id + '/update-equity', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Game-Code':TNSVT_CONFIG.code},
+      body:JSON.stringify({current_equity:Math.max(0,s.portfolio).toFixed(2)})
+    })
+    .then(r=>r.ok?r.json():r.json().then(e=>Promise.reject(e)))
+    .then(d=>{if(window.showToast) showToast('📊 PnL: '+(parseFloat(d.pnl_pct)>=0?'+':'')+parseFloat(d.pnl_pct).toFixed(2)+'% ($'+d.pnl_usd+')');})
+    .catch(err=>{if(window.showToast) showToast('⚠ Equity update: '+(err.error||err.message||'error'));});
+  }else{currentTorneo=null;}
+  // Jackpot check
+  let jackpotWon=false;let jackpotAmount=0;
+  if(effPnlPct>=JACKPOT_WIN_PNL&&globalJackpot>0){
+    // Jackpot tiers: bigger PnL = bigger share
+    const share=Math.min(1,Math.max(0.1,(effPnlPct-JACKPOT_WIN_PNL)/100));
+    jackpotAmount=Math.round(globalJackpot*share*100)/100;
+    jackpotWon=true;
+    globalJackpot-=jackpotAmount;
+    s.portfolio+=jackpotAmount;
+    s.jackpotWon=true;
+    if(window.showToast) showToast('💰 JACKPOT! Ganaste $'+jackpotAmount.toFixed(2));
+  }
+  const overlayIcon=totalPnl>0?'🏆':'💀';
+  let overlayTitle='Torneo '+fmt.icon+' '+(s.stage==='final'?'Final':STAGE_LABELS[s.stage]);
+  let overlaySub=s.eliminated?('Eliminado en ronda '+s.round+' ('+fmt.label+')'):(rank+' — '+s.trades.length+' trades');
+  let stats=[
+    {val:(totalPnl>=0?'+':'')+'$'+totalPnl.toFixed(2),lbl:'PnL'},
+    {val:(totalPnlPct>=0?'+':'')+totalPnlPct.toFixed(2)+'%',lbl:'Rend.'},
+    {val:'$'+s.peakPortfolio.toFixed(2),lbl:'Peak'},
+    {val:winRate+'% ('+wins+'/'+(wins+losses)+')',lbl:'Win Rate'},
+    {val:'+'+xp+' XP',lbl:'XP'},
+  ];
+  if(s.format==='consistency') stats.splice(4,0,{val:consistencyScore.toFixed(1),lbl:'Score C.'});
+  if(jackpotWon) stats.push({val:'+$'+jackpotAmount.toFixed(2),lbl:'Jackpot'});
+  showResultOverlay(overlayIcon,overlayTitle,overlaySub,null,stats,()=>{
+    document.getElementById('torneo-game').style.display='none';
+    document.getElementById('torneo-lobby').style.display='';
+    goScreen('s-torneos');
+  });
+}
+
+// ==== Admin: Create Tournament ====
+async function adminCreateTorneo(){
+  const resEl=document.getElementById('admin-t-result');
+  if(resEl) resEl.textContent='⏳ Creando...';
+  const name=document.getElementById('admin-t-name')?.value?.trim();
+  const fee=parseFloat(document.getElementById('admin-t-fee')?.value||'0');
+  const days=parseInt(document.getElementById('admin-t-days')?.value||'7');
+  if(!name){if(resEl) resEl.textContent='❌ El nombre es obligatorio';return;}
+  if(fee<0){if(resEl) resEl.textContent='❌ Entry fee no puede ser negativo';return;}
+  if(days<1||days>365){if(resEl) resEl.textContent='❌ Duración debe ser 1-365 días';return;}
+  const tier=document.getElementById('admin-t-tier')?.value||'free';
+  const format=document.getElementById('admin-t-format')?.value||'classic';
+  const maxPlayers=parseInt(document.getElementById('admin-t-max')?.value||'100');
+  const dist=document.getElementById('admin-t-dist')?.value?.trim()||'60,30,10';
+  const desc=document.getElementById('admin-t-desc')?.value?.trim()||null;
+  const startNow=document.getElementById('admin-t-start')?.checked||false;
+  try {
+    const r=await tnsvtFetch((TNSVT_CONFIG.serverUrl||'').replace(/\/$/,'')+'/api/tournaments/admin/create',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Password':TNSVT_CONFIG.adminPassword||'', 'X-Game-Code':TNSVT_CONFIG.code||''},
+      body:JSON.stringify({name,entry_fee:fee,duration_days:days,tier,format,max_players:maxPlayers,prize_distribution:dist,description:desc,start_now:startNow})
+    });
+    const d=await r.json();
+    if(!r.ok||d.error){
+      if(resEl) resEl.textContent='❌ '+(d.error||d.message||'Error');
+      return;
+    }
+    if(resEl) resEl.innerHTML='✅ Torneo creado: <b>'+escapeHtml(name)+'</b> (#'+d.tournament_id+')';
+    // Clear form
+    document.getElementById('admin-t-name').value='';
+    document.getElementById('admin-t-desc').value='';
+    if(window.showToast) showToast('✅ Torneo "'+name+'" creado!');
+  } catch(e){
+    if(resEl) resEl.textContent='❌ '+e.message;
   }
 }
 
@@ -3115,16 +3822,10 @@ async function loadActiveTorneos(){
   const myList = document.getElementById('torneosMyList');
   const notAuth = document.getElementById('torneosNotAuth');
   if(list) list.innerHTML = '<div style="text-align:center;padding:18px;color:var(--text3);font-size:12px">Cargando...</div>';
-
-  // Mostrar/ocultar warning si no esta autenticado
   if(notAuth) notAuth.style.display = (!TNSVT_CONFIG.enabled || !TNSVT_CONFIG.code) ? 'block' : 'none';
-
-  // Cargar wallet
   loadTorneoWallet();
-
-  // 1) Torneos activos (publico, no requiere auth)
   try {
-    const r = await fetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'') + '/api/tournaments/active');
+    const r = await tnsvtFetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'') + '/api/tournaments/active');
     const d = await r.json();
     _torneosCache.active = (d && d.tournaments) ? d.tournaments : [];
   } catch(e){
@@ -3132,11 +3833,9 @@ async function loadActiveTorneos(){
     if(list) list.innerHTML = '<div style="text-align:center;padding:18px;color:#f87171;font-size:12px">❌ No se pudo conectar al servidor. Revisá la URL en Perfil → Sync TNSVT.</div>';
     return;
   }
-
-  // 2) Mis torneos (requiere auth)
   if(TNSVT_CONFIG.enabled && TNSVT_CONFIG.code){
     try {
-      const r = await fetch((TNSVT_CONFIG.serverUrl||'').replace(/\/$/,'') + '/api/tournaments/my', {
+      const r = await tnsvtFetch((TNSVT_CONFIG.serverUrl||'').replace(/\/$/,'') + '/api/tournaments/my', {
         headers: { 'X-Game-Code': TNSVT_CONFIG.code }
       });
       const d = await r.json();
@@ -3149,7 +3848,6 @@ async function loadActiveTorneos(){
   } else {
     if(mySection) mySection.style.display = 'none';
   }
-
   renderTorneosList();
   renderTorneosMyList();
 }
@@ -3178,6 +3876,9 @@ function renderTorneosMyList(){
 
 function torneoCard(t, isMine){
   if(!t) return '';
+  const fmtKey=t.format||'classic';const fmt=getFormat(fmtKey);
+  const tierKey=t.tier||(parseFloat(t.entry_fee_usd||0)>=100?'elite':(parseFloat(t.entry_fee_usd||0)>=25?'pro':(parseFloat(t.entry_fee_usd||0)>=5?'beginner':'free')));
+  const tier=getTier(tierKey);
   const statusColor = t.status==='active' ? 'var(--green)' : t.status==='finished' ? 'var(--text3)' : 'var(--red)';
   const daysLeft = t.days_remaining != null ? t.days_remaining : '?';
   const daysText = daysLeft === 0 ? 'Termina hoy' : daysLeft === 1 ? '1 día restante' : daysLeft+' días restantes';
@@ -3207,7 +3908,11 @@ function torneoCard(t, isMine){
     +'<div style="display:flex;justify-content:space-between;align-items:start;gap:8px;margin-bottom:6px">'
     +  '<div style="flex:1;min-width:0">'
     +    '<div style="font-family:Cinzel,serif;font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(t.name||'Torneo')+'</div>'
-    +    '<div style="font-size:9px;letter-spacing:1.5px;color:'+statusColor+';text-transform:uppercase;margin-top:2px">⏱ '+daysText+'</div>'
+    +    '<div style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap">'
+    +      '<span style="font-size:8px;padding:1px 5px;border-radius:4px;background:rgba(168,160,200,.1);color:var(--text3)">'+tier.icon+' '+tier.label+'</span>'
+    +      '<span style="font-size:8px;padding:1px 5px;border-radius:4px;background:rgba(168,160,200,.1);color:var(--text3)">'+fmt.icon+' '+fmt.label+'</span>'
+    +      '<span style="font-size:8px;letter-spacing:1.5px;color:'+statusColor+'">⏱ '+daysText+'</span>'
+    +    '</div>'
     +  '</div>'
     +  '<div style="text-align:right">'
     +    '<div style="font-size:9px;color:var(--text3);letter-spacing:1px">ENTRY</div>'
@@ -3233,7 +3938,7 @@ async function loadTorneoWallet(){
   if(!el) return;
   if(!TNSVT_CONFIG.enabled || !TNSVT_CONFIG.code){ el.textContent='$0.00'; el.style.color='var(--text3)'; return; }
   try {
-    const r = await fetch((TNSVT_CONFIG.serverUrl||'').replace(/\/$/,'') + '/api/wallet/balance', {
+    const r = await tnsvtFetch((TNSVT_CONFIG.serverUrl||'').replace(/\/$/,'') + '/api/wallet/balance', {
       headers: { 'X-Game-Code': TNSVT_CONFIG.code }
     });
     const d = await r.json();
@@ -3246,81 +3951,7 @@ async function loadTorneoWallet(){
   }
 }
 
-function torneoNextRound(){
-  torneoWaited=false;
-  document.getElementById('tr-score').textContent=STATE.torneo.score;
-  document.getElementById('tr-round').textContent=STATE.torneo.round+'/10';
-  const sym=SV_ASSETS[Math.floor(Math.random()*SV_ASSETS.length)];
-  const a=ASSETS[sym];const base=STATE.prices[sym]||a.base;
-  torneoCandles=genCandles(35,base,a.vol*1.5);
-  renderCandleChart('torneo-chart',torneoCandles);
-  if(torneoTimerInt)clearInterval(torneoTimerInt);
-  let t=20;document.getElementById('tr-timer').textContent=t;
-  const trEl=document.getElementById('tr-timer');
-  torneoTimerInt=setInterval(()=>{
-    t--;trEl.textContent=t;trEl.style.color=t<=5?'var(--red)':'var(--text)';
-    if(t<=0){clearInterval(torneoTimerInt);if(!torneoWaited)torneoPlay('skip');}
-  },1000);
-}
-
-function torneoPlay(action){
-  if(torneoWaited)return;torneoWaited=true;clearInterval(torneoTimerInt);
-  const result=determineResult(torneoCandles);
-  const correct=action!=='skip'&&action===result;
-  if(correct){STATE.torneo.score+=300;showToast('✓ +300 pts');}
-  else showToast('✗ El mercado fue '+(result==='long'?'alcista':'bajista'));
-  document.getElementById('tr-score').textContent=STATE.torneo.score;
-  const pos=Math.max(1,Math.floor(1248*(1-STATE.torneo.score/3000)));
-  document.getElementById('tr-pos').textContent='#'+pos;
-  setTimeout(()=>{
-    if(STATE.torneo.round>=10){torneoFinish();}
-    else{STATE.torneo.round++;torneoNextRound();}
-  },1500);
-}
-
-function torneoFinish(){
-  const score=STATE.torneo.score;
-  let xp=200,pos='Top 10';
-  if(score>=2700){xp=2000;pos='1° Lugar';}
-  else if(score>=2400){xp=1000;pos='2° Lugar';}
-  else if(score>=2100){xp=500;pos='3° Lugar';}
-  else if(score>=1500){xp=200;pos='Top 10';}
-  addXP(xp);
-  tnsvtSync('torneo', score, xp, { position: pos, round: STATE.torneo.round||1 });
-
-  // Si hay un torneo real activo, actualiza equity en backend
-  if(currentTorneo && TNSVT_CONFIG.enabled && TNSVT_CONFIG.code){
-    // Mapeo score 0-3000 → PnL -100% to +100%
-    // score 0 = -100% pnl (peor caso), score 1500 = 0%, score 3000 = +100%
-    const pnlPct = (score / 1500) * 100 - 100;
-    const currentEquity = currentTorneo.starting_equity * (1 + pnlPct / 100);
-    const cTorneo = currentTorneo;
-    currentTorneo = null; // reset antes del await
-    fetch(TNSVT_CONFIG.serverUrl.replace(/\/$/,'') + '/api/tournaments/' + cTorneo.id + '/update-equity', {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json', 'X-Game-Code': TNSVT_CONFIG.code },
-      body: JSON.stringify({ current_equity: currentEquity.toFixed(2) }),
-      credentials: 'omit'
-    })
-    .then(r => r.ok ? r.json() : r.json().then(e => Promise.reject(e)))
-    .then(d => {
-      if(window.showToast) showToast('📊 PnL: ' + (parseFloat(d.pnl_pct) >= 0 ? '+' : '') + parseFloat(d.pnl_pct).toFixed(2) + '% ($' + d.pnl_usd + ')');
-    })
-    .catch(err => {
-      if(window.showToast) showToast('⚠ Equity update failed: ' + (err.error || err.message || 'error'));
-    });
-  }else{
-    currentTorneo = null;
-  }
-
-  showResultOverlay('🏆','Torneo Finalizado',pos+' — Gran actuación',null,[
-    {val:score,lbl:'Score final'},{val:pos,lbl:'Posición'},{val:'+'+xp+' XP',lbl:'Recompensa'}
-  ],()=>{
-    document.getElementById('torneo-game').style.display='none';
-    document.getElementById('torneo-lobby').style.display='';
-    goScreen('s-torneos');
-  });
-}
+// (old torneo functions replaced by portfolio version above)
 // ============================================================
 // LIGA
 // ============================================================
@@ -3999,22 +4630,47 @@ function renderEffectsGrid(){
 }
 
 // ── BUY / EQUIP HANDLER ──────────────────────────────────────
+function equipItem(type, id){
+  if(type==='frame')  { EQUIPPED.frame=id; applyFrame(id); }
+  if(type==='avatar') { EQUIPPED.avatar=id; applyAvatar(id); }
+  if(type==='theme')  { EQUIPPED.theme=id; applyTheme(id); }
+  if(type==='effect') { EQUIPPED.effect=id; applyEffect(id); if(id!=='ef0'&&typeof triggerActiveEffect==='function') triggerActiveEffect(); }
+  // Save equipped state
+  try { localStorage.setItem('tnsvt_equipped', JSON.stringify(EQUIPPED)); } catch(e){}
+}
+
 function shopItemClick(type, id, name){
   SFX.tap(); HAPTICS.tap();
   const owned = isOwned(type, id);
   if(!owned){
-    // Comprar
+    // Find item and its price
+    const maps = {frame:FRAMES, avatar:AVATARS, theme:THEMES, effect:EFFECTS_SHOP};
+    const item = (maps[type]||[]).find(x=>x.id===id);
+    if(!item) return;
+    // Convert price to XP: $0.99 = 500 XP
+    const xpCost = item.free ? 0 : 500;
+    if(!item.free && STATE.xp < xpCost){
+      showToast('❌ Necesitás '+xpCost+' XP (tenés '+STATE.xp+') · Ganá XP en los modos de juego');
+      return;
+    }
+    if(!item.free){
+      STATE.xp -= xpCost;
+      try { localStorage.setItem('tnsvt_xp', STATE.xp); } catch(e){}
+    }
     STATE.shopOwned.add(id);
+    saveShop();
     SFX.unlock(); HAPTICS.unlock(); confetti();
     equipItem(type, id);
-    showToast(`✦ "${name}" desbloqueado · $9.99 USD`);
+    showToast(`✦ "${name}" desbloqueado` + (item.free?'':' por '+xpCost+' XP'));
     renderTienda(tiendaActiveCat);
+    // Update XP display if visible
+    const xpEl=document.querySelector('.hero-xp-label span:first-child');
+    if(xpEl) xpEl.textContent='✦ '+STATE.xp+' XP';
     return;
   }
   // Ya tiene, equipar
   equipItem(type, id);
   if(type === 'effect'){
-    // Mensaje unificado para efectos (incluye preview)
     showToast(`✨ "${name}" activo — se dispara al acertar`);
   } else {
     showToast(`✓ "${name}" equipado`);
@@ -4578,6 +5234,11 @@ function renderTnsvtSettings(){
           <input id="tnsvt-code" type="text" placeholder="TNSVT-XXXX" value="${c.code||''}"
             style="width:100%;padding:8px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-family:'JetBrains Mono',monospace">
         </div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px">🔑 Password Admin (para crear torneos)</label>
+          <input id="tnsvt-admin-pass" type="password" placeholder="••••••••" value="${c.adminPassword||''}"
+            style="width:100%;padding:8px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-family:'JetBrains Mono',monospace">
+        </div>
         <div style="display:flex;gap:8px;margin-bottom:10px">
           <button onclick="tnsvtTest()" style="flex:1;padding:9px;background:rgba(96,165,250,.15);border:1px solid var(--blue);color:var(--blue);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">🔌 Probar</button>
           <button onclick="tnsvtSave()" style="flex:1;padding:9px;background:linear-gradient(135deg,var(--violet),var(--violet2));border:0;color:#fff;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">💾 Guardar</button>
@@ -4622,9 +5283,14 @@ function renderTnsvtSettings(){
 }
 
 function tnsvtGetInput(){
+  let url = (document.getElementById('tnsvt-url')?.value||'').trim();
+  // Auto-fix missing colon after scheme
+  if(url.startsWith('http//')) url = url.replace('http//', 'http://');
+  if(url.startsWith('https//')) url = url.replace('https//', 'https://');
   return {
-    serverUrl: (document.getElementById('tnsvt-url')?.value||'').trim(),
+    serverUrl: url,
     code: (document.getElementById('tnsvt-code')?.value||'').trim(),
+    adminPassword: (document.getElementById('tnsvt-admin-pass')?.value||'').trim(),
   };
 }
 
@@ -4633,19 +5299,43 @@ async function tnsvtTest(){
   const result = document.getElementById('tnsvt-test-result');
   if(!c.serverUrl || !c.code){ result.innerHTML = '⚠ Completá URL y código'; return; }
   result.innerHTML = '🔄 Probando...';
+  const url = c.serverUrl.replace(/\/$/,'') + '/api/game/auth';
+  console.log('FETCHING URL:', url);
   try {
-    const r = await fetch(c.serverUrl.replace(/\/$/,'') + '/api/game/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({code: c.code})
-    });
-    const data = await r.json();
+    let data;
+    // Fix URL if missing colon after scheme
+    if(url.startsWith('http//')) url = url.replace('http//', 'http://');
+    if(url.startsWith('https//')) url = url.replace('https//', 'https://');
+    console.log('FETCHING URL:', url);
+
+    // Try native CapacitorHttp (bypasses WebView restrictions on Android)
+    const capHttp = window.Capacitor && (window.Capacitor.CapacitorHttp || window.Capacitor.Plugins?.CapacitorHttp);
+    if(capHttp){
+      const r = await capHttp.post({
+        url,
+        headers: {'Content-Type':'application/json'},
+        data: {code: c.code}
+      });
+      console.log('CapacitorHttp response:', r.status, r.headers);
+      data = r.data;
+      if(typeof data === 'string') data = JSON.parse(data);
+    } else {
+      const r = await tnsvtFetch(url, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({code: c.code})
+      });
+      const text = await r.text();
+      console.log('STATUS:', r.status, 'CONTENT-TYPE:', r.headers.get('content-type'));
+      console.log('BODY:', text.substring(0,500));
+      data = JSON.parse(text);
+    }
     if(data.authenticated){
       result.innerHTML = `✅ Conectado como <strong>${data.display_name}</strong> · ${data.xp||0} XP · ${data.rank}`;
     } else {
       result.innerHTML = '❌ ' + (data.error || 'Código inválido');
     }
   } catch(e){
-    result.innerHTML = '❌ Error de red: ' + e.message;
+    result.innerHTML = '❌ Error de red: ' + e.message + (e.responseText ? ' | body: ' + e.responseText.substring(0,200) : '');
   }
 }
 
@@ -6568,22 +7258,41 @@ function glosRender(){
 // ============================================================
 function addXP(amount){
   STATE.xp += amount;
+  try { localStorage.setItem('tnsvt_xp', STATE.xp); } catch(e){}
   const r = RANKS.slice().reverse().find(r=>STATE.xp>=r.min);
   if(r && r.name !== STATE.rank){ STATE.rank=r.name; showToast('🎉 ¡Nuevo rango: '+r.name+'!'); confetti(); }
 }
+function saveShop(){ try { localStorage.setItem('tnsvt_shop', JSON.stringify([...STATE.shopOwned])); } catch(e){} }
 
 // ============================================================
 // TNSVT SYNC — envía scores al backend de TNSVT
-// Si TNSVT_CONFIG.serverUrl está configurado, usa fetch() directo
+// Si TNSVT_CONFIG.serverUrl está configurado, usa tnsvtFetch() directo
 // Si no, intenta postMessage (modo iframe / wrapper embebido)
 // ============================================================
 const TNSVT_CONFIG_KEY = 'tnsvt_config_v1';
 const TNSVT_CONFIG = (function(){
   try {
     const raw = localStorage.getItem(TNSVT_CONFIG_KEY);
-    return raw ? JSON.parse(raw) : { serverUrl:'', code:'', enabled:false, lastSync:0, lastError:null };
-  } catch(e){ return { serverUrl:'', code:'', enabled:false, lastSync:0, lastError:null }; }
+    return raw ? JSON.parse(raw) : { serverUrl:'', code:'', adminPassword:'', enabled:false, lastSync:0, lastError:null };
+  } catch(e){ return { serverUrl:'', code:'', adminPassword:'', enabled:false, lastSync:0, lastError:null }; }
 })();
+
+// Universal fetch with CapacitorHttp fallback (bypasses WebView CORS on Android)
+async function tnsvtFetch(url, opts){
+  const capHttp = window.Capacitor && (window.Capacitor.CapacitorHttp || window.Capacitor.Plugins?.CapacitorHttp);
+  if(capHttp){
+    const method = (opts&&opts.method)||'GET';
+    const cType = opts&&opts.headers&&opts.headers['Content-Type']||'';
+    let data;
+    if(opts&&opts.body){
+      if(typeof opts.body==='string' && cType.includes('application/json')) data = JSON.parse(opts.body);
+      else data = opts.body;
+    }
+    const r = await capHttp.request({url, method, headers: opts&&opts.headers||{}, data});
+    return { ok: r.status>=200 && r.status<300, status: r.status, json: async()=>typeof r.data==='string' ? JSON.parse(r.data) : r.data, text: async()=>typeof r.data==='string' ? r.data : JSON.stringify(r.data), headers: { get: k=>r.headers?.[k] } };
+  }
+  return fetch(url, opts);
+}
 
 function tnsvtSaveConfig(cfg){
   Object.assign(TNSVT_CONFIG, cfg);
@@ -6596,7 +7305,7 @@ function tnsvtSync(mode, score, xp, extra){
 
   // 1) Si TNSVT_CONFIG está activo, fetch directo al backend
   if(TNSVT_CONFIG.enabled && TNSVT_CONFIG.serverUrl && TNSVT_CONFIG.code){
-    fetch(TNSVT_CONFIG.serverUrl.replace(/\/$/,'') + '/api/game/score', {
+    tnsvtFetch(TNSVT_CONFIG.serverUrl.replace(/\/$/,'') + '/api/game/score', {
       method: 'POST',
       headers: { 'Content-Type':'application/json', 'X-Game-Code': TNSVT_CONFIG.code },
       body: JSON.stringify(payload),
@@ -6698,7 +7407,7 @@ async function checkGameUpdate(){
   try {
     // Usar serverUrl configurado, sino fallback a LAN
     const base = (TNSVT_CONFIG && TNSVT_CONFIG.serverUrl) || 'http://192.168.1.2:8000';
-    const r = await fetch(base.replace(/\/$/,'') + '/api/app/game-version', { cache: 'no-store' });
+    const r = await tnsvtFetch(base.replace(/\/$/,'') + '/api/app/game-version', { cache: 'no-store' });
     if(!r.ok) return;
     const d = await r.json();
     if(!d.versionCode || d.versionCode <= GAME_LOCAL_VERSION_CODE) return;
@@ -7384,11 +8093,11 @@ arenaFinish = function(){
 const _torneoPlay_orig = torneoPlay;
 torneoPlay = function(action){
   SFX.tap(); HAPTICS.tap();
-  const prevScore = STATE.torneo.score;
+  const prevPortfolio = torneoState.portfolio;
   _torneoPlay_orig(action);
   setTimeout(()=>{
-    if(STATE.torneo.score > prevScore){ SFX.correct(); HAPTICS.correct(); }
-    else if(action!=='skip'){ SFX.wrong(); HAPTICS.wrong(); }
+    if(torneoState.portfolio > prevPortfolio){ SFX.correct(); HAPTICS.correct(); }
+    else if(action!=='skip' && torneoState.portfolio < prevPortfolio){ SFX.wrong(); HAPTICS.wrong(); }
   },100);
 };
 
@@ -7478,7 +8187,7 @@ document.addEventListener('click', ()=>getAudio(), {once:true});
       PushNotifications.addListener('registration', ({value}) => {
         const code = TNSVT_CONFIG && TNSVT_CONFIG.code;
         if(code){
-          fetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'') + '/api/devices/register', {
+          tnsvtFetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'') + '/api/devices/register', {
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify({user_code: code, fcm_token: value, platform:'android'})
@@ -7501,7 +8210,7 @@ async function mpCreatePayment(){
   let amount=_mpAmount>0?_mpAmount:parseFloat(document.getElementById('mpAmountInput').value);
   if(!amount||amount<1||amount>1000){errDiv.textContent='⚠ 1-1000 USD';errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con MercadoPago';return;}
   try {
-    const r=await fetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'')+'/api/mercadopago/create-payment',{
+    const r=await tnsvtFetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'')+'/api/mercadopago/create-payment',{
       method:'POST',headers:{'Content-Type':'application/json','X-Game-Code':TNSVT_CONFIG.code||''},
       body:JSON.stringify({amount_usd:amount})
     });
@@ -7521,7 +8230,7 @@ async function bnCreatePayment(){
   let amount=_bnAmount>0?_bnAmount:parseFloat(document.getElementById('bnAmountInput').value);
   if(!amount||amount<1||amount>1000){errDiv.textContent='⚠ 1-1000 USD';errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';return;}
   try {
-    const r=await fetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'')+'/api/binance-pay/create-order',{
+    const r=await tnsvtFetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'')+'/api/binance-pay/create-order',{
       method:'POST',headers:{'Content-Type':'application/json','X-Game-Code':TNSVT_CONFIG.code||''},
       body:JSON.stringify({amount_usd:amount})
     });
