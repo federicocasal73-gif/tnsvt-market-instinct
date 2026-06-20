@@ -81,6 +81,8 @@ body{position:relative}
 .tick-chg.dn{color:var(--red)}
 .tick-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse2 2s infinite}
 @keyframes pulse2{0%,100%{opacity:1}50%{opacity:.4}}
+.lang-btn.active{color:var(--violet3)!important;background:rgba(147,83,255,.12)!important;box-shadow:0 0 8px rgba(147,83,255,.3)}
+.lang-btn:hover{color:var(--text)!important}
 
 /* MAIN CONTAINER */
 #app{position:fixed;top:30px;bottom:60px;left:0;right:0;overflow:hidden;z-index:1}
@@ -792,6 +794,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <span class="tick-item" id="t-NAS100"><span class="tick-sym" style="color:var(--blue)">NAS100</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
   <span class="tick-item" id="t-DXY"><span class="tick-sym" style="color:rgba(200,160,255,.8)">DXY</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
   <span class="tick-item" id="t-EURUSD"><span class="tick-sym" style="color:rgba(200,160,255,.8)">EUR/USD</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
+  <span class="tick-item" style="border-left:1px solid rgba(45,31,85,.6);padding-left:10px;margin-left:6px;display:flex;gap:4px;align-items:center;flex-shrink:0">
+    <button class="lang-btn active" data-lang="es" onclick="setLang('es')" style="background:0;border:0;color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:inherit;letter-spacing:.3px">🇦🇷 ES</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:0;border:0;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:inherit;letter-spacing:.3px">🇺🇸 EN</button>
+  </span>
 </div>
 
 <div id="streak-bar-wrap" class="hidden">
@@ -817,21 +823,21 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <!-- ======================== SCREEN: INICIO ======================== -->
 <div class="screen active" id="s-inicio">
   <div class="hero">
-    <div class="hero-title">T.N.S.V.T — Market Instinct</div>
-    <div class="hero-name">Hola, Trader ✦</div>
+    <div class="hero-title" data-i18n="home.subtitle">T.N.S.V.T — Market Instinct</div>
+    <div class="hero-name" data-i18n="home.greet">Hola, Trader ✦</div>
     <div class="hero-rank">
       <span class="badge badge-rank">⚔ OPERADOR</span>
       <span class="badge badge-xp">✦ 2,340 XP</span>
       <span id="price-badge" class="badge badge-live">● LIVE</span>
     </div>
     <div class="hero-xp-row">
-      <div class="hero-xp-label"><span>Progreso al siguiente rango</span><span>2,340 / 3,500</span></div>
+      <div class="hero-xp-label"><span data-i18n="prof.progress">Progreso al siguiente rango</span><span>2,340 / 3,500</span></div>
       <div class="xp-bar-wrap"><div class="xp-bar-fill" style="width:67%"></div></div>
     </div>
   </div>
 
   <!-- MISIONES RÁPIDAS -->
-  <div class="sec-hdr"><span class="sec-title">Misiones de Hoy</span><span class="sec-link" onclick="goScreen('s-misiones')">Ver todas →</span></div>
+  <div class="sec-hdr"><span class="sec-title" data-i18n="home.missions.title">Misiones de Hoy</span><span class="sec-link" onclick="goScreen('s-misiones')" data-i18n="home.missions.all">Ver todas →</span></div>
   <div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:6px">
     <div class="mission-item" style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);padding:12px">
       <div class="miss-icon">🎯</div>
@@ -854,27 +860,27 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   </div>
 
   <!-- MODO DESTACADO -->
-  <div class="sec-hdr"><span class="sec-title">Modo del Día</span></div>
+  <div class="sec-hdr"><span class="sec-title" data-i18n="home.feat.title">Modo del Día</span></div>
   <div class="feat-mode" onclick="goScreen('s-daily')">
     <div style="font-size:32px;margin-bottom:8px">📅</div>
-    <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;margin-bottom:4px">Daily Challenge</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:12px">El mismo activo para todos. Un solo intento. ¿Quién lee mejor el mercado hoy?</div>
+    <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;margin-bottom:4px" data-i18n="mode.daily.name">Daily Challenge</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:12px" data-i18n="mode.daily.desc">El mismo activo para todos. Un solo intento. ¿Quién lee mejor el mercado hoy?</div>
     <div style="display:flex;gap:8px;align-items:center">
-      <span class="badge badge-rank">🔥 2,847 jugadores</span>
-      <span style="font-size:12px;color:var(--text3)" id="daily-countdown">Renueva en: --:--:--</span>
+      <span class="badge badge-rank">🔥 2,847 <span data-i18n="home.feat.players">jugadores</span></span>
+      <span style="font-size:12px;color:var(--text3)" id="daily-countdown"><span data-i18n="home.feat.renews">Renueva en:</span> --:--:--</span>
     </div>
   </div>
 
   <!-- MODOS RÁPIDOS -->
-  <div class="sec-hdr"><span class="sec-title">Jugar Ahora</span><span class="sec-link" onclick="goScreen('s-modos')">Todos →</span></div>
+  <div class="sec-hdr"><span class="sec-title" data-i18n="home.modes.title">Jugar Ahora</span><span class="sec-link" onclick="goScreen('s-modos')" data-i18n="home.modes.all">Todos →</span></div>
   <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px;padding-bottom:16px">
     <div class="mode-card" onclick="startClassic()">
       <div class="mode-icon">📊</div>
       <div class="mode-info">
-        <div class="mode-name">Classic</div>
-        <div class="mode-desc">Long · Short · Sin Trade — el juego base</div>
+        <div class="mode-name" data-i18n="mode.classic.name">Classic</div>
+        <div class="mode-desc" data-i18n="mode.classic.desc">Long · Short · Sin Trade — el juego base</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(74,222,128,.15);color:var(--green)">LIBRE</span>
+          <span class="mode-tag" style="background:rgba(74,222,128,.15);color:var(--green)" data-i18n="tag.libre">LIBRE</span>
           <span class="mode-tag" style="background:rgba(147,83,255,.15);color:var(--violet3)">8 ACTIVOS</span>
         </div>
       </div>
@@ -883,10 +889,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="mode-card" onclick="startSurvival()">
       <div class="mode-icon">❤️</div>
       <div class="mode-info">
-        <div class="mode-name">Survival</div>
-        <div class="mode-desc">3 vidas · dificultad creciente</div>
+        <div class="mode-name" data-i18n="mode.survival.name">Survival</div>
+        <div class="mode-desc" data-i18n="mode.survival.desc">3 vidas · dificultad creciente</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(248,113,113,.15);color:var(--red)">INTENSO</span>
+          <span class="mode-tag" style="background:rgba(248,113,113,.15);color:var(--red)" data-i18n="tag.intenso">INTENSO</span>
         </div>
       </div>
       <div class="mode-arrow">›</div>
@@ -894,10 +900,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="mode-card" onclick="goScreen('s-arena')">
       <div class="mode-icon">⚔️</div>
       <div class="mode-info">
-        <div class="mode-name">Arena 1vs1</div>
-        <div class="mode-desc">Desafiá a otro trader en tiempo real</div>
+        <div class="mode-name" data-i18n="mode.arena.name">Arena 1vs1</div>
+        <div class="mode-desc" data-i18n="mode.arena.desc">Desafiá a otro trader en tiempo real</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(240,192,96,.15);color:var(--gold)">COMPETITIVO</span>
+          <span class="mode-tag" style="background:rgba(240,192,96,.15);color:var(--gold)" data-i18n="tag.competitivo">COMPETITIVO</span>
         </div>
       </div>
       <div class="mode-arrow">›</div>
@@ -905,12 +911,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="mode-card" onclick="vipGoScreen('s-fractal', 'Modo Fractal')" style="border-color:rgba(255,215,0,.3);background:linear-gradient(135deg,rgba(255,215,0,.05),transparent)">
       <div class="mode-icon">🔱</div>
       <div class="mode-info">
-        <div class="mode-name" style="color:#ffd700">Modo Fractal</div>
-        <div class="mode-desc">BOS · LG · Zonas · Setup 2-Step — T.N.S.V.T</div>
+        <div class="mode-name" style="color:#ffd700" data-i18n="mode.fractal.name">Modo Fractal</div>
+        <div class="mode-desc" data-i18n="mode.fractal.desc">BOS · LG · Zonas · Setup 2-Step — T.N.S.V.T</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(255,215,0,.15);color:#ffd700">METODOLOGÍA</span>
-          <span class="mode-tag" style="background:rgba(74,222,128,.1);color:var(--green)">NUEVO</span>
-          <span class="mode-tag" style="background:linear-gradient(135deg,rgba(240,192,96,.25),rgba(212,160,48,.25));color:var(--gold);border:1px solid var(--gold)">👑 VIP</span>
+          <span class="mode-tag" style="background:rgba(255,215,0,.15);color:#ffd700" data-i18n="tag.metodologia">METODOLOGÍA</span>
+          <span class="mode-tag" style="background:rgba(74,222,128,.1);color:var(--green)" data-i18n="tag.new">NUEVO</span>
+          <span class="mode-tag" style="background:linear-gradient(135deg,rgba(240,192,96,.25),rgba(212,160,48,.25));color:var(--gold);border:1px solid var(--gold)" data-i18n="tag.vip">👑 VIP</span>
         </div>
       </div>
       <div style="font-size:18px">🔒</div>
@@ -918,10 +924,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="mode-card" onclick="goScreen('s-glosario')" style="border-color:rgba(96,165,250,.25);background:linear-gradient(135deg,rgba(96,165,250,.05),transparent)">
       <div class="mode-icon">📖</div>
       <div class="mode-info">
-        <div class="mode-name" style="color:var(--blue)">Glosario Completo</div>
-        <div class="mode-desc">OB · POI · BOS · LG · EQH · TR · 30+ conceptos</div>
+        <div class="mode-name" style="color:var(--blue)" data-i18n="mode.glosario.name">Glosario Completo</div>
+        <div class="mode-desc" data-i18n="mode.glosario.desc">OB · POI · BOS · LG · EQH · TR · 30+ conceptos</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(96,165,250,.15);color:var(--blue)">EDUCACIÓN</span>
+          <span class="mode-tag" style="background:rgba(96,165,250,.15);color:var(--blue)" data-i18n="tag.educacion">EDUCACIÓN</span>
         </div>
       </div>
       <div class="mode-arrow">›</div>
@@ -934,18 +940,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <div class="game-hud">
     <div class="hud-item">
       <div class="hud-val" id="cl-score">0</div>
-      <div class="hud-lbl">Score</div>
+      <div class="hud-lbl" data-i18n="hud.score">Score</div>
     </div>
     <div class="hud-item">
       <div id="cl-streak-badge" class="streak-badge" style="display:none">🔥 <span id="cl-streak-n">0</span></div>
-      <div class="hud-lbl">Racha</div>
+      <div class="hud-lbl" data-i18n="hud.streak">Racha</div>
     </div>
     <div class="hud-item">
       <div class="hud-val" id="cl-acc">—</div>
-      <div class="hud-lbl">Precisión</div>
+      <div class="hud-lbl" data-i18n="hud.accuracy">Precisión</div>
     </div>
     <div class="hud-item">
-      <button class="btn btn-ghost btn-sm" onclick="goScreen('s-inicio')">✕ Salir</button>
+      <button class="btn btn-ghost btn-sm" onclick="goScreen('s-inicio')" data-i18n="ui.exit">✕ Salir</button>
     </div>
   </div>
 
@@ -990,22 +996,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <div style="padding:0 10px 4px;display:flex;gap:6px">
     <div class="indicator" style="flex:1;padding:6px 8px">
       <div class="ind-icon" style="font-size:14px">💰</div>
-      <div><div class="ind-label">Precio Actual</div><div class="ind-val" id="cl-current-price">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.price">Precio Actual</div><div class="ind-val" id="cl-current-price">—</div></div>
     </div>
     <div class="indicator" style="flex:1">
       <div class="ind-icon" id="cl-trend-icon">📊</div>
-      <div><div class="ind-label">Tendencia</div><div class="ind-val" id="cl-trend">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.trend">Tendencia</div><div class="ind-val" id="cl-trend">—</div></div>
     </div>
     <div class="indicator" style="flex:1">
       <div class="ind-icon">📐</div>
-      <div><div class="ind-label">Variación</div><div class="ind-val" id="cl-change">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.change">Variación</div><div class="ind-val" id="cl-change">—</div></div>
     </div>
   </div>
 
   <div class="action-row" style="padding:10px 12px">
-    <button class="action-btn action-long" onclick="classicPlay('long')">▲ LONG</button>
-    <button class="action-btn action-skip" onclick="classicPlay('skip')" style="flex:.6">— Skip</button>
-    <button class="action-btn action-short" onclick="classicPlay('short')">▼ SHORT</button>
+    <button class="action-btn action-long" onclick="classicPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="action-btn action-skip" onclick="classicPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
+    <button class="action-btn action-short" onclick="classicPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 </div>
 
@@ -1014,17 +1020,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <div class="game-hud">
     <div class="hud-item">
       <div class="hud-val gold" id="sv-score">0</div>
-      <div class="hud-lbl">Score</div>
+      <div class="hud-lbl" data-i18n="hud.score">Score</div>
     </div>
     <div class="hud-item">
       <div class="lives" id="sv-lives">
         <span class="life">❤️</span><span class="life">❤️</span><span class="life">❤️</span>
       </div>
-      <div class="hud-lbl">Vidas</div>
+      <div class="hud-lbl" data-i18n="hud.lives">Vidas</div>
     </div>
     <div class="hud-item">
       <div class="hud-val" id="sv-round">1</div>
-      <div class="hud-lbl">Ronda</div>
+      <div class="hud-lbl" data-i18n="hud.round">Ronda</div>
     </div>
     <div class="hud-item">
       <button class="btn btn-ghost btn-sm" onclick="goScreen('s-inicio')">✕</button>
@@ -1033,7 +1039,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 
   <div style="padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between">
     <div id="sv-diff-badge" class="diff-pill diff-easy">FÁCIL</div>
-    <div style="font-size:13px;color:var(--text2)">Activo: <strong id="sv-asset">BTC</strong></div>
+    <div style="font-size:13px;color:var(--text2)"><span data-i18n="cs.assets">Activos</span>: <strong id="sv-asset">BTC</strong></div>
   </div>
 
   <div style="padding:0 16px 8px">
@@ -1044,22 +1050,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 
   <div style="padding:4px 16px 8px;display:flex;gap:8px">
     <div class="indicator" style="flex:1">
-      <div><div class="ind-label">Tendencia 5 velas</div><div class="ind-val" id="sv-trend">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.trend">Tendencia</div><div class="ind-val" id="sv-trend">—</div></div>
     </div>
     <div class="indicator" style="flex:1">
-      <div><div class="ind-label">Variación</div><div class="ind-val" id="sv-change">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.change">Variación</div><div class="ind-val" id="sv-change">—</div></div>
     </div>
     <div class="indicator" style="flex:1">
-      <div><div class="ind-label">Racha</div><div class="ind-val" id="sv-streak">0 🔥</div></div>
+      <div><div class="ind-label" data-i18n="hud.streak">Racha</div><div class="ind-val" id="sv-streak">0 🔥</div></div>
     </div>
   </div>
 
   <div style="padding:4px 16px 8px;background:var(--panel2);margin:0 16px;border-radius:var(--r2);font-size:12px;color:var(--text3);border:1px solid var(--border)" id="sv-hint"></div>
 
   <div class="action-row">
-    <button class="action-btn action-long" onclick="survivalPlay('long')">▲ LONG</button>
-    <button class="action-btn action-skip" onclick="survivalPlay('skip')" style="flex:.6">— Skip</button>
-    <button class="action-btn action-short" onclick="survivalPlay('short')">▼ SHORT</button>
+    <button class="action-btn action-long" onclick="survivalPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="action-btn action-skip" onclick="survivalPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
+    <button class="action-btn action-short" onclick="survivalPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 </div>
 
@@ -1082,28 +1088,28 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 
   <div style="padding:4px 16px 8px;display:flex;gap:8px">
     <div class="indicator" style="flex:1">
-      <div><div class="ind-label">Contexto</div><div class="ind-val" id="dc-context">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.context">Contexto</div><div class="ind-val" id="dc-context">—</div></div>
     </div>
     <div class="indicator" style="flex:1">
-      <div><div class="ind-label">Ratio 5v</div><div class="ind-val" id="dc-ratio">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.ratio">Ratio 5v</div><div class="ind-val" id="dc-ratio">—</div></div>
     </div>
     <div class="indicator" style="flex:1">
-      <div><div class="ind-label">% Cambio</div><div class="ind-val" id="dc-change">—</div></div>
+      <div><div class="ind-label" data-i18n="cs.pctChange">% Cambio</div><div class="ind-val" id="dc-change">—</div></div>
     </div>
   </div>
 
-  <div style="margin:0 16px 12px;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);font-size:12px;color:var(--text2)">
+  <div style="margin:0 16px 12px;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);font-size:12px;color:var(--text2)" data-i18n="daily.info">
     <strong style="color:var(--gold)">📊 El mismo chart para todos.</strong> Un solo intento por día. Tu decisión queda registrada en el ranking global.
   </div>
 
   <div class="action-row" id="dc-action-row">
-    <button class="action-btn action-long" onclick="dailyPlay('long')">▲ LONG</button>
-    <button class="action-btn action-skip" onclick="dailyPlay('skip')" style="flex:.6">— Skip</button>
-    <button class="action-btn action-short" onclick="dailyPlay('short')">▼ SHORT</button>
+    <button class="action-btn action-long" onclick="dailyPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="action-btn action-skip" onclick="dailyPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
+    <button class="action-btn action-short" onclick="dailyPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 
   <!-- RANKING DAILY -->
-  <div class="sec-hdr"><span class="sec-title">Ranking de Hoy</span></div>
+  <div class="sec-hdr"><span class="sec-title" data-i18n="daily.rank.today">Ranking de Hoy</span></div>
   <div id="dc-ranking"></div>
 </div>
 <!-- ======================== SCREEN: ARENA 1VS1 ======================== -->
@@ -1112,13 +1118,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <div id="arena-lobby">
     <div style="padding:20px 16px;text-align:center;border-bottom:1px solid var(--border)">
       <div style="font-size:40px;margin-bottom:8px">⚔️</div>
-      <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;margin-bottom:4px">Arena 1vs1</div>
-      <div style="font-size:13px;color:var(--text2)">Desafiá a traders reales. 5 rondas. El que más acierta, gana.</div>
+      <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;margin-bottom:4px" data-i18n="arena.title">Arena 1vs1</div>
+      <div style="font-size:13px;color:var(--text2)" data-i18n="arena.subtitle">Desafiá a traders reales. 5 rondas. El que más acierta, gana.</div>
     </div>
-    <div class="sec-hdr"><span class="sec-title">Elegí un Rival</span></div>
+    <div class="sec-hdr"><span class="sec-title" data-i18n="arena.pick">Elegí un Rival</span></div>
     <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px" id="rival-list"></div>
     <div style="padding:16px">
-      <button class="btn btn-primary" style="width:100%" onclick="startArena()">⚔ Entrar al Arena</button>
+      <button class="btn btn-primary" style="width:100%" onclick="startArena()" data-i18n="arena.enter">⚔ Entrar al Arena</button>
     </div>
   </div>
 
@@ -1127,22 +1133,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="game-hud">
       <div class="hud-item">
         <div class="hud-val green" id="ar-my-score">0</div>
-        <div class="hud-lbl">Yo</div>
+        <div class="hud-lbl" data-i18n="hud.me">Yo</div>
       </div>
       <div class="hud-item">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text3)">Ronda <span id="ar-round">1</span>/5</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text3)"><span data-i18n="hud.round">Ronda</span> <span id="ar-round">1</span>/5</div>
         <div id="ar-timer-val" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--text);text-align:center" class="hud-val">15</div>
-        <div class="hud-lbl">Timer</div>
+        <div class="hud-lbl" data-i18n="hud.timer">Timer</div>
       </div>
       <div class="hud-item">
         <div class="hud-val red" id="ar-rival-score">0</div>
-        <div class="hud-lbl" id="ar-rival-name-hud">Rival</div>
+        <div class="hud-lbl" id="ar-rival-name-hud" data-i18n="hud.rival">Rival</div>
       </div>
     </div>
     <div class="arena-vs">
       <div class="arena-player">
         <div class="arena-avatar me">🎯</div>
-        <div class="arena-name">Tú</div>
+        <div class="arena-name" data-i18n="hud.me">Tú</div>
         <div class="arena-score green" id="ar-my-pts">0</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
@@ -1151,7 +1157,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       </div>
       <div class="arena-player">
         <div class="arena-avatar rival" id="ar-rival-avatar">🤖</div>
-        <div class="arena-name" id="ar-rival-name">Rival</div>
+        <div class="arena-name" id="ar-rival-name" data-i18n="hud.rival">Rival</div>
         <div class="arena-score red" id="ar-rival-pts">0</div>
       </div>
     </div>
@@ -1161,9 +1167,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       </div>
     </div>
     <div class="action-row" id="ar-actions">
-      <button class="action-btn action-long" onclick="arenaPlay('long')">▲ LONG</button>
-      <button class="action-btn action-skip" onclick="arenaPlay('skip')" style="flex:.6">—</button>
-      <button class="action-btn action-short" onclick="arenaPlay('short')">▼ SHORT</button>
+      <button class="action-btn action-long" onclick="arenaPlay('long')" data-i18n="btn.long">▲ LONG</button>
+      <button class="action-btn action-skip" onclick="arenaPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
+      <button class="action-btn action-short" onclick="arenaPlay('short')" data-i18n="btn.short">▼ SHORT</button>
     </div>
   </div>
 </div>
@@ -1171,9 +1177,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <!-- ======================== SCREEN: HISTÓRICO ======================== -->
 <div class="screen" id="s-historico">
   <div style="padding:20px 16px 16px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:6px">MODO HISTÓRICO</div>
-    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;margin-bottom:4px">Eventos Reales</div>
-    <div style="font-size:13px;color:var(--text2)">Viajá al pasado. Leé el chart como si fuera hoy.</div>
+    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:6px" data-i18n="mode.historico.name">MODO HISTÓRICO</div>
+    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;margin-bottom:4px" data-i18n="hist.title">Eventos Reales</div>
+    <div style="font-size:13px;color:var(--text2)" data-i18n="hist.subtitle">Viajá al pasado. Leé el chart como si fuera hoy.</div>
   </div>
   <div style="padding:8px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none">
     <button class="btn btn-ghost btn-sm sf-active" onclick="histFilter('all',this)" id="hf-all">Todos</button>
@@ -1204,9 +1210,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       </div>
     </div>
     <div class="action-row" id="hg-actions">
-      <button class="action-btn action-long" onclick="histPlay('long')">▲ LONG</button>
-      <button class="action-btn action-skip" onclick="histPlay('skip')" style="flex:.6">—</button>
-      <button class="action-btn action-short" onclick="histPlay('short')">▼ SHORT</button>
+      <button class="action-btn action-long" onclick="histPlay('long')" data-i18n="btn.long">▲ LONG</button>
+      <button class="action-btn action-skip" onclick="histPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
+      <button class="action-btn action-short" onclick="histPlay('short')" data-i18n="btn.short">▼ SHORT</button>
     </div>
     <div id="hg-lesson" style="display:none;margin:0 16px;padding:16px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r)"></div>
   </div>
@@ -1218,8 +1224,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div style="padding:16px;background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border);position:relative;overflow:hidden">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <div style="flex:1;min-width:0">
-          <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold)">🏆 Torneos</div>
-          <div style="font-size:11px;color:var(--text2);margin-top:2px">Competí por premios en USD reales</div>
+          <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold)" data-i18n="tor.title">🏆 Torneos</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px" data-i18n="tor.subtitle">Competí por premios en USD reales</div>
         </div>
         <div id="torneoWalletChip" style="text-align:right;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:6px 10px">
           <div style="font-size:8px;color:var(--text3);letter-spacing:1.5px">WALLET</div>
@@ -1481,17 +1487,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <!-- ======================== SCREEN: LIGA ======================== -->
 <div class="screen" id="s-liga">
   <div style="padding:16px 16px 12px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:6px">LIGA GLOBAL</div>
+    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:6px" data-i18n="liga.subtitle">LIGA GLOBAL</div>
     <div style="display:flex;align-items:center;gap:8px">
-      <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700">Rankings</div>
-      <span class="badge badge-live">● EN VIVO</span>
+      <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700" data-i18n="liga.title">Rankings</div>
+      <span class="badge badge-live" data-i18n="liga.live">● EN VIVO</span>
     </div>
   </div>
   <div class="tabs">
-    <div class="tab active" onclick="ligaTab('global',this)">Global</div>
-    <div class="tab" onclick="ligaTab('semanal',this)">Semanal</div>
-    <div class="tab" onclick="ligaTab('diario',this)">Diario</div>
-    <div class="tab" onclick="ligaTab('stats',this)">Mis Stats</div>
+    <div class="tab active" onclick="ligaTab('global',this)" data-i18n="liga.global">Global</div>
+    <div class="tab" onclick="ligaTab('semanal',this)" data-i18n="liga.week">Semanal</div>
+    <div class="tab" onclick="ligaTab('diario',this)" data-i18n="liga.daily">Diario</div>
+    <div class="tab" onclick="ligaTab('stats',this)" data-i18n="liga.mine">Mis Stats</div>
   </div>
   <!-- PODIUM -->
   <div class="podium" id="liga-podium"></div>
@@ -1500,11 +1506,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <!-- STATS TAB -->
   <div id="liga-stats-tab" style="display:none;padding:16px">
     <div class="stat-grid" style="padding:0 0 16px">
-      <div class="stat-box"><div class="stat-val" id="ls-total">0</div><div class="stat-lbl">Partidas</div></div>
-      <div class="stat-box"><div class="stat-val" id="ls-acc">0%</div><div class="stat-lbl">Precisión</div></div>
-      <div class="stat-box"><div class="stat-val" id="ls-streak">0</div><div class="stat-lbl">Racha max</div></div>
+      <div class="stat-box"><div class="stat-val" id="ls-total">0</div><div class="stat-lbl" data-i18n="prof.parts">Partidas</div></div>
+      <div class="stat-box"><div class="stat-val" id="ls-acc">0%</div><div class="stat-lbl" data-i18n="prof.precision">Precisión</div></div>
+      <div class="stat-box"><div class="stat-val" id="ls-streak">0</div><div class="stat-lbl" data-i18n="prof.rachaMax">Racha max</div></div>
     </div>
-    <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:10px">HISTORIAL RECIENTE</div>
+    <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:10px" data-i18n="liga.history">HISTORIAL RECIENTE</div>
     <div id="ls-history"></div>
   </div>
 </div>
@@ -1528,16 +1534,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       </div>
     </div>
     <div class="stat-grid">
-      <div class="stat-box"><div class="stat-val">47</div><div class="stat-lbl">Partidas</div></div>
-      <div class="stat-box"><div class="stat-val" style="color:var(--green)">68%</div><div class="stat-lbl">Precisión</div></div>
-      <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">Racha max</div></div>
+      <div class="stat-box"><div class="stat-val">47</div><div class="stat-lbl" data-i18n="prof.parts">Partidas</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:var(--green)">68%</div><div class="stat-lbl" data-i18n="prof.precision">Precisión</div></div>
+      <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl" data-i18n="prof.rachaMax">Racha max</div></div>
     </div>
     <div class="tabs">
-      <div class="tab active" id="tab-logros" onclick="perfilTab('logros',this)">Logros</div>
-      <div class="tab" id="tab-historial" onclick="perfilTab('historial',this)">Historial</div>
-      <div class="tab" id="tab-tienda" onclick="perfilTab('tienda',this)">Tienda</div>
-      <div class="tab" id="tab-planes" onclick="perfilTab('planes',this)">Pro</div>
-      <div class="tab" id="tab-sync" onclick="perfilTab('sync',this)">⚡ Sync TNSVT</div>
+      <div class="tab active" id="tab-logros" onclick="perfilTab('logros',this)" data-i18n="prof.logros">Logros</div>
+      <div class="tab" id="tab-historial" onclick="perfilTab('historial',this)" data-i18n="prof.historial">Historial</div>
+      <div class="tab" id="tab-tienda" onclick="perfilTab('tienda',this)" data-i18n="prof.tienda">Tienda</div>
+      <div class="tab" id="tab-planes" onclick="perfilTab('planes',this)" data-i18n="prof.planes">Pro</div>
+      <div class="tab" id="tab-sync" onclick="perfilTab('sync',this)" data-i18n="prof.sync">⚡ Sync TNSVT</div>
     </div>
   </div>
   <div id="perfil-body">
@@ -1555,19 +1561,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <div id="fractal-lobby" style="overflow-y:auto;flex:1;padding-bottom:20px">
     <div style="padding:20px 16px 16px;background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border);position:relative;overflow:hidden">
       <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY</div>
-      <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--violet3);margin-bottom:6px">Modo Fractal</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.6">El sistema analiza el chart con tu metodología.<br>Identificá BOS · LG · Zonas · Setup 2-Step.</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px" data-i18n="fr.theory">T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY</div>
+      <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--violet3);margin-bottom:6px" data-i18n="fr.title">Modo Fractal</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6" data-i18n="fr.desc">El sistema analiza el chart con tu metodología.<br>Identificá BOS · LG · Zonas · Setup 2-Step.</div>
     </div>
     <!-- SUB-MODES -->
     <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:2px">ELIGE UN MÓDULO</div>
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:2px" data-i18n="fr.submodes">ELIGE UN MÓDULO</div>
 
       <div class="mode-card" onclick="vipFractalMode('bos')" style="border-color:rgba(147,83,255,.4);background:linear-gradient(135deg,rgba(147,83,255,.08),transparent)">
         <div class="mode-icon">🔱</div>
         <div class="mode-info">
-          <div class="mode-name" style="color:var(--violet3)">BOS — Break of Structure</div>
-          <div class="mode-desc">Identificá rupturas de estructura alcistas y bajistas en el chart</div>
+          <div class="mode-name" style="color:var(--violet3)" data-i18n="fr.bos.name">BOS — Break of Structure</div>
+          <div class="mode-desc" data-i18n="fr.bos.desc">Identificá rupturas de estructura alcistas y bajistas en el chart</div>
           <div class="mode-meta">
             <span class="mode-tag" style="background:rgba(147,83,255,.15);color:var(--violet3)">ESTRUCTURA</span>
             <span class="mode-tag" style="background:rgba(74,222,128,.12);color:var(--green)">+200 XP</span>
@@ -1579,8 +1585,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       <div class="mode-card" onclick="vipFractalMode('lg')" style="border-color:rgba(240,192,96,.3);background:linear-gradient(135deg,rgba(240,192,96,.06),transparent)">
         <div class="mode-icon">🎯</div>
         <div class="mode-info">
-          <div class="mode-name" style="color:var(--gold)">LG — Last Gap</div>
-          <div class="mode-desc">Ubicá el último gap de liquidez antes del movimiento</div>
+          <div class="mode-name" style="color:var(--gold)" data-i18n="fr.lg.name">LG — Last Gap</div>
+          <div class="mode-desc" data-i18n="fr.lg.desc">Ubicá el último gap de liquidez antes del movimiento</div>
           <div class="mode-meta">
             <span class="mode-tag" style="background:rgba(240,192,96,.15);color:var(--gold)">LIQUIDEZ</span>
             <span class="mode-tag" style="background:rgba(74,222,128,.12);color:var(--green)">+250 XP</span>
@@ -1592,8 +1598,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       <div class="mode-card" onclick="vipFractalMode('zonas')" style="border-color:rgba(96,165,250,.3);background:linear-gradient(135deg,rgba(96,165,250,.06),transparent)">
         <div class="mode-icon">🗺️</div>
         <div class="mode-info">
-          <div class="mode-name" style="color:var(--blue)">Zonas de Oferta y Demanda</div>
-          <div class="mode-desc">Marcá las zonas institucionales donde el precio va a reaccionar</div>
+          <div class="mode-name" style="color:var(--blue)" data-i18n="fr.zones.name">Zonas de Oferta y Demanda</div>
+          <div class="mode-desc" data-i18n="fr.zones.desc">Marcá las zonas institucionales donde el precio va a reaccionar</div>
           <div class="mode-meta">
             <span class="mode-tag" style="background:rgba(96,165,250,.15);color:var(--blue)">INSTITUCIONAL</span>
             <span class="mode-tag" style="background:rgba(74,222,128,.12);color:var(--green)">+300 XP</span>
@@ -1605,8 +1611,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       <div class="mode-card" onclick="vipFractalMode('setup')" style="border:2px solid rgba(255,215,0,.4);background:linear-gradient(135deg,rgba(255,215,0,.08),transparent);box-shadow:0 4px 24px rgba(255,215,0,.1)">
         <div class="mode-icon">⚡</div>
         <div class="mode-info">
-          <div class="mode-name" style="color:#ffd700">Setup 2-Step Completo</div>
-          <div class="mode-desc">El análisis completo T.N.S.V.T — BOS + LG + Zona + Entry</div>
+          <div class="mode-name" style="color:#ffd700" data-i18n="fr.setup.name">Setup 2-Step Completo</div>
+          <div class="mode-desc" data-i18n="fr.setup.desc">El análisis completo T.N.S.V.T — BOS + LG + Zona + Entry</div>
           <div class="mode-meta">
             <span class="mode-tag" style="background:rgba(255,215,0,.2);color:#ffd700">AVANZADO</span>
             <span class="mode-tag" style="background:rgba(74,222,128,.12);color:var(--green)">+500 XP</span>
@@ -1619,7 +1625,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 
     <!-- FRACTAL THEORY CARD -->
     <div style="margin:0 16px 16px">
-      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:10px">TEORÍA RÁPIDA</div>
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:10px" data-i18n="fr.theory.title">TEORÍA RÁPIDA</div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:16px">
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="display:flex;gap:10px;align-items:flex-start">
@@ -1726,26 +1732,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <div class="screen" id="s-glosario">
   <div style="background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border);padding:18px 16px 14px;flex-shrink:0">
     <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:5px">T.N.S.V.T — EDUCACIÓN</div>
-    <div style="font-family:'Cinzel',serif;font-size:21px;font-weight:700;color:var(--text);margin-bottom:4px">Conceptos Base</div>
-    <div style="font-size:12px;color:var(--text2)">Abreviaciones, estructura y lógica institucional del mercado</div>
+    <div style="font-family:'Cinzel',serif;font-size:21px;font-weight:700;color:var(--text);margin-bottom:4px" data-i18n="glos.title">Conceptos Base</div>
+    <div style="font-size:12px;color:var(--text2)" data-i18n="glos.subtitle">Abreviaciones, estructura y lógica institucional del mercado</div>
   </div>
   <!-- Search -->
   <div style="padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0">
     <div style="position:relative">
-      <input id="glos-search" type="text" placeholder="Buscar concepto..." oninput="glosSearch(this.value)"
+      <input id="glos-search" type="text" data-i18n-placeholder="glos.search" placeholder="Buscar concepto..." oninput="glosSearch(this.value)"
         style="width:100%;padding:9px 12px 9px 34px;background:var(--panel);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none">
       <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text3)">🔍</span>
     </div>
   </div>
   <!-- Category pills -->
   <div style="display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(45,31,85,.4);flex-shrink:0" id="glos-cats">
-    <button class="glos-cat active" onclick="glosCat('all',this)">Todos</button>
+    <button class="glos-cat active" onclick="glosCat('all',this)" data-i18n="glos.cat.all">Todos</button>
     <button class="glos-cat" onclick="glosCat('poi',this)">📍 POI</button>
     <button class="glos-cat" onclick="glosCat('tf',this)">⏱ TF</button>
-    <button class="glos-cat" onclick="glosCat('estructura',this)">🏗 Estructura</button>
-    <button class="glos-cat" onclick="glosCat('entrada',this)">🎯 Entradas</button>
-    <button class="glos-cat" onclick="glosCat('liquidez',this)">💧 Liquidez</button>
-    <button class="glos-cat" onclick="glosCat('misc',this)">📐 Misc</button>
+    <button class="glos-cat" onclick="glosCat('estructura',this)" data-i18n="glos.cat.est">🏗 Estructura</button>
+    <button class="glos-cat" onclick="glosCat('entrada',this)" data-i18n="glos.cat.ent">🎯 Entradas</button>
+    <button class="glos-cat" onclick="glosCat('liquidez',this)" data-i18n="glos.cat.liq">💧 Liquidez</button>
+    <button class="glos-cat" onclick="glosCat('misc',this)" data-i18n="glos.cat.misc">📐 Misc</button>
   </div>
   <!-- Cards -->
   <div style="overflow-y:auto;flex:1;padding:10px 16px 20px" id="glos-list"></div>
@@ -1754,7 +1760,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <!-- ======================== SCREEN: MODOS ======================== -->
 <div class="screen" id="s-modos">
   <div style="padding:20px 16px 12px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700">Todos los Modos</div>
+    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700" data-i18n="mode.all.title">Todos los Modos</div>
   </div>
   <div id="modos-list" style="padding:12px 16px;display:flex;flex-direction:column;gap:8px"></div>
 </div>
@@ -1762,12 +1768,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <!-- ======================== SCREEN: MISIONES ======================== -->
 <div class="screen" id="s-misiones">
   <div style="padding:20px 16px 12px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700">Misiones</div>
+    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700" data-i18n="mode.misiones.name">Misiones</div>
   </div>
   <div class="tabs">
-    <div class="tab active" onclick="misionTab('diarias',this)">Diarias</div>
-    <div class="tab" onclick="misionTab('semanales',this)">Semanales</div>
-    <div class="tab" onclick="misionTab('permanentes',this)">Logros</div>
+    <div class="tab active" onclick="misionTab('diarias',this)" data-i18n="mis.tab.daily">Diarias</div>
+    <div class="tab" onclick="misionTab('semanales',this)" data-i18n="mis.tab.week">Semanales</div>
+    <div class="tab" onclick="misionTab('permanentes',this)" data-i18n="mis.tab.perm">Logros</div>
   </div>
   <div id="mission-list"></div>
 </div>
@@ -1805,10 +1811,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 
   <!-- TABS -->
   <div class="tabs" style="flex-shrink:0">
-    <div class="tab active" onclick="portTab('trade',this)">Nueva Orden</div>
-    <div class="tab" onclick="portTab('posiciones',this)">Posiciones <span id="port-pos-count" style="font-size:10px;color:var(--violet3)"></span></div>
-    <div class="tab" onclick="portTab('historial',this)">Historial</div>
-    <div class="tab" onclick="portTab('stats',this)">Stats</div>
+    <div class="tab active" onclick="portTab('trade',this)" data-i18n="port.tab.trade">Nueva Orden</div>
+    <div class="tab" onclick="portTab('posiciones',this)" data-i18n="port.tab.positions">Posiciones <span id="port-pos-count" style="font-size:10px;color:var(--violet3)"></span></div>
+    <div class="tab" onclick="portTab('historial',this)" data-i18n="port.tab.history">Historial</div>
+    <div class="tab" onclick="portTab('stats',this)" data-i18n="port.tab.stats">Stats</div>
   </div>
 
   <div style="overflow-y:auto;flex:1">
@@ -1998,7 +2004,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <!-- ── TAB: HISTORIAL ── -->
   <div id="port-historial" class="port-tab" style="display:none">
     <div style="padding:10px 16px;display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:11px;color:var(--text3)">Últimas operaciones cerradas</div>
+      <div style="font-size:11px;color:var(--text3)" data-i18n="port.empty">Últimas operaciones cerradas</div>
       <div style="font-size:12px;font-weight:600" id="port-hist-pnl"></div>
     </div>
     <div id="port-hist-list"></div>
@@ -2050,44 +2056,44 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <!-- Slide 1: Bienvenida -->
   <div class="ob-slide active" id="ob-slide-1">
     <div class="ob-emoji">🔮</div>
-    <div class="ob-title">Bienvenido a<br><span style="color:var(--violet3)">Market Instinct</span></div>
-    <div class="ob-desc">El juego donde tu <span class="ob-highlight">lectura del mercado</span> vale más que cualquier indicador.<br>Entrenás tu instinto. El mercado te corrige.</div>
-    <div class="ob-tip">💡 Basado en la <strong>T.N.S.V.T — Two-Step Multifractal Theory</strong>. Cada ronda es una decisión real de trading.</div>
+    <div class="ob-title" data-i18n="ob.1.title">Bienvenido a<br><span style="color:var(--violet3)">Market Instinct</span></div>
+    <div class="ob-desc" data-i18n="ob.1.desc">El juego donde tu <span class="ob-highlight">lectura del mercado</span> vale más que cualquier indicador.<br>Entrenás tu instinto. El mercado te corrige.</div>
+    <div class="ob-tip" data-i18n="ob.1.tip">💡 Basado en la <strong>T.N.S.V.T — Two-Step Multifractal Theory</strong>. Cada ronda es una decisión real de trading.</div>
     <div class="ob-dots">
       <div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div>
     </div>
-    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px" onclick="obNext()">Comenzar →</button>
-    <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="obSkip()">Saltar tutorial</button>
+    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px" onclick="obNext()" data-i18n="ob.1.btn">Comenzar →</button>
+    <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="obSkip()" data-i18n="ui.skip">Saltar tutorial</button>
   </div>
 
   <!-- Slide 2: Las 3 decisiones -->
   <div class="ob-slide" id="ob-slide-2">
     <div class="ob-emoji">📊</div>
-    <div class="ob-title">3 Decisiones</div>
-    <div class="ob-desc">Mirás el chart. La vela siguiente ya está formándose.<br>Tenés que decidir antes de que aparezca.</div>
+    <div class="ob-title" data-i18n="ob.2.title">3 Decisiones</div>
+    <div class="ob-desc" data-i18n="ob.2.desc">Mirás el chart. La vela siguiente ya está formándose.<br>Tenés que decidir antes de que aparezca.</div>
     <div class="ob-demo">
-      <button class="ob-demo-btn long" onclick="obDemoTap(this,'correct')">▲ LONG</button>
-      <button class="ob-demo-btn skip" onclick="obDemoTap(this,'skip')">— Skip</button>
-      <button class="ob-demo-btn short" onclick="obDemoTap(this,'wrong')">▼ SHORT</button>
+      <button class="ob-demo-btn long" onclick="obDemoTap(this,'correct')" data-i18n="btn.long">▲ LONG</button>
+      <button class="ob-demo-btn skip" onclick="obDemoTap(this,'skip')" data-i18n="btn.skip">— Skip</button>
+      <button class="ob-demo-btn short" onclick="obDemoTap(this,'wrong')" data-i18n="btn.short">▼ SHORT</button>
     </div>
-    <div id="ob-demo-feedback" style="font-size:13px;color:var(--text3);min-height:20px">← Probá tocar un botón</div>
+    <div id="ob-demo-feedback" style="font-size:13px;color:var(--text3);min-height:20px" data-i18n="ob.2.feedback">← Probá tocar un botón</div>
     <div class="ob-dots">
       <div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div>
     </div>
-    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px;margin-top:16px" onclick="obNext()">Entendido →</button>
+    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px;margin-top:16px" onclick="obNext()" data-i18n="ob.2.btn">Entendido →</button>
   </div>
 
   <!-- Slide 3: Rachas y XP -->
   <div class="ob-slide" id="ob-slide-3">
     <div class="ob-emoji">🔥</div>
-    <div class="ob-title">Rachas = Poder</div>
-    <div class="ob-desc">Cada respuesta correcta enciende tu racha.<br>Cuanto más larga, más XP multiplicado.</div>
+    <div class="ob-title" data-i18n="ob.3.title">Rachas = Poder</div>
+    <div class="ob-desc" data-i18n="ob.3.desc">Cada respuesta correcta enciende tu racha.<br>Cuanto más larga, más XP multiplicado.</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;max-width:300px;width:100%">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px">
-        <span style="font-size:16px">🔥🔥🔥</span><span style="font-size:13px;color:var(--text2)">Racha ×3</span><span style="font-weight:700;color:#f87171">×1.5 XP</span>
+        <span style="font-size:16px">🔥🔥🔥</span><span style="font-size:13px;color:var(--text2)"><span data-i18n="hud.streak">Racha</span> ×3</span><span style="font-weight:700;color:#f87171">×1.5 XP</span>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px">
-        <span style="font-size:16px">⚡⚡⚡⚡⚡</span><span style="font-size:13px;color:var(--text2)">Racha ×5</span><span style="font-weight:700;color:var(--gold)">×2 XP</span>
+        <span style="font-size:16px">⚡⚡⚡⚡⚡</span><span style="font-size:13px;color:var(--text2)"><span data-i18n="hud.streak">Racha</span> ×5</span><span style="font-weight:700;color:var(--gold)">×2 XP</span>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(90deg,rgba(240,192,96,.08),transparent);border:1px solid rgba(240,192,96,.3);border-radius:10px">
         <span style="font-size:16px">👑👑👑👑👑👑👑👑👑👑</span><span style="font-size:12px;color:var(--gold)">×10</span><span style="font-weight:700;color:#ffd700">×5 XP</span>
@@ -2096,39 +2102,39 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="ob-dots">
       <div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div>
     </div>
-    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px" onclick="obNext()">Siguiente →</button>
+    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px" onclick="obNext()" data-i18n="ob.3.btn">Siguiente →</button>
   </div>
 
   <!-- Slide 4: Modos -->
   <div class="ob-slide" id="ob-slide-4">
     <div class="ob-emoji">⚔️</div>
-    <div class="ob-title">7 Modos de Juego</div>
-    <div class="ob-desc">Cada modo entrena una habilidad diferente del trader.</div>
+    <div class="ob-title" data-i18n="ob.4.title">7 Modos de Juego</div>
+    <div class="ob-desc" data-i18n="ob.4.desc">Cada modo entrena una habilidad diferente del trader.</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;max-width:320px;width:100%">
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">📊</div><div style="font-size:12px;font-weight:600;margin-top:4px">Classic</div><div style="font-size:10px;color:var(--text3)">El base</div></div>
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">❤️</div><div style="font-size:12px;font-weight:600;margin-top:4px">Survival</div><div style="font-size:10px;color:var(--text3)">3 vidas</div></div>
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">📅</div><div style="font-size:12px;font-weight:600;margin-top:4px">Daily</div><div style="font-size:10px;color:var(--text3)">Un intento</div></div>
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">⚔️</div><div style="font-size:12px;font-weight:600;margin-top:4px">Arena</div><div style="font-size:10px;color:var(--text3)">1vs1</div></div>
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">📚</div><div style="font-size:12px;font-weight:600;margin-top:4px">Histórico</div><div style="font-size:10px;color:var(--text3)">Eventos reales</div></div>
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">🏆</div><div style="font-size:12px;font-weight:600;margin-top:4px">Torneo</div><div style="font-size:10px;color:var(--text3)">Semanal</div></div>
-      <div style="background:linear-gradient(135deg,rgba(74,222,128,.08),transparent);border:1px solid rgba(74,222,128,.3);border-radius:10px;padding:10px;text-align:center;grid-column:1/3"><div style="font-size:22px">💼</div><div style="font-size:12px;font-weight:600;margin-top:4px;color:var(--green)">Portfolio</div><div style="font-size:10px;color:var(--text3)">$50k virtuales · precios reales</div></div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">📊</div><div style="font-size:12px;font-weight:600;margin-top:4px" data-i18n="mode.classic.name">Classic</div><div style="font-size:10px;color:var(--text3)" data-i18n="ob.4.desc">El base</div></div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">❤️</div><div style="font-size:12px;font-weight:600;margin-top:4px" data-i18n="mode.survival.name">Survival</div><div style="font-size:10px;color:var(--text3)">3 vidas</div></div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">📅</div><div style="font-size:12px;font-weight:600;margin-top:4px" data-i18n="mode.daily.name">Daily</div><div style="font-size:10px;color:var(--text3)">Un intento</div></div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">⚔️</div><div style="font-size:12px;font-weight:600;margin-top:4px" data-i18n="mode.arena.name">Arena</div><div style="font-size:10px;color:var(--text3)">1vs1</div></div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">📚</div><div style="font-size:12px;font-weight:600;margin-top:4px" data-i18n="mode.historico.name">Histórico</div><div style="font-size:10px;color:var(--text3)">Eventos reales</div></div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:22px">🏆</div><div style="font-size:12px;font-weight:600;margin-top:4px" data-i18n="mode.torneo.name">Torneo</div><div style="font-size:10px;color:var(--text3)">Semanal</div></div>
+      <div style="background:linear-gradient(135deg,rgba(74,222,128,.08),transparent);border:1px solid rgba(74,222,128,.3);border-radius:10px;padding:10px;text-align:center;grid-column:1/3"><div style="font-size:22px">💼</div><div style="font-size:12px;font-weight:600;margin-top:4px;color:var(--green)" data-i18n="mode.portfolio.name">Portfolio</div><div style="font-size:10px;color:var(--text3)">$50k virtuales · precios reales</div></div>
     </div>
     <div class="ob-dots">
       <div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div>
     </div>
-    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px" onclick="obNext()">Casi listo →</button>
+    <button class="btn btn-primary btn-lg" style="width:100%;max-width:300px" onclick="obNext()" data-i18n="ob.4.btn">Casi listo →</button>
   </div>
 
   <!-- Slide 5: Ready -->
   <div class="ob-slide" id="ob-slide-5">
     <div class="ob-emoji" style="animation:none;font-size:80px">🚀</div>
-    <div class="ob-title">¡Listo para operar!</div>
-    <div class="ob-desc">Tu primera misión: <span class="ob-highlight">acertar 3 operaciones en Classic Mode</span>.<br>El mercado está esperando.</div>
-    <div class="ob-tip">🎯 Consejo de T.N.S.V.T: <em>"Antes de decidir, identificá la estructura. BOS + LG = Setup."</em></div>
+    <div class="ob-title" data-i18n="ob.5.title">¡Listo para operar!</div>
+    <div class="ob-desc" data-i18n="ob.5.desc">Tu primera misión: <span class="ob-highlight">acertar 3 operaciones en Classic Mode</span>.<br>El mercado está esperando.</div>
+    <div class="ob-tip" data-i18n="ob.5.tip">🎯 Consejo de T.N.S.V.T: <em>"Antes de decidir, identificá la estructura. BOS + LG = Setup."</em></div>
     <div class="ob-dots">
       <div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div>
     </div>
-    <button class="btn btn-gold btn-lg" style="width:100%;max-width:300px" onclick="obFinish()">🎯 ¡Empezar a jugar!</button>
+    <button class="btn btn-gold btn-lg" style="width:100%;max-width:300px" onclick="obFinish()" data-i18n="ob.5.btn">🎯 ¡Empezar a jugar!</button>
   </div>
 </div>
 
@@ -2136,23 +2142,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <nav id="nav">
   <button class="nav-btn active" onclick="goScreen('s-inicio')" id="nav-inicio">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Inicio
+    <span data-i18n="nav.inicio">Inicio</span>
   </button>
   <button class="nav-btn" onclick="goScreen('s-modos')" id="nav-modos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    Modos
+    <span data-i18n="nav.modos">Modos</span>
   </button>
   <button class="nav-btn" onclick="startClassic()" id="nav-play">
     <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10" fill="rgba(147,83,255,.2)" stroke="rgba(147,83,255,.6)" stroke-width="1.5"/><polygon points="10,8 16,12 10,16" fill="var(--violet3)"/></svg>
-    Jugar
+    <span data-i18n="nav.jugar">Jugar</span>
   </button>
   <button class="nav-btn" onclick="goScreen('s-liga')" id="nav-liga">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 21h8m-4-4v4m-7-4h14l-2-10H5L3 17zm4-10V4a1 1 0 011-1h8a1 1 0 011 1v3"/></svg>
-    Liga
+    <span data-i18n="nav.liga">Liga</span>
   </button>
   <button class="nav-btn" onclick="goScreen('s-perfil')" id="nav-perfil">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    Perfil
+    <span data-i18n="nav.perfil">Perfil</span>
   </button>
 </nav>
 
@@ -2212,6 +2218,346 @@ const RANKS = [
   {name:'MAESTRO',   min:7000,  color:'#f0c060'},
   {name:'ORÁCULO',   min:15000, color:'#ffd700'},
 ];
+
+// ============================================================
+// I18N — Multi idioma (Español Argentino + Inglés)
+// ============================================================
+const I18N = {
+  es: {
+    // ── UI general ──
+    'ui.live':'LIVE','ui.tap':'Tap','ui.menu':'menú','ui.back':'volver','ui.close':'Cerrar',
+    'ui.continue':'Continuar →','ui.exit':'✕ Salir','ui.next':'Siguiente →','ui.skip':'Saltar tutorial',
+    'ui.search':'Buscar...','ui.loading':'Cargando...','ui.empty':'No hay datos',
+    // ── Navegación ──
+    'nav.inicio':'Inicio','nav.modos':'Modos','nav.jugar':'Jugar','nav.liga':'Liga','nav.perfil':'Perfil',
+    // ── Inicio ──
+    'home.subtitle':'T.N.S.V.T — Market Instinct','home.greet':'Hola, Trader ✦',
+    'home.missions.title':'Misiones de Hoy','home.missions.all':'Ver todas →',
+    'home.feat.title':'Modo del Día','home.feat.players':'jugadores',
+    'home.feat.renews':'Renueva en:',
+    'home.modes.title':'Jugar Ahora','home.modes.all':'Todos →',
+    // ── Modo tags ──
+    'tag.libre':'LIBRE','tag.intenso':'INTENSO','tag.diario':'DIARIO','tag.competitivo':'COMPETITIVO',
+    'tag.educativo':'EDUCATIVO','tag.semanal':'SEMANAL','tag.simulador':'SIMULADOR','tag.educacion':'EDUCACIÓN',
+    'tag.xp':'XP','tag.new':'NUEVO','tag.metodologia':'METODOLOGÍA','tag.vip':'👑 VIP',
+    // ── Modos nombres ──
+    'mode.classic.name':'Classic','mode.classic.desc':'Long · Short · Sin Trade — el juego base',
+    'mode.survival.name':'Survival','mode.survival.desc':'3 vidas · dificultad creciente',
+    'mode.daily.name':'Daily Challenge','mode.daily.desc':'El mismo activo para todos. Un solo intento. ¿Quién lee mejor el mercado hoy?',
+    'mode.arena.name':'Arena 1vs1','mode.arena.desc':'Desafiá a otro trader en tiempo real',
+    'mode.historico.name':'Modo Histórico','mode.historico.desc':'Eventos reales del mercado · aprendé del pasado',
+    'mode.torneo.name':'Torneo Semanal','mode.torneo.desc':'10 rondas · ranking global · premios en USD',
+    'mode.portfolio.name':'Portfolio','mode.portfolio.desc':'$50,000 virtuales · opera con precios reales',
+    'mode.fractal.name':'Modo Fractal','mode.fractal.desc':'BOS · LG · Zonas · Setup 2-Step — T.N.S.V.T',
+    'mode.glosario.name':'Glosario Completo','mode.glosario.desc':'OB · POI · BOS · LG · EQH · TR · 30+ conceptos',
+    'mode.misiones.name':'Misiones','mode.misiones.desc':'Retos diarios y semanales · XP extra',
+    'mode.all.title':'Todos los Modos',
+    // ── Botones acción ──
+    'btn.long':'▲ LONG','btn.short':'▼ SHORT','btn.skip':'— Skip','btn.sintrade':'— Sin Trade',
+    'btn.sintrade.sub':'me quedo flat','btn.long.sub':'el precio sube','btn.short.sub':'el precio baja',
+    // ── HUD ──
+    'hud.score':'Score','hud.streak':'Racha','hud.accuracy':'Precisión','hud.lives':'Vidas',
+    'hud.round':'Ronda','hud.me':'Yo','hud.rival':'Rival','hud.timer':'Timer',
+    // ── Classic / Survival ──
+    'cs.assets':'Activos','cs.tf':'Timeframes','cs.price':'Precio Actual','cs.trend':'Tendencia',
+    'cs.change':'Variación','cs.context':'Contexto','cs.ratio':'Ratio 5v','cs.pctChange':'% Cambio',
+    'cs.q':'¿Qué pasa después?','cs.correct':'CORRECTO','cs.wrong':'INCORRECTO',
+    'cs.next':'SIGUIENTE →','cs.was':'precio','cs.up':'SUBE','cs.dn':'BAJA',
+    // ── Daily ──
+    'daily.played':'✓ Ya jugaste hoy','daily.info':'<strong style="color:var(--gold)">📊 El mismo chart para todos.</strong> Un solo intento por día. Tu decisión queda registrada en el ranking global.',
+    'daily.rank.today':'Ranking de Hoy',
+    // ── Arena ──
+    'arena.title':'Arena 1vs1','arena.subtitle':'Desafiá a traders reales. 5 rondas. El que más acierta, gana.',
+    'arena.pick':'Elegí un Rival','arena.enter':'⚔ Entrar al Arena',
+    // ── Histórico ──
+    'hist.title':'Eventos Reales','hist.subtitle':'Viajá al pasado. Leé el chart como si fuera hoy.',
+    'hist.tag.crpto':'CRIPTO','hist.tag.macro':'MACRO','hist.tag.forex':'FOREX','hist.tag.crash':'CRASH',
+    'hist.diff.easy':'FÁCIL','hist.diff.med':'MEDIO','hist.diff.hard':'DIFÍCIL',
+    'hist.done':'✓ Completado','hist.locked':'🔒 Bloqueado','hist.lesson':'📚 Lección del fractal:',
+    'hist.wrong.skip':'Sin trade','hist.wrong.dir':'Dirección incorrecta',
+    'hist.lesson.back':'← Volver a eventos','hist.realDir':'Dirección real:',
+    // ── Portfolio ──
+    'port.demo':'CUENTA DEMO — T.N.S.V.T','port.equity':'Equity total','port.pnlOpen':'P&L abierto',
+    'port.pnlClosed':'cerrado','port.balance':'Balance','port.free':'Libre','port.margin':'Margen',
+    'port.tab.trade':'Nueva Orden','port.tab.positions':'Posiciones','port.tab.history':'Historial','port.tab.stats':'Stats',
+    'port.instrument':'Instrumento','port.24h':'📈 24 horas','port.size':'Tamaño de posición',
+    'port.size.usd':'$ USD','port.size.pct':'% Capital','port.size.units':'Unidades',
+    'port.leverage':'Apalancamiento','port.sl':'Stop Loss','port.tp':'Take Profit','port.trailing':'Trailing Stop',
+    'port.trailing.desc':'Sigue el precio automáticamente','port.trailing.dist':'Distancia trailing (%)',
+    'port.preview':'Vista previa de la orden','port.buy':'▲ BUY / LONG','port.sell':'▼ SELL / SHORT',
+    'port.spread':'Spread','port.24hHigh':'24h High','port.24hLow':'24h Low',
+    'port.empty':'Últimas operaciones cerradas','port.custom':'Monto personalizado (1-1000 USD)',
+    // ── Perfil ──
+    'prof.logros':'Logros','prof.historial':'Historial','prof.tienda':'Tienda','prof.planes':'Pro',
+    'prof.sync':'⚡ Sync TNSVT','prof.parts':'Partidas','prof.precision':'Precisión','prof.rachaMax':'Racha max',
+    'prof.next':'Siguiente:','prof.progress':'Progreso al siguiente rango',
+    // ── Tienda ──
+    'shop.equip':'Equipar','shop.equipped':'Equipado ✓','shop.active':'✓ Activo','shop.buy':'$0.99',
+    'shop.locked':'🔒 VIP','shop.price':'$9.99','shop.tab.frames':'Marcos','shop.tab.avatars':'Avatares',
+    'shop.tab.themes':'Temas','shop.tab.effects':'Efectos',
+    // ── Misiones ──
+    'mis.tab.daily':'Diarias','mis.tab.week':'Semanales','mis.tab.perm':'Logros',
+    'mis.claim':'Reclamar','mis.completed':'✓ Completado',
+    // ── Glosario ──
+    'glos.title':'Conceptos Base','glos.subtitle':'Abreviaciones, estructura y lógica institucional del mercado',
+    'glos.search':'Buscar concepto...','glos.empty':'No se encontraron conceptos',
+    'glos.cat.all':'Todos','glos.cat.poi':'POI/Precio','glos.cat.tf':'Timeframes','glos.cat.est':'Estructura',
+    'glos.cat.ent':'Entradas','glos.cat.liq':'Liquidez','glos.cat.misc':'Misc',
+    // ── Ticker ──
+    'tk.live':'LIVE',
+    // ── Onboarding ──
+    'ob.1.title':'Bienvenido a<br><span style="color:var(--violet3)">Market Instinct</span>',
+    'ob.1.desc':'El juego donde tu <span class="ob-highlight">lectura del mercado</span> vale más que cualquier indicador.<br>Entrenás tu instinto. El mercado te corrige.',
+    'ob.1.tip':'💡 Basado en la <strong>T.N.S.V.T — Two-Step Multifractal Theory</strong>. Cada ronda es una decisión real de trading.',
+    'ob.1.btn':'Comenzar →',
+    'ob.2.title':'3 Decisiones','ob.2.desc':'Mirás el chart. La vela siguiente ya está formándose.<br>Tenés que decidir antes de que aparezca.',
+    'ob.2.feedback':'← Probá tocar un botón','ob.2.btn':'Entendido →',
+    'ob.3.title':'Rachas = Poder','ob.3.desc':'Cada respuesta correcta enciende tu racha.<br>Cuanto más larga, más XP multiplicado.',
+    'ob.3.btn':'Siguiente →',
+    'ob.4.title':'7 Modos de Juego','ob.4.desc':'Cada modo entrena una habilidad diferente del trader.',
+    'ob.4.btn':'Casi listo →',
+    'ob.5.title':'¡Listo para operar!','ob.5.desc':'Tu primera misión: <span class="ob-highlight">acertar 3 operaciones en Classic Mode</span>.<br>El mercado está esperando.',
+    'ob.5.tip':'🎯 Consejo de T.N.S.V.T: <em>"Antes de decidir, identificá la estructura. BOS + LG = Setup."</em>',
+    'ob.5.btn':'🎯 ¡Empezar a jugar!',
+    // ── Torneos ──
+    'tor.title':'🏆 Torneos','tor.subtitle':'Competí por premios en USD reales','tor.wallet':'WALLET',
+    'tor.notAuth':'⚠ No estás conectado a TNSVT. Configurá tu código en <b>Perfil → Sync TNSVT</b> para inscribirte.',
+    'tor.search':'Buscar torneo...','tor.mp':'💳 Cargar con MP','tor.bn':'B Cargar con Binance',
+    'tor.available':'DISPONIBLES','tor.mine':'MIS TORNEOS','tor.practice':'🎮 Iniciar Práctica',
+    'tor.practice.sub':'Práctica libre · +200 XP base · No afecta tu wallet','tor.tier':'TIER','tor.format':'FORMATO',
+    'tor.tier.free':'🆓 Gratuito ($0|$25k|5x)','tor.tier.beg':'🟢 Principiante ($5|$50k|10x)',
+    'tor.tier.int':'🔵 Intermedio ($25|$100k|25x)','tor.tier.pro':'🟣 Pro ($100|$250k|50x)','tor.tier.eli':'🔴 Elite ($500|$1M|100x)',
+    'tor.fmt.cls':'🏆 Clásico','tor.fmt.sur':'🛡️ Supervivencia','tor.fmt.kno':'⚔️ Eliminatorio','tor.fmt.con':'📊 Consistencia',
+    // ── Fractal ──
+    'fr.title':'Modo Fractal','fr.theory':'T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY',
+    'fr.desc':'El sistema analiza el chart con tu metodología.<br>Identificá BOS · LG · Zonas · Setup 2-Step.',
+    'fr.submodes':'ELIGE UN MÓDULO','fr.theory.title':'TEORÍA RÁPIDA',
+    'fr.bos.name':'BOS — Break of Structure','fr.bos.desc':'Identificá rupturas de estructura alcistas y bajistas en el chart',
+    'fr.lg.name':'LG — Last Gap','fr.lg.desc':'Ubicá el último gap de liquidez antes del movimiento',
+    'fr.zones.name':'Zonas de Oferta y Demanda','fr.zones.desc':'Marcá las zonas institucionales donde el precio va a reaccionar',
+    'fr.setup.name':'Setup 2-Step Completo','fr.setup.desc':'El análisis completo T.N.S.V.T — BOS + LG + Zona + Entry',
+    'fr.task':'Tocá el chart para marcar el nivel','fr.confirm':'✓ Confirmar nivel','fr.clear':'↺ Borrar',
+    // ── Toasts / Resultados ──
+    'toast.skip':'— Sin trade registrado','toast.roundSkip':'— Ronda saltada',
+    'toast.bull':'alcista','toast.bear':'bajista','toast.wrong':'El mercado fue',
+    'toast.newRank':'🎉 ¡Nuevo rango:','toast.xp':'✦ +','toast.tnsvt':'✦ TNSVT: +','toast.syncErr':'⚠ TNSVT sync falló:',
+    // ── Chart branding ──
+    'chart.engine':'📊 T.N.S.V.T Engine',
+    // ── Logros nombres/desc ──
+    'ach.first.name':'Primer Trade','ach.first.desc':'Completá tu primera ronda',
+    'ach.s3.name':'Triple Exacto','ach.s3.desc':'Racha de 3 respuestas correctas',
+    'ach.s5.name':'Llama Viva','ach.s5.desc':'Racha de 5 en Classic Mode',
+    'ach.sur.name':'Superviviente','ach.sur.desc':'Terminar Survival en ronda 15+',
+    'ach.d7.name':'Semana Completa','ach.d7.desc':'7 Daily Challenges seguidos',
+    'ach.a10.name':'Gladiador','ach.a10.desc':'10 victorias en Arena 1vs1',
+    'ach.t1.name':'Campeón','ach.t1.desc':'Ganar un Torneo Semanal',
+    'ach.hist.name':'Historiador','ach.hist.desc':'Completar todos los eventos históricos',
+    'ach.ora.name':'Oráculo','ach.ora.desc':'Alcanzar el rango máximo',
+    'ach.p80.name':'Cirujano','ach.p80.desc':'80% de precisión en 50 partidas',
+    'ach.bos_first.name':'Cazador de BOS','ach.bos_first.desc':'Acertá 10 BOS en Modo Fractal',
+    'ach.lg_master.name':'Maestro del LG','ach.lg_master.desc':'Acertá 10 LG consecutivos',
+    'ach.zone_pro.name':'Cartógrafo','ach.zone_pro.desc':'Marcá 25 zonas correctamente',
+    'ach.streak10.name':'Imparable','ach.streak10.desc':'Racha de 10 respuestas correctas',
+    'ach.trader_rich.name':'Ballena','ach.trader_rich.desc':'+$1000 P&L en Portfolio',
+    'ach.all_assets.name':'Polímata','ach.all_assets.desc':'Operá los 10 activos al menos 1 vez',
+    'ach.all_modes.name':'Versátil','ach.all_modes.desc':'Probá todos los modos de juego',
+    'ach.speed_demon.name':'Speed Trader','ach.speed_demon.desc':'10 decisiones en menos de 5s en Arena',
+    'ach.win_streak5.name':'Rey de la Racha','ach.win_streak5.desc':'5 victorias consecutivas en Arena',
+    'ach.no_skip_streak.name':'Decisor','ach.no_skip_streak.desc':'20 trades sin usar Skip',
+    // ── Liga ──
+    'liga.global':'Global','liga.week':'Semanal','liga.daily':'Diario','liga.mine':'Mis Stats',
+    'liga.live':'● EN VIVO','liga.title':'Rankings','liga.subtitle':'LIGA GLOBAL',
+    'liga.history':'HISTORIAL RECIENTE',
+    // ── Survival hints ──
+    'sv.h1':'💡 Buscá el BOS más reciente','sv.h2':'🧠 El fractal mayor manda la dirección',
+    'sv.h3':'⚡ Volumen + estructura = Setup','sv.h4':'🎯 Esperá la confirmación antes de entrar',
+    'sv.h5':'📐 ¿Hay LG en zona premium o descuento?',
+    // ── Lang selector ──
+    'lang.es':'🇦🇷 ES-AR','lang.en':'🇺🇸 EN',
+  },
+  en: {
+    'ui.live':'LIVE','ui.tap':'Tap','ui.menu':'menu','ui.back':'back','ui.close':'Close',
+    'ui.continue':'Continue →','ui.exit':'✕ Exit','ui.next':'Next →','ui.skip':'Skip tutorial',
+    'ui.search':'Search...','ui.loading':'Loading...','ui.empty':'No data',
+    'nav.inicio':'Home','nav.modos':'Modes','nav.jugar':'Play','nav.liga':'League','nav.perfil':'Profile',
+    'home.subtitle':'T.N.S.V.T — Market Instinct','home.greet':'Hey, Trader ✦',
+    'home.missions.title':'Today\'s Missions','home.missions.all':'See all →',
+    'home.feat.title':'Mode of the Day','home.feat.players':'players','home.feat.renews':'Renews in:',
+    'home.modes.title':'Play Now','home.modes.all':'All →',
+    'tag.libre':'FREE','tag.intenso':'INTENSE','tag.diario':'DAILY','tag.competitivo':'COMPETITIVE',
+    'tag.educativo':'EDUCATIONAL','tag.semanal':'WEEKLY','tag.simulador':'SIMULATOR','tag.educacion':'EDUCATION',
+    'tag.xp':'XP','tag.new':'NEW','tag.metodologia':'METHODOLOGY','tag.vip':'👑 VIP',
+    'mode.classic.name':'Classic','mode.classic.desc':'Long · Short · No Trade — the core game',
+    'mode.survival.name':'Survival','mode.survival.desc':'3 lives · increasing difficulty',
+    'mode.daily.name':'Daily Challenge','mode.daily.desc':'Same asset for everyone. One shot. Who reads the market best today?',
+    'mode.arena.name':'Arena 1vs1','mode.arena.desc':'Challenge another trader in real time',
+    'mode.historico.name':'Historical Mode','mode.historico.desc':'Real market events · learn from the past',
+    'mode.torneo.name':'Weekly Tournament','mode.torneo.desc':'10 rounds · global ranking · USD prizes',
+    'mode.portfolio.name':'Portfolio','mode.portfolio.desc':'$50,000 virtual · trade with real prices',
+    'mode.fractal.name':'Fractal Mode','mode.fractal.desc':'BOS · LG · Zones · 2-Step Setup — T.N.S.V.T',
+    'mode.glosario.name':'Full Glossary','mode.glosario.desc':'OB · POI · BOS · LG · EQH · TR · 30+ concepts',
+    'mode.misiones.name':'Missions','mode.misiones.desc':'Daily & weekly challenges · extra XP',
+    'mode.all.title':'All Modes',
+    'btn.long':'▲ LONG','btn.short':'▼ SHORT','btn.skip':'— Skip','btn.sintrade':'— No Trade',
+    'btn.sintrade.sub':'I stay flat','btn.long.sub':'price goes up','btn.short.sub':'price goes down',
+    'hud.score':'Score','hud.streak':'Streak','hud.accuracy':'Accuracy','hud.lives':'Lives',
+    'hud.round':'Round','hud.me':'Me','hud.rival':'Rival','hud.timer':'Timer',
+    'cs.assets':'Assets','cs.tf':'Timeframes','cs.price':'Current Price','cs.trend':'Trend',
+    'cs.change':'Change','cs.context':'Context','cs.ratio':'5c Ratio','cs.pctChange':'% Change',
+    'cs.q':'What happens next?','cs.correct':'CORRECT','cs.wrong':'WRONG',
+    'cs.next':'NEXT →','cs.was':'price','cs.up':'UP','cs.dn':'DOWN',
+    'daily.played':'✓ Already played today','daily.info':'<strong style="color:var(--gold)">📊 Same chart for everyone.</strong> One shot per day. Your decision is recorded on the global ranking.',
+    'daily.rank.today':'Today\'s Ranking',
+    'arena.title':'Arena 1vs1','arena.subtitle':'Challenge real traders. 5 rounds. Most correct wins.',
+    'arena.pick':'Pick a Rival','arena.enter':'⚔ Enter the Arena',
+    'hist.title':'Real Events','hist.subtitle':'Travel to the past. Read the chart like it\'s today.',
+    'hist.tag.crpto':'CRYPTO','hist.tag.macro':'MACRO','hist.tag.forex':'FOREX','hist.tag.crash':'CRASH',
+    'hist.diff.easy':'EASY','hist.diff.med':'MEDIUM','hist.diff.hard':'HARD',
+    'hist.done':'✓ Completed','hist.locked':'🔒 Locked','hist.lesson':'📚 Fractal lesson:',
+    'hist.wrong.skip':'No trade','hist.wrong.dir':'Wrong direction',
+    'hist.lesson.back':'← Back to events','hist.realDir':'Real direction:',
+    'port.demo':'DEMO ACCOUNT — T.N.S.V.T','port.equity':'Total equity','port.pnlOpen':'Open P&L',
+    'port.pnlClosed':'closed','port.balance':'Balance','port.free':'Free','port.margin':'Margin',
+    'port.tab.trade':'New Order','port.tab.positions':'Positions','port.tab.history':'History','port.tab.stats':'Stats',
+    'port.instrument':'Instrument','port.24h':'📈 24 hours','port.size':'Position size',
+    'port.size.usd':'$ USD','port.size.pct':'% Equity','port.size.units':'Units',
+    'port.leverage':'Leverage','port.sl':'Stop Loss','port.tp':'Take Profit','port.trailing':'Trailing Stop',
+    'port.trailing.desc':'Follows price automatically','port.trailing.dist':'Trailing distance (%)',
+    'port.preview':'Order preview','port.buy':'▲ BUY / LONG','port.sell':'▼ SELL / SHORT',
+    'port.spread':'Spread','port.24hHigh':'24h High','port.24hLow':'24h Low',
+    'port.empty':'Last closed trades','port.custom':'Custom amount (1-1000 USD)',
+    'prof.logros':'Achievements','prof.historial':'History','prof.tienda':'Shop','prof.planes':'Pro',
+    'prof.sync':'⚡ Sync TNSVT','prof.parts':'Games','prof.precision':'Accuracy','prof.rachaMax':'Best streak',
+    'prof.next':'Next:','prof.progress':'Progress to next rank',
+    'shop.equip':'Equip','shop.equipped':'Equipped ✓','shop.active':'✓ Active','shop.buy':'$0.99',
+    'shop.locked':'🔒 VIP','shop.price':'$9.99','shop.tab.frames':'Frames','shop.tab.avatars':'Avatars',
+    'shop.tab.themes':'Themes','shop.tab.effects':'Effects',
+    'mis.tab.daily':'Daily','mis.tab.week':'Weekly','mis.tab.perm':'Achievements',
+    'mis.claim':'Claim','mis.completed':'✓ Completed',
+    'glos.title':'Core Concepts','glos.subtitle':'Abbreviations, structure and institutional market logic',
+    'glos.search':'Search concept...','glos.empty':'No concepts found',
+    'glos.cat.all':'All','glos.cat.poi':'POI/Price','glos.cat.tf':'Timeframes','glos.cat.est':'Structure',
+    'glos.cat.ent':'Entries','glos.cat.liq':'Liquidity','glos.cat.misc':'Misc',
+    'tk.live':'LIVE',
+    'ob.1.title':'Welcome to<br><span style="color:var(--violet3)">Market Instinct</span>',
+    'ob.1.desc':'The game where your <span class="ob-highlight">market reading</span> matters more than any indicator.<br>Train your instinct. The market corrects you.',
+    'ob.1.tip':'💡 Based on the <strong>T.N.S.V.T — Two-Step Multifractal Theory</strong>. Each round is a real trading decision.',
+    'ob.1.btn':'Start →',
+    'ob.2.title':'3 Decisions','ob.2.desc':'You look at the chart. The next candle is already forming.<br>You have to decide before it appears.',
+    'ob.2.feedback':'← Try tapping a button','ob.2.btn':'Got it →',
+    'ob.3.title':'Streaks = Power','ob.3.desc':'Every right answer ignites your streak.<br>The longer, the more XP multiplied.',
+    'ob.3.btn':'Next →',
+    'ob.4.title':'7 Game Modes','ob.4.desc':'Each mode trains a different trader skill.',
+    'ob.4.btn':'Almost ready →',
+    'ob.5.title':'Ready to trade!','ob.5.desc':'Your first mission: <span class="ob-highlight">get 3 right in Classic Mode</span>.<br>The market is waiting.',
+    'ob.5.tip':'🎯 T.N.S.V.T tip: <em>"Before deciding, identify the structure. BOS + LG = Setup."</em>',
+    'ob.5.btn':'🎯 Start playing!',
+    'tor.title':'🏆 Tournaments','tor.subtitle':'Compete for real USD prizes','tor.wallet':'WALLET',
+    'tor.notAuth':'⚠ You\'re not connected to TNSVT. Set your code in <b>Profile → Sync TNSVT</b> to join.',
+    'tor.search':'Search tournament...','tor.mp':'💳 Load with MP','tor.bn':'B Load with Binance',
+    'tor.available':'AVAILABLE','tor.mine':'MY TOURNAMENTS','tor.practice':'🎮 Start Practice',
+    'tor.practice.sub':'Free practice · +200 XP base · Doesn\'t affect your wallet',
+    'tor.tier':'TIER','tor.format':'FORMAT',
+    'tor.tier.free':'🆓 Free ($0|$25k|5x)','tor.tier.beg':'🟢 Beginner ($5|$50k|10x)',
+    'tor.tier.int':'🔵 Intermediate ($25|$100k|25x)','tor.tier.pro':'🟣 Pro ($100|$250k|50x)','tor.tier.eli':'🔴 Elite ($500|$1M|100x)',
+    'tor.fmt.cls':'🏆 Classic','tor.fmt.sur':'🛡️ Survival','tor.fmt.kno':'⚔️ Knockout','tor.fmt.con':'📊 Consistency',
+    'fr.title':'Fractal Mode','fr.theory':'T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY',
+    'fr.desc':'The system analyzes the chart with your methodology.<br>Identify BOS · LG · Zones · 2-Step Setup.',
+    'fr.submodes':'PICK A MODULE','fr.theory.title':'QUICK THEORY',
+    'fr.bos.name':'BOS — Break of Structure','fr.bos.desc':'Identify bullish and bearish structure breaks on the chart',
+    'fr.lg.name':'LG — Last Gap','fr.lg.desc':'Locate the last liquidity gap before the move',
+    'fr.zones.name':'Supply & Demand Zones','fr.zones.desc':'Mark the institutional zones where price will react',
+    'fr.setup.name':'Full 2-Step Setup','fr.setup.desc':'Full T.N.S.V.T analysis — BOS + LG + Zone + Entry',
+    'fr.task':'Tap the chart to mark the level','fr.confirm':'✓ Confirm level','fr.clear':'↺ Clear',
+    'toast.skip':'— No trade recorded','toast.roundSkip':'— Round skipped',
+    'toast.bull':'bullish','toast.bear':'bearish','toast.wrong':'The market was',
+    'toast.newRank':'🎉 New rank:','toast.xp':'✦ +','toast.tnsvt':'✦ TNSVT: +','toast.syncErr':'⚠ TNSVT sync failed:',
+    'chart.engine':'📊 T.N.S.V.T Engine',
+    'ach.first.name':'First Trade','ach.first.desc':'Complete your first round',
+    'ach.s3.name':'Triple Exact','ach.s3.desc':'3 correct answers streak',
+    'ach.s5.name':'Living Flame','ach.s5.desc':'5 streak in Classic Mode',
+    'ach.sur.name':'Survivor','ach.sur.desc':'Finish Survival at round 15+',
+    'ach.d7.name':'Full Week','ach.d7.desc':'7 Daily Challenges in a row',
+    'ach.a10.name':'Gladiator','ach.a10.desc':'10 wins in Arena 1vs1',
+    'ach.t1.name':'Champion','ach.t1.desc':'Win a Weekly Tournament',
+    'ach.hist.name':'Historian','ach.hist.desc':'Complete all historical events',
+    'ach.ora.name':'Oracle','ach.ora.desc':'Reach the max rank',
+    'ach.p80.name':'Surgeon','ach.p80.desc':'80% accuracy in 50 games',
+    'ach.bos_first.name':'BOS Hunter','ach.bos_first.desc':'Hit 10 BOS in Fractal Mode',
+    'ach.lg_master.name':'LG Master','ach.lg_master.desc':'Hit 10 LGs in a row',
+    'ach.zone_pro.name':'Cartographer','ach.zone_pro.desc':'Mark 25 zones correctly',
+    'ach.streak10.name':'Unstoppable','ach.streak10.desc':'10 correct answers streak',
+    'ach.trader_rich.name':'Whale','ach.trader_rich.desc':'+$1000 P&L in Portfolio',
+    'ach.all_assets.name':'Polymath','ach.all_assets.desc':'Trade all 10 assets at least once',
+    'ach.all_modes.name':'Versatile','ach.all_modes.desc':'Try all game modes',
+    'ach.speed_demon.name':'Speed Trader','ach.speed_demon.desc':'10 decisions under 5s in Arena',
+    'ach.win_streak5.name':'Streak King','ach.win_streak5.desc':'5 wins in a row in Arena',
+    'ach.no_skip_streak.name':'Decisive','ach.no_skip_streak.desc':'20 trades without Skip',
+    'liga.global':'Global','liga.week':'Weekly','liga.daily':'Daily','liga.mine':'My Stats',
+    'liga.live':'● LIVE','liga.title':'Rankings','liga.subtitle':'GLOBAL LEAGUE','liga.history':'RECENT HISTORY',
+    'sv.h1':'💡 Look for the latest BOS','sv.h2':'🧠 The higher fractal leads the direction',
+    'sv.h3':'⚡ Volume + structure = Setup','sv.h4':'🎯 Wait for confirmation before entry',
+    'sv.h5':'📐 Any LG in premium or discount zone?',
+    'lang.es':'🇦🇷 ES-AR','lang.en':'🇺🇸 EN',
+  }
+};
+
+let CURRENT_LANG = (function(){
+  try { return localStorage.getItem('tnsvt_lang') || 'es'; } catch(e){ return 'es'; }
+})();
+
+function t(key){
+  const dict = I18N[CURRENT_LANG] || I18N.es;
+  return (dict[key] != null) ? dict[key] : (I18N.es[key] != null ? I18N.es[key] : key);
+}
+
+function setLang(lang){
+  if(!I18N[lang]) return;
+  CURRENT_LANG = lang;
+  try { localStorage.setItem('tnsvt_lang', lang); } catch(e){}
+  applyI18n();
+  if(typeof SFX !== 'undefined' && SFX.tap) SFX.tap();
+}
+
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const html = t(key);
+    if(html !== key) el.innerHTML = html;
+  });
+  document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    el.getAttribute('data-i18n-attr').split(',').forEach(pair => {
+      const [attr, key] = pair.split(':').map(s=>s.trim());
+      if(attr && key){
+        const val = t(key);
+        if(val !== key) el.setAttribute(attr, val);
+      }
+    });
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const val = t(key);
+    if(val !== key) el.setAttribute('placeholder', val);
+  });
+  // Highlight active lang button
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === CURRENT_LANG);
+  });
+  // Re-render dynamic components if functions exist
+  try { if(typeof renderModos === 'function')    renderModos(); } catch(e){}
+  try { if(typeof renderMisiones === 'function') renderMisiones(); } catch(e){}
+  try { if(typeof renderLogros === 'function')   renderLogros(); } catch(e){}
+  try { if(typeof renderPHistorial === 'function') renderPHistorial(); } catch(e){}
+  try { if(typeof renderPlanes === 'function')   renderPlanes(); } catch(e){}
+  try { if(typeof renderHistEvents === 'function') renderHistEvents(); } catch(e){}
+  try { if(typeof glosRender === 'function')     glosRender(); } catch(e){}
+  try { if(typeof updateTickerMacro === 'function') updateTickerMacro(); } catch(e){}
+  try { if(typeof updateTickerCrypto === 'function' && typeof STATE !== 'undefined' && STATE.marketData) {
+    const d={};
+    Object.entries(STATE.marketData).forEach(([k,v])=>{ d[k==='BTC'?'bitcoin':k==='ETH'?'ethereum':k==='SOL'?'solana':k==='BNB'?'binancecoin':k==='XRP'?'ripple':k]={usd:v.price,usd_24h_change:v.change24h}; });
+    updateTickerCrypto(d);
+  } } catch(e){}
+}
 
 // ============================================================
 // LIVE PRICES — CoinGecko free API
@@ -2716,6 +3062,39 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   ctx.fillStyle = 'rgba(240,192,96,.4)';
   ctx.fillText('EMA21', LEFT+38, PAD_TOP+9);
 
+  // ── T.N.S.V.T Engine branding (reemplaza visual de "TradingView") ──
+  ctx.save();
+  ctx.textAlign = 'right';
+  ctx.font = 'bold 9px Inter, sans-serif';
+  // Background pill
+  const brandText = '◆ T.N.S.V.T';
+  const brandW = 78;
+  const brandH = 14;
+  const brandX = W - PRICE_W - brandW - 4;
+  const brandY = H - PAD_BOT + 4;
+  ctx.fillStyle = 'rgba(147,83,255,.12)';
+  ctx.strokeStyle = 'rgba(147,83,255,.35)';
+  ctx.lineWidth = 1;
+  const br = 3;
+  ctx.beginPath();
+  ctx.moveTo(brandX+br, brandY);
+  ctx.lineTo(brandX+brandW-br, brandY);
+  ctx.quadraticCurveTo(brandX+brandW, brandY, brandX+brandW, brandY+br);
+  ctx.lineTo(brandX+brandW, brandY+brandH-br);
+  ctx.quadraticCurveTo(brandX+brandW, brandY+brandH, brandX+brandW-br, brandY+brandH);
+  ctx.lineTo(brandX+br, brandY+brandH);
+  ctx.quadraticCurveTo(brandX, brandY+brandH, brandX, brandY+brandH-br);
+  ctx.lineTo(brandX, brandY+br);
+  ctx.quadraticCurveTo(brandX, brandY, brandX+br, brandY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Brand text
+  ctx.fillStyle = 'rgba(200,160,255,.75)';
+  ctx.textAlign = 'center';
+  ctx.fillText(brandText, brandX+brandW/2, brandY+10);
+  ctx.restore();
+
   return null;
 }
 
@@ -2823,11 +3202,11 @@ function classicPlay(action){
       showToast(msgs[Math.floor(Math.random()*msgs.length)] + ' +'+pts+' pts');
     } else {
       STATE.classic.streak = 0;
-      showToast('✗ El mercado fue '+(result==='long'?'alcista':'bajista'));
+      showToast('✗ '+t('toast.wrong')+' '+(result==='long'?t('toast.bull'):t('toast.bear')));
     }
   } else {
     STATE.classic.streak = 0;
-    showToast('— Sin trade registrado');
+    showToast(t('toast.skip'));
   }
   const a = ASSETS[STATE.classic.asset];
   const base = STATE.prices[STATE.classic.asset] || a.base;
@@ -2865,8 +3244,8 @@ function updateSurvivalUI(){
   const db = document.getElementById('sv-diff-badge');
   db.textContent=diff; db.className='diff-pill '+cls;
   // Hint
-  const hints=['💡 Buscá el BOS más reciente','🧠 El fractal mayor manda la dirección','⚡ Volumen + estructura = Setup','🎯 Esperá la confirmación antes de entrar','📐 ¿Hay LG en zona premium o descuento?'];
-  document.getElementById('sv-hint').textContent = hints[Math.floor(Math.random()*hints.length)];
+  const hints=['sv.h1','sv.h2','sv.h3','sv.h4','sv.h5'];
+  document.getElementById('sv-hint').textContent = t(hints[Math.floor(Math.random()*hints.length)]);
 }
 
 function survivalNextRound(){
@@ -2891,7 +3270,7 @@ function survivalPlay(action){
   const correct = action !== 'skip' && action === result;
   if(action === 'skip'){
     STATE.survival.streak = 0;
-    showToast('— Ronda saltada');
+    showToast(t('toast.roundSkip'));
   } else if(correct){
     STATE.survival.streak++;
     let pts = 50 + Math.min(STATE.survival.round*10, 300);
@@ -3165,6 +3544,23 @@ const HIST_EVENTS = [
   {id:'cpi',name:'CPI Sorpresa',date:'Sep 2022',asset:'SP500',cat:'macro',diff:'med',pts:200,ctx:'Inflación USA supera expectativas. Fed sube tasas agresivamente.',trend:-1,lesson:'El dato macro actúa como catalizador del fractal mayor. El BOS bajista confirma la tendencia.'},
   {id:'btcath',name:'BTC ATH $64k',date:'Nov 2021',asset:'BTC',cat:'crypto',diff:'easy',pts:100,ctx:'Bitcoin alcanza máximo histórico de $64,000. Euforia total.',trend:1,lesson:'En tendencias eufóricas, el fractal menor nunca cierra el Setup bajista. Seguí la estructura mayor.'},
   {id:'gbp',name:'Libra Crisis',date:'Sep 2022',asset:'EURUSD',cat:'macro',diff:'med',pts:200,ctx:'Crisis fiscal UK. Gilt yields explotan. GBP colapsa a mínimos históricos.',trend:-1,lesson:'La crisis de deuda soberana genera fractales de RISK OFF en todos los activos. Correlaciones macro primero.'},
+
+  // ── Más eventos históricos (suma +15) ──
+  {id:'dotcom',name:'Dot-com Crash',date:'Mar 2000',asset:'NAS100',cat:'crash',diff:'hard',pts:350,ctx:'Burbuja tecnológica revienta. NASDAQ cae 78% en 2 años.',trend:-1,lesson:'Las burbujas especulativas se corrigen violentamente. El BOS del último HL marca el inicio del bear market.'},
+  {id:'lehman',name:'Lehman Brothers',date:'Sep 2008',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'Quiebra de Lehman. Crisis financiera global. Mercado interbank congelado.',trend:-1,lesson:'Las crisis de contraparte producen gaps de liquidez extremos. El SL se ejecuta siempre.'},
+  {id:'flashcrash',name:'Flash Crash 2010',date:'May 2010',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'SP500 cae 9% en minutos. Recuperación inmediata. Liquidez evaporada.',trend:-1,lesson:'Los flash crashes son LG extremos del HTF. La estructura técnica no aplica en milisegundos.'},
+  {id:'chinar',name:'China Ban',date:'Sep 2021',asset:'BTC',cat:'crypto',diff:'hard',pts:300,ctx:'China prohíbe toda actividad de cripto. Mining masivo migra. Hashrate -50%.',trend:-1,lesson:'Prohibiciones regulatorias son cisnes negros para crypto. Buscá acumulación posterior en LG mayor.'},
+  {id:'brexit',name:'Brexit Vote',date:'Jun 2016',asset:'EURUSD',cat:'forex',diff:'med',pts:200,ctx:'Reino Unido vota salir de la UE. GBP colapsa 15% overnight.',trend:-1,lesson:'Los eventos binarios (elecciones/referéndums) producen BOS instantáneos. Operar el gap, no el setup.'},
+  {id:'svb',name:'SVB Bank Collapse',date:'Mar 2023',asset:'SP500',cat:'macro',diff:'med',pts:250,ctx:'Silicon Valley Bank quiebra. Contagio a bancos regionales. Fed pausa suba de tasas.',trend:-1,lesson:'La fragilidad bancaria acelera el Risk Off. En Macro Shock, el SL corto salva la cuenta.'},
+  {id:'blackrock',name:'BlackRock ETF',date:'Jun 2023',asset:'BTC',cat:'crypto',diff:'easy',pts:150,ctx:'BlackRock presenta solicitud para ETF de Bitcoin. Institucionalización.',trend:1,lesson:'Las solicitudes regulatorias alcistas generan fractales de varios meses. Comprá el LG del primer retroceso.'},
+  {id:'defisum',name:'DeFi Summer',date:'Jul 2020',asset:'ETH',cat:'crypto',diff:'easy',pts:150,ctx:'Yield farming explota. TVL de DeFi pasa de $1B a $30B en meses.',trend:1,lesson:'Las narrativas sectoriales producen fractales verticales en activos específicos. ETH lidera.'},
+  {id:'ethmerge',name:'Ethereum Merge',date:'Sep 2022',asset:'ETH',cat:'crypto',diff:'med',pts:200,ctx:'ETH migra a Proof of Stake. Evento técnico más importante de la historia cripto.',trend:1,lesson:'Eventos técnicos predecibles (Merge, Halving) cotizan con anticipación. Comprá la expectativa.'},
+  {id:'czresign',name:'CZ Resignation',date:'Nov 2023',asset:'BTC',cat:'crypto',diff:'med',pts:200,ctx:'CZ (Binance CEO) renuncia tras acuerdo con DOJ. Sentimiento regulatorio.',trend:-1,lesson:'Los cambios regulatorios en exchanges centrales generan presión vendedora inmediata.'},
+  {id:'teslafomo',name:'Tesla FOMO 2020',date:'Ene 2021',asset:'NAS100',cat:'macro',diff:'easy',pts:150,ctx:'Tesla entra al S&P 500. Meme stocks como GME y AMC explotan.',trend:1,lesson:'La entrada de símbolos al S&P produce un rally inicial de 1-2 meses. Después la estructura manda.'},
+  {id:'amazoncrash',name:'Amazon COVID Rally',date:'Mar 2020',asset:'NAS100',cat:'macro',diff:'hard',pts:300,ctx:'COVID golpea. AMZN retrocede 25% en 3 semanas. Después sube 200%.',trend:1,lesson:'En crisis, las big tech son las primeras en recuperarse. El LG del crash es el mejor setup del año.'},
+  {id:'oilneg',name:'Oil Goes Negative',date:'Abr 2020',asset:'WTI',cat:'crash',diff:'hard',pts:400,ctx:'El petróleo WTI cotiza en -$37 por primera vez en la historia. Saturación total.',trend:-1,lesson:'Eventos sin precedente histórico rompen toda estructura técnica. Cero análisis, solo gestión de riesgo.'},
+  {id:'goldcovid',name:'Gold COVID Rally',date:'Jul 2020',asset:'GOLD',cat:'macro',diff:'easy',pts:150,ctx:'Oro alcanza $2,067 ATH durante la incertidumbre del COVID.',trend:1,lesson:'En risk-off extremo, el oro es el primer activo en reflejar el LG del miedo.'},
+  {id:'eurodol',name:'Euro-Dollar Parity',date:'Jul 2022',asset:'EURUSD',cat:'forex',diff:'med',pts:250,ctx:'EUR/USD toca paridad 1.0000 por primera vez en 20 años.',trend:-1,lesson:'Las paridades psicológicas (1.00, 100) son niveles de ERL. Después gira.'},
 ];
 
 let histFilter_active = 'all';
@@ -3186,14 +3582,14 @@ function renderHistEvents(){
   el.innerHTML = events.map(ev=>{
     const done = STATE.hist.completed.has(ev.id);
     const tagMap = {crypto:'tag-crypto',macro:'tag-macro',forex:'tag-forex',crash:'tag-crash'};
-    const tagLabel = {crypto:'CRIPTO',macro:'MACRO',forex:'FOREX',crash:'CRASH'};
-    const diffLabel = {easy:'FÁCIL',med:'MEDIO',hard:'DIFÍCIL'};
+    const tagLabel = {crypto:t('hist.tag.crpto'),macro:t('hist.tag.macro'),forex:t('hist.tag.forex'),crash:t('hist.tag.crash')};
+    const diffLabel = {easy:t('hist.diff.easy'),med:t('hist.diff.med'),hard:t('hist.diff.hard')};
     const diffCls = {easy:'diff-easy',med:'diff-med',hard:'diff-hard'};
     return `<div class="event-card ${done?'completed':''}" onclick="openHistEvent('${ev.id}')">
       <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px">
         <span class="event-tag ${tagMap[ev.cat]}">${tagLabel[ev.cat]}</span>
         <span class="diff-pill ${diffCls[ev.diff]}" style="font-size:10px;padding:2px 7px">${diffLabel[ev.diff]}</span>
-        ${done?`<span style="color:var(--green);font-size:11px;font-weight:700">✓ Completado</span>`:''}
+        ${done?`<span style="color:var(--green);font-size:11px;font-weight:700">${t('hist.done')}</span>`:''}
       </div>
       <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;margin-bottom:4px">${ev.name}</div>
       <div style="font-size:12px;color:var(--text3)">${ev.asset} · ${ev.date}</div>
@@ -3217,7 +3613,7 @@ function openHistEvent(id){
   const diffCls = {easy:'diff-easy',med:'diff-med',hard:'diff-hard'};
   const diffEl = document.getElementById('hg-diff');
   diffEl.className='diff-pill '+diffCls[ev.diff];
-  diffEl.textContent={easy:'FÁCIL',med:'MEDIO',hard:'DIFÍCIL'}[ev.diff];
+  diffEl.textContent={easy:t('hist.diff.easy'),med:t('hist.diff.med'),hard:t('hist.diff.hard')}[ev.diff];
   const histGame = document.getElementById('hist-game');
   histGame.style.display='block';
   histGame._candles = candles;
@@ -3240,13 +3636,13 @@ function histPlay(action){
   const lesson = document.getElementById('hg-lesson');
   lesson.style.display='';
   lesson.innerHTML = `
-    <div style="color:${correct?'var(--green)':'var(--red)'};font-weight:700;font-size:15px;margin-bottom:8px">${correct?'✓ ¡Correcto!':'✗ '+(action==='skip'?'Sin trade':'Dirección incorrecta')}</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><strong style="color:var(--gold)">📚 Lección del fractal:</strong> ${ev.lesson}</div>
-    <div style="font-size:12px;color:var(--text3)">Dirección real: <strong style="color:${ev.trend>0?'var(--green)':'var(--red)'}">${ev.trend>0?'📈 LONG':'📉 SHORT'}</strong></div>
+    <div style="color:${correct?'var(--green)':'var(--red)'};font-weight:700;font-size:15px;margin-bottom:8px">${correct?'✓ '+(CURRENT_LANG==='en'?'Correct!':'¡Correcto!'):'✗ '+(action==='skip'?t('hist.wrong.skip'):t('hist.wrong.dir'))}</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><strong style="color:var(--gold)">${t('hist.lesson')}</strong> ${ev.lesson}</div>
+    <div style="font-size:12px;color:var(--text3)">${t('hist.realDir')} <strong style="color:${ev.trend>0?'var(--green)':'var(--red)'}">${ev.trend>0?'📈 LONG':'📉 SHORT'}</strong></div>
     ${correct?`<div style="margin-top:8px;color:var(--gold);font-size:12px;font-weight:700">+${ev.pts} pts · +${ev.pts/10|0} XP</div>`:''}
-    <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="closeHistGame()">← Volver a eventos</button>`;
+    <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="closeHistGame()">${t('hist.lesson.back')}</button>`;
   if(correct){ addXP(ev.pts/10|0); showToast('✓ +'+ev.pts+' pts — '+ev.name); }
-  else showToast('✗ Evento: '+(ev.trend>0?'fue LONG':'fue SHORT'));
+  else showToast('✗ Evento: '+(ev.trend>0?(CURRENT_LANG==='en'?'was LONG':'fue LONG'):(CURRENT_LANG==='en'?'was SHORT':'fue SHORT')));
   renderHistEvents();
 }
 
@@ -4064,6 +4460,17 @@ const ACHIEVEMENTS = [
   {id:'hist',name:'Historiador',desc:'Completar todos los eventos históricos',emoji:'📚',xp:600,unlocked:false},
   {id:'oracle',name:'Oráculo',desc:'Alcanzar el rango máximo',emoji:'🔮',xp:2000,unlocked:false},
   {id:'precision80',name:'Cirujano',desc:'80% de precisión en 50 partidas',emoji:'🎖',xp:800,unlocked:false},
+  // ── Logros extra (+10) ──
+  {id:'bos_first',name:'Cazador de BOS',desc:'Acertá 10 BOS en Modo Fractal',emoji:'🔱',xp:600,unlocked:false},
+  {id:'lg_master',name:'Maestro del LG',desc:'Acertá 10 LG consecutivos',emoji:'🎯',xp:700,unlocked:false},
+  {id:'zone_pro',name:'Cartógrafo',desc:'Marcá 25 zonas correctamente',emoji:'🗺️',xp:500,unlocked:false},
+  {id:'streak10',name:'Imparable',desc:'Racha de 10 respuestas correctas',emoji:'⚡⚡',xp:500,unlocked:false},
+  {id:'trader_rich',name:'Ballena',desc:'+$1000 P&L en Portfolio',emoji:'🐋',xp:900,unlocked:false},
+  {id:'all_assets',name:'Polímata',desc:'Operá los 10 activos al menos 1 vez',emoji:'🌐',xp:400,unlocked:false},
+  {id:'all_modes',name:'Versátil',desc:'Probá todos los modos de juego',emoji:'🎮',xp:600,unlocked:false},
+  {id:'speed_demon',name:'Speed Trader',desc:'10 decisiones en menos de 5s en Arena',emoji:'⏱️',xp:450,unlocked:false},
+  {id:'win_streak5',name:'Rey de la Racha',desc:'5 victorias consecutivas en Arena',emoji:'👑',xp:800,unlocked:false},
+  {id:'no_skip_streak',name:'Decisor',desc:'20 trades sin usar Skip',emoji:'💯',xp:550,unlocked:false},
 ];
 
 const HIST_RECORDS = [
@@ -4173,6 +4580,51 @@ const FRAMES = [
         <div style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:1">🌌</div>
       </div>`,
   },
+  // ── Marcos extra (+4) ──
+  {
+    id:'fr8', name:'⚡ Rayo Eléctrico', price:'$0.99',
+    desc:'Energía pura. Para los que operan con voltaje.',
+    css:`border:3px solid #f7ff00;box-shadow:0 0 0 2px rgba(247,255,0,.2),0 0 24px rgba(247,255,0,.5),inset 0 0 14px rgba(247,255,0,.15)`,
+    preview: () => `
+      <div style="position:relative;width:72px;height:72px;margin:0 auto">
+        <div style="position:absolute;inset:-1px;border-radius:50%;border:3px solid #f7ff00;box-shadow:0 0 0 3px rgba(247,255,0,.18),0 0 24px rgba(247,255,0,.6)"></div>
+        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(247,255,0,.22),rgba(247,255,0,.08));display:flex;align-items:center;justify-content:center;font-size:30px">⚡</div>
+      </div>`,
+  },
+  {
+    id:'fr9', name:'🌊 Olas del Mercado', price:'$0.99',
+    desc:'Fluyes con las olas. Lectura del OF institucional.',
+    css:`border:3px solid transparent;background:linear-gradient(#0a1525,#0a1525) padding-box,linear-gradient(135deg,#0891b2,#06b6d4,#60a5fa) border-box;box-shadow:0 0 24px rgba(6,182,212,.4)`,
+    preview: () => `
+      <div style="position:relative;width:72px;height:72px;margin:0 auto">
+        <div style="position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(135deg,#0891b2,#06b6d4,#60a5fa);padding:3px">
+          <div style="width:100%;height:100%;border-radius:50%;background:#0a1525"></div>
+        </div>
+        <div style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:1">🌊</div>
+      </div>`,
+  },
+  {
+    id:'fr10', name:'🔥 Infernal', price:'$0.99',
+    desc:'Ardes en cada trade. Pasión por el mercado.',
+    css:`border:3px solid #ff4500;box-shadow:0 0 0 2px rgba(255,69,0,.2),0 0 22px rgba(255,69,0,.55),inset 0 0 14px rgba(255,69,0,.18)`,
+    preview: () => `
+      <div style="position:relative;width:72px;height:72px;margin:0 auto">
+        <div style="position:absolute;inset:-1px;border-radius:50%;border:3px solid #ff4500;box-shadow:0 0 0 3px rgba(255,69,0,.2),0 0 26px rgba(255,69,0,.65)"></div>
+        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(255,69,0,.25),rgba(255,69,0,.08));display:flex;align-items:center;justify-content:center;font-size:30px">🔥</div>
+      </div>`,
+  },
+  {
+    id:'fr11', name:'💎 Cristal Diamante', price:'$0.99',
+    desc:'Tu setup es perfecto. Refleja cada trade.',
+    css:`border:3px solid transparent;background:linear-gradient(#0a0014,#0a0014) padding-box,linear-gradient(135deg,#f0abfc,#a78bfa,#22d3ee,#f0abfc) border-box;box-shadow:0 0 26px rgba(167,139,250,.45)`,
+    preview: () => `
+      <div style="position:relative;width:72px;height:72px;margin:0 auto">
+        <div style="position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(135deg,#f0abfc,#a78bfa,#22d3ee,#f0abfc);padding:3px">
+          <div style="width:100%;height:100%;border-radius:50%;background:#0a0014"></div>
+        </div>
+        <div style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:1">💎</div>
+      </div>`,
+  },
 ];
 
 // ────────────────────────────────────────────────────────────
@@ -4211,6 +4663,39 @@ const AVATARS = [
     tagline:'Revive de cada drawdown. Nunca se rinde.',
     color:'#f0c060', rank:'ESTRATEGA+', trait:'Comeback king',
     stat1:'Recovery', s1:'99%', stat2:'Resiliencia', s2:'★★★'},
+  // ── Avatares extra (+8) ──
+  {id:'a9', name:'Wolf', emoji:'🐺', price:'$0.99',
+    tagline:'Caza en manada. Domina la tendencia.',
+    color:'#94a3b8', rank:'OPERADOR+', trait:'Trend follower',
+    stat1:'Trend', s1:'88%', stat2:'Paciencia', s2:'★★☆'},
+  {id:'a10', name:'Cobra', emoji:'🐍', price:'$0.99',
+    tagline:'Ataque silencioso. Liquidez en zonas de OF.',
+    color:'#84cc16', rank:'MAESTRO+', trait:'OF hunter',
+    stat1:'OF sync', s1:'85%', stat2:'Veneno', s2:'★★★'},
+  {id:'a11', name:'Crane', emoji:'🦢', price:'$0.99',
+    tagline:'Elegancia institucional. Setup limpio.',
+    color:'#ec4899', rank:'ESTRATEGA+', trait:'Setup minimalista',
+    stat1:'RR medio', s1:'1:4', stat2:'Pureza', s2:'★★★'},
+  {id:'a12', name:'Panther', emoji:'🐈‍⬛', price:'$0.99',
+    tagline:'Nocturno. Lee los gaps y se mueve en las sombras.',
+    color:'#1e293b', rank:'MAESTRO+', trait:'FVG master',
+    stat1:'FVG hit', s1:'92%', stat2:'Sigilo', s2:'★★★'},
+  {id:'a13', name:'Lion', emoji:'🦁', price:'$0.99',
+    tagline:'Rey de la jungle. Domina las aperturas macro.',
+    color:'#f59e0b', rank:'ORÁCULO only', trait:'Apertura NY',
+    stat1:'NY Wins', s1:'78%', stat2:'Rugido', s2:'★★★'},
+  {id:'a14', name:'Eagle', emoji:'🦅', price:'$0.99',
+    tagline:'Vista HTF. Ve lo que nadie ve.',
+    color:'#06b6d4', rank:'MAESTRO+', trait:'HTF bias',
+    stat1:'Bias hit', s1:'94%', stat2:'Visión', s2:'★★★'},
+  {id:'a15', name:'Tiger', emoji:'🐯', price:'$0.99',
+    tagline:'Agresor disciplinado. Nunca pierde el control.',
+    color:'#fb923c', rank:'ESTRATEGA+', trait:'Aggression',
+    stat1:'Win rate', s1:'72%', stat2:'Disciplina', s2:'★★★'},
+  {id:'a16', name:'Kraken', emoji:'🦑', price:'$0.99',
+    tagline:'Crypto nativo. Multi-tentáculos en todos los pares.',
+    color:'#7c3aed', rank:'ORÁCULO only', trait:'Multi-pair',
+    stat1:'Pairs', s1:'8+', stat2:'Tentáculos', s2:'★★★'},
 ];
 
 // ────────────────────────────────────────────────────────────
@@ -5375,15 +5860,21 @@ function renderLogros(){
   const el=document.getElementById('perfil-logros');
   if(!el) return;
   el.innerHTML=`<div style="padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
-    ${ACHIEVEMENTS.map(a=>`
+    ${ACHIEVEMENTS.map(a=>{
+      const nameI18n = t('ach.'+a.id.split('_')[0]+(a.id.includes('_')?('_'+a.id.split('_').slice(1).join('_')):'')+'.name');
+      const descI18n = t('ach.'+a.id.split('_')[0]+(a.id.includes('_')?('_'+a.id.split('_').slice(1).join('_')):'')+'.desc');
+      const name = (nameI18n && !nameI18n.startsWith('ach.')) ? nameI18n : a.name;
+      const desc = (descI18n && !descI18n.startsWith('ach.')) ? descI18n : a.desc;
+      return `
       <div style="background:var(--panel);border:1px solid ${a.unlocked?'rgba(147,83,255,.4)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;opacity:${a.unlocked?1:.45};transition:all .2s">
         <div style="font-size:28px;margin-bottom:8px;${a.unlocked?'filter:drop-shadow(0 0 8px rgba(240,192,96,.4))':''}">${a.emoji}</div>
-        <div style="font-weight:700;font-size:13px;margin-bottom:3px;color:${a.unlocked?'var(--text)':'var(--text3)'}">${a.name}</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;line-height:1.4">${a.desc}</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:3px;color:${a.unlocked?'var(--text)':'var(--text3)'}">${name}</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;line-height:1.4">${desc}</div>
         ${a.unlocked
           ? `<div style="font-size:10px;color:var(--gold);font-weight:600">✦ +${a.xp} XP · ${a.date}</div>`
-          : `<div style="font-size:10px;color:var(--text3)">🔒 Bloqueado</div>`}
-      </div>`).join('')}
+          : `<div style="font-size:10px;color:var(--text3)">${t('hist.locked')}</div>`}
+      </div>`;
+    }).join('')}
   </div>`;
 }
 
@@ -5485,11 +5976,21 @@ const MISIONES = {
     {id:'d2',name:'Racha de 3 en Survival',emoji:'⚡',progress:0,total:3,xp:200,completed:false},
     {id:'d3',name:'Jugar el Daily Challenge',emoji:'📅',progress:STATE.daily.played?1:0,total:1,xp:100,completed:STATE.daily.played},
     {id:'d4',name:'Ganar 1 Arena 1vs1',emoji:'⚔️',progress:0,total:1,xp:250,completed:false},
+    // ── Misiones diarias extra (+5) ──
+    {id:'d5',name:'Operar 3 activos distintos',emoji:'🌐',progress:1,total:3,xp:180,completed:false},
+    {id:'d6',name:'Acertar 1 trade en 2 timeframes',emoji:'⏱️',progress:0,total:2,xp:200,completed:false},
+    {id:'d7',name:'Llegar a ronda 5 en Survival',emoji:'🛡️',progress:0,total:5,xp:220,completed:false},
+    {id:'d8',name:'Completar 1 evento histórico',emoji:'📜',progress:0,total:1,xp:300,completed:false},
+    {id:'d9',name:'Hacer 1 long + 1 short en Classic',emoji:'↕️',progress:0,total:2,xp:160,completed:false},
   ],
   semanales:[
     {id:'w1',name:'200 operaciones totales',emoji:'📊',progress:47,total:200,xp:1000,completed:false},
     {id:'w2',name:'Jugar 5 días seguidos',emoji:'🔥',progress:3,total:5,xp:500,completed:false},
     {id:'w3',name:'Completar 3 eventos históricos',emoji:'📚',progress:STATE.hist.completed.size,total:3,xp:600,completed:STATE.hist.completed.size>=3},
+    // ── Misiones semanales extra (+3) ──
+    {id:'w4',name:'Llegar a rango ESTRATEGA',emoji:'📈',progress:0,total:1,xp:800,completed:false},
+    {id:'w5',name:'Acertar 30 trades en Survival',emoji:'💀',progress:0,total:30,xp:1200,completed:false},
+    {id:'w6',name:'Comprar 1 item en la tienda',emoji:'🛍️',progress:0,total:1,xp:300,completed:false},
   ],
   permanentes: ACHIEVEMENTS.filter(a=>!a.unlocked).map(a=>({id:a.id,name:a.name,emoji:a.emoji,desc:a.desc,xp:a.xp,progress:0,total:1,completed:false})),
 };
@@ -5509,12 +6010,12 @@ function misionTab(tab, btn){
       <div class="miss-icon">${m.emoji}</div>
       <div class="miss-info">
         <div class="miss-name">${m.name}</div>
-        <div class="miss-prog">${m.completed?'✓ Completado':`${m.progress} / ${m.total}`}</div>
+        <div class="miss-prog">${m.completed?t('mis.completed'):`${m.progress} / ${m.total}`}</div>
         <div class="miss-bar"><div class="miss-fill" style="width:${pct}%"></div></div>
       </div>
       <div class="miss-reward">
         <div class="miss-xp">+${m.xp} XP</div>
-        ${m.completed&&!STATE.missionsCompleted.has(m.id)?`<button class="claim-btn" onclick="claimMission('${m.id}',${m.xp},event)">Reclamar</button>`:''}
+        ${m.completed&&!STATE.missionsCompleted.has(m.id)?`<button class="claim-btn" onclick="claimMission('${m.id}',${m.xp},event)">${t('mis.claim')}</button>`:''}
       </div>
     </div>`;
   }).join('');
@@ -7231,16 +7732,18 @@ function glosRender(){
     g.desc.toLowerCase().includes(glosSearchTerm)
   );
   const list=document.getElementById('glos-list'); if(!list)return;
-  if(!items.length){ list.innerHTML=`<div style="padding:40px;text-align:center;color:var(--text3)">No se encontraron conceptos</div>`; return; }
+  if(!items.length){ list.innerHTML=`<div style="padding:40px;text-align:center;color:var(--text3)">${t('glos.empty')}</div>`; return; }
   const catCol={poi:'#60a5fa',tf:'#a78bfa',estructura:'#f0c060',entrada:'#4ade80',liquidez:'#38bdf8',misc:'#c8a0ff'};
   list.innerHTML=items.map(g=>{
     const col=catCol[g.cat]||'var(--violet3)';
     const exp=glosExpanded.has(g.abbr);
+    const catKey = {poi:'glos.cat.poi',tf:'glos.cat.tf',estructura:'glos.cat.est',entrada:'glos.cat.ent',liquidez:'glos.cat.liq',misc:'glos.cat.misc'}[g.cat] || '';
+    const catLabel = catKey ? t(catKey) : (CAT_LABELS[g.cat]||'');
     return `<div class="glos-card${exp?' expanded':''}" id="gc-${g.abbr}" onclick="glosToggle('${g.abbr}')">
       <div class="glos-header">
         <div class="glos-abbr" style="color:${col}">${g.abbr}</div>
         <div style="flex:1"><div class="glos-full">${g.full}</div><div class="glos-en">${g.en}</div></div>
-        <span class="glos-cat-badge badge-${g.cat}" style="margin-right:6px">${CAT_EMOJIS[g.cat]||''} ${CAT_LABELS[g.cat]}</span>
+        <span class="glos-cat-badge badge-${g.cat}" style="margin-right:6px">${CAT_EMOJIS[g.cat]||''} ${catLabel}</span>
         <div class="glos-arrow" style="color:${col};transition:transform .25s;display:inline-block;transform:${exp?'rotate(90deg)':'rotate(0)'}">&rsaquo;</div>
       </div>
       <div class="glos-body">
@@ -7260,7 +7763,7 @@ function addXP(amount){
   STATE.xp += amount;
   try { localStorage.setItem('tnsvt_xp', STATE.xp); } catch(e){}
   const r = RANKS.slice().reverse().find(r=>STATE.xp>=r.min);
-  if(r && r.name !== STATE.rank){ STATE.rank=r.name; showToast('🎉 ¡Nuevo rango: '+r.name+'!'); confetti(); }
+  if(r && r.name !== STATE.rank){ STATE.rank=r.name; showToast(t('toast.newRank')+' '+r.name+'!'); confetti(); }
 }
 function saveShop(){ try { localStorage.setItem('tnsvt_shop', JSON.stringify([...STATE.shopOwned])); } catch(e){} }
 
@@ -7373,6 +7876,7 @@ fetchPrices();
 setInterval(fetchPrices, 30000);
 initModos();
 updateDailyCountdown();
+applyI18n();
 
 // ============================================================
 // INIT CLASSIC on load
