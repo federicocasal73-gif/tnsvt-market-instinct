@@ -213,6 +213,25 @@ body{position:relative}
 .rs-val{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--gold)}
 .rs-lbl{font-size:11px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase}
 
+/* MINI RESULT FLASH sobre el chart (durante la animacion tick-by-tick) */
+@keyframes ro-show{from{opacity:0;transform:translate(-50%,-50%) scale(.6)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes ro-hide{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-50%) scale(.8)}}
+.result-flash{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  padding:18px 28px;border-radius:14px;
+  display:flex;align-items:center;gap:12px;
+  font-family:'Cinzel',serif;font-size:18px;font-weight:700;
+  z-index:50;pointer-events:none;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  opacity:0;transition:opacity .25s ease,transform .25s ease;
+}
+.result-flash.show{animation:ro-show .35s ease forwards}
+.result-flash:not(.show){animation:ro-hide .3s ease forwards}
+.result-flash .ro-icon{font-size:30px;line-height:1}
+.result-flash.win{background:rgba(74,222,128,.92);color:#062c1a;border:2px solid rgba(74,222,128,1);text-shadow:0 1px 0 rgba(255,255,255,.3)}
+.result-flash.lose{background:rgba(248,113,113,.92);color:#3a0a0a;border:2px solid rgba(248,113,113,1);text-shadow:0 1px 0 rgba(255,255,255,.3)}
+.result-flash.skip{background:rgba(160,160,180,.85);color:#1a1a25;border:2px solid rgba(160,160,180,1)}
+
 /* CANDLE CHART AREA */
 .chart-container{position:relative;width:100%;height:200px}
 
@@ -933,6 +952,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       <div class="mode-arrow">›</div>
     </div>
   </div>
+
+  <!-- COMPARTIR -->
+  <div class="sec-hdr"><span class="sec-title" data-i18n="home.share.title">Compartir T.N.S.V.T</span></div>
+  <div style="padding:0 16px 24px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn btn-ghost btn-sm" style="flex:1;min-width:140px" onclick="shareGame('whatsapp')">
+      <span style="font-size:18px">💬</span> WhatsApp
+    </button>
+    <button class="btn btn-ghost btn-sm" style="flex:1;min-width:140px" onclick="shareGame('twitter')">
+      <span style="font-size:18px">🐦</span> X / Twitter
+    </button>
+    <button class="btn btn-ghost btn-sm" style="flex:1;min-width:140px" onclick="shareGame('telegram')">
+      <span style="font-size:18px">✈️</span> Telegram
+    </button>
+    <button class="btn btn-ghost btn-sm" style="flex:1;min-width:140px" onclick="shareGame('copy')">
+      <span style="font-size:18px">🔗</span> Copiar link
+    </button>
+  </div>
 </div>
 
 <!-- ======================== SCREEN: CLASSIC ======================== -->
@@ -1203,6 +1239,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div style="padding:12px 16px 8px">
       <div id="hg-event-name" style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;margin-bottom:4px"></div>
       <div id="hg-event-ctx" style="font-size:12px;color:var(--text2)"></div>
+    </div>
+    <div id="hg-macro" style="display:none;margin:0 16px 8px;padding:12px;background:linear-gradient(135deg,rgba(147,83,255,.08),rgba(74,222,128,.05));border:1px solid rgba(147,83,255,.25);border-radius:var(--r);font-size:12px;line-height:1.55;color:var(--text2)">
+      <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--violet3);letter-spacing:.5px;margin-bottom:6px" data-i18n="hist.macro.title">🌐 CONTEXTO MACRO / GEOPOLÍTICO / CRIPTO</div>
+      <div id="hg-macro-text"></div>
     </div>
     <div style="padding:0 16px 8px">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
@@ -2822,6 +2862,68 @@ function showToast(msg, dur=2500){
 }
 
 // ============================================================
+// SHARE — links para redes y deep links
+// ============================================================
+const SHARE_URL_FALLBACK = 'http://192.168.1.2:8000/';
+const SHARE_TITLE = 'T.N.S.V.T — Market Instinct';
+const SHARE_TEXT = 'El juego de trading con eventos históricos reales, multi-idioma y metodología fractal. ¿Podés leer el mercado?';
+
+function shareGame(channel){
+  const url = encodeURIComponent(SHARE_URL_FALLBACK);
+  const text = encodeURIComponent(SHARE_TEXT + ' ' + SHARE_URL_FALLBACK);
+  const title = encodeURIComponent(SHARE_TITLE);
+  let target = null;
+  if(channel === 'whatsapp')  target = 'https://wa.me/?text=' + text;
+  if(channel === 'twitter')   target = 'https://twitter.com/intent/tweet?text=' + text;
+  if(channel === 'telegram')  target = 'https://t.me/share/url?url=' + url + '&text=' + text;
+  if(channel === 'copy'){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(SHARE_URL_FALLBACK).then(
+        ()=>showToast('🔗 Link copiado al portapapeles'),
+        ()=>showToast('❌ No pude copiar — copialo manualmente')
+      );
+    } else {
+      // Fallback viejo
+      const ta = document.createElement('textarea');
+      ta.value = SHARE_URL_FALLBACK; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); showToast('🔗 Link copiado'); }
+      catch(e){ showToast('❌ No pude copiar'); }
+      ta.remove();
+    }
+    return;
+  }
+  if(target){
+    try {
+      window.open(target, '_blank', 'noopener,noreferrer');
+      showToast('📤 Abriendo ' + channel + '…');
+    } catch(e){
+      showToast('❌ No pude abrir ' + channel);
+    }
+  }
+}
+
+// Deep link desde URL (utm o ?ref=)
+// Ejemplo: ?ref=TRADER_ARG&mode=classic
+function parseDeepLink(){
+  const params = new URLSearchParams(location.search);
+  const ref = params.get('ref');
+  if(ref){
+    try { localStorage.setItem('tnsvt_ref', ref); } catch(e){}
+  }
+  const mode = params.get('mode');
+  if(mode){
+    setTimeout(()=>{
+      if(mode==='classic') startClassic();
+      else if(mode==='survival') startSurvival();
+      else if(mode==='daily') goScreen('s-daily');
+      else if(mode==='arena') goScreen('s-arena');
+      else if(mode==='hist') goScreen('s-historico');
+    }, 600);
+  }
+}
+
+// ============================================================
 // CHART UTILS
 // ============================================================
 function genCandles(n=40, base=100, vol=0.02, trending=null){
@@ -3113,16 +3215,78 @@ function getChange(candles, n=5){
 }
 
 function determineResult(candles){
-  // Next 3 candles sim
+  // Simula los proximos 3 candles para que el jugador VEA como se mueve el precio.
+  // Retorna {trend, nextCandles, changePct}.
+  // trend: 'long' | 'short' | 'neutral'
+  // nextCandles: array con 3 candles que se pueden animar uno a uno
   const last = candles[candles.length-1];
-  const moves = [0,0,0].map(()=>{
-    const r = (Math.random()-.45)*0.04;
-    return last.c*(1+r);
-  });
-  const finalPrice = moves[2];
-  const pct = (finalPrice-last.c)/last.c*100;
-  if(Math.abs(pct)<0.3) return 'neutral';
-  return pct > 0 ? 'long' : 'short';
+  if(!last) return { trend:'neutral', nextCandles:[], changePct:0 };
+  // Bias: 55% long, 45% short para que el juego no sea siempre bearish
+  const bias = Math.random() < 0.55 ? 1 : -1;
+  const vol = Math.abs(last.c - last.o) / Math.max(last.o, 0.0001) || 0.01;
+  const nextCandles = [];
+  let prev = last;
+  for(let i=0; i<3; i++){
+    const move = bias * (0.005 + Math.random()*0.015) * (1 + i*0.4);
+    const open = prev.c;
+    const close = open * (1 + move + (Math.random()-0.5)*vol*0.6);
+    const wick = Math.abs(close - open) * (1 + Math.random()*0.5);
+    const high = Math.max(open, close) + wick*Math.random();
+    const low  = Math.min(open, close) - wick*Math.random();
+    nextCandles.push({ o:open, h:high, l:low, c:close });
+    prev = nextCandles[nextCandles.length-1];
+  }
+  const finalPrice = nextCandles[nextCandles.length-1].c;
+  const pct = (finalPrice - last.c) / last.c * 100;
+  let trend;
+  if(Math.abs(pct) < 0.3) trend = 'neutral';
+  else trend = pct > 0 ? 'long' : 'short';
+  return { trend, nextCandles, changePct: pct };
+}
+
+// Anima tick-by-tick los proximos candles en el canvas del chart,
+// mostrando como se mueve el precio despues de la decision del usuario.
+// Al final llama onComplete(correct).
+// Bloquea los botones hasta terminar la animacion.
+function animateResultAndScore(canvasId, currentCandles, action, onComplete){
+  const result = determineResult(currentCandles);
+  const correct = action !== 'skip' && action === result.trend;
+  const extended = currentCandles.concat(result.nextCandles);
+  const tickMs = 650;
+  let step = 0;
+  function nextTick(){
+    if(step >= result.nextCandles.length){
+      // Animacion terminada: mostrar overlay breve y callback
+      const overlay = document.createElement('div');
+      overlay.className = 'result-flash ' + (action==='skip'?'skip':correct?'win':'lose');
+      const label = action==='skip'
+        ? '<span class="ro-icon">⏸</span><span class="ro-text">'+t('toast.skip')+'</span>'
+        : correct
+          ? '<span class="ro-icon">✓</span><span class="ro-text">'+t('toast.correct')+'</span>'
+          : '<span class="ro-icon">✗</span><span class="ro-text">'+t('toast.wrong')+' '+(result.trend==='long'?t('toast.bull'):t('toast.bear'))+'</span>';
+      overlay.innerHTML = label;
+      const canvas = document.getElementById(canvasId);
+      if(canvas && canvas.parentElement){
+        canvas.parentElement.style.position = 'relative';
+        canvas.parentElement.appendChild(overlay);
+        setTimeout(()=>{ overlay.classList.add('show'); }, 20);
+        setTimeout(()=>{ overlay.classList.remove('show'); setTimeout(()=>overlay.remove(), 350); }, 1300);
+      }
+      onComplete(correct, result);
+      return;
+    }
+    const partial = currentCandles.concat(result.nextCandles.slice(0, step+1));
+    renderCandleChart(canvasId, partial);
+    step++;
+    setTimeout(nextTick, tickMs);
+  }
+  setTimeout(nextTick, 200);
+}
+
+// Helper para re-renderizar chart con animacion desactivada (cuando el modo
+// necesita regenerar candles sin pasar por la animacion de resultado)
+function rerenderChart(canvasId, candles){
+  renderCandleChart(canvasId, candles);
 }
 
 // ============================================================
@@ -3186,33 +3350,40 @@ function updateClassicInfo(){
 }
 
 function classicPlay(action){
-  const result = determineResult(classicCandles);
-  const correct = action==='skip' ? false : action===result;
-  if(action !== 'skip') {
-    STATE.classic.total++;
-    if(correct){
-      STATE.classic.correct++;
-      STATE.classic.streak++;
-      let pts = 100;
-      if(STATE.classic.streak>=5) pts=250;
-      else if(STATE.classic.streak>=3) pts=175;
-      STATE.classic.score += pts;
-      addXP(pts/10|0);
-      const msgs = STATE.classic.streak>=5 ? ['🔥 ¡RACHA DE FUEGO!','⚡ ¡IMPARABLE!'] : STATE.classic.streak>=3 ? ['✦ ¡Racha activa!','🎯 ¡Bien leído!'] : ['✓ ¡Correcto!','📊 ¡Buen análisis!'];
-      showToast(msgs[Math.floor(Math.random()*msgs.length)] + ' +'+pts+' pts');
+  // Bloquear botones hasta terminar la animacion
+  const btnRow = document.querySelector('#s-classic .action-row') || document.getElementById('cl-actions');
+  if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
+  animateResultAndScore('classic-chart', classicCandles, action, (correct, result)=>{
+    if(action !== 'skip') {
+      STATE.classic.total++;
+      if(correct){
+        STATE.classic.correct++;
+        STATE.classic.streak++;
+        let pts = 100;
+        if(STATE.classic.streak>=5) pts=250;
+        else if(STATE.classic.streak>=3) pts=175;
+        STATE.classic.score += pts;
+        addXP(pts/10|0);
+        const msgs = STATE.classic.streak>=5 ? ['🔥 ¡RACHA DE FUEGO!','⚡ ¡IMPARABLE!'] : STATE.classic.streak>=3 ? ['✦ ¡Racha activa!','🎯 ¡Bien leído!'] : ['✓ ¡Correcto!','📊 ¡Buen análisis!'];
+        showToast(msgs[Math.floor(Math.random()*msgs.length)] + ' +'+pts+' pts');
+      } else {
+        STATE.classic.streak = 0;
+        showToast('✗ '+t('toast.wrong')+' '+(result.trend==='long'?t('toast.bull'):t('toast.bear')));
+      }
     } else {
       STATE.classic.streak = 0;
-      showToast('✗ '+t('toast.wrong')+' '+(result==='long'?t('toast.bull'):t('toast.bear')));
+      showToast(t('toast.skip'));
     }
-  } else {
-    STATE.classic.streak = 0;
-    showToast(t('toast.skip'));
-  }
-  const a = ASSETS[STATE.classic.asset];
-  const base = STATE.prices[STATE.classic.asset] || a.base;
-  classicCandles = genCandles(40, base, a.vol);
-  renderCandleChart('classic-chart', classicCandles);
-  updateClassicInfo();
+    // Re-habilitar botones y generar nuevos candles
+    setTimeout(()=>{
+      if(btnRow){ btnRow.style.pointerEvents = ''; btnRow.style.opacity = '1'; }
+      const a = ASSETS[STATE.classic.asset];
+      const base = STATE.prices[STATE.classic.asset] || a.base;
+      classicCandles = genCandles(40, base, a.vol);
+      renderCandleChart('classic-chart', classicCandles);
+      updateClassicInfo();
+    }, 2200);
+  });
 }
 
 // ============================================================
@@ -3266,28 +3437,37 @@ function survivalNextRound(){
 }
 
 function survivalPlay(action){
-  const result = determineResult(survivalCandles);
-  const correct = action !== 'skip' && action === result;
-  if(action === 'skip'){
-    STATE.survival.streak = 0;
-    showToast(t('toast.roundSkip'));
-  } else if(correct){
-    STATE.survival.streak++;
-    let pts = 50 + Math.min(STATE.survival.round*10, 300);
-    if(STATE.survival.streak>=5){ pts*=2; if(STATE.survival.lives<3){STATE.survival.lives++;showToast('❤️ ¡Vida recuperada!');} }
-    else if(STATE.survival.streak>=3) pts=Math.round(pts*1.5);
-    STATE.survival.score += pts;
-    addXP(pts/20|0);
-    showToast('✓ +'+ pts +' pts'+(STATE.survival.streak>=3?' 🔥x'+STATE.survival.streak:''));
-  } else {
-    STATE.survival.lives--;
-    STATE.survival.streak = 0;
-    showToast('✗ -1 vida · El mercado fue '+(result==='long'?'alcista':'bajista'));
-    if(STATE.survival.lives <= 0){ return survivorGameOver(); }
-  }
-  STATE.survival.round++;
-  updateSurvivalUI();
-  survivalNextRound();
+  // Bloquear botones
+  const btnRow = document.getElementById('sv-actions');
+  if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
+  animateResultAndScore('survival-chart', survivalCandles, action, (correct, result)=>{
+    if(action === 'skip'){
+      STATE.survival.streak = 0;
+      showToast(t('toast.roundSkip'));
+    } else if(correct){
+      STATE.survival.streak++;
+      let pts = 50 + Math.min(STATE.survival.round*10, 300);
+      if(STATE.survival.streak>=5){ pts*=2; if(STATE.survival.lives<3){STATE.survival.lives++;showToast('❤️ ¡Vida recuperada!');} }
+      else if(STATE.survival.streak>=3) pts=Math.round(pts*1.5);
+      STATE.survival.score += pts;
+      addXP(pts/20|0);
+      showToast('✓ +'+ pts +' pts'+(STATE.survival.streak>=3?' 🔥x'+STATE.survival.streak:''));
+    } else {
+      STATE.survival.lives--;
+      STATE.survival.streak = 0;
+      showToast('✗ -1 vida · El mercado fue '+(result.trend==='long'?'alcista':'bajista'));
+      if(STATE.survival.lives <= 0){
+        if(btnRow){ btnRow.style.pointerEvents = ''; btnRow.style.opacity = '1'; }
+        return survivorGameOver();
+      }
+    }
+    STATE.survival.round++;
+    updateSurvivalUI();
+    setTimeout(()=>{
+      if(btnRow){ btnRow.style.pointerEvents = ''; btnRow.style.opacity = '1'; }
+      survivalNextRound();
+    }, 2200);
+  });
 }
 
 function survivorGameOver(){
@@ -3359,18 +3539,20 @@ function updateDailyCountdown(){
 }
 
 function dailyPlay(action){
-  if(STATE.daily.played) return showToast('⏳ Ya jugaste tu Daily de hoy');
-  const result = determineResult(dailyCandles);
-  const correct = action!=='skip' && action===result;
-  STATE.daily.played = true;
-  STATE.daily.result = {action, result, correct};
-  document.getElementById('dc-played-badge').style.display='';
-  document.getElementById('dc-action-row').style.display='none';
-  if(correct){ addXP(300); showToast('🎯 ¡Correcto! +300 XP — Daily Challenge ganado'); }
-  else if(action==='skip') showToast('— Sin trade en el Daily de hoy');
-  else showToast('✗ El mercado fue '+(result==='long'?'alcista':'bajista')+' · +50 XP por participar');
-  tnsvtSync('daily', correct?2100:0, correct?300:50, { asset: STATE.daily.asset||'BTC', correct });
-  renderDailyRanking();
+  if(STATE.daily.played) return showToast('✗ Ya jugaste tu Daily de hoy');
+  const btnRow = document.getElementById('dc-action-row');
+  if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
+  animateResultAndScore('daily-chart', dailyCandles, action, (correct, result)=>{
+    STATE.daily.played = true;
+    STATE.daily.result = {action, trend: result.trend, correct};
+    document.getElementById('dc-played-badge').style.display='';
+    document.getElementById('dc-action-row').style.display='none';
+    if(correct){ addXP(300); showToast('✓ ¡Correcto! +300 XP - Daily Challenge ganado'); }
+    else if(action==='skip') showToast('— Sin trade en el Daily de hoy');
+    else showToast('✗ El mercado fue '+(result.trend==='long'?'alcista':'bajista')+' +50 XP por participar');
+    tnsvtSync('daily', correct?2100:0, correct?300:50, { asset: STATE.daily.asset||'BTC', correct });
+    renderDailyRanking();
+  });
 }
 
 const MOCK_RANKING = [
@@ -3490,31 +3672,31 @@ function arenaPlay(action){
   clearInterval(arenaTimerInt);
   document.getElementById('ar-actions').style.opacity='.4';
   document.getElementById('ar-actions').style.pointerEvents='none';
-  const result = determineResult(arenaCandles);
-  const myCorrect = action!=='skip' && action===result;
-  const r = RIVALS[STATE.arena.rival];
-  const winrate = parseInt(r.winrate)/100;
-  const rivalCorrect = Math.random() < winrate;
-  const timeBonus = arenaTimerVal > 10 && myCorrect ? 50 : 0;
-  let myPts=0, rivalPts=0;
-  if(myCorrect) myPts = 200 + timeBonus;
-  if(rivalCorrect) rivalPts = 200;
-  STATE.arena.myScore += myPts;
-  STATE.arena.rivalScore += rivalPts;
-  const rr = document.getElementById('ar-round-result');
-  if(myCorrect && !rivalCorrect) rr.textContent = '✓ Ganaste esta ronda'+(timeBonus?'+⚡':'');
-  else if(!myCorrect && rivalCorrect) rr.textContent = '✗ El rival acertó';
-  else if(myCorrect && rivalCorrect) rr.textContent = '~ Empate en esta ronda';
-  else rr.textContent = '✗ Ninguno acertó';
-  rr.style.color = myPts>rivalPts?'var(--green)':myPts<rivalPts?'var(--red)':'var(--text3)';
-  document.getElementById('ar-my-pts').textContent = STATE.arena.myScore;
-  document.getElementById('ar-rival-pts').textContent = STATE.arena.rivalScore;
-  document.getElementById('ar-my-score').textContent = STATE.arena.myScore;
-  document.getElementById('ar-rival-score').textContent = STATE.arena.rivalScore;
-  setTimeout(()=>{
-    if(STATE.arena.round >= 5){ arenaFinish(); }
-    else { STATE.arena.round++; arenaNextRound(); }
-  }, 1800);
+  animateResultAndScore('arena-chart', arenaCandles, action, (myCorrect, result)=>{
+    const r = RIVALS[STATE.arena.rival];
+    const winrate = parseInt(r.winrate)/100;
+    const rivalCorrect = Math.random() < winrate;
+    const timeBonus = arenaTimerVal > 10 && myCorrect ? 50 : 0;
+    let myPts=0, rivalPts=0;
+    if(myCorrect) myPts = 200 + timeBonus;
+    if(rivalCorrect) rivalPts = 200;
+    STATE.arena.myScore += myPts;
+    STATE.arena.rivalScore += rivalPts;
+    const rr = document.getElementById('ar-round-result');
+    if(myCorrect && !rivalCorrect) rr.textContent = '✓ Ganaste esta ronda'+(timeBonus?'+⚡':'');
+    else if(!myCorrect && rivalCorrect) rr.textContent = '✗ El rival acertó';
+    else if(myCorrect && rivalCorrect) rr.textContent = '~ Empate en esta ronda';
+    else rr.textContent = '✗ Ninguno acertó';
+    rr.style.color = myPts>rivalPts?'var(--green)':myPts<rivalPts?'var(--red)':'var(--text3)';
+    document.getElementById('ar-my-pts').textContent = STATE.arena.myScore;
+    document.getElementById('ar-rival-pts').textContent = STATE.arena.rivalScore;
+    document.getElementById('ar-my-score').textContent = STATE.arena.myScore;
+    document.getElementById('ar-rival-score').textContent = STATE.arena.rivalScore;
+    setTimeout(()=>{
+      if(STATE.arena.round >= 5){ arenaFinish(); }
+      else { STATE.arena.round++; arenaNextRound(); }
+    }, 1800);
+  });
 }
 
 function arenaFinish(){
@@ -3536,31 +3718,54 @@ function arenaFinish(){
 // HISTÓRICO
 // ============================================================
 const HIST_EVENTS = [
-  {id:'ftx',name:'FTX Collapse',date:'Nov 2022',asset:'BTC',cat:'crash',diff:'hard',pts:350,ctx:'FTX suspende retiros. El mercado empieza a colapsar.',trend:-1,lesson:'Los eventos de crédito generan cascadas de liquidación. El BOS bajista era inevitable.'},
-  {id:'covid',name:'COVID Crash',date:'Mar 2020',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'Pandemia global declarada. Mercados en pánico total.',trend:-1,lesson:'En Macro Shock, todos los activos caen correlacionados. El fractal de pánico siempre rompe soportes.'},
-  {id:'btcetf',name:'BTC ETF Rumor',date:'Oct 2023',asset:'BTC',cat:'crypto',diff:'med',pts:200,ctx:'Rumores de aprobación del ETF de Bitcoin en EE.UU.',trend:1,lesson:'Los eventos de liquidez institucional generan fractales de acumulación. Buscá LG en zona de descuento.'},
-  {id:'snb',name:'SNB Peg Removal',date:'Ene 2015',asset:'EURUSD',cat:'forex',diff:'hard',pts:350,ctx:'El Banco Nacional Suizo elimina el techo del Franco. EUR/CHF cae 30% en segundos.',trend:-1,lesson:'Los eventos de banco central rompen toda estructura técnica. Gestión de riesgo ante todo.'},
-  {id:'luna',name:'Terra/LUNA Collapse',date:'May 2022',asset:'ETH',cat:'crash',diff:'hard',pts:350,ctx:'UST pierde el peg. LUNA colapsa. Contagio a todo el cripto.',trend:-1,lesson:'El contagio sistémico en crypto ignora soportes técnicos. En Macro Shock, esperá la estabilización.'},
-  {id:'cpi',name:'CPI Sorpresa',date:'Sep 2022',asset:'SP500',cat:'macro',diff:'med',pts:200,ctx:'Inflación USA supera expectativas. Fed sube tasas agresivamente.',trend:-1,lesson:'El dato macro actúa como catalizador del fractal mayor. El BOS bajista confirma la tendencia.'},
-  {id:'btcath',name:'BTC ATH $64k',date:'Nov 2021',asset:'BTC',cat:'crypto',diff:'easy',pts:100,ctx:'Bitcoin alcanza máximo histórico de $64,000. Euforia total.',trend:1,lesson:'En tendencias eufóricas, el fractal menor nunca cierra el Setup bajista. Seguí la estructura mayor.'},
-  {id:'gbp',name:'Libra Crisis',date:'Sep 2022',asset:'EURUSD',cat:'macro',diff:'med',pts:200,ctx:'Crisis fiscal UK. Gilt yields explotan. GBP colapsa a mínimos históricos.',trend:-1,lesson:'La crisis de deuda soberana genera fractales de RISK OFF en todos los activos. Correlaciones macro primero.'},
+  {id:'ftx',name:'FTX Collapse',date:'Nov 2022',asset:'BTC',cat:'crash',diff:'hard',pts:350,ctx:'FTX suspende retiros. El mercado empieza a colapsar.',trend:-1,lesson:'Los eventos de crédito generan cascadas de liquidación. El BOS bajista era inevitable.',
+   macro:'CRIPTO / CREDITICIO: El 2 Nov 2022, CoinDesk revela que Alameda Research (sister company de FTX) tiene $5B en FTT token como collateral. CZ (Binance) anuncia venta masiva. Bankman-Fried tuitea que FTX está "fine". El 6 Nov Binance firma LOI para comprar FTX, pero el 9 Nov se retira tras revisar los libros. FTT colapsa 80%, BTC -20% en 48hs. Genesis, BlockFi y Galois Capital entran en default en cadena. La SEC y DOJ abren investigaciones. Sam Bankman-Fried es arrestado en Bahamas el 12 Dic.'},
+  {id:'covid',name:'COVID Crash',date:'Mar 2020',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'Pandemia global declarada. Mercados en pánico total.',trend:-1,lesson:'En Macro Shock, todos los activos caen correlacionados. El fractal de pánico siempre rompe soportes.',
+   macro:'MACRO / GEOPOL: La OMS declara pandemia el 11 Mar 2020. Trump cierra fronteras con Europa el 13 Mar. Italia ya tiene 1,000+ muertos. El S&P500 sufre el drawdown más rápido de la historia: 34% en 23 días hábiles (vs 2008: 554 días). El VIX salta a 82.69 (récord). WTI colapsa por guerra de precios Rusia-Arabia Saudita + demanda evaporada. La Fed lanza QE infinito + facility de $2.3T. Desempleo USA pasa de 3.5% a 14.7% en 2 meses.'},
+  {id:'btcetf',name:'BTC ETF Rumor',date:'Oct 2023',asset:'BTC',cat:'crypto',diff:'med',pts:200,ctx:'Rumores de aprobación del ETF de Bitcoin en EE.UU.',trend:1,lesson:'Los eventos de liquidez institucional generan fractales de acumulación. Buscá LG en zona de descuento.',
+   macro:'CRIPTO / REGULATORIO: BlackRock, Fidelity, Invesco, Ark y otras 13 firmas presentan solicitudes S-1 para ETF spot de BTC en Junio 2023. La SEC posterga decisión tras posterga. En Oct 2023, reportes indican que la SEC NO apelará la pérdida del caso Grayscale (que convirtió su GBTC en ETF). Mercado interpreta aprobación como inminente. BTC sube de $27k a $38k en 6 semanas. La aprobación efectiva llega el 10 Ene 2024.'},
+  {id:'snb',name:'SNB Peg Removal',date:'Ene 2015',asset:'EURUSD',cat:'crash',diff:'hard',pts:350,ctx:'El Banco Nacional Suizo elimina el techo del Franco. EUR/CHF cae 30% en segundos.',trend:-1,lesson:'Los eventos de banco central rompen toda estructura técnica. Gestión de riesgo ante todo.',
+   macro:'GEOPOL / FOREX: El Banco Nacional Suizo mantiene EUR/CHF ≥1.20 desde Sep 2011 para evitar fortaleza del CHF (deflación). El 15 Ene 2015, sin aviso, el SNB elimina el peg citing "CHF está significativamente sobrevalorado". EUR/CHF cae 30% en minutos (1.20 → 0.85). Brokers colapsan: Alpari UK, Excel Markets, New Zealand Foreign Exchange quiebran. FXCM tiene negative equity balance de $225M. El CEO de SNB, Thomas Jordan, dice después: "fue un shock incluso para nosotros".'},
+  {id:'luna',name:'Terra/LUNA Collapse',date:'May 2022',asset:'ETH',cat:'crash',diff:'hard',pts:350,ctx:'UST pierde el peg. LUNA colapsa. Contagio a todo el cripto.',trend:-1,lesson:'El contagio sistémico en crypto ignora soportes técnicos. En Macro Shock, esperá la estabilización.',
+   macro:'CRIPTO / DEFI: Do Kwon lanzó TerraUSD (UST) como algorithmic stablecoin respaldada por LUNA. LUNA pasa de $80 a $120 en Abr 2022, UST alcanza $18B market cap. El 7 May 2022, UST pierde el peg ($1) tras masiva venta en Curve pool. Death spiral: para mantener UST a $1, se mintean LUNA tokens → supply explosion → LUNA colapsa de $80 a $0.00001 en 72 horas. Celsius, Three Arrows Capital (3AC), Voyager Digital caen en cascada. BTC pierde 35% en 2 semanas.'},
+  {id:'cpi',name:'CPI Sorpresa',date:'Sep 2022',asset:'SP500',cat:'macro',diff:'med',pts:200,ctx:'Inflación USA supera expectativas. Fed sube tasas agresivamente.',trend:-1,lesson:'El dato macro actúa como catalizador del fractal mayor. El BOS bajista confirma la tendencia.',
+   macro:'MACRO: CPI de Ago 2022 (publicado 13 Sep) llega a 8.2% YoY vs esperado 8.1%. Core CPI 6.3% (vs esperado 6.1%). Powell había prometido en Jackson Hole (26 Ago) que la Fed sería "painful" para reducir inflación. Mercados repricean: terminal rate ahora 4.75% (antes 4.25%). S&P500 -25% YTD, peor year-to-date desde 2002. 2Y Treasury yield llega a 4.5%,最高的 desde 2007. Carry trades en JPY (Weak yen) colapsan. Reino Unido lanza mini-budget el 23 Sep que gatilla la crisis de Libra.'},
+  {id:'btcath',name:'BTC ATH $64k',date:'Nov 2021',asset:'BTC',cat:'crypto',diff:'easy',pts:100,ctx:'Bitcoin alcanza máximo histórico de $64,000. Euforia total.',trend:1,lesson:'En tendencias eufóricas, el fractal menor nunca cierra el Setup bajista. Seguí la estructura mayor.',
+   macro:'CRIPTO / MACRO: BTC llega a $69K el 10 Nov 2021 después de lanzar BCH futures ETF (ProShares). ProShares BITO se vuelve el ETF con el debut más rápido en llegar a $1B AUM. Coinbase reporta 13M usuarios activos (vs 7M en Q4 2020). MicroStrategy y Tesla ya tienen BTC en balance. El Salvador adopta BTC como moneda legal. Expectativa de tapering de la Fed es el cisne negro que sigue. China ya había banned mining (May 2021) - hashrate se recupera.'},
+  {id:'gbp',name:'Libra Crisis',date:'Sep 2022',asset:'EURUSD',cat:'macro',diff:'med',pts:200,ctx:'Crisis fiscal UK. Gilt yields explotan. GBP colapsa a mínimos históricos.',trend:-1,lesson:'La crisis de deuda soberana genera fractales de RISK OFF en todos los activos. Correlaciones macro primero.',
+   macro:'GEOPOL / FISCAL: La nueva PM Liz Truss y su Chancellor Kwasi Kwarteng anuncian "mini-budget" el 23 Sep 2022: £45B en recortes de impuestos sin financiamiento. 30Y Gilt yield salta de 3.5% a 5.1% en 4 días. GBP/USD cae a $1.05 (mínimo histórico vs USD). Pensiones liability-driven investment (LDI) funds enfrentan margin calls. Bank of England interviene con compras temporales de Gilts (£65B en 4 días) para estabilizar. Kwarteng es despedido el 14 Oct, Truss renuncia el 20 Oct. Hunt revierte casi todo el mini-budget.'},
 
   // ── Más eventos históricos (suma +15) ──
-  {id:'dotcom',name:'Dot-com Crash',date:'Mar 2000',asset:'NAS100',cat:'crash',diff:'hard',pts:350,ctx:'Burbuja tecnológica revienta. NASDAQ cae 78% en 2 años.',trend:-1,lesson:'Las burbujas especulativas se corrigen violentamente. El BOS del último HL marca el inicio del bear market.'},
-  {id:'lehman',name:'Lehman Brothers',date:'Sep 2008',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'Quiebra de Lehman. Crisis financiera global. Mercado interbank congelado.',trend:-1,lesson:'Las crisis de contraparte producen gaps de liquidez extremos. El SL se ejecuta siempre.'},
-  {id:'flashcrash',name:'Flash Crash 2010',date:'May 2010',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'SP500 cae 9% en minutos. Recuperación inmediata. Liquidez evaporada.',trend:-1,lesson:'Los flash crashes son LG extremos del HTF. La estructura técnica no aplica en milisegundos.'},
-  {id:'chinar',name:'China Ban',date:'Sep 2021',asset:'BTC',cat:'crypto',diff:'hard',pts:300,ctx:'China prohíbe toda actividad de cripto. Mining masivo migra. Hashrate -50%.',trend:-1,lesson:'Prohibiciones regulatorias son cisnes negros para crypto. Buscá acumulación posterior en LG mayor.'},
-  {id:'brexit',name:'Brexit Vote',date:'Jun 2016',asset:'EURUSD',cat:'forex',diff:'med',pts:200,ctx:'Reino Unido vota salir de la UE. GBP colapsa 15% overnight.',trend:-1,lesson:'Los eventos binarios (elecciones/referéndums) producen BOS instantáneos. Operar el gap, no el setup.'},
-  {id:'svb',name:'SVB Bank Collapse',date:'Mar 2023',asset:'SP500',cat:'macro',diff:'med',pts:250,ctx:'Silicon Valley Bank quiebra. Contagio a bancos regionales. Fed pausa suba de tasas.',trend:-1,lesson:'La fragilidad bancaria acelera el Risk Off. En Macro Shock, el SL corto salva la cuenta.'},
-  {id:'blackrock',name:'BlackRock ETF',date:'Jun 2023',asset:'BTC',cat:'crypto',diff:'easy',pts:150,ctx:'BlackRock presenta solicitud para ETF de Bitcoin. Institucionalización.',trend:1,lesson:'Las solicitudes regulatorias alcistas generan fractales de varios meses. Comprá el LG del primer retroceso.'},
-  {id:'defisum',name:'DeFi Summer',date:'Jul 2020',asset:'ETH',cat:'crypto',diff:'easy',pts:150,ctx:'Yield farming explota. TVL de DeFi pasa de $1B a $30B en meses.',trend:1,lesson:'Las narrativas sectoriales producen fractales verticales en activos específicos. ETH lidera.'},
-  {id:'ethmerge',name:'Ethereum Merge',date:'Sep 2022',asset:'ETH',cat:'crypto',diff:'med',pts:200,ctx:'ETH migra a Proof of Stake. Evento técnico más importante de la historia cripto.',trend:1,lesson:'Eventos técnicos predecibles (Merge, Halving) cotizan con anticipación. Comprá la expectativa.'},
-  {id:'czresign',name:'CZ Resignation',date:'Nov 2023',asset:'BTC',cat:'crypto',diff:'med',pts:200,ctx:'CZ (Binance CEO) renuncia tras acuerdo con DOJ. Sentimiento regulatorio.',trend:-1,lesson:'Los cambios regulatorios en exchanges centrales generan presión vendedora inmediata.'},
-  {id:'teslafomo',name:'Tesla FOMO 2020',date:'Ene 2021',asset:'NAS100',cat:'macro',diff:'easy',pts:150,ctx:'Tesla entra al S&P 500. Meme stocks como GME y AMC explotan.',trend:1,lesson:'La entrada de símbolos al S&P produce un rally inicial de 1-2 meses. Después la estructura manda.'},
-  {id:'amazoncrash',name:'Amazon COVID Rally',date:'Mar 2020',asset:'NAS100',cat:'macro',diff:'hard',pts:300,ctx:'COVID golpea. AMZN retrocede 25% en 3 semanas. Después sube 200%.',trend:1,lesson:'En crisis, las big tech son las primeras en recuperarse. El LG del crash es el mejor setup del año.'},
-  {id:'oilneg',name:'Oil Goes Negative',date:'Abr 2020',asset:'WTI',cat:'crash',diff:'hard',pts:400,ctx:'El petróleo WTI cotiza en -$37 por primera vez en la historia. Saturación total.',trend:-1,lesson:'Eventos sin precedente histórico rompen toda estructura técnica. Cero análisis, solo gestión de riesgo.'},
-  {id:'goldcovid',name:'Gold COVID Rally',date:'Jul 2020',asset:'GOLD',cat:'macro',diff:'easy',pts:150,ctx:'Oro alcanza $2,067 ATH durante la incertidumbre del COVID.',trend:1,lesson:'En risk-off extremo, el oro es el primer activo en reflejar el LG del miedo.'},
-  {id:'eurodol',name:'Euro-Dollar Parity',date:'Jul 2022',asset:'EURUSD',cat:'forex',diff:'med',pts:250,ctx:'EUR/USD toca paridad 1.0000 por primera vez en 20 años.',trend:-1,lesson:'Las paridades psicológicas (1.00, 100) son niveles de ERL. Después gira.'},
+  {id:'dotcom',name:'Dot-com Crash',date:'Mar 2000',asset:'NAS100',cat:'crash',diff:'hard',pts:350,ctx:'Burbuja tecnológica revienta. NASDAQ cae 78% en 2 años.',trend:-1,lesson:'Las burbujas especulativas se corrigen violentamente. El BOS del último HL marca el inicio del bear market.',
+   macro:'MACRO: NASDAQ llega a 5,048 el 10 Mar 2000 (P/E ratio >200 para algunas empresas). Empresas sin revenue (pets.com) tienen valuaciones de $millardos. Pets.com cierra en Nov 2000. Cisco (CSCO) era el stock más valioso del mundo. Fed de Greenspan sube rates 6 veces entre Jun 1999 y May 2000. El crash dura 2 años: NASDAQ -78%. Pets.com, Webvan, Boo.com, Kozmo.com quiebran. Pasan 15 años hasta que NASDAQ recupera el peak.'},
+  {id:'lehman',name:'Lehman Brothers',date:'Sep 2008',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'Quiebra de Lehman. Crisis financiera global. Mercado interbank congelado.',trend:-1,lesson:'Las crisis de contraparte producen gaps de liquidez extremos. El SL se ejecuta siempre.',
+   macro:'MACRO / CREDIT: Bear Stearns colapsa en Mar 2008 (vendido a JP Morgan por $2/share). Fannie Mae y Freddie Mac son puestas bajo conservatorship el 7 Sep. Lehman Brothers se declara en quiebra el 15 Sep 2008 ($639B en activos, la mayor bancarrota de la historia). AIG es rescatada con $182B al día siguiente. LIBOR-OIS spread (gauge de stress bancario) salta a 364 bps. Credit Default Swaps en default. S&P500 pierde 38% en 5 meses. Desempleo USA llega a 10% en Oct 2009.'},
+  {id:'flashcrash',name:'Flash Crash 2010',date:'May 2010',asset:'SP500',cat:'crash',diff:'hard',pts:350,ctx:'SP500 cae 9% en minutos. Recuperación inmediata. Liquidez evaporada.',trend:-1,lesson:'Los flash crashes son LG extremos del HTF. La estructura técnica no aplica en milisegundos.',
+   macro:'MACRO / ESTRUCTURAL: El 6 May 2010, 14:32 ET, el S&P500 cae 9% (≈$1T de market cap) en 5 minutos. Una venta de $4.1B en E-Mini futures (sin hedge) por Waddell & Reed Financial gatilla una cascada de stop-losses. El índice recupera la mayoría en 20 minutos. La SEC publica reporte 5 meses después y propone "limit up/limit down" rules. High-frequency trading amplifiers el movimiento. El evento lleva a la creación de single-stock circuit breakers.'},
+  {id:'chinar',name:'China Ban',date:'Sep 2021',asset:'BTC',cat:'crypto',diff:'hard',pts:300,ctx:'China prohíbe toda actividad de cripto. Mining masivo migra. Hashrate -50%.',trend:-1,lesson:'Prohibiciones regulatorias son cisnes negros para crypto. Buscá acumulación posterior en LG mayor.',
+   macro:'GEOPOL / CRIPTO: El PBoC y 10 agencias发布通知 el 24 Sep 2021 declarando todas las transacciones de cripto "ilegales". Bitcoin cae de $45k a $39k en horas. Hashrate global cae -50% en 1 mes (mining migra a USA, Kazakhstan, Rusia). Kazakhtán experimenta apagones eléctricos. USA captura >35% del hashrate global (antes 4%). El evento es temporary: BTC recupera y llega a $69K en Nov 2021.'},
+  {id:'brexit',name:'Brexit Vote',date:'Jun 2016',asset:'EURUSD',cat:'forex',diff:'med',pts:200,ctx:'Reino Unido vota salir de la UE. GBP colapsa 15% overnight.',trend:-1,lesson:'Los eventos binarios (elecciones/referéndums) producen BOS instantáneos. Operar el gap, no el setup.',
+   macro:'GEOPOL / FOREX: 23 Jun 2016, Reino Unido vota 51.9% Leave vs 48.1% Remain. Polymarket y betting houses daban Remain como 80% favorito. GBP/USD cae de $1.50 a $1.32 overnight (-12%). FTSE 100 cae 8% en 2 días. Cameron renuncia. Theresa May asume como PM. Article 50 se invoca el 29 Mar 2017. La transición toma 4 años y Brexit efectivo es 31 Ene 2020. GBP sigue -10% debajo del pre-voto 5 años después.'},
+  {id:'svb',name:'SVB Bank Collapse',date:'Mar 2023',asset:'SP500',cat:'macro',diff:'med',pts:250,ctx:'Silicon Valley Bank quiebra. Contagio a bancos regionales. Fed pausa suba de tasas.',trend:-1,lesson:'La fragilidad bancaria acelera el Risk Off. En Macro Shock, el SL corto salva la cuenta.',
+   macro:'MACRO / BANCARIO: SVB (Silicon Valley Bank, $200B AUM, 16to banco de USA) es cerrado por regulators el 10 Mar 2023 tras bank run de $42B en 24 horas. La causa raíz: la Fed subió rates 4.75% en 12 meses, los bonos HTM del SVB perdieron $15B de valor, intento de raise capital el 8 Mar déclenchea pánico. Signature Bank colapsa el 12 Mar. First Republic cae 60% en 1 semana (rescatada después). Credit Suisse es comprado por UBS el 19 Mar (con $3B de pérdida para AT1 holders). Fed crea BTFP (Bank Term Funding Program) para liquidez.'},
+  {id:'blackrock',name:'BlackRock ETF',date:'Jun 2023',asset:'BTC',cat:'crypto',diff:'easy',pts:150,ctx:'BlackRock presenta solicitud para ETF de Bitcoin. Institucionalización.',trend:1,lesson:'Las solicitudes regulatorias alcistas generan fractales de varios meses. Comprá el LG del primer retroceso.',
+   macro:'CRIPTO / INSTITUCIONAL: BlackRock, el asset manager más grande del mundo ($9T AUM), presenta S-1 para iShares Bitcoin Trust el 15 Jun 2023. En 48 horas, Fidelity, Invesco, WisdomTree, Bitwise, Valkyrie y 8 más siguen. La narrativa cambia: institucionalización de BTC ya no es especulación, es inminente. BTC sube de $25k (Jun) a $44k (Abr 2024). Aprobación efectiva llega 10 Ene 2024 con trading volume de $4.6B en día 1. BlackRock IBIT llega a $10B AUM en 7 semanas (récord).'},
+  {id:'defisum',name:'DeFi Summer',date:'Jul 2020',asset:'ETH',cat:'crypto',diff:'easy',pts:150,ctx:'Yield farming explota. TVL de DeFi pasa de $1B a $30B en meses.',trend:1,lesson:'Las narrativas sectoriales producen fractales verticales en activos específicos. ETH lidera.',
+   macro:'CRIPTO / DEFI: Compound lanza COMP token el 15 Jun 2020 y empieza la fiebre de yield farming. Los holders de COMP reciben rewards por prestar/borrowear. Balancer, Yearn (YFI), Curve, SushiSwap siguen en semanas. TVL de DeFi pasa de $1B (Jun) a $13B (Sep) a $30B (Dic). ETH pasa de $230 a $730 en 5 meses. Bancor, Balancer, Yearn dominan. YFI llega a $40k (más caro que 1 BTC). El ciclo termina con el crash del 17 Sep 2020 (DeFi tokens -70% en 24hs).'},
+  {id:'ethmerge',name:'Ethereum Merge',date:'Sep 2022',asset:'ETH',cat:'crypto',diff:'med',pts:200,ctx:'ETH migra a Proof of Stake. Evento técnico más importante de la historia cripto.',trend:1,lesson:'Eventos técnicos predecibles (Merge, Halving) cotizan con anticipación. Comprá la expectativa.',
+   macro:'CRIPTO / TÉCNICO: El 15 Sep 2022, Ethereum completa "The Merge": transiciona de Proof of Work (PoW) a Proof of Stake (PoS) en block 15,537,393. Supply de ETH pasa de inflación ~4% anual a deflación neta (EIP-1559 burning + staking rewards). ETH reduce consumo energético en 99.95%. Vitalik Buterin tuitea "Happy merge all". Pre-Merge ETH cotiza con descuento (PoS se anticipa). Post-Merge, ETH pierde momentum en medio del bear market (cae de $1,700 a $1,200). Shanghai upgrade (Apr 2023) finalmente permite withdrawals de staking.'},
+  {id:'czresign',name:'CZ Resignation',date:'Nov 2023',asset:'BTC',cat:'crypto',diff:'med',pts:200,ctx:'CZ (Binance CEO) renuncia tras acuerdo con DOJ. Sentimiento regulatorio.',trend:-1,lesson:'Los cambios regulatorios en exchanges centrales generan presión vendedora inmediata.',
+   macro:'CRIPTO / REGULATORIO: El 21 Nov 2023, Changpeng Zhao (CZ) anuncia que renunciará como CEO de Binance y se declarará culpable de cargos federales (Bank Secrecy Act, BSA violations). Binance paga $4.3B en multas (la mayor corporativa en historia USA). Richard Teng asume como nuevo CEO. DOJ designa 3 monitores independientes para Binance por 5 años. El evento ratifica la narrativa post-FTX: regulación crypto llegó. BTC cae de $37k a $36k, se recupera a $44k en 6 semanas.'},
+  {id:'teslafomo',name:'Tesla FOMO 2020',date:'Ene 2021',asset:'NAS100',cat:'macro',diff:'easy',pts:150,ctx:'Tesla entra al S&P 500. Meme stocks como GME y AMC explotan.',trend:1,lesson:'La entrada de símbolos al S&P produce un rally inicial de 1-2 meses. Después la estructura manda.',
+   macro:'MACRO / EUFORIA: Tesla entra al S&P 500 el 21 Dic 2020, la mayor adición en la historia del índice. El 28 Ene 2021, Tesla sube a $900 (+800% YTD). Robinhood y otros brokers reportan records de nuevos usuarios. Reddit r/wallstreetbets coordina squeeze en GME: de $20 a $480 en 2 semanas. Melvin Capital pierde 53% en enero. AMC, BB, NOK siguen. Hedge funds cierran shorts en masa. SEC interviene el 28 Ene. Robinhood restringe compras de GME. GameStop llega a pico de $483.'},
+  {id:'amazoncrash',name:'Amazon COVID Rally',date:'Mar 2020',asset:'NAS100',cat:'macro',diff:'hard',pts:300,ctx:'COVID golpea. AMZN retrocede 25% en 3 semanas. Después sube 200%.',trend:1,lesson:'En crisis, las big tech son las primeras en recuperarse. El LG del crash es el mejor setup del año.',
+   macro:'MACRO / SECTORIAL: Amazon cae de $2,170 (Feb 19, 2020) a $1,628 (Mar 12, -25%) en 3 semanas durante el COVID crash. Pero ya en Apr 2020 empieza a recuperarse mientras la economía real colapsa. AMZN cierra 2020 en $3,200 (+76% YTD). En los siguientes 24 meses llega a $3,700 (Sep 2021). COVID acelera el shift a e-commerce 5 años. AWS revenue crece 30%. Jeff Bezos vende ~$10B en acciones de AMZN en 2020-2021 para financiar Blue Origin.'},
+  {id:'oilneg',name:'Oil Goes Negative',date:'Abr 2020',asset:'WTI',cat:'crash',diff:'hard',pts:400,ctx:'El petróleo WTI cotiza en -$37 por primera vez en la historia. Saturación total.',trend:-1,lesson:'Eventos sin precedente histórico rompen toda estructura técnica. Cero análisis, solo gestión de riesgo.',
+   macro:'MACRO / COMMODITIES: El 20 Abr 2020, el WTI Crude futures (May contract) cierra en -$37.63/bbl. Es la primera vez en la historia que un commodity cotiza en negativo. La causa: COVID destruyó demanda (-30% global),沙特 y Rusia en guerra de precios, capacidad de almacenamiento de Cushing (OK) al límite. El ETF USO (United States Oil Fund) tiene que reestructurar su portfolio. Inversores retail pierden fortunas. Mayo de 2020, WTI recupera a $30+. La lección: physical delivery futures pueden ir a negativo.'},
+  {id:'goldcovid',name:'Gold COVID Rally',date:'Jul 2020',asset:'GOLD',cat:'macro',diff:'easy',pts:150,ctx:'Oro alcanza $2,067 ATH durante la incertidumbre del COVID.',trend:1,lesson:'En risk-off extremo, el oro es el primer activo en reflejar el LG del miedo.',
+   macro:'MACRO / REFUGIO: El oro pasa de $1,520 (Ene 2020) a $2,067 (6 Ago 2020), ATH histórico. Las razones: (1) Real yields colapsan a negativos por Fed QE infinito, (2) DXY (dollar index) cae 7% en 5 meses, (3) demanda retail de barras y monedas (APMEX, JM Bullion reportan records), (4) bancos centrales (Rusia, China, Turquía) aumentan compras. La plata sigue a gold pero +80% (de $18 a $29). A partir de Ago 2020, gold entra en bear market (cae a $1,675 en Mar 2021) cuando reabre la economía.'},
+  {id:'eurodol',name:'Euro-Dollar Parity',date:'Jul 2022',asset:'EURUSD',cat:'forex',diff:'med',pts:250,ctx:'EUR/USD toca paridad 1.0000 por primera vez en 20 años.',trend:-1,lesson:'Las paridades psicológicas (1.00, 100) son niveles de ERL. Después gira.',
+   macro:'MACRO / FOREX: El 13 Jul 2022, EUR/USD toca 0.9999 (paridad) por primera vez desde 2002. Las causas: (1) Fed sube 75 bps agresivamente (vs BCE más gradual), (2) Russia-Ukraine war amenaza economía europea (energía, granos), (3) Italia political crisis (Draghi renuncia Jul 21), (4) cuenta corriente eurozona deteriora por energía importada. El spread de tasas US-DE 10Y llega a 230 bps (favorece USD). ECB sube 50 bps Jul 2022 (primera subida en 11 años) pero sin convicción. EUR/USD llega a 0.9534 Sep 2022 (mínimo 20 años).'},
 ];
 
 let histFilter_active = 'all';
@@ -3610,6 +3815,15 @@ function openHistEvent(id){
   const candles = genCandles(40, base, a.vol*2, ev.trend);
   document.getElementById('hg-event-name').textContent = ev.name+' — '+ev.date;
   document.getElementById('hg-event-ctx').textContent = ev.ctx;
+  // Mostrar contexto macro/geopolit/cripto si existe
+  const macroBlock = document.getElementById('hg-macro');
+  const macroText = document.getElementById('hg-macro-text');
+  if(ev.macro && macroBlock && macroText){
+    macroBlock.style.display = 'block';
+    macroText.textContent = ev.macro;
+  } else if(macroBlock){
+    macroBlock.style.display = 'none';
+  }
   const diffCls = {easy:'diff-easy',med:'diff-med',hard:'diff-hard'};
   const diffEl = document.getElementById('hg-diff');
   diffEl.className='diff-pill '+diffCls[ev.diff];
@@ -3630,20 +3844,52 @@ function histPlay(action){
   const ev = STATE.hist.current;
   if(!ev) return;
   const candles = document.getElementById('hist-game')._candles;
+  // Para eventos historicos el trend es fijo (ev.trend), no aleatorio.
+  // Animos igualmente los proximos candles para realismo, usando la misma volatilidad.
+  const last = candles[candles.length-1];
+  const nextCandles = [];
+  let prev = last;
+  const bias = ev.trend;
+  const vol = Math.abs(last.c - last.o) / Math.max(last.o, 0.0001) || 0.02;
+  for(let i=0; i<3; i++){
+    const move = bias * (0.01 + Math.random()*0.015) * (1 + i*0.3);
+    const open = prev.c;
+    const close = open * (1 + move + (Math.random()-0.5)*vol*0.5);
+    const wick = Math.abs(close - open) * (1 + Math.random()*0.4);
+    const high = Math.max(open, close) + wick*Math.random();
+    const low  = Math.min(open, close) - wick*Math.random();
+    nextCandles.push({ o:open, h:high, l:low, c:close });
+    prev = nextCandles[nextCandles.length-1];
+  }
   const correct = action!=='skip' && ((ev.trend>0&&action==='long')||(ev.trend<0&&action==='short'));
-  STATE.hist.completed.add(ev.id);
-  document.getElementById('hg-actions').style.display='none';
-  const lesson = document.getElementById('hg-lesson');
-  lesson.style.display='';
-  lesson.innerHTML = `
-    <div style="color:${correct?'var(--green)':'var(--red)'};font-weight:700;font-size:15px;margin-bottom:8px">${correct?'✓ '+(CURRENT_LANG==='en'?'Correct!':'¡Correcto!'):'✗ '+(action==='skip'?t('hist.wrong.skip'):t('hist.wrong.dir'))}</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><strong style="color:var(--gold)">${t('hist.lesson')}</strong> ${ev.lesson}</div>
-    <div style="font-size:12px;color:var(--text3)">${t('hist.realDir')} <strong style="color:${ev.trend>0?'var(--green)':'var(--red)'}">${ev.trend>0?'📈 LONG':'📉 SHORT'}</strong></div>
-    ${correct?`<div style="margin-top:8px;color:var(--gold);font-size:12px;font-weight:700">+${ev.pts} pts · +${ev.pts/10|0} XP</div>`:''}
-    <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="closeHistGame()">${t('hist.lesson.back')}</button>`;
-  if(correct){ addXP(ev.pts/10|0); showToast('✓ +'+ev.pts+' pts — '+ev.name); }
-  else showToast('✗ Evento: '+(ev.trend>0?(CURRENT_LANG==='en'?'was LONG':'fue LONG'):(CURRENT_LANG==='en'?'was SHORT':'fue SHORT')));
-  renderHistEvents();
+  const btnRow = document.getElementById('hg-actions');
+  if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
+  // Animar tick-by-tick
+  const tickMs = 700;
+  let step = 0;
+  function nextTick(){
+    if(step >= nextCandles.length){
+      STATE.hist.completed.add(ev.id);
+      document.getElementById('hg-actions').style.display='none';
+      const lesson = document.getElementById('hg-lesson');
+      lesson.style.display='';
+      lesson.innerHTML = `
+        <div style="color:${correct?'var(--green)':'var(--red)'};font-weight:700;font-size:15px;margin-bottom:8px">${correct?'✓ '+(CURRENT_LANG==='en'?'Correct!':'¡Correcto!'):'✗ '+(action==='skip'?t('hist.wrong.skip'):t('hist.wrong.dir'))}</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><strong style="color:var(--gold)">${t('hist.lesson')}</strong> ${ev.lesson}</div>
+        <div style="font-size:12px;color:var(--text3)">${t('hist.realDir')} <strong style="color:${ev.trend>0?'var(--green)':'var(--red)'}">${ev.trend>0?'📈 LONG':'📉 SHORT'}</strong></div>
+        ${correct?`<div style="margin-top:8px;color:var(--gold);font-size:12px;font-weight:700">+${ev.pts} pts · +${ev.pts/10|0} XP</div>`:''}
+        <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="closeHistGame()">${t('hist.lesson.back')}</button>`;
+      if(correct){ addXP(ev.pts/10|0); showToast('✓ +'+ev.pts+' pts - '+ev.name); }
+      else showToast('✗ Evento: '+(ev.trend>0?(CURRENT_LANG==='en'?'was LONG':'fue LONG'):(CURRENT_LANG==='en'?'was SHORT':'fue SHORT')));
+      renderHistEvents();
+      return;
+    }
+    const partial = candles.concat(nextCandles.slice(0, step+1));
+    renderCandleChart('hist-chart', partial);
+    step++;
+    setTimeout(nextTick, tickMs);
+  }
+  setTimeout(nextTick, 250);
 }
 
 // ============================================================
@@ -4508,6 +4754,7 @@ const FRAMES = [
   },
   {
     id:'fr1', name:'Corona de Oro', price:'$0.99',
+    xpCost: 300,
     desc:'Reservado para los que dominan el mercado',
     css:`border:3px solid #f0c060;box-shadow:0 0 0 2px rgba(240,192,96,.2),0 0 20px rgba(240,192,96,.4),inset 0 0 12px rgba(240,192,96,.1)`,
     preview: () => `
@@ -4519,6 +4766,7 @@ const FRAMES = [
   },
   {
     id:'fr2', name:'Aura Violeta', price:'$0.99',
+    xpCost: 300,
     desc:'La firma del fractal. La marca T.N.S.V.T',
     css:`border:3px solid #9353ff;box-shadow:0 0 0 3px rgba(147,83,255,.15),0 0 24px rgba(147,83,255,.5),0 0 48px rgba(147,83,255,.2)`,
     preview: () => `
@@ -4529,6 +4777,7 @@ const FRAMES = [
   },
   {
     id:'fr3', name:'Llama Viva', price:'$0.99',
+    xpCost: 300,
     desc:'Para los que nunca dejan de brillar en racha',
     css:`border:3px solid #f97316;box-shadow:0 0 0 3px rgba(249,115,22,.15),0 0 20px rgba(249,115,22,.5),0 0 40px rgba(248,113,113,.2)`,
     preview: () => `
@@ -4540,6 +4789,7 @@ const FRAMES = [
   },
   {
     id:'fr4', name:'Diamante Prisma', price:'$0.99',
+    xpCost: 400,
     desc:'El más raro. Cambia de color como un prisma vivo',
     css:`border:3px solid #60a5fa;animation:rainbow-border 4s linear infinite`,
     preview: () => `
@@ -4550,6 +4800,7 @@ const FRAMES = [
   },
   {
     id:'fr5', name:'Plasma Verde', price:'$0.99',
+    xpCost: 500,
     desc:'Puro OF alcista. Energía de entrada',
     css:`border:3px solid #4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.12),0 0 20px rgba(74,222,128,.5),0 0 40px rgba(74,222,128,.2)`,
     preview: () => `
@@ -4560,6 +4811,7 @@ const FRAMES = [
   },
   {
     id:'fr6', name:'Rojo Sangre', price:'$0.99',
+    xpCost: 600,
     desc:'Bear mode activado. El mercado te teme',
     css:`border:3px solid #f87171;box-shadow:0 0 0 3px rgba(248,113,113,.15),0 0 20px rgba(248,113,113,.5)`,
     preview: () => `
@@ -4570,6 +4822,7 @@ const FRAMES = [
   },
   {
     id:'fr7', name:'Galaxia', price:'$0.99',
+    xpCost: 800,
     desc:'Sos una anomalía en el mercado. Nivel cósmico',
     css:`border:3px solid transparent;background:linear-gradient(#0e0a1e,#0e0a1e) padding-box,linear-gradient(135deg,#312e81,#7c3aed,#2563eb,#0891b2) border-box;box-shadow:0 0 28px rgba(124,58,237,.4)`,
     preview: () => `
@@ -4583,6 +4836,7 @@ const FRAMES = [
   // ── Marcos extra (+4) ──
   {
     id:'fr8', name:'⚡ Rayo Eléctrico', price:'$0.99',
+    xpCost: 1000,
     desc:'Energía pura. Para los que operan con voltaje.',
     css:`border:3px solid #f7ff00;box-shadow:0 0 0 2px rgba(247,255,0,.2),0 0 24px rgba(247,255,0,.5),inset 0 0 14px rgba(247,255,0,.15)`,
     preview: () => `
@@ -4593,6 +4847,7 @@ const FRAMES = [
   },
   {
     id:'fr9', name:'🌊 Olas del Mercado', price:'$0.99',
+    xpCost: 1500,
     desc:'Fluyes con las olas. Lectura del OF institucional.',
     css:`border:3px solid transparent;background:linear-gradient(#0a1525,#0a1525) padding-box,linear-gradient(135deg,#0891b2,#06b6d4,#60a5fa) border-box;box-shadow:0 0 24px rgba(6,182,212,.4)`,
     preview: () => `
@@ -4605,6 +4860,7 @@ const FRAMES = [
   },
   {
     id:'fr10', name:'🔥 Infernal', price:'$0.99',
+    xpCost: 2000,
     desc:'Ardes en cada trade. Pasión por el mercado.',
     css:`border:3px solid #ff4500;box-shadow:0 0 0 2px rgba(255,69,0,.2),0 0 22px rgba(255,69,0,.55),inset 0 0 14px rgba(255,69,0,.18)`,
     preview: () => `
@@ -4615,6 +4871,7 @@ const FRAMES = [
   },
   {
     id:'fr11', name:'💎 Cristal Diamante', price:'$0.99',
+    xpCost: 2500,
     desc:'Tu setup es perfecto. Refleja cada trade.',
     css:`border:3px solid transparent;background:linear-gradient(#0a0014,#0a0014) padding-box,linear-gradient(135deg,#f0abfc,#a78bfa,#22d3ee,#f0abfc) border-box;box-shadow:0 0 26px rgba(167,139,250,.45)`,
     preview: () => `
@@ -4636,63 +4893,78 @@ const AVATARS = [
     color:'#4ade80', rank:'NOVICIO+', trait:'Agresivo en longs',
     stat1:'Long Rate', s1:'85%', stat2:'Paciencia', s2:'★★☆'},
   {id:'a2', name:'Bear', emoji:'🐻', price:'$0.99',
+    xpCost: 300,
     tagline:'El bajista nato. Lee el dolor del mercado.',
     color:'#f87171', rank:'APRENDIZ+', trait:'Short specialist',
     stat1:'Short Rate', s1:'80%', stat2:'Frialdad', s2:'★★★'},
   {id:'a3', name:'Whale', emoji:'🐳', price:'$0.99',
+    xpCost: 300,
     tagline:'Mueve el mercado. Piensa en millones.',
     color:'#60a5fa', rank:'OPERADOR+', trait:'Posiciones grandes',
     stat1:'Precision', s1:'72%', stat2:'Tamaño', s2:'★★★'},
   {id:'a4', name:'AlgoBot', emoji:'🤖', price:'$0.99',
+    xpCost: 300,
     tagline:'Sin emociones. Pura probabilidad estadística.',
     color:'#a78bfa', rank:'ESTRATEGA+', trait:'Datos > intuición',
     stat1:'W. Rate', s1:'68%', stat2:'Disciplina', s2:'★★★'},
   {id:'a5', name:'Fox', emoji:'🦊', price:'$0.99',
+    xpCost: 400,
     tagline:'Astuto. Lee el LG antes que todos.',
     color:'#f97316', rank:'OPERADOR+', trait:'Cazador de LG',
     stat1:'LG detect', s1:'91%', stat2:'Velocidad', s2:'★★★'},
   {id:'a6', name:'Oráculo', emoji:'🔮', price:'$0.99',
+    xpCost: 500,
     tagline:'Nivel máximo. Ve el fractal completo.',
     color:'#c8a0ff', rank:'ORÁCULO only', trait:'Fractal master',
     stat1:'Accuracy', s1:'88%', stat2:'Visión', s2:'★★★'},
   {id:'a7', name:'Shark', emoji:'🦈', price:'$0.99',
+    xpCost: 500,
     tagline:'Silencioso hasta que ataca. BOS cazador.',
     color:'#38bdf8', rank:'MAESTRO+', trait:'BOS sniper',
     stat1:'BOS hit', s1:'94%', stat2:'Instinto', s2:'★★★'},
   {id:'a8', name:'Phoenix', emoji:'🦅', price:'$0.99',
+    xpCost: 500,
     tagline:'Revive de cada drawdown. Nunca se rinde.',
     color:'#f0c060', rank:'ESTRATEGA+', trait:'Comeback king',
     stat1:'Recovery', s1:'99%', stat2:'Resiliencia', s2:'★★★'},
   // ── Avatares extra (+8) ──
   {id:'a9', name:'Wolf', emoji:'🐺', price:'$0.99',
+    xpCost: 700,
     tagline:'Caza en manada. Domina la tendencia.',
     color:'#94a3b8', rank:'OPERADOR+', trait:'Trend follower',
     stat1:'Trend', s1:'88%', stat2:'Paciencia', s2:'★★☆'},
   {id:'a10', name:'Cobra', emoji:'🐍', price:'$0.99',
+    xpCost: 700,
     tagline:'Ataque silencioso. Liquidez en zonas de OF.',
     color:'#84cc16', rank:'MAESTRO+', trait:'OF hunter',
     stat1:'OF sync', s1:'85%', stat2:'Veneno', s2:'★★★'},
   {id:'a11', name:'Crane', emoji:'🦢', price:'$0.99',
+    xpCost: 900,
     tagline:'Elegancia institucional. Setup limpio.',
     color:'#ec4899', rank:'ESTRATEGA+', trait:'Setup minimalista',
     stat1:'RR medio', s1:'1:4', stat2:'Pureza', s2:'★★★'},
   {id:'a12', name:'Panther', emoji:'🐈‍⬛', price:'$0.99',
+    xpCost: 900,
     tagline:'Nocturno. Lee los gaps y se mueve en las sombras.',
     color:'#1e293b', rank:'MAESTRO+', trait:'FVG master',
     stat1:'FVG hit', s1:'92%', stat2:'Sigilo', s2:'★★★'},
   {id:'a13', name:'Lion', emoji:'🦁', price:'$0.99',
+    xpCost: 1200,
     tagline:'Rey de la jungle. Domina las aperturas macro.',
     color:'#f59e0b', rank:'ORÁCULO only', trait:'Apertura NY',
     stat1:'NY Wins', s1:'78%', stat2:'Rugido', s2:'★★★'},
   {id:'a14', name:'Eagle', emoji:'🦅', price:'$0.99',
+    xpCost: 1200,
     tagline:'Vista HTF. Ve lo que nadie ve.',
     color:'#06b6d4', rank:'MAESTRO+', trait:'HTF bias',
     stat1:'Bias hit', s1:'94%', stat2:'Visión', s2:'★★★'},
   {id:'a15', name:'Tiger', emoji:'🐯', price:'$0.99',
+    xpCost: 1500,
     tagline:'Agresor disciplinado. Nunca pierde el control.',
     color:'#fb923c', rank:'ESTRATEGA+', trait:'Aggression',
     stat1:'Win rate', s1:'72%', stat2:'Disciplina', s2:'★★★'},
   {id:'a16', name:'Kraken', emoji:'🦑', price:'$0.99',
+    xpCost: 2000,
     tagline:'Crypto nativo. Multi-tentáculos en todos los pares.',
     color:'#7c3aed', rank:'ORÁCULO only', trait:'Multi-pair',
     stat1:'Pairs', s1:'8+', stat2:'Tentáculos', s2:'★★★'},
@@ -4711,6 +4983,7 @@ const THEMES = [
   },
   {
     id:'th1', name:'Matrix', price:'$0.99',
+    xpCost: 400,
     desc:'Verde neón sobre negro total. Código puro.',
     bg:'#000800', bull:'#00ff41', bear:'#00cc33', accent:'#00ff41', gold:'#00ff41',
     preview_bg:'linear-gradient(135deg,#000800,#001200)',
@@ -4718,6 +4991,7 @@ const THEMES = [
   },
   {
     id:'th2', name:'Blood Market', price:'$0.99',
+    xpCost: 500,
     desc:'Rojo sangre. Para los que aman el caos bajista.',
     bg:'#100000', bull:'#ff4040', bear:'#cc0000', accent:'#ff2020', gold:'#ff6060',
     preview_bg:'linear-gradient(135deg,#100000,#200000)',
@@ -4725,6 +4999,7 @@ const THEMES = [
   },
   {
     id:'th3', name:'Gold Rush', price:'$0.99',
+    xpCost: 500,
     desc:'Dorado y negro. Para los que operan en premiums.',
     bg:'#0a0800', bull:'#f0c060', bear:'#c85000', accent:'#f0c060', gold:'#fff0a0',
     preview_bg:'linear-gradient(135deg,#0a0800,#1a1200)',
@@ -4732,6 +5007,7 @@ const THEMES = [
   },
   {
     id:'th4', name:'Midnight Blue', price:'$0.99',
+    xpCost: 600,
     desc:'Azul profundo oceánico. Calma institucional.',
     bg:'#000814', bull:'#60a5fa', bear:'#cc3366', accent:'#3b82f6', gold:'#60a5fa',
     preview_bg:'linear-gradient(135deg,#000814,#001230)',
@@ -4739,6 +5015,7 @@ const THEMES = [
   },
   {
     id:'th5', name:'Cyberpunk', price:'$0.99',
+    xpCost: 800,
     desc:'Amarillo eléctrico y cyan. Desde el futuro.',
     bg:'#050010', bull:'#f7ff00', bear:'#ff00aa', accent:'#00ffff', gold:'#f7ff00',
     preview_bg:'linear-gradient(135deg,#050010,#0a0020)',
@@ -4746,6 +5023,7 @@ const THEMES = [
   },
   {
     id:'th6', name:'Arctic', price:'$0.99',
+    xpCost: 900,
     desc:'Blanco hielo y azul glaciar. Frío y preciso.',
     bg:'#040d18', bull:'#e0f2fe', bear:'#7dd3fc', accent:'#bae6fd', gold:'#e0f2fe',
     preview_bg:'linear-gradient(135deg,#040d18,#082030)',
@@ -4753,10 +5031,47 @@ const THEMES = [
   },
   {
     id:'th7', name:'Lava', price:'$0.99',
+    xpCost: 1200,
     desc:'Naranja volcánico. Trade con fuego.',
     bg:'#100400', bull:'#f97316', bear:'#ef4444', accent:'#f97316', gold:'#fbbf24',
     preview_bg:'linear-gradient(135deg,#100400,#201000)',
     candle_bull:'#f97316', candle_bear:'#ef4444',
+  },
+  {
+    id:'th8', name:'🌈 Rainbow', price:'$0.99',
+    xpCost: 2500,
+    desc:'Todos los colores del espectro. Animación arcoíris en borders.',
+    bg:'#0a0518', bull:'#ff0080', bear:'#00ffea', accent:'#ffd700', gold:'#ffd700',
+    preview_bg:'conic-gradient(from 0deg, #ff0080, #ff8c00, #ffd700, #00ff41, #00bfff, #8b00ff, #ff0080)',
+    candle_bull:'#ff0080', candle_bear:'#00ffea',
+    isRainbow:true,
+  },
+  {
+    id:'th9', name:'🔥 Lava Intenso', price:'$0.99',
+    xpCost: 2000,
+    desc:'Magma fundido. Pulsos térmicos en cada trade.',
+    bg:'#0a0000', bull:'#fbbf24', bear:'#dc2626', accent:'#fb923c', gold:'#fde047',
+    preview_bg:'radial-gradient(circle at 30% 30%, #7c2d12, #0a0000 70%)',
+    candle_bull:'#fbbf24', candle_bear:'#dc2626',
+    isLava:true,
+  },
+  {
+    id:'th10', name:'✨ Aurora Boreal', price:'$0.99',
+    xpCost: 2200,
+    desc:'Cortinas de luz verde-violeta que se mueven. Trade bajo las estrellas.',
+    bg:'#020617', bull:'#86efac', bear:'#a78bfa', accent:'#22d3ee', gold:'#fde68a',
+    preview_bg:'linear-gradient(135deg,#022c22,#0c0a1f,#022c22)',
+    candle_bull:'#86efac', candle_bear:'#a78bfa',
+    isAurora:true,
+  },
+  {
+    id:'th11', name:'🏙️ Neon City', price:'$0.99',
+    xpCost: 1800,
+    desc:'Tonos neón sobre asfalto mojado. Ciudad que nunca duerme.',
+    bg:'#0a0a14', bull:'#f0abfc', bear:'#22d3ee', accent:'#f472b6', gold:'#facc15',
+    preview_bg:'linear-gradient(135deg,#1e1b4b,#0a0a14 50%,#831843)',
+    candle_bull:'#f0abfc', candle_bear:'#22d3ee',
+    isNeon:true,
   },
 ];
 
@@ -4771,6 +5086,7 @@ const EFFECTS_SHOP = [
   },
   {
     id:'ef1', name:'Confetti Storm', price:'$0.99',
+    xpCost: 600,
     desc:'Cada vez que acertás cae una lluvia de colores celebratoria. Ideal para sentir el "¡vamos!" en cada acierto.',
     preview: () => `
       <div style="position:relative;height:80px;background:#0a0518;border-radius:10px;overflow:hidden">
@@ -4784,6 +5100,7 @@ const EFFECTS_SHOP = [
   },
   {
     id:'ef2', name:'Lightning Strike', price:'$0.99',
+    xpCost: 900,
     desc:'Al acertar, un rayo dorado cae sobre tu pantalla. Estilo arcade retro para los que aman el drama.',
     preview: () => `
       <div style="position:relative;height:80px;background:#0a0800;border-radius:10px;overflow:hidden">
@@ -4794,6 +5111,7 @@ const EFFECTS_SHOP = [
   },
   {
     id:'ef3', name:'Nova Explosion', price:'$0.99',
+    xpCost: 1500,
     desc:'Al acertar, una supernova de partículas explota desde el centro. Cálido y agresivo.',
     preview: () => `
       <div style="position:relative;height:80px;background:#0d0008;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center">
@@ -4808,6 +5126,7 @@ const EFFECTS_SHOP = [
   },
   {
     id:'ef4', name:'Star Rain', price:'$0.99',
+    xpCost: 800,
     desc:'Al acertar, estrellas doradas caen del cielo. Estilo mágico y místico, ideal para racha larga.',
     preview: () => `
       <div style="position:relative;height:80px;background:#04020f;border-radius:10px;overflow:hidden">
@@ -4822,6 +5141,7 @@ const EFFECTS_SHOP = [
   },
   {
     id:'ef5', name:'Matrix Rain', price:'$0.99',
+    xpCost: 900,
     desc:'Al acertar, código verde estilo Matrix cae en cascada. Para los que se sienten Neo del trading.',
     preview: () => `
       <div style="position:relative;height:80px;background:#000800;border-radius:10px;overflow:hidden;font-family:'JetBrains Mono',monospace">
@@ -4835,6 +5155,7 @@ const EFFECTS_SHOP = [
   },
   {
     id:'ef6', name:'Aurora', price:'$0.99',
+    xpCost: 1100,
     desc:'Al acertar, una ola de luz boreal verde-violeta cruza la pantalla. Relajante y elegante.',
     preview: () => `
       <div style="position:relative;height:80px;background:#010818;border-radius:10px;overflow:hidden">
@@ -4845,6 +5166,7 @@ const EFFECTS_SHOP = [
   },
   {
     id:'ef7', name:'Shockwave', price:'$0.99',
+    xpCost: 1500,
     desc:'Al acertar, ondas expansivas violeta-gold explotan desde el centro. Potente y enérgico.',
     preview: () => `
       <div style="position:relative;height:80px;background:#050010;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center">
@@ -4881,6 +5203,30 @@ function injectShopKeyframes(){
 @keyframes aurora-wave{0%,100%{transform:translateX(-5%) skewX(-5deg)}50%{transform:translateX(5%) skewX(5deg)}}
 @keyframes shockwave{0%{transform:scale(0.3);opacity:0.9}100%{transform:scale(5);opacity:0}}
 @keyframes shop-card-in{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* THEME: RAINBOW (th8) */
+@keyframes rainbow-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+body.theme-rainbow{background:linear-gradient(135deg,#ff0080,#ff8c00,#ffd700,#00ff41,#00bfff,#8b00ff,#ff0080)!important;background-size:400% 400%!important;animation:rainbow-shift 8s ease infinite}
+body.theme-rainbow .screen,
+body.theme-rainbow .panel,
+body.theme-rainbow [class*="panel"],
+body.theme-rainbow [class*="card"]{position:relative}
+body.theme-rainbow .screen::before{content:"";position:fixed;inset:0;background:conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,0,128,.15) 30deg, transparent 60deg, rgba(0,255,234,.15) 90deg, transparent 120deg);pointer-events:none;z-index:0;animation:spin-rainbow 6s linear infinite;opacity:.6}
+
+/* THEME: LAVA (th9) */
+@keyframes lava-pulse{0%,100%{box-shadow:inset 0 0 80px rgba(255,80,0,.4),inset 0 0 30px rgba(255,180,0,.3)}50%{box-shadow:inset 0 0 120px rgba(255,40,0,.6),inset 0 0 60px rgba(255,140,0,.5)}}
+@keyframes lava-bubble{0%{transform:translateY(0) scale(1);opacity:.6}50%{transform:translateY(-20px) scale(1.1);opacity:.9}100%{transform:translateY(-40px) scale(.7);opacity:0}}
+body.theme-lava{background:radial-gradient(circle at 30% 30%, #4a0e0e, #0a0000 70%)!important;animation:lava-pulse 4s ease-in-out infinite}
+
+/* THEME: AURORA (th10) */
+@keyframes aurora-drift{0%{background-position:0% 0%,100% 0%}50%{background-position:100% 100%,0% 100%}100%{background-position:0% 0%,100% 0%}}
+body.theme-aurora{background:linear-gradient(135deg,#022c22,#0c0a1f,#1e1b4b,#022c22)!important;background-size:200% 200%!important;animation:aurora-drift 12s ease infinite}
+
+/* THEME: NEON CITY (th11) */
+@keyframes neon-flicker{0%,100%{text-shadow:0 0 4px currentColor,0 0 8px currentColor}50%{text-shadow:0 0 6px currentColor,0 0 14px currentColor,0 0 20px currentColor}}
+@keyframes neon-scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+body.theme-neon{background:linear-gradient(180deg,#1e1b4b,#0a0a14 50%,#831843)!important;position:relative}
+body.theme-neon::after{content:"";position:fixed;inset:0;background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 3px);pointer-events:none;z-index:1}
 @keyframes equip-flash{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 4px rgba(74,222,128,.5),0 0 20px rgba(74,222,128,.3)}}
 `;
   document.head.appendChild(style);
@@ -4955,7 +5301,7 @@ function renderFramesGrid(){
           color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
           border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
           transition:all .2s">
-          ${active?'Equipado ✓':owned?'Equipar':'$0.99'}
+          ${active?'Equipado ✓':owned?'Equipar':'💎 '+f.xpCost+' XP'}
         </button>
       </div>`;
     }).join('')}
@@ -5005,7 +5351,7 @@ function renderAvatarsGrid(){
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
             border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
             transition:all .2s;white-space:nowrap">
-            ${active?'✓ Activo':owned?'Equipar':'$0.99'}
+            ${active?'✓ Activo':owned?'Equipar':'💎 '+a.xpCost+' XP'}
           </button>
         </div>
       </div>`;
@@ -5065,8 +5411,8 @@ function renderThemesGrid(){
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
             border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
             transition:all .2s;white-space:nowrap;flex-shrink:0">
-            ${active?'✓ Activo':owned?'Aplicar':'$0.99'}
-          </button>
+${active?'✓ Activo':owned?'Aplicar':'💎 '+th.xpCost+' XP'}
+        </button>
         </div>
       </div>`;
     }).join('')}
@@ -5106,7 +5452,7 @@ function renderEffectsGrid(){
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
             border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
             transition:all .2s;white-space:nowrap;flex-shrink:0">
-            ${active?'✓ Activo':owned?'Equipar':'$0.99'}
+            ${active?'✓ Activo':owned?'Equipar':'💎 '+ef.xpCost+' XP'}
           </button>
         </div>
       </div>`;
@@ -5132,8 +5478,8 @@ function shopItemClick(type, id, name){
     const maps = {frame:FRAMES, avatar:AVATARS, theme:THEMES, effect:EFFECTS_SHOP};
     const item = (maps[type]||[]).find(x=>x.id===id);
     if(!item) return;
-    // Convert price to XP: $0.99 = 500 XP
-    const xpCost = item.free ? 0 : 500;
+    // XP cost: item.xpCost si existe, sino 500 default; free=0
+    const xpCost = item.free ? 0 : (item.xpCost || 500);
     if(!item.free && STATE.xp < xpCost){
       showToast('❌ Necesitás '+xpCost+' XP (tenés '+STATE.xp+') · Ganá XP en los modos de juego');
       return;
@@ -5258,6 +5604,11 @@ function applyTheme(id){
 
   // Update body background directly
   document.body.style.background = t.bg;
+  document.body.classList.remove('theme-rainbow','theme-lava','theme-aurora','theme-neon');
+  if(t.isRainbow) document.body.classList.add('theme-rainbow');
+  if(t.isLava) document.body.classList.add('theme-lava');
+  if(t.isAurora) document.body.classList.add('theme-aurora');
+  if(t.isNeon) document.body.classList.add('theme-neon');
 
   // Inject theme-specific candle colors for canvas charts
   STATE.themeCandles = {bull: t.candle_bull, bear: t.candle_bear, accent: t.accent};
@@ -7892,6 +8243,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   renderCandleChart('survival-chart', svCandles);
   // Check for game updates
   if(typeof checkGameUpdate === 'function') setTimeout(checkGameUpdate, 2000);
+  // Deep link (?ref= o ?mode=)
+  if(typeof parseDeepLink === 'function') parseDeepLink();
 });
 
 // ============================================================
@@ -8746,3 +9099,4 @@ async function bnCreatePayment(){
 </script>
 </body>
 </html>
+
