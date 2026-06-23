@@ -5411,7 +5411,7 @@ function renderThemesGrid(){
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
             border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
             transition:all .2s;white-space:nowrap;flex-shrink:0">
-${active?'✓ Activo':owned?'Aplicar':'💎 '+t.xpCost+' XP'}
+${active?'✓ Activo':owned?'Aplicar':'💎 '+(t.xpCost||500)+' XP'}
         </button>
         </div>
       </div>`;
