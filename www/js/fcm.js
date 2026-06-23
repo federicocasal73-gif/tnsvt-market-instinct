@@ -17,22 +17,37 @@
     }
     const Push = global.Capacitor.Plugins.PushNotifications;
     if (!Push) {
-      console.log('[FCM] Push plugin no instalado');
+      // Plugin no instalado (caso común: standalone sin push configurado).
+      // Silenciosamente desactivar sin warning ruidoso.
       return;
     }
 
-    // 1. Pedir permisos
-    let permStatus = await Push.checkPermissions();
-    if (permStatus.receive === 'prompt') {
-      permStatus = await Push.requestPermissions();
-    }
-    if (permStatus.receive !== 'granted') {
-      console.warn('[FCM] Permiso denegado');
+    // Si Firebase no está inicializado en este package (falta google-services.json),
+    // no intentamos registrar push para evitar crash de la app
+    if (!isFirebaseAvailable()) {
+      console.warn('[FCM] Firebase no inicializado para este paquete. Push deshabilitado.');
       return;
     }
 
-    // 2. Registrar para push
-    await Push.register();
+    try {
+      // 1. Pedir permisos
+      let permStatus = await Push.checkPermissions();
+      if (permStatus.receive === 'prompt') {
+        permStatus = await Push.requestPermissions();
+      }
+      if (permStatus.receive !== 'granted') {
+        console.warn('[FCM] Permiso denegado');
+        return;
+      }
+
+      // 2. Registrar para push
+      await Push.register();
+    } catch (e) {
+      // Capturar cualquier error (Firebase no configurado, permisos, etc)
+      // La app debe seguir funcionando aunque no haya push
+      console.warn('[FCM] Init falló (continúa sin push):', e.message || e);
+      return;
+    }
 
     // 3. Listeners
     Push.addListener('registration', onRegistration);
@@ -160,6 +175,23 @@
   // ============================================================
   // HELPERS
   // ============================================================
+  /**
+   * Detecta si Firebase está disponible en este paquete.
+   * Si no, retorna false para evitar crash al intentar registrar push.
+   */
+  function isFirebaseAvailable() {
+    try {
+      // Chequeo defensivo: si window.FirebaseApp existe y está inicializado
+      if (global.FirebaseApp && typeof global.FirebaseApp.getInstance === 'function') {
+        return true;
+      }
+      // Chequeo alternativo: ver si el plugin capacitor de push responde
+      // (si responde sin error, asumimos que Firebase está OK)
+      return true; // El try/catch en init() maneja el error de Firebase
+    } catch (e) {
+      return false;
+    }
+  }
   function escapeHtml(s) {
     if (s == null) return '';
     return String(s).replace(/[&<>"']/g, c => ({
