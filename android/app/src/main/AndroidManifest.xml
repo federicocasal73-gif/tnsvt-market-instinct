@@ -25,12 +25,24 @@
             </intent-filter>
 
             <!-- Deep link: com.tnsvt.game://score?xp=300 -->
-            <!-- Permite que TNSVT u otras apps abran el juego y/o el juego abra TNSVT -->
+            <!-- Permite que TNSVT u otras apps abran el juego -->
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="com.tnsvt.game" />
+            </intent-filter>
+
+            <!-- Deep link: tnsvt://payment?token=xxx -->
+            <!-- Para retorno desde el checkout web (MP/Binance/Crypto) -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tnsvt" android:host="payment" />
+                <data android:scheme="tnsvt" android:host="payment-success" />
+                <data android:scheme="tnsvt" android:host="payment-failure" />
+                <data android:scheme="tnsvt" android:host="tournament" />
             </intent-filter>
 
         </activity>
@@ -49,4 +61,10 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- FCM Push Notifications (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
 </manifest>

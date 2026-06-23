@@ -9083,20 +9083,31 @@ function bnShowModal(){document.getElementById('bnModal').style.display='flex';d
 function bnSetAmount(n){_bnAmount=n;document.getElementById('bnAmountInput').value=n;document.getElementById('bnError').style.display='none';document.querySelectorAll('.bn-amount-btn').forEach(b=>{b.style.borderColor=parseFloat(b.textContent.replace('$',''))===n?'var(--violet)':'var(--border)';b.style.background=parseFloat(b.textContent.replace('$',''))===n?'rgba(139,92,246,.2)':'var(--bg2)';});}
 async function bnCreatePayment(){
   const btn=document.getElementById('bnPayBtn'),errDiv=document.getElementById('bnError');
-  btn.disabled=true;btn.textContent='⏳...';errDiv.style.display='none';
+  btn.disabled=true;btn.textContent='?...';errDiv.style.display='none';
   let amount=_bnAmount>0?_bnAmount:parseFloat(document.getElementById('bnAmountInput').value);
-  if(!amount||amount<1||amount>1000){errDiv.textContent='⚠ 1-1000 USD';errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';return;}
+  if(!amount||amount<1||amount>1000){errDiv.textContent='? 1-1000 USD';errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';return;}
   try {
     const r=await tnsvtFetch((TNSVT_CONFIG.serverUrl||'http://192.168.1.2:8000').replace(/\/$/,'')+'/api/binance-pay/create-order',{
       method:'POST',headers:{'Content-Type':'application/json','X-Game-Code':TNSVT_CONFIG.code||''},
       body:JSON.stringify({amount_usd:amount})
     });
     const d=await r.json();
-    if(d.error){errDiv.textContent='❌ '+d.error;errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';return;}
+    if(d.error){errDiv.textContent='? '+d.error;errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';return;}
     window.location.href=d.checkout_url;
-  }catch(e){errDiv.textContent='❌ '+e.message;errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';}
+  }catch(e){errDiv.textContent='? '+e.message;errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';}
 }
 </script>
+
+<!-- ============================================================ -->
+<!-- TNSVT v2 — Enhanced Integration Layer (JWT + deep-links)    -->
+<!-- ============================================================ -->
+<script src="js/api.js"></script>
+<script src="js/wallet.js"></script>
+<script src="js/pagos.js"></script>
+<script src="js/torneos.js"></script>
+<script src="js/fcm.js"></script>
+<script src="js/integrate.js"></script>
+
 </body>
 </html>
 

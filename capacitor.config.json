@@ -4,7 +4,9 @@
   "webDir": "www",
   "bundledWebRuntime": false,
   "server": {
-    "androidScheme": "http"
+    "androidScheme": "https",
+    "cleartext": true,
+    "errorPath": "error.html"
   },
   "android": {
     "allowMixedContent": true,
@@ -21,6 +23,12 @@
     "StatusBar": {
       "style": "DARK",
       "backgroundColor": "#06040f"
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "Browser": {
+      "applicationId": "com.tnsvt.game"
     }
   }
 }
