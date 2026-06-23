@@ -5411,7 +5411,7 @@ function renderThemesGrid(){
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
             border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
             transition:all .2s;white-space:nowrap;flex-shrink:0">
-${active?'✓ Activo':owned?'Aplicar':'💎 '+th.xpCost+' XP'}
+${active?'✓ Activo':owned?'Aplicar':'💎 '+t.xpCost+' XP'}
         </button>
         </div>
       </div>`;
@@ -8427,9 +8427,10 @@ torneoFinish = function(){
 // PUSH NOTIFICATIONS — Daily Challenge
 // ============================================================
 let notifPermission = false;
+const hasNotification = (typeof Notification !== 'undefined');
 
 async function requestNotifications(){
-  if(!('Notification' in window)) return;
+  if(!hasNotification) return;
   if(Notification.permission==='granted'){ notifPermission=true; scheduleDailyNotif(); return; }
   if(Notification.permission!=='denied'){
     const perm = await Notification.requestPermission();
@@ -8439,12 +8440,12 @@ async function requestNotifications(){
 }
 
 function scheduleDailyNotif(){
-  if(!notifPermission) return;
+  if(!notifPermission || !hasNotification) return;
   const now = new Date();
   const next = new Date(now); next.setDate(next.getDate()+1); next.setHours(0,1,0,0);
   const msUntil = next - now;
   setTimeout(()=>{
-    if(Notification.permission==='granted' && !STATE.daily.played){
+    if(hasNotification && Notification.permission==='granted' && !STATE.daily.played){
       new Notification('🎯 T.N.S.V.T — Daily Challenge', {
         body:'Nuevo chart disponible. ¿Podés leer el mercado hoy?',
         icon:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔮</text></svg>',
@@ -8459,7 +8460,7 @@ function scheduleDailyNotif(){
 
 // Show notification prompt after 30s if not decided yet
 setTimeout(()=>{
-  if(!STATE.daily.played && Notification.permission==='default'){
+  if(hasNotification && !STATE.daily.played && Notification.permission==='default'){
     showToast('🔔 ¿Activar notificaciones del Daily?');
     setTimeout(()=>{
       const btn = document.createElement('button');
