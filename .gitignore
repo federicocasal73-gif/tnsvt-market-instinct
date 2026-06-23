@@ -28,6 +28,9 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Backend copy (vive en tnsvt-symfony, no commitear acá)
+# Backend copy (vive en tnsvt-symfony, no commitear ac�)
 backend/
+
+# APKs (se distribuyen por la web, no por git)
+public/downloads/*.apk
 
