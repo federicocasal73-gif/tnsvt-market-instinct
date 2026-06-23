@@ -34,3 +34,8 @@ backend/
 # APKs (se distribuyen por la web, no por git)
 public/downloads/*.apk
 
+
+# Firebase (secretos - nunca commitear)
+android/app/google-services.json
+android/app/*.jks
+android/app/keystore.properties
