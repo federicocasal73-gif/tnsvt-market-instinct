@@ -95,18 +95,12 @@ body{position:relative}
 /* SCREENS */
 .screen{
   position:absolute;inset:0;overflow-y:auto;
-  display:flex;flex-direction:column;
+  display:none;flex-direction:column;
   background:var(--bg);
   padding-bottom:70px;z-index:2;
-  opacity:0;visibility:hidden;
-  transform:translateY(12px);
-  transition:opacity .3s ease,transform .3s ease,visibility .3s;
-  pointer-events:none;
 }
-.screen.active{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
-/* Previous screen slides down on exit (for goScreen direction) */
-.screen.exit-left{transform:translateX(-30px);opacity:0}
-.screen.exit-right{transform:translateX(30px);opacity:0}
+.screen.active{display:flex}
+
 
 /* PERFIL STICKY HEADER */
 #s-perfil{overflow-y:hidden;padding-bottom:0}
@@ -2867,13 +2861,8 @@ function fmtPrice(p){
 // ============================================================
 // NAVIGATION
 // ============================================================
-function goScreen(id, reverse){
-  const prev = document.querySelector('.screen.active');
-  if(prev && prev.id !== id){
-    prev.classList.remove('active');
-    prev.classList.add(reverse?'exit-right':'exit-left');
-    setTimeout(()=>prev.classList.remove('exit-left','exit-right'),350);
-  }
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const el = document.getElementById(id);
   if(el) el.classList.add('active');
   STATE.screen = id;
@@ -5926,7 +5915,7 @@ function applyBackground(id){
 
   const overlay = document.createElement('div');
   overlay.id = 'bg-overlay';
-  overlay.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden';
+  overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden';
 
   if(id==='bg1'){ // Matrix Rain
     document.body.classList.add('has-bg-matrix');
@@ -5968,7 +5957,8 @@ function applyBackground(id){
     }
   }
 
-  document.body.appendChild(overlay);
+  const app = document.getElementById('app');
+  if(app) app.appendChild(overlay); else document.body.appendChild(overlay);
 }
 
 function triggerActiveEffect(){
@@ -8511,6 +8501,19 @@ function addXP(amount){
   if(r && r.name !== STATE.rank){ STATE.rank=r.name; showToast(t('toast.newRank')+' '+r.name+'!'); confetti(); }
   return amount;
 }
+function updateXPDisplay(){
+  const nextRank = RANKS.find(r=>r.min>STATE.xp) || RANKS[RANKS.length-1];
+  const prevRank = RANKS.slice().reverse().find(r=>r.min<=STATE.xp) || RANKS[0];
+  const pct = nextRank===RANKS[RANKS.length-1] ? 100 : Math.round((STATE.xp-prevRank.min)/(nextRank.min-prevRank.min)*100);
+  document.querySelectorAll('.badge-xp').forEach(el=>{ el.textContent='✦ '+STATE.xp.toLocaleString()+' XP'; });
+  document.querySelectorAll('.badge-rank').forEach(el=>{ el.textContent='⚔ '+prevRank.name; });
+  document.querySelectorAll('.hero-xp-label span:first-child').forEach(el=>{ el.innerHTML='✦ '+STATE.xp.toLocaleString()+' XP'; });
+  document.querySelectorAll('.hero-xp-label span:last-child').forEach(el=>{
+    if(nextRank!==RANKS[RANKS.length-1]) el.textContent=STATE.xp.toLocaleString()+' / '+nextRank.min.toLocaleString();
+    else el.textContent='★ MÁXIMO';
+  });
+  document.querySelectorAll('.xp-bar-fill').forEach(el=>{ el.style.width=pct+'%'; });
+}
 function saveShop(){ try { localStorage.setItem('tnsvt_shop', JSON.stringify([...STATE.shopOwned])); } catch(e){} }
 
 // ============================================================
@@ -9360,20 +9363,7 @@ torneoFinish = function(){
 const _addXP_orig = addXP;
 addXP = function(amount){
   const ret = _addXP_orig(amount);
-  // Actualizar UI de XP en toda la app
-  const nextRank = RANKS.find(r=>r.min>STATE.xp) || RANKS[RANKS.length-1];
-  const prevRank = RANKS.slice().reverse().find(r=>r.min<=STATE.xp) || RANKS[0];
-  const pct = nextRank===RANKS[RANKS.length-1] ? 100 : Math.round((STATE.xp-prevRank.min)/(nextRank.min-prevRank.min)*100);
-  document.querySelectorAll('.badge-xp').forEach(el=>{ el.textContent='✦ '+STATE.xp.toLocaleString()+' XP'; });
-  document.querySelectorAll('.badge-rank').forEach(el=>{ el.textContent='⚔ '+prevRank.name; });
-  document.querySelectorAll('.hero-xp-label span:first-child').forEach(el=>{
-    if(el.style.color) el.innerHTML='✦ '+STATE.xp.toLocaleString()+' XP';
-  });
-  document.querySelectorAll('.hero-xp-label span:last-child').forEach(el=>{
-    if(nextRank!==RANKS[RANKS.length-1]) el.textContent=STATE.xp.toLocaleString()+' / '+nextRank.min.toLocaleString();
-    else el.textContent='★ MÁXIMO';
-  });
-  document.querySelectorAll('.xp-bar-fill').forEach(el=>{ el.style.width=pct+'%'; });
+  updateXPDisplay();
   if(amount>=100) setTimeout(()=>SFX.xp(),200);
   return ret;
 };
@@ -9504,6 +9494,8 @@ async function bnCreatePayment(){
 }
 // Apply equipped background on load
 try { applyBackground(EQUIPPED.background); } catch(e){}
+// Update XP display after loading state
+try { updateXPDisplay(); } catch(e){}
 // Unlock all + reset stats (one-time flag)
 try {
   if(!localStorage.getItem('tnsvt_reset_done')){
