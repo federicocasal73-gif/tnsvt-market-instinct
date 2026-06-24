@@ -28,6 +28,22 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
+# Test / debug artifacts (root)
+*_dump.xml
+*_scrolled.xml
+*.ui_dump.xml
+after_onboarding.xml
+rainbow_dump.xml
+test_*.png
+test_*.xml
+reset_unlocks_done.png
+TEST_PLAN.md
+scroll_test.sh
+
+# ADB smoke test results
+adb-smoke/results/
+adb-smoke/.ui_dump.xml
+
 # Backend copy (vive en tnsvt-symfony, no commitear ac�)
 backend/
 
