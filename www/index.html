@@ -6027,11 +6027,11 @@ function applyBackground(id){
     overlay.appendChild(shooter);
   } else if(id==='bg3'){ // ═══ AURORA CURTAIN ═══
     document.body.classList.add('has-bg-aurora');
-    // Base gradient (more visible)
+    // Base gradient
     const base = document.createElement('div');
-    base.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.15),rgba(147,83,255,.2),rgba(96,165,250,.15),transparent 80%);background-size:200% 200%;animation:a-drift 8s ease infinite';
+    base.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.08),rgba(147,83,255,.12),rgba(96,165,250,.08),transparent 80%);background-size:200% 200%;animation:a-drift 8s ease infinite';
     overlay.appendChild(base);
-    // 3 aurora bands — more opacity
+    // 3 aurora bands
     const bands = [
       {top:'15%',h:'55%',spd:'6s',del:'0s',c1:G,c2:V,c3:A},
       {top:'30%',h:'40%',spd:'8s',del:'1.5s',c1:V,c2:A,c3:GO},
@@ -6039,11 +6039,11 @@ function applyBackground(id){
     ];
     bands.forEach(b=>{
       const band = document.createElement('div');
-      band.style.cssText = `position:absolute;top:${b.top};left:-10%;width:120%;height:${b.h};background:linear-gradient(90deg,transparent,${b.c1}50,${b.c2}60,${b.c3}50,transparent);animation:a-wave ${b.spd} ease-in-out ${b.del} infinite;border-radius:50%;filter:blur(25px)`;
+      band.style.cssText = `position:absolute;top:${b.top};left:-10%;width:120%;height:${b.h};background:linear-gradient(90deg,transparent,${b.c1}25,${b.c2}35,${b.c3}25,transparent);animation:a-wave ${b.spd} ease-in-out ${b.del} infinite;border-radius:50%;filter:blur(25px)`;
       overlay.appendChild(band);
     });
-    // Sparkle particles — more
-    for(let i=0;i<20;i++){
+    // Sparkle particles
+    for(let i=0;i<12;i++){
       const sp = document.createElement('div');
       sp.style.cssText = `position:absolute;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;border-radius:50%;background:#fff;top:${Math.random()*70+5}%;left:${Math.random()*90+5}%;opacity:0;box-shadow:0 0 6px ${pick([G,V,A,GO])};animation:sparkle ${1+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
       overlay.appendChild(sp);
