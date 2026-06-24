@@ -6543,6 +6543,20 @@ function renderTnsvtSettings(){
         </div>
       </div>
 
+      <!-- WALLET BALANCE CARD -->
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);font-weight:700">💰 Wallet</div>
+          <div style="font-size:10px;color:var(--text3)" id="wallet-sync-status">${(()=>{try{const s=localStorage.getItem('tnsvt_wallet_sync_status')||'local';return s==='synced'?'🟢 Sincronizada':'🟡 Local'}catch(e){return '🟡 Local'}})()}</div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--green)" id="wallet-balance-display">
+            $${(()=>{try{const b=parseFloat(localStorage.getItem('tnsvt_wallet_balance'));return b?b.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'0.00'}catch(e){return '0.00'}})()}
+          </div>
+          <div style="font-size:12px;color:var(--text3)">USD</div>
+        </div>
+      </div>
+
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px">
         <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);font-weight:700;margin-bottom:8px">🔗 Deep link a TNSVT</div>
         <div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:10px">
@@ -8633,6 +8647,10 @@ function unlockAllAndReset(){
     PORT.orders = [];
     PORT.history = [];
     PORT.closedPnl = 0;
+    // Wallet demo balance
+    try { localStorage.setItem('tnsvt_wallet_balance','50000'); } catch(e){}
+    try { localStorage.setItem('tnsvt_wallet_holdings','[]'); } catch(e){}
+    try { localStorage.setItem('tnsvt_wallet_sync_status','local'); } catch(e){}
     // Save all
     saveShop();
     savePort();
