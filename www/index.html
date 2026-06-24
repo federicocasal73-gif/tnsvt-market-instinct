@@ -1561,8 +1561,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="hero">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
         <div id="perfil-hero-av" class="avatar-frame" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--violet2));display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid rgba(147,83,255,.4);box-shadow:0 0 20px rgba(147,83,255,.3);flex-shrink:0;transition:all .3s"><span class="avatar-emoji">🎯</span></div>
-        <div>
-          <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700">Trader</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <div id="perfil-hero-name" style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Trader</div>
+            <button class="btn btn-ghost btn-sm" onclick="editTraderName()" style="padding:4px 10px;font-size:11px;white-space:nowrap" data-i18n="prof.editName">✏️</button>
+          </div>
           <div style="display:flex;gap:6px;margin-top:4px">
             <span class="badge badge-rank">⚔ OPERADOR</span>
           </div>
@@ -2219,21 +2222,42 @@ const STATE = {
   survival: { lives:3, score:0, round:1, streak:0, data:null },
   daily: { played: false, result: null },
   arena: { rival:null, myScore:0, rivalScore:0, round:1, timer:null, chartInst:null },
-  torneo: { score:0, round:1, timer:null, chartInst:null },
+  torneo: { score:0, round:0, round:1, timer:null, chartInst:null },
   hist: { filter:'all', current:null, completed:new Set(), chartInst:null },
   portfolio: null, // alias of PORT (lazy-initialized)
   liga: { tab:'global' },
-  xp: 2340, rank: 'OPERADOR',
+  xp: 0, rank: 'NOVICIO',
   shopOwned: new Set(['a1']),
   missionsCompleted: new Set(),
+  currentMode: 'classic',
+  traderName: 'Trader',
 };
-// Carga XP guardada
-try { const saved=localStorage.getItem('tnsvt_xp'); if(saved) STATE.xp=Number(saved)||2340; } catch(e){}
+// XP Economy versioning — forca reset al cambiar la economía
+const XP_ECONOMY_VERSION = 3;
+// Carga XP guardada — con versioning para forzar reset al cambiar la economía
+try {
+  const savedVer = parseInt(localStorage.getItem('tnsvt_xp_version') || '0', 10);
+  if(savedVer < XP_ECONOMY_VERSION){
+    localStorage.removeItem('tnsvt_xp');
+    STATE.xp = 0;
+    STATE.rank = 'NOVICIO';
+    localStorage.setItem('tnsvt_xp_version', String(XP_ECONOMY_VERSION));
+    try { localStorage.setItem('tnsvt_xp', '0'); } catch(e){}
+    setTimeout(()=>{
+      try { showToast('🔄 Economía de XP recalibrada — empezás de cero'); } catch(e){}
+    }, 1500);
+  } else {
+    const saved=localStorage.getItem('tnsvt_xp');
+    if(saved!==null) STATE.xp=Number(saved)||0;
+  }
+} catch(e){}
 // Carga items comprados
 try { const s=localStorage.getItem('tnsvt_shop'); if(s){ JSON.parse(s).forEach(id=>STATE.shopOwned.add(id)); } } catch(e){}
 try { const e=localStorage.getItem('tnsvt_equipped'); if(e){ Object.assign(EQUIPPED,JSON.parse(e)); } } catch(e){}
 // Carga estado VIP desde localStorage (debe ir DESPUES de STATE)
 loadVipState();
+// Carga nombre de trader
+try { const savedName=localStorage.getItem('tnsvt_trader_name'); if(savedName) STATE.traderName=savedName; } catch(e){}
 
 const ASSETS = {
   BTC:   { sym:'BTC',    name:'Bitcoin',      emoji:'₿',  vol:0.025, base:65000  },
@@ -2331,6 +2355,7 @@ const I18N = {
     'prof.logros':'Logros','prof.historial':'Historial','prof.tienda':'Tienda','prof.planes':'Pro',
     'prof.sync':'⚡ Sync TNSVT','prof.parts':'Partidas','prof.precision':'Precisión','prof.rachaMax':'Racha max',
     'prof.next':'Siguiente:','prof.progress':'Progreso al siguiente rango',
+    'prof.editName':'Editar nombre','prof.nameLabel':'Tu nombre de trader',
     // ── Tienda ──
     'shop.equip':'Equipar','shop.equipped':'Equipado ✓','shop.active':'✓ Activo','shop.buy':'$0.99',
     'shop.locked':'🔒 VIP','shop.price':'$9.99','shop.tab.frames':'Marcos','shop.tab.avatars':'Avatares',
@@ -2379,7 +2404,7 @@ const I18N = {
     'fr.task':'Tocá el chart para marcar el nivel','fr.confirm':'✓ Confirmar nivel','fr.clear':'↺ Borrar',
     // ── Toasts / Resultados ──
     'toast.skip':'— Sin trade registrado','toast.roundSkip':'— Ronda saltada',
-    'toast.bull':'alcista','toast.bear':'bajista','toast.wrong':'El mercado fue',
+    'toast.correct':'¡Correcto!','toast.bull':'alcista','toast.bear':'bajista','toast.wrong':'El mercado fue',
     'toast.newRank':'🎉 ¡Nuevo rango:','toast.xp':'✦ +','toast.tnsvt':'✦ TNSVT: +','toast.syncErr':'⚠ TNSVT sync falló:',
     // ── Chart branding ──
     'chart.engine':'📊 T.N.S.V.T Engine',
@@ -2469,6 +2494,7 @@ const I18N = {
     'prof.logros':'Achievements','prof.historial':'History','prof.tienda':'Shop','prof.planes':'Pro',
     'prof.sync':'⚡ Sync TNSVT','prof.parts':'Games','prof.precision':'Accuracy','prof.rachaMax':'Best streak',
     'prof.next':'Next:','prof.progress':'Progress to next rank',
+    'prof.editName':'Edit name','prof.nameLabel':'Your trader name',
     'shop.equip':'Equip','shop.equipped':'Equipped ✓','shop.active':'✓ Active','shop.buy':'$0.99',
     'shop.locked':'🔒 VIP','shop.price':'$9.99','shop.tab.frames':'Frames','shop.tab.avatars':'Avatars',
     'shop.tab.themes':'Themes','shop.tab.effects':'Effects',
@@ -2510,7 +2536,7 @@ const I18N = {
     'fr.setup.name':'Full 2-Step Setup','fr.setup.desc':'Full T.N.S.V.T analysis — BOS + LG + Zone + Entry',
     'fr.task':'Tap the chart to mark the level','fr.confirm':'✓ Confirm level','fr.clear':'↺ Clear',
     'toast.skip':'— No trade recorded','toast.roundSkip':'— Round skipped',
-    'toast.bull':'bullish','toast.bear':'bearish','toast.wrong':'The market was',
+    'toast.correct':'Correct!','toast.bull':'bullish','toast.bear':'bearish','toast.wrong':'The market was',
     'toast.newRank':'🎉 New rank:','toast.xp':'✦ +','toast.tnsvt':'✦ TNSVT: +','toast.syncErr':'⚠ TNSVT sync failed:',
     'chart.engine':'📊 T.N.S.V.T Engine',
     'ach.first.name':'First Trade','ach.first.desc':'Complete your first round',
@@ -3363,9 +3389,9 @@ function classicPlay(action){
         if(STATE.classic.streak>=5) pts=250;
         else if(STATE.classic.streak>=3) pts=175;
         STATE.classic.score += pts;
-        addXP(pts/10|0);
+        const classicXp = addXP(pts/10|0);
         const msgs = STATE.classic.streak>=5 ? ['🔥 ¡RACHA DE FUEGO!','⚡ ¡IMPARABLE!'] : STATE.classic.streak>=3 ? ['✦ ¡Racha activa!','🎯 ¡Bien leído!'] : ['✓ ¡Correcto!','📊 ¡Buen análisis!'];
-        showToast(msgs[Math.floor(Math.random()*msgs.length)] + ' +'+pts+' pts');
+        showToast(msgs[Math.floor(Math.random()*msgs.length)] + ' +'+pts+' pts · +'+classicXp+' XP');
       } else {
         STATE.classic.streak = 0;
         showToast('✗ '+t('toast.wrong')+' '+(result.trend==='long'?t('toast.bull'):t('toast.bear')));
@@ -3450,8 +3476,8 @@ function survivalPlay(action){
       if(STATE.survival.streak>=5){ pts*=2; if(STATE.survival.lives<3){STATE.survival.lives++;showToast('❤️ ¡Vida recuperada!');} }
       else if(STATE.survival.streak>=3) pts=Math.round(pts*1.5);
       STATE.survival.score += pts;
-      addXP(pts/20|0);
-      showToast('✓ +'+ pts +' pts'+(STATE.survival.streak>=3?' 🔥x'+STATE.survival.streak:''));
+      const survivalXp = addXP(pts/20|0);
+      showToast('✓ +'+ pts +' pts · +'+survivalXp+' XP'+(STATE.survival.streak>=3?' 🔥x'+STATE.survival.streak:''));
     } else {
       STATE.survival.lives--;
       STATE.survival.streak = 0;
@@ -3547,10 +3573,11 @@ function dailyPlay(action){
     STATE.daily.result = {action, trend: result.trend, correct};
     document.getElementById('dc-played-badge').style.display='';
     document.getElementById('dc-action-row').style.display='none';
-    if(correct){ addXP(300); showToast('✓ ¡Correcto! +300 XP - Daily Challenge ganado'); }
+    let dailyXp = 0;
+    if(correct){ dailyXp=addXP(300); showToast('✓ ¡Correcto! +'+dailyXp+' XP - Daily Challenge ganado'); }
     else if(action==='skip') showToast('— Sin trade en el Daily de hoy');
-    else showToast('✗ El mercado fue '+(result.trend==='long'?'alcista':'bajista')+' +50 XP por participar');
-    tnsvtSync('daily', correct?2100:0, correct?300:50, { asset: STATE.daily.asset||'BTC', correct });
+    else showToast('✗ El mercado fue '+(result.trend==='long'?'alcista':'bajista'));
+    tnsvtSync('daily', correct?2100:0, dailyXp, { asset: STATE.daily.asset||'BTC', correct });
     renderDailyRanking();
   });
 }
@@ -3702,8 +3729,8 @@ function arenaPlay(action){
 function arenaFinish(){
   const win = STATE.arena.myScore > STATE.arena.rivalScore;
   const draw = STATE.arena.myScore === STATE.arena.rivalScore;
-  const xp = win?300:draw?150:75;
-  addXP(xp);
+  const xpRaw = win?300:draw?150:75;
+  const xp = addXP(xpRaw);
   tnsvtSync('arena', STATE.arena.myScore, xp, { win, draw, rival_score: STATE.arena.rivalScore, rival: STATE.arena.rival });
   showResultOverlay(
     win?'🏆':draw?'🤝':'💀',
@@ -3873,13 +3900,14 @@ function histPlay(action){
       document.getElementById('hg-actions').style.display='none';
       const lesson = document.getElementById('hg-lesson');
       lesson.style.display='';
+      const histXp = correct ? addXP(ev.pts/10|0) : 0;
       lesson.innerHTML = `
         <div style="color:${correct?'var(--green)':'var(--red)'};font-weight:700;font-size:15px;margin-bottom:8px">${correct?'✓ '+(CURRENT_LANG==='en'?'Correct!':'¡Correcto!'):'✗ '+(action==='skip'?t('hist.wrong.skip'):t('hist.wrong.dir'))}</div>
         <div style="font-size:13px;color:var(--text2);margin-bottom:8px"><strong style="color:var(--gold)">${t('hist.lesson')}</strong> ${ev.lesson}</div>
         <div style="font-size:12px;color:var(--text3)">${t('hist.realDir')} <strong style="color:${ev.trend>0?'var(--green)':'var(--red)'}">${ev.trend>0?'📈 LONG':'📉 SHORT'}</strong></div>
-        ${correct?`<div style="margin-top:8px;color:var(--gold);font-size:12px;font-weight:700">+${ev.pts} pts · +${ev.pts/10|0} XP</div>`:''}
+        ${correct?`<div style="margin-top:8px;color:var(--gold);font-size:12px;font-weight:700">+${ev.pts} pts · +${histXp} XP</div>`:''}
         <button class="btn btn-ghost btn-sm" style="margin-top:12px;width:100%" onclick="closeHistGame()">${t('hist.lesson.back')}</button>`;
-      if(correct){ addXP(ev.pts/10|0); showToast('✓ +'+ev.pts+' pts - '+ev.name); }
+      if(correct) showToast('✓ +'+ev.pts+' pts · +'+histXp+' XP - '+ev.name);
       else showToast('✗ Evento: '+(ev.trend>0?(CURRENT_LANG==='en'?'was LONG':'fue LONG'):(CURRENT_LANG==='en'?'was SHORT':'fue SHORT')));
       renderHistEvents();
       return;
@@ -4357,15 +4385,15 @@ function torneoFinish(){
     consistencyScore=(avg/std)*Math.sqrt(s.consistencyScores.length);
   }
   const effPnlPct=s.format==='consistency'?consistencyScore:totalPnlPct;
-  let xp=Math.max(0,Math.floor(200+effPnlPct*5));
+  let xpRaw=Math.max(0,Math.floor(200+effPnlPct*5));
   let rank='Top 10';
-  if(effPnlPct>=100){xp=3000;rank='🏆 Leyenda';}
-  else if(effPnlPct>=50){xp=2000;rank='🥇 1° Lugar';}
-  else if(effPnlPct>=25){xp=1000;rank='🥈 2° Lugar';}
-  else if(effPnlPct>=10){xp=500;rank='🥉 3° Lugar';}
-  else if(effPnlPct>=0){xp=300;rank='Top 10';}
-  else {xp=Math.max(50,200+Math.floor(effPnlPct*2));rank='Participante';}
-  addXP(xp);
+  if(effPnlPct>=100){xpRaw=3000;rank='🏆 Leyenda';}
+  else if(effPnlPct>=50){xpRaw=2000;rank='🥇 1° Lugar';}
+  else if(effPnlPct>=25){xpRaw=1000;rank='🥈 2° Lugar';}
+  else if(effPnlPct>=10){xpRaw=500;rank='🥉 3° Lugar';}
+  else if(effPnlPct>=0){xpRaw=300;rank='Top 10';}
+  else {xpRaw=Math.max(50,200+Math.floor(effPnlPct*2));rank='Participante';}
+  const xp = addXP(xpRaw);
   tnsvtSync('torneo', Math.max(0,s.portfolio), xp, { position:rank, round:s.round, pnl:totalPnlPct.toFixed(2), stage:s.stage, format:s.format });
   // Stage advancement check
   if(!s.eliminated&&s.stage!=='final'&&s.stageRound>=12){
@@ -4760,6 +4788,7 @@ var EQUIPPED = {
   avatar:  'a1',    // Bull por defecto
   theme:   'th0',   // TNSV original
   effect:  null,    // sin efecto activo
+  background: 'bg0',// bg0 = default (ninguno)
 };
 
 // ────────────────────────────────────────────────────────────
@@ -5203,6 +5232,77 @@ const EFFECTS_SHOP = [
 ];
 
 // ────────────────────────────────────────────────────────────
+// BACKGROUNDS — overlays animados de fondo
+// ────────────────────────────────────────────────────────────
+const BACKGROUNDS = [
+  {
+    id:'bg0', name:'Sin Fondo', price:'Free', free:true,
+    desc:'Fondo limpio. Sin overlay.',
+    bodyClass: '',
+    preview: () => `<div style="height:80px;background:var(--panel2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px">Sin fondo activo</div>`,
+  },
+  {
+    id:'bg1', name:'🌧️ Matrix Rain', price:'$0.99',
+    xpCost: 700,
+    desc:'Código verde cae en cascada sobre toda la pantalla.',
+    bodyClass: 'has-bg-matrix',
+    preview: () => `
+      <div style="position:relative;height:80px;background:#000800;border-radius:10px;overflow:hidden;font-family:'JetBrains Mono',monospace">
+        ${Array.from({length:16},(_,i)=>{
+          const chars='01BOS LGG HHL BOS01'.split('');
+          const col='rgba(0,255,65,';
+          return `<div style="position:absolute;left:${i*6.5}%;top:-20px;font-size:9px;color:${col+(0.3+Math.random()*0.5)+')'};animation:matrix-col ${0.5+Math.random()*0.7}s linear ${Math.random()*0.5}s infinite;white-space:nowrap">${chars[i%chars.length]}</div>`;
+        }).join('')}
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;text-shadow:0 0 12px #00ff41">🌧️</div>
+      </div>`,
+  },
+  {
+    id:'bg2', name:'✨ Star Rain', price:'$0.99',
+    xpCost: 700,
+    desc:'Estrellas doradas caen del cielo sobre el fondo.',
+    bodyClass: 'has-bg-stars',
+    preview: () => `
+      <div style="position:relative;height:80px;background:#04020f;border-radius:10px;overflow:hidden">
+        ${Array.from({length:14},(_,i)=>{
+          const stars=['✦','✧','★','◈','✦'];
+          const s=stars[i%5];
+          const cols=['#f0c060','#c8a0ff','#fff9c4','#f0c060','#ffd700'];
+          return `<div style="position:absolute;font-size:${8+Math.random()*10}px;left:${i*7.5}%;top:-10px;color:${cols[i%5]};filter:drop-shadow(0 0 4px ${cols[i%5]});animation:star-rain ${0.9+Math.random()*0.8}s linear ${Math.random()*0.6}s infinite">${s}</div>`;
+        }).join('')}
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;text-shadow:0 0 12px #ffd700">✨</div>
+      </div>`,
+  },
+  {
+    id:'bg3', name:'🌌 Aurora Curtain', price:'$0.99',
+    xpCost: 900,
+    desc:'Cortina de luz boreal que fluye suavemente.',
+    bodyClass: 'has-bg-aurora',
+    preview: () => `
+      <div style="position:relative;height:80px;background:#010818;border-radius:10px;overflow:hidden">
+        <div style="position:absolute;top:0;left:-20%;width:140%;height:100%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.3),rgba(147,83,255,.4),rgba(96,165,250,.3),transparent);animation:aurora-wave 2s ease-in-out infinite;border-radius:50%"></div>
+        <div style="position:absolute;top:10px;left:-20%;width:140%;height:60%;background:linear-gradient(90deg,transparent,rgba(240,192,96,.2),rgba(74,222,128,.25),rgba(147,83,255,.2),transparent);animation:aurora-wave 2s ease-in-out 0.5s infinite;border-radius:50%"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;text-shadow:0 0 12px #4ade80">🌌</div>
+      </div>`,
+  },
+  {
+    id:'bg4', name:'🌀 Galaxy Particles', price:'$0.99',
+    xpCost: 1100,
+    desc:'Partículas cósmicas flotando en el espacio profundo.',
+    bodyClass: 'has-bg-galaxy',
+    preview: () => `
+      <div style="position:relative;height:80px;background:#050010;border-radius:10px;overflow:hidden">
+        ${Array.from({length:18},(_,i)=>{
+          const angle=(i/18)*360;
+          const cols=['#9353ff','#f0c060','#c8a0ff','#60a5fa','#4ade80'];
+          const c=cols[i%5]; const d=20+Math.random()*30;
+          return `<div style="position:absolute;width:5px;height:5px;border-radius:50%;background:${c};top:50%;left:50%;box-shadow:0 0 8px ${c};transform-origin:0 0;animation:nova-pt 2s ease-in-out ${i*0.12}s infinite;--angle:${angle}deg;--dist:${d}px;opacity:.7"></div>`;
+        }).join('')}
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;text-shadow:0 0 15px #9353ff">🌀</div>
+      </div>`,
+  },
+];
+
+// ────────────────────────────────────────────────────────────
 // CSS KEYFRAMES (inyectar en <head>)
 // ────────────────────────────────────────────────────────────
 function injectShopKeyframes(){
@@ -5214,6 +5314,11 @@ function injectShopKeyframes(){
 @keyframes fire-flicker{from{box-shadow:0 0 14px rgba(249,115,22,.5),0 0 28px rgba(249,115,22,.25)}to{box-shadow:0 0 22px rgba(249,115,22,.8),0 0 44px rgba(249,115,22,.4),0 0 6px rgba(255,255,0,.3)}}
 @keyframes plasma-pulse{0%,100%{box-shadow:0 0 18px rgba(74,222,128,.6),0 0 36px rgba(74,222,128,.25)}50%{box-shadow:0 0 28px rgba(74,222,128,.9),0 0 56px rgba(74,222,128,.4)}}
 @keyframes blood-pulse{0%,100%{box-shadow:0 0 18px rgba(248,113,113,.5)}50%{box-shadow:0 0 28px rgba(248,113,113,.9),0 0 10px rgba(248,113,113,.3)}}
+@property --angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes spin-rainbow{to{--angle:360deg;}}
+@keyframes lightning-frame{0%,90%,100%{box-shadow:0 0 0 2px rgba(247,255,0,.2),0 0 18px rgba(247,255,0,.4),inset 0 0 10px rgba(247,255,0,.1)}5%,15%,25%,35%,45%,55%{box-shadow:0 0 0 3px rgba(247,255,0,.3),0 0 32px rgba(247,255,0,.85),inset 0 0 18px rgba(247,255,0,.4)}10%,20%,30%,40%,50%{box-shadow:0 0 0 2px rgba(247,255,0,.15),0 0 22px rgba(247,255,0,.5),inset 0 0 14px rgba(247,255,0,.2)}}
+@keyframes wave-rotate{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes fire-pulse{0%,100%{box-shadow:0 0 0 2px rgba(255,69,0,.2),0 0 18px rgba(255,69,0,.5),0 0 36px rgba(255,69,0,.2),inset 0 0 12px rgba(255,69,0,.15)}50%{box-shadow:0 0 0 3px rgba(255,69,0,.25),0 0 32px rgba(255,69,0,.85),0 0 64px rgba(255,69,0,.4),inset 0 0 18px rgba(255,140,0,.3)}}
 @keyframes spin-rainbow{to{--angle:360deg;}}
 @keyframes rainbow-border{0%{box-shadow:0 0 0 3px rgba(240,192,96,.3),0 0 20px rgba(240,192,96,.4)}25%{box-shadow:0 0 0 3px rgba(147,83,255,.3),0 0 20px rgba(147,83,255,.4)}50%{box-shadow:0 0 0 3px rgba(74,222,128,.3),0 0 20px rgba(74,222,128,.4)}75%{box-shadow:0 0 0 3px rgba(96,165,250,.3),0 0 20px rgba(96,165,250,.4)}100%{box-shadow:0 0 0 3px rgba(240,192,96,.3),0 0 20px rgba(240,192,96,.4)}}
 @keyframes cfall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(90px) rotate(480deg);opacity:0}}
@@ -5225,6 +5330,9 @@ function injectShopKeyframes(){
 @keyframes matrix-col{0%{transform:translateY(-20px);opacity:0}10%{opacity:1}100%{transform:translateY(90px);opacity:0}}
 @keyframes aurora-wave{0%,100%{transform:translateX(-5%) skewX(-5deg)}50%{transform:translateX(5%) skewX(5deg)}}
 @keyframes shockwave{0%{transform:scale(0.3);opacity:0.9}100%{transform:scale(5);opacity:0}}
+
+/* BACKGROUND overlays — z-index base */
+/* Los elementos DOM de overlay se inyectan via applyBackground() */
 @keyframes shop-card-in{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* THEME: RAINBOW (th8) */
@@ -5271,6 +5379,7 @@ function renderTienda(cat){
     {id:'avatars',label:'👤 Avatars', count: AVATARS.length},
     {id:'themes', label:'🎨 Temas', count: THEMES.length},
     {id:'effects',label:'✨ Efectos', count: EFFECTS_SHOP.length},
+    {id:'backgrounds',label:'🌌 Fondos', count: BACKGROUNDS.length},
   ];
 
   el.innerHTML = `
@@ -5298,6 +5407,7 @@ function renderShopGrid(cat){
   if(cat==='avatars') return renderAvatarsGrid();
   if(cat==='themes')  return renderThemesGrid();
   if(cat==='effects') return renderEffectsGrid();
+  if(cat==='backgrounds') return renderBackgroundsGrid();
   return '';
 }
 
@@ -5483,12 +5593,43 @@ function renderEffectsGrid(){
   </div>`;
 }
 
+// ── BACKGROUNDS GRID ──────────────────────────────────────────
+function renderBackgroundsGrid(){
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    ${BACKGROUNDS.map((b,i)=>{
+      const owned = b.free || STATE.shopOwned.has(b.id);
+      const active = EQUIPPED.background===b.id;
+      return `<div onclick="shopItemClick('background','${b.id}','${b.name}')"
+        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.6)':owned?'rgba(147,83,255,.3)':'var(--border)'};
+        border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;
+        transition:all .25s;animation:shop-card-in .3s ease ${i*0.04}s both;
+        ${active?'box-shadow:0 0 0 2px rgba(74,222,128,.3),0 0 16px rgba(74,222,128,.15)':''}">
+        <!-- PREVIEW -->
+        <div style="height:88px;display:flex;align-items:center;justify-content:center;margin-bottom:10px">
+          ${b.preview()}
+        </div>
+        <div style="font-weight:700;font-size:13px;color:${active?'var(--green)':'var(--text)'};margin-bottom:3px">${b.name}</div>
+        ${active?`<div style="font-size:10px;color:var(--green);margin-bottom:6px;font-weight:700">✓ ACTIVO</div>`:`<div style="font-size:10px;color:var(--text3);margin-bottom:6px">${b.desc}</div>`}
+        <button style="width:100%;padding:7px;border-radius:8px;border:none;cursor:pointer;
+          font-weight:700;font-size:11px;font-family:'Cinzel',serif;letter-spacing:.5px;
+          background:${active?'rgba(74,222,128,.15)':owned?'rgba(147,83,255,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
+          color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
+          border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
+          transition:all .2s">
+          ${active?'Activo ✓':owned?'Activar':'💎 '+b.xpCost+' XP'}
+        </button>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
 // ── BUY / EQUIP HANDLER ──────────────────────────────────────
 function equipItem(type, id){
   if(type==='frame')  { EQUIPPED.frame=id; applyFrame(id); }
   if(type==='avatar') { EQUIPPED.avatar=id; applyAvatar(id); }
   if(type==='theme')  { EQUIPPED.theme=id; applyTheme(id); }
   if(type==='effect') { EQUIPPED.effect=id; applyEffect(id); if(id!=='ef0'&&typeof triggerActiveEffect==='function') triggerActiveEffect(); }
+  if(type==='background') { EQUIPPED.background=id; applyBackground(id); }
   // Save equipped state
   try { localStorage.setItem('tnsvt_equipped', JSON.stringify(EQUIPPED)); } catch(e){}
 }
@@ -5498,7 +5639,7 @@ function shopItemClick(type, id, name){
   const owned = isOwned(type, id);
   if(!owned){
     // Find item and its price
-    const maps = {frame:FRAMES, avatar:AVATARS, theme:THEMES, effect:EFFECTS_SHOP};
+    const maps = {frame:FRAMES, avatar:AVATARS, theme:THEMES, effect:EFFECTS_SHOP, background:BACKGROUNDS};
     const item = (maps[type]||[]).find(x=>x.id===id);
     if(!item) return;
     // XP cost: item.xpCost si existe, sino 500 default; free=0
@@ -5533,7 +5674,7 @@ function shopItemClick(type, id, name){
 }
 
 function isOwned(type, id){
-  const maps = {frame:FRAMES, avatar:AVATARS, theme:THEMES, effect:EFFECTS_SHOP};
+  const maps = {frame:FRAMES, avatar:AVATARS, theme:THEMES, effect:EFFECTS_SHOP, background:BACKGROUNDS};
   const item = (maps[type]||[]).find(x=>x.id===id);
   return item?.free || STATE.shopOwned.has(id);
 }
@@ -5565,7 +5706,15 @@ function applyFrame(id){
   } else if(id==='fr6'){ // Rojo Sangre
     styleEl.textContent=`.avatar-frame{border:3px solid #f87171!important;box-shadow:0 0 18px rgba(248,113,113,.6)!important;animation:blood-pulse 1.2s ease-in-out infinite!important;}`;
   } else if(id==='fr7'){ // Galaxia
-    styleEl.textContent=`.avatar-frame{border:3px solid #7c3aed!important;box-shadow:0 0 0 2px #2563eb,0 0 28px rgba(124,58,237,.5)!important;}`;
+    styleEl.textContent=`.avatar-frame{border:3px solid transparent!important;background:linear-gradient(#0e0a1e,#0e0a1e) padding-box,linear-gradient(var(--angle),#312e81,#7c3aed,#2563eb,#0891b2,#312e81) border-box!important;box-shadow:0 0 28px rgba(124,58,237,.55),0 0 56px rgba(37,99,235,.25)!important;animation:spin-rainbow 8s linear infinite!important;}`;
+  } else if(id==='fr8'){ // ⚡ Rayo Eléctrico
+    styleEl.textContent=`.avatar-frame{border:3px solid #f7ff00!important;box-shadow:0 0 0 2px rgba(247,255,0,.2),0 0 24px rgba(247,255,0,.55),inset 0 0 14px rgba(247,255,0,.18)!important;animation:lightning-frame 2s ease-in-out infinite!important;}`;
+  } else if(id==='fr9'){ // 🌊 Olas del Mercado
+    styleEl.textContent=`.avatar-frame{border:3px solid transparent!important;background:linear-gradient(#0a1525,#0a1525) padding-box,linear-gradient(135deg,#0891b2,#06b6d4,#60a5fa,#0891b2) border-box!important;background-size:100% 100%,200% 200%!important;background-position:0% 0%,0% 50%!important;box-shadow:0 0 28px rgba(6,182,212,.5),0 0 56px rgba(96,165,250,.25)!important;animation:wave-rotate 5s ease-in-out infinite!important;}`;
+  } else if(id==='fr10'){ // 🔥 Infernal
+    styleEl.textContent=`.avatar-frame{border:3px solid #ff4500!important;box-shadow:0 0 0 2px rgba(255,69,0,.25),0 0 26px rgba(255,69,0,.7),inset 0 0 16px rgba(255,69,0,.22)!important;animation:fire-pulse 1.5s ease-in-out infinite!important;}`;
+  } else if(id==='fr11'){ // 💎 Cristal Diamante
+    styleEl.textContent=`.avatar-frame{border:3px solid transparent!important;background:linear-gradient(#0a0014,#0a0014) padding-box,linear-gradient(var(--angle),#f0abfc,#a78bfa,#22d3ee,#67e8f9,#f0abfc) border-box!important;box-shadow:0 0 28px rgba(167,139,250,.55),0 0 56px rgba(34,211,238,.3)!important;animation:spin-rainbow 6s linear infinite!important;}`;
   }
 
   // Apply to all avatar elements in the DOM
@@ -5678,6 +5827,68 @@ function applyEffect(id){
   if(!ef||id==='ef0') return;
   // Preview the effect immediately
   triggerActiveEffect();
+}
+
+// ============================================================
+// APPLY BACKGROUND — overlay animado de fondo
+// ============================================================
+function applyBackground(id){
+  // Remove existing background overlay
+  const old = document.getElementById('bg-overlay');
+  if(old) old.remove();
+  // Reset body classes
+  document.body.classList.remove('has-bg-matrix','has-bg-stars','has-bg-aurora','has-bg-galaxy');
+
+  if(id==='bg0') return;
+
+  const b = BACKGROUNDS.find(x=>x.id===id);
+  if(!b) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'bg-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden';
+
+  if(id==='bg1'){ // Matrix Rain
+    document.body.classList.add('has-bg-matrix');
+    overlay.innerHTML = `<div style="position:absolute;inset:0;opacity:.08;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,65,.08) 3px,rgba(0,255,65,.08) 4px)"></div>`;
+    const cols = 18;
+    for(let i=0;i<cols;i++){
+      const span = document.createElement('div');
+      span.style.cssText = `position:absolute;left:${i*(100/cols)}%;top:-30px;font-size:${7+Math.random()*5}px;color:rgba(0,255,65,${0.15+Math.random()*0.2});font-family:'JetBrains Mono',monospace;animation:matrix-col ${0.8+Math.random()*0.8}s linear ${Math.random()*1.5}s infinite;white-space:nowrap`;
+      const chars='01BOS HL LGG BOS01 10'.split(' ');
+      span.textContent = chars[i%chars.length];
+      overlay.appendChild(span);
+    }
+  } else if(id==='bg2'){ // Star Rain
+    document.body.classList.add('has-bg-stars');
+    const stars=['✦','✧','★','◈','✦'];
+    const cols=['#f0c060','#c8a0ff','#fff9c4','#f0c060','#ffd700'];
+    for(let i=0;i<16;i++){
+      const span = document.createElement('div');
+      span.style.cssText = `position:absolute;font-size:${7+Math.random()*9}px;left:${i*6.5}%;top:-10px;color:${cols[i%5]};filter:drop-shadow(0 0 3px ${cols[i%5]});animation:star-rain ${0.9+Math.random()*0.8}s linear ${Math.random()*0.8}s infinite;opacity:.6`;
+      span.textContent = stars[i%5];
+      overlay.appendChild(span);
+    }
+  } else if(id==='bg3'){ // Aurora Curtain
+    document.body.classList.add('has-bg-aurora');
+    overlay.innerHTML = `
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.04),rgba(147,83,255,.06),rgba(96,165,250,.04),transparent 80%);background-size:200% 200%;animation:aurora-drift 8s ease infinite"></div>
+      <div style="position:absolute;top:-30%;left:-10%;width:120%;height:60%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.06),rgba(147,83,255,.08),rgba(96,165,250,.06),transparent);animation:aurora-drift 10s ease infinite 2s;border-radius:50%;filter:blur(20px)"></div>`;
+  } else if(id==='bg4'){ // Galaxy Particles
+    document.body.classList.add('has-bg-galaxy');
+    const cols=['#9353ff','#f0c060','#c8a0ff','#60a5fa','#4ade80'];
+    for(let i=0;i<20;i++){
+      const angle=(i/20)*360;
+      const c=cols[i%5];
+      const size=2+Math.random()*4;
+      const d=20+Math.random()*35;
+      const p = document.createElement('div');
+      p.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:${c};top:50%;left:50%;box-shadow:0 0 6px ${c};transform-origin:0 0;animation:nova-pt 2.5s ease-in-out ${i*0.1}s infinite;--angle:${angle}deg;--dist:${d}px;opacity:.5`;
+      overlay.appendChild(p);
+    }
+  }
+
+  document.body.appendChild(overlay);
 }
 
 function triggerActiveEffect(){
@@ -6049,6 +6260,11 @@ function showVipPaywall(featureName, onUnlock){
 
 function initPerfil(){
   perfilTab('logros', document.querySelector('#s-perfil .tab.active'));
+  // Update trader name in UI
+  const nameEl = document.getElementById('perfil-hero-name');
+  if(nameEl) nameEl.textContent = STATE.traderName || 'Trader';
+  const homeNameEl = document.getElementById('home-trader-name');
+  if(homeNameEl) homeNameEl.textContent = STATE.traderName || 'Trader';
 }
 
 function perfilTab(tab, btn){
@@ -6063,6 +6279,57 @@ function perfilTab(tab, btn){
   if(tab==='tienda')   renderTienda('frames');
   if(tab==='planes')   renderPlanes();
   if(tab==='sync')     renderTnsvtSettings();
+}
+
+// Edit trader name modal
+function editTraderName(){
+  const currentName = STATE.traderName || 'Trader';
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:360px">
+      <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--violet3)" data-i18n="prof.editName">Editar nombre</div>
+        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;font-size:24px;color:var(--text3);cursor:pointer;line-height:1">×</button>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:6px" data-i18n="prof.nameLabel">Tu nombre de trader</label>
+        <input id="edit-name-input" type="text" value="${STATE.traderName || 'Trader'}" maxlength="20" style="width:100%;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:16px;font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:1px">
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Máx. 20 caracteres · Solo letras, números y espacios</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" style="flex:1;padding:12px;border-radius:8px;font-weight:600" onclick="this.closest('.modal-overlay').remove()" data-i18n="ui.cancel">Cancelar</button>
+        <button class="btn btn-primary" style="flex:1;padding:12px;border-radius:8px;font-weight:700" onclick="saveTraderName()">Guardar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>{
+    const input = document.getElementById('edit-name-input');
+    if(input){ input.focus(); input.select(); }
+  });
+}
+
+function saveTraderName(){
+  const input = document.getElementById('edit-name-input');
+  if(!input) return;
+  let name = input.value.trim().toUpperCase();
+  // Sanitize: only letters, numbers, spaces
+  name = name.replace(/[^A-Z0-9\s]/g, '').substring(0, 20);
+  if(!name) name = 'TRADER';
+  STATE.traderName = name;
+  try { localStorage.setItem('tnsvt_trader_name', name); } catch(e){}
+  // Update UI
+  const nameEl = document.getElementById('perfil-hero-name');
+  if(nameEl) nameEl.textContent = name;
+  const homeNameEl = document.getElementById('home-trader-name');
+  if(homeNameEl) homeNameEl.textContent = name;
+  // Close modal
+  const overlay = document.querySelector('.modal-overlay');
+  if(overlay) overlay.remove();
+  SFX.tap();
+  HAPTICS.tap();
+  showToast('✓ Nombre actualizado a ' + name);
 }
 
 function renderTnsvtSettings(){
@@ -6399,8 +6666,8 @@ function claimMission(id, xp, e){
   e.stopPropagation();
   if(STATE.missionsCompleted.has(id)) return;
   STATE.missionsCompleted.add(id);
-  addXP(xp);
-  showToast('✦ +'+xp+' XP reclamados');
+  const xpGranted = addXP(xp);
+  showToast('✦ +'+xpGranted+' XP reclamados');
   confetti();
 }
 
@@ -7048,8 +7315,8 @@ function fractalNext(){
 function fractalFinish(){
   const cfg = FRACTAL_MODES[fractalState.mode];
   const prec = fractalState.total>0 ? Math.round(fractalState.correct/fractalState.total*100) : 0;
-  const xp = Math.round(cfg.xp * (prec/100) * 1.5);
-  addXP(xp);
+  const xpRaw = Math.round(cfg.xp * (prec/100) * 1.5);
+  const xp = addXP(xpRaw);
   tnsvtSync('fractal', fractalState.score||0, xp, { mode: cfg.id, precision: prec });
   if(prec>=80) fxWin();
   else if(prec>=50) { SFX.correct(); screenFlash('correct'); }
@@ -8158,10 +8425,12 @@ function glosRender(){
 // XP + RANK
 // ============================================================
 function addXP(amount){
-  STATE.xp += amount;
+  const granted = Math.max(1, Math.round(amount * 0.075));
+  STATE.xp += granted;
   try { localStorage.setItem('tnsvt_xp', STATE.xp); } catch(e){}
   const r = RANKS.slice().reverse().find(r=>STATE.xp>=r.min);
   if(r && r.name !== STATE.rank){ STATE.rank=r.name; showToast(t('toast.newRank')+' '+r.name+'!'); confetti(); }
+  return granted;
 }
 function saveShop(){ try { localStorage.setItem('tnsvt_shop', JSON.stringify([...STATE.shopOwned])); } catch(e){} }
 
@@ -9144,6 +9413,8 @@ async function bnCreatePayment(){
     window.location.href=d.checkout_url;
   }catch(e){errDiv.textContent='? '+e.message;errDiv.style.display='block';btn.disabled=false;btn.innerHTML='Pagar con Binance Pay';}
 }
+// Apply equipped background on load
+try { applyBackground(EQUIPPED.background); } catch(e){}
 </script>
 
 <!-- ============================================================ -->
