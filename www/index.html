@@ -100,6 +100,10 @@ body{position:relative}
   padding-bottom:70px;z-index:2;
 }
 .screen.active{display:flex}
+body.has-bg .screen{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.87)}
+body.has-bg #perfil-header{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.95)}
+body.has-bg #ticker,
+body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
 
 
 /* PERFIL STICKY HEADER */
@@ -5396,25 +5400,43 @@ function injectShopKeyframes(){
 @keyframes cfall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(90px) rotate(480deg);opacity:0}}
 @keyframes bolt-drop{0%{opacity:0;transform:scaleY(0)}20%{opacity:1;transform:scaleY(1)}80%{opacity:1}100%{opacity:0}}
 @keyframes bolt-flash{0%,100%{opacity:0.3;transform:scale(0.9)}15%,35%{opacity:1;transform:scale(1.2)}25%{opacity:0.1}}
+@keyframes shockwave{0%{transform:scale(0.3);opacity:0.9}100%{transform:scale(5);opacity:0}}
+/* SHOP / EFFECTS KEYFRAMES (keep for previews) */
+@keyframes matrix-col{0%{transform:translateY(-20px);opacity:0}10%{opacity:1}100%{transform:translateY(90px);opacity:0}}
+@keyframes star-rain{0%{transform:translateY(-10px);opacity:0}20%{opacity:1}100%{transform:translateY(90px);opacity:0}}
+@keyframes aurora-wave{0%,100%{transform:translateX(-5%) skewX(-5deg)}50%{transform:translateX(5%) skewX(5deg)}}
 @keyframes nova-pt{0%{transform:translate(0,0);opacity:1}100%{transform:translate(calc(cos(var(--angle))*var(--dist)),calc(sin(var(--angle))*var(--dist)));opacity:0}}
 @keyframes nova-core{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
-@keyframes star-rain{0%{transform:translateY(-10px);opacity:0}20%{opacity:1}100%{transform:translateY(90px);opacity:0}}
-@keyframes matrix-col{0%{transform:translateY(-20px);opacity:0}10%{opacity:1}100%{transform:translateY(90px);opacity:0}}
-@keyframes aurora-wave{0%,100%{transform:translateX(-5%) skewX(-5deg)}50%{transform:translateX(5%) skewX(5deg)}}
-@keyframes shockwave{0%{transform:scale(0.3);opacity:0.9}100%{transform:scale(5);opacity:0}}
+/* BACKGROUND KEYFRAMES (high quality) */
+@keyframes mf{0%{transform:translateY(-100%);opacity:0}8%{opacity:1}100%{transform:translateY(calc(100vh))}}
+@keyframes sf{0%{transform:translateY(-10px);opacity:0}15%{opacity:1}100%{transform:translateY(calc(100vh + 20px));opacity:0}}
+@keyframes tf{0%,100%{opacity:0.2;transform:scale(0.8)}50%{opacity:1;transform:scale(1.3)}}
+@keyframes ss{0%{transform:translate(0,0);opacity:1}10%{opacity:0}20%{opacity:0}100%{transform:translate(110vw,110vh);opacity:0}}
+@keyframes a-drift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes a-wave{0%,100%{transform:translateX(-8%) skewX(-6deg)}50%{transform:translateX(8%) skewX(6deg)}}
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:0.8;transform:scale(1)}}
+@keyframes cg{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.4}50%{transform:translate(-50%,-50%) scale(1.3);opacity:0.8}}
+@keyframes orb{0%{transform:rotate(0deg) translateX(var(--dist)) rotate(0deg);opacity:0}20%{opacity:0.8}100%{transform:rotate(360deg) translateX(var(--dist)) rotate(-360deg);opacity:0}}
 
 /* BACKGROUND overlays — z-index base */
 /* Los elementos DOM de overlay se inyectan via applyBackground() */
 @keyframes shop-card-in{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* THEME: RAINBOW (th8) */
-@keyframes rainbow-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-body.theme-rainbow{background:linear-gradient(135deg,#ff0080,#ff8c00,#ffd700,#00ff41,#00bfff,#8b00ff,#ff0080)!important;background-size:400% 400%!important;animation:rainbow-shift 8s ease infinite}
+@keyframes rainbow-border{
+  0%{border-color:#ff0080;box-shadow:0 0 8px rgba(255,0,128,.3),inset 0 0 8px rgba(255,0,128,.08)}
+  16%{border-color:#ff8c00;box-shadow:0 0 8px rgba(255,140,0,.3),inset 0 0 8px rgba(255,140,0,.08)}
+  33%{border-color:#ffd700;box-shadow:0 0 8px rgba(255,215,0,.3),inset 0 0 8px rgba(255,215,0,.08)}
+  50%{border-color:#00ff41;box-shadow:0 0 8px rgba(0,255,65,.3),inset 0 0 8px rgba(0,255,65,.08)}
+  66%{border-color:#00bfff;box-shadow:0 0 8px rgba(0,191,255,.3),inset 0 0 8px rgba(0,191,255,.08)}
+  83%{border-color:#8b00ff;box-shadow:0 0 8px rgba(139,0,255,.3),inset 0 0 8px rgba(139,0,255,.08)}
+  100%{border-color:#ff0080;box-shadow:0 0 8px rgba(255,0,128,.3),inset 0 0 8px rgba(255,0,128,.08)}
+}
 body.theme-rainbow .screen,
 body.theme-rainbow .panel,
 body.theme-rainbow [class*="panel"],
-body.theme-rainbow [class*="card"]{position:relative}
-body.theme-rainbow .screen::before{content:"";position:fixed;inset:0;background:conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,0,128,.15) 30deg, transparent 60deg, rgba(0,255,234,.15) 90deg, transparent 120deg);pointer-events:none;z-index:0;animation:spin-rainbow 6s linear infinite;opacity:.6}
+body.theme-rainbow [class*="card"]{border:1px solid;animation:rainbow-border 3s linear infinite}
+body.theme-rainbow .screen::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%, rgba(255,0,128,.04), transparent 70%);pointer-events:none;z-index:0}
 
 /* THEME: LAVA (th9) */
 @keyframes lava-pulse{0%,100%{box-shadow:inset 0 0 80px rgba(255,80,0,.4),inset 0 0 30px rgba(255,180,0,.3)}50%{box-shadow:inset 0 0 120px rgba(255,40,0,.6),inset 0 0 60px rgba(255,140,0,.5)}}
@@ -5832,6 +5854,10 @@ function applyTheme(id){
 
   // Core colors
   r.style.setProperty('--bg',      t.bg);
+  const bgRgb = hexToRgb(t.bg);
+  r.style.setProperty('--bg-r',    bgRgb.r);
+  r.style.setProperty('--bg-g',    bgRgb.g);
+  r.style.setProperty('--bg-b',    bgRgb.b);
   r.style.setProperty('--bg2',     lighten(t.bg, 1.35));
   r.style.setProperty('--bg3',     lighten(t.bg, 1.7));
   r.style.setProperty('--panel',   lighten(t.bg, 1.5));
@@ -5884,6 +5910,10 @@ function lightenHex(hex, amount){
     return '#'+[r2,g2,b2].map(x=>Math.min(255,x).toString(16).padStart(2,'0')).join('');
   }catch(e){return hex;}
 }
+function hexToRgb(hex){
+  try{ return {r:parseInt(hex.slice(1,3),16),g:parseInt(hex.slice(3,5),16),b:parseInt(hex.slice(5,7),16)}; }
+  catch(e){ return {r:6,g:4,b:15}; }
+}
 // alias for old code
 function adjustBrightness(hex,f){return lighten(hex,f);}
 
@@ -5899,61 +5929,129 @@ function applyEffect(id){
 }
 
 // ============================================================
-// APPLY BACKGROUND — overlay animado de fondo
+// APPLY BACKGROUND — overlay animado de alta calidad
 // ============================================================
 function applyBackground(id){
-  // Remove existing background overlay
   const old = document.getElementById('bg-overlay');
   if(old) old.remove();
-  // Reset body classes
-  document.body.classList.remove('has-bg-matrix','has-bg-stars','has-bg-aurora','has-bg-galaxy');
-
+  document.body.classList.remove('has-bg','has-bg-matrix','has-bg-stars','has-bg-aurora','has-bg-galaxy');
   if(id==='bg0') return;
-
   const b = BACKGROUNDS.find(x=>x.id===id);
   if(!b) return;
 
+  document.body.classList.add('has-bg');
   const overlay = document.createElement('div');
   overlay.id = 'bg-overlay';
-  overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden';
+  overlay.style.cssText = 'position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden';
 
-  if(id==='bg1'){ // Matrix Rain
+  // Read theme accent colors for integration
+  const cs = getComputedStyle(document.documentElement);
+  const G = cs.getPropertyValue('--green').trim() || '#4ade80';
+  const V = cs.getPropertyValue('--violet').trim() || '#9353ff';
+  const GO = cs.getPropertyValue('--gold').trim() || '#f0c060';
+  const R = cs.getPropertyValue('--red').trim() || '#f87171';
+  const A = cs.getPropertyValue('--accent').trim() || '#9353ff';
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+
+  if(id==='bg1'){ // ═══ MATRIX RAIN ═══
     document.body.classList.add('has-bg-matrix');
-    overlay.innerHTML = `<div style="position:absolute;inset:0;opacity:.08;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,65,.08) 3px,rgba(0,255,65,.08) 4px)"></div>`;
-    const cols = 18;
-    for(let i=0;i<cols;i++){
-      const span = document.createElement('div');
-      span.style.cssText = `position:absolute;left:${i*(100/cols)}%;top:-30px;font-size:${7+Math.random()*5}px;color:rgba(0,255,65,${0.3+Math.random()*0.4});font-family:'JetBrains Mono',monospace;animation:matrix-col ${0.8+Math.random()*0.8}s linear ${Math.random()*1.5}s infinite;white-space:nowrap`;
-      const chars='01BOS HL LGG BOS01 10'.split(' ');
-      span.textContent = chars[i%chars.length];
-      overlay.appendChild(span);
+    overlay.style.background = '#000a00';
+    // Scan lines
+    const scan = document.createElement('div');
+    scan.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,65,.03) 3px,rgba(0,255,65,.03) 4px)';
+    overlay.appendChild(scan);
+    // Bottom glow
+    const gb = document.createElement('div');
+    gb.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(0deg,rgba(0,255,65,.12),transparent)';
+    overlay.appendChild(gb);
+    // 28 columns of falling code — each column = stack of 5 chars
+    const CHARS = '01БОSLGGHHLБОS01БОS'.split('');
+    const COLORS = [G,'#00ff80','#00cc33'];
+    for(let i=0;i<28;i++){
+      const col = document.createElement('div');
+      const speed = 0.7+Math.random()*0.9;
+      const x = i*3.57;
+      const sz = 7+Math.random()*5;
+      const c = COLORS[i%COLORS.length];
+      col.style.cssText = `position:absolute;left:${x}%;top:-60px;font-family:'JetBrains Mono',monospace;text-align:center;animation:mf ${speed}s linear ${Math.random()*1.8}s infinite;white-space:nowrap;line-height:1`;
+      // Build a stack of chars (5 per column) with varying opacity
+      let html = `<span style="color:${c};text-shadow:0 0 10px ${c};font-size:${sz+3}px;opacity:.95">${pick(CHARS)}</span>`;
+      for(let j=1;j<5;j++) html += `<span style="color:${c};font-size:${sz+2-j*1.5}px;opacity:${0.6-j*0.12}">${pick(CHARS)}</span>`;
+      col.innerHTML = html;
+      overlay.appendChild(col);
     }
-  } else if(id==='bg2'){ // Star Rain
+  } else if(id==='bg2'){ // ═══ STAR RAIN ═══
     document.body.classList.add('has-bg-stars');
-    const stars=['✦','✧','★','◈','✦'];
-    const cols=['#f0c060','#c8a0ff','#fff9c4','#f0c060','#ffd700'];
-    for(let i=0;i<16;i++){
-      const span = document.createElement('div');
-      span.style.cssText = `position:absolute;font-size:${7+Math.random()*9}px;left:${i*6.5}%;top:-10px;color:${cols[i%5]};filter:drop-shadow(0 0 3px ${cols[i%5]});animation:star-rain ${0.9+Math.random()*0.8}s linear ${Math.random()*0.8}s infinite;opacity:.6`;
-      span.textContent = stars[i%5];
-      overlay.appendChild(span);
+    overlay.style.background = '#040210';
+    // 30 stars with mixed sizes, twinkling
+    const STARS = ['✦','✧','★','◈','+'];
+    const COLS = [GO,V,'#fff9c4',A,'#ffd700'];
+    for(let i=0;i<30;i++){
+      const s = document.createElement('div');
+      const sz = 6+Math.random()*11;
+      const c = COLS[i%COLS.length];
+      const x = Math.random()*94+3;
+      const spd = 0.8+Math.random()*1.2;
+      const del = Math.random()*2;
+      const twinkle = i%4===0 ? 'tf ' : '';
+      s.style.cssText = `position:absolute;font-size:${sz}px;left:${x}%;top:-20px;color:${c};filter:drop-shadow(0 0 ${sz*0.5}px ${c});animation:${twinkle}sf ${spd}s linear ${del}s infinite;opacity:${0.5+Math.random()*0.4}`;
+      s.textContent = STARS[i%STARS.length];
+      overlay.appendChild(s);
     }
-  } else if(id==='bg3'){ // Aurora Curtain
+    // Shooting star every ~4s via delayed animation
+    const shooter = document.createElement('div');
+    shooter.style.cssText = 'position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;top:-5px;left:0;box-shadow:0 0 6px #fff,0 0 12px #fff;animation:ss 4s ease-in-out infinite';
+    overlay.appendChild(shooter);
+  } else if(id==='bg3'){ // ═══ AURORA CURTAIN ═══
     document.body.classList.add('has-bg-aurora');
-    overlay.innerHTML = `
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.12),rgba(147,83,255,.18),rgba(96,165,250,.12),transparent 80%);background-size:200% 200%;animation:aurora-drift 8s ease infinite"></div>
-      <div style="position:absolute;top:-30%;left:-10%;width:120%;height:60%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.15),rgba(147,83,255,.2),rgba(96,165,250,.15),transparent);animation:aurora-drift 10s ease infinite 2s;border-radius:50%;filter:blur(20px)"></div>`;
-  } else if(id==='bg4'){ // Galaxy Particles
+    overlay.style.background = '#010a14';
+    // Base subtle gradient
+    const base = document.createElement('div');
+    base.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.08),rgba(147,83,255,.12),rgba(96,165,250,.08),transparent 80%);background-size:200% 200%;animation:a-drift 8s ease infinite';
+    overlay.appendChild(base);
+    // 3 aurora bands at different heights
+    const bands = [
+      {top:'15%',h:'55%',spd:'6s',del:'0s',c1:G,c2:V,c3:A},
+      {top:'30%',h:'40%',spd:'8s',del:'1.5s',c1:V,c2:A,c3:GO},
+      {top:'50%',h:'35%',spd:'10s',del:'3s',c1:A,c2:G,c3:V},
+    ];
+    bands.forEach(b=>{
+      const band = document.createElement('div');
+      band.style.cssText = `position:absolute;top:${b.top};left:-10%;width:120%;height:${b.h};background:linear-gradient(90deg,transparent,${b.c1}30,${b.c2}40,${b.c3}30,transparent);animation:a-wave ${b.spd} ease-in-out ${b.del} infinite;border-radius:50%;filter:blur(25px)`;
+      overlay.appendChild(band);
+    });
+    // Sparkle particles
+    for(let i=0;i<15;i++){
+      const sp = document.createElement('div');
+      sp.style.cssText = `position:absolute;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;border-radius:50%;background:#fff;top:${Math.random()*70+5}%;left:${Math.random()*90+5}%;opacity:0;box-shadow:0 0 4px ${pick([G,V,A,GO])};animation:sparkle ${1+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
+      overlay.appendChild(sp);
+    }
+  } else if(id==='bg4'){ // ═══ GALAXY PARTICLES ═══
     document.body.classList.add('has-bg-galaxy');
-    const cols=['#9353ff','#f0c060','#c8a0ff','#60a5fa','#4ade80'];
-    for(let i=0;i<20;i++){
-      const angle=(i/20)*360;
-      const c=cols[i%5];
-      const size=2+Math.random()*4;
-      const d=20+Math.random()*35;
+    overlay.style.background = '#03000e';
+    // Nebula clouds
+    const nebula = document.createElement('div');
+    nebula.style.cssText = 'position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(147,83,255,.1) 0%, transparent 60%),radial-gradient(ellipse at 30% 60%, rgba(74,222,128,.05) 0%, transparent 50%),radial-gradient(ellipse at 70% 40%, rgba(96,165,250,.06) 0%, transparent 50%)';
+    overlay.appendChild(nebula);
+    // Core glow
+    const core = document.createElement('div');
+    core.style.cssText = 'position:absolute;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:cg 3s ease-in-out infinite';
+    overlay.appendChild(core);
+    // 40 orbiting particles
+    const PCOLS = [V,GO,'#c8a0ff',A,G];
+    for(let i=0;i<40;i++){
       const p = document.createElement('div');
-      p.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:${c};top:50%;left:50%;box-shadow:0 0 6px ${c};transform-origin:0 0;animation:nova-pt 2.5s ease-in-out ${i*0.1}s infinite;--angle:${angle}deg;--dist:${d}px;opacity:.8`;
+      const dist = 15+Math.random()*40;
+      const sz = 1.5+Math.random()*3.5;
+      const c = PCOLS[i%PCOLS.length];
+      p.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;border-radius:50%;background:${c};top:50%;left:50%;box-shadow:0 0 ${sz*3}px ${c};transform-origin:0 0;animation:orb ${3+Math.random()*2}s ease-in-out ${i*0.08}s infinite;--dist:${dist}px;opacity:${0.5+Math.random()*0.4}`;
       overlay.appendChild(p);
+    }
+    // Distant background stars (fixed, twinkling)
+    for(let i=0;i<20;i++){
+      const ds = document.createElement('div');
+      ds.style.cssText = `position:absolute;width:1px;height:1px;border-radius:50%;background:#fff;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${0.1+Math.random()*0.3};animation:tf ${1.5+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
+      overlay.appendChild(ds);
     }
   }
 
