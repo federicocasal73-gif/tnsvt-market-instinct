@@ -92,7 +92,7 @@ body{position:relative}
   position:absolute;inset:0;overflow-y:auto;
   display:none;flex-direction:column;
   background:var(--bg);
-  padding-bottom:70px;
+  padding-bottom:70px;z-index:2;
 }
 .screen.active{display:flex}
 
@@ -5846,7 +5846,7 @@ function applyBackground(id){
 
   const overlay = document.createElement('div');
   overlay.id = 'bg-overlay';
-  overlay.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden';
+  overlay.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden';
 
   if(id==='bg1'){ // Matrix Rain
     document.body.classList.add('has-bg-matrix');
@@ -8425,14 +8425,55 @@ function glosRender(){
 // XP + RANK
 // ============================================================
 function addXP(amount){
-  const granted = Math.max(1, Math.round(amount * 0.075));
-  STATE.xp += granted;
+  STATE.xp += amount;
   try { localStorage.setItem('tnsvt_xp', STATE.xp); } catch(e){}
   const r = RANKS.slice().reverse().find(r=>STATE.xp>=r.min);
   if(r && r.name !== STATE.rank){ STATE.rank=r.name; showToast(t('toast.newRank')+' '+r.name+'!'); confetti(); }
-  return granted;
+  return amount;
 }
 function saveShop(){ try { localStorage.setItem('tnsvt_shop', JSON.stringify([...STATE.shopOwned])); } catch(e){} }
+
+// ============================================================
+// UNLOCK ALL + RESET — para testeo / fresh start
+// ============================================================
+function unlockAllAndReset(){
+  try {
+    // Gather all shop item IDs
+    const allItems = new Set();
+    allItems.add('a1');
+    [FRAMES,AVATARS,THEMES,EFFECTS_SHOP,BACKGROUNDS].forEach(arr=>{
+      arr.forEach(item=>{ if(!item.free) allItems.add(item.id); });
+    });
+    // Wipe everything
+    STATE.xp = 99999;
+    STATE.rank = 'ORÁCULO';
+    STATE.shopOwned = allItems;
+    STATE.traderName = 'Trader';
+    STATE.missionsCompleted = new Set();
+    // Reset Portfolio
+    PORT.balance = 50000;
+    PORT.positions = [];
+    PORT.orders = [];
+    PORT.history = [];
+    PORT.closedPnl = 0;
+    // Save all
+    saveShop();
+    savePort();
+    try { localStorage.setItem('tnsvt_xp', '99999'); } catch(e){}
+    try { localStorage.setItem('tnsvt_trader_name', 'Trader'); } catch(e){}
+    try { localStorage.setItem('tnsvt_xp_version', '0'); } catch(e){ localStorage.removeItem('tnsvt_xp_version'); }
+    EQUIPPED.frame = 'fr0';
+    EQUIPPED.avatar = 'a1';
+    EQUIPPED.theme = 'th0';
+    EQUIPPED.effect = 'ef0';
+    EQUIPPED.background = 'bg0';
+    try { localStorage.setItem('tnsvt_equipped', JSON.stringify(EQUIPPED)); } catch(e){}
+    try { localStorage.setItem('tnsvt_vip_status', ''); } catch(e){}
+    try { localStorage.setItem('tnsvt_portfolio', JSON.stringify(PORT)); } catch(e){}
+    try { localStorage.setItem('tnsvt_hist_completed', '[]'); } catch(e){}
+    showToast('✦ TODO DESBLOQUEADO · Estadísticas reiniciadas');
+  } catch(e){ console.error('unlockAllAndReset error:',e); }
+}
 
 // ============================================================
 // TNSVT SYNC — envía scores al backend de TNSVT
@@ -9415,6 +9456,13 @@ async function bnCreatePayment(){
 }
 // Apply equipped background on load
 try { applyBackground(EQUIPPED.background); } catch(e){}
+// Unlock all + reset stats (one-time flag)
+try {
+  if(!localStorage.getItem('tnsvt_reset_done')){
+    unlockAllAndReset();
+    localStorage.setItem('tnsvt_reset_done','1');
+  }
+} catch(e){}
 </script>
 
 <!-- ============================================================ -->
