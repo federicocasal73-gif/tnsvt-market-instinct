@@ -2221,7 +2221,7 @@ const STATE = {
   arena: { rival:null, myScore:0, rivalScore:0, round:1, timer:null, chartInst:null },
   torneo: { score:0, round:1, timer:null, chartInst:null },
   hist: { filter:'all', current:null, completed:new Set(), chartInst:null },
-  portfolio: { balance:50000, positions:[], history:[], asset:'BTC', pnl:0 },
+  portfolio: null, // alias of PORT (lazy-initialized)
   liga: { tab:'global' },
   xp: 2340, rank: 'OPERADOR',
   shopOwned: new Set(['a1']),
@@ -4056,11 +4056,14 @@ function startTorneo(){
   const tierKey=document.getElementById('practice-tier')?.value||'free';
   const fmtKey=document.getElementById('practice-format')?.value||'classic';
   const tier=getTier(tierKey);
+  // Snapshot Portfolio balance — torneo toma "prestado" del portfolio real
+  const loanStart = PORT.balance;
   torneoState={portfolio:tier.startingEquity,peakPortfolio:tier.startingEquity,round:1,totalRounds:12,
     trades:[],position:null,eliminated:false,drawdownPct:0,
     stage:'qualifying',stageRound:1,totalStageRounds:12,
     tier:tierKey,format:fmtKey,knockoutOpponent:null,consistencyScores:[],
-    currentNews:null,bountyTarget:null,bountyAmount:0,jackpotWon:false};
+    currentNews:null,bountyTarget:null,bountyAmount:0,jackpotWon:false,
+    loanStart:loanStart,loanSize:tier.startingEquity};
   torneoLev=tier.startingLev;
   document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===torneoLev));
   document.getElementById('torneo-lobby').style.display='none';
@@ -4412,6 +4415,26 @@ function torneoFinish(){
   ];
   if(s.format==='consistency') stats.splice(4,0,{val:consistencyScore.toFixed(1),lbl:'Score C.'});
   if(jackpotWon) stats.push({val:'+$'+jackpotAmount.toFixed(2),lbl:'Jackpot'});
+  // Aplicar P&L al Portfolio: devuelve el préstamo + suma el P&L (positivo o negativo)
+  if(typeof s.loanStart === 'number'){
+    const portfolioDelta = s.loanSize + totalPnl;
+    PORT.balance = s.loanStart + portfolioDelta;
+    PORT.closedPnl = (PORT.closedPnl||0) + totalPnl;
+    PORT.history.unshift({
+      id: 'torneo-' + Date.now(),
+      sym: 'TORNEOS',
+      label: 'Torneo ' + fmt.icon + ' ' + (s.stage==='final'?'Final':STAGE_LABELS[s.stage]),
+      dir: totalPnl>=0 ? 'long' : 'short',
+      entryPrice: s.loanSize, closePrice: s.loanSize + totalPnl,
+      qty: 1, leverage: 1, margin: s.loanSize, pnl: totalPnl,
+      pnlPct: totalPnlPct, closePrice2: PORT.balance,
+      reason: totalPnl>=0?'Torneo ganado':'Torneo perdido',
+      closedAt: new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})
+    });
+    PORT.equityCurve.push(PORT.balance);
+    if(typeof savePort === 'function') savePort();
+    stats.push({val: (totalPnl>=0?'+':'') + '$' + totalPnl.toFixed(2) + ' → $' + PORT.balance.toLocaleString('en-US',{maximumFractionDigits:0}), lbl:'Portfolio'});
+  }
   showResultOverlay(overlayIcon,overlayTitle,overlaySub,null,stats,()=>{
     document.getElementById('torneo-game').style.display='none';
     document.getElementById('torneo-lobby').style.display='';
@@ -7044,19 +7067,39 @@ function fractalFinish(){
 // ============================================================
 // PORTFOLIO — CUENTA DEMO BROKER
 // ============================================================
-const PORT = {
-  balance:    50000,   // cash disponible
-  equity:     50000,   // balance + pnl abierto
-  closedPnl:  0,
-  positions:  [],
-  history:    [],
-  equityCurve:[50000],
-  maxEquity:  50000,
-  maxDrawdown:0,
-  nextId:     1,
-  sizeMode:   'usd',   // usd | pct | units
-  leverage:   1,
-};
+// PORT = STATE.portfolio (sincronizados). Persistido en localStorage.
+function getPortDefault(){
+  return {
+    balance:    50000,   // cash disponible
+    equity:     50000,   // balance + pnl abierto
+    closedPnl:  0,
+    positions:  [],
+    history:    [],
+    equityCurve:[50000],
+    maxEquity:  50000,
+    maxDrawdown:0,
+    nextId:     1,
+    sizeMode:   'usd',   // usd | pct | units
+    leverage:   1,
+    asset:      'BTC',
+    pnl:        0,
+  };
+}
+var PORT = STATE.portfolio = STATE.portfolio || getPortDefault();
+function savePort(){
+  try { localStorage.setItem('tnsvt_portfolio', JSON.stringify(PORT)); } catch(e){}
+}
+try {
+  const saved = localStorage.getItem('tnsvt_portfolio');
+  if(saved){
+    const parsed = JSON.parse(saved);
+    if(parsed && typeof parsed.balance==='number'){
+      PORT = STATE.portfolio = parsed;
+    }
+  } else {
+    savePort();
+  }
+} catch(e){}
 
 const PORT_ASSETS = {
   BTC:  { sym:'BTC',  label:'BTC/USD',  lotSize:1,    prec:2, spread:15,   vol:0.025 },
@@ -7075,7 +7118,7 @@ let portAsset          = 'BTC';
 
 // ── Init ──────────────────────────────────────────────────
 function initPortfolio(){
-  portAsset = STATE.portfolio?.asset || 'BTC';
+  portAsset = PORT.asset || 'BTC';
   portTab('trade', document.querySelector('#s-portfolio .tab.active'));
   portUpdateLivePrice();
   portCalcPreview();
@@ -7143,6 +7186,7 @@ function portTick(){
       if(pos.dir==='short' && price <= pos.tp) portAutoClose(pos.id,'TP');
     }
   });
+  savePort();
 
   // Recalculate equity
   const openPnl = PORT.positions.reduce((s,p)=>s+p.pnl,0);
@@ -7194,6 +7238,7 @@ function portAutoClose(id, reason){
   PORT.history.unshift({ ...pos, closePrice, reason,
     closedAt: new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})});
   PORT.equityCurve.push(PORT.equity);
+  savePort();
   portRenderHeader();
   portUpdateStats();
   const msg = reason==='TP'
@@ -7451,8 +7496,8 @@ function portTab(tab, btn){
 // ── Asset select ─────────────────────────────────────────────
 function portSelectAsset(sym, el){
   portAsset = sym;
-  STATE.portfolio = STATE.portfolio||{};
-  STATE.portfolio.asset = sym;
+  PORT.asset = sym;
+  savePort();
   document.querySelectorAll('#s-portfolio .asset-pill').forEach(p=>p.classList.remove('active'));
   if(el) el.classList.add('active');
   portUpdateLivePrice();
@@ -7641,6 +7686,7 @@ function portOpen(dir){
   const trailingDist = parseFloat(document.getElementById('port-trailing-dist')?.value)||1.5;
 
   PORT.balance -= usdSize;
+  savePort();
   const pos = {
     id:          PORT.nextId++,
     sym:         portAsset,
@@ -7681,6 +7727,7 @@ function portClose(id){
   PORT.history.unshift({...pos, closePrice:price, reason:'Manual',
     closedAt: new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})});
   PORT.equityCurve.push(PORT.equity);
+  savePort();
   portRenderHeader();
   portRenderPositions();
   portUpdateStats();
