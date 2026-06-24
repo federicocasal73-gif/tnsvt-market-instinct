@@ -3376,10 +3376,11 @@ function updateClassicInfo(){
 }
 
 function classicPlay(action){
-  // Bloquear botones hasta terminar la animacion
+  SFX.tap(); HAPTICS.tap();
   const btnRow = document.querySelector('#s-classic .action-row') || document.getElementById('cl-actions');
   if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
   animateResultAndScore('classic-chart', classicCandles, action, (correct, result)=>{
+    // ── Game logic ──
     if(action !== 'skip') {
       STATE.classic.total++;
       if(correct){
@@ -3399,6 +3400,22 @@ function classicPlay(action){
     } else {
       STATE.classic.streak = 0;
       showToast(t('toast.skip'));
+    }
+    // ── SFX + FX (ahora dentro del callback, sincronizado) ──
+    if(action==='skip'){ SFX.skip(); fxSkip(); }
+    else if(correct){
+      const s = STATE.classic.streak;
+      fxCorrect(s);
+      updateStreakBar(s);
+      showMultiplierPopup(s);
+      if(s>=5){ SFX.streak5(); HAPTICS.streak(); }
+      else if(s>=3){ SFX.streak3(); HAPTICS.correct(); }
+      else { SFX.correct(); HAPTICS.correct(); }
+      setTimeout(()=>SFX.xp(),300);
+    } else {
+      fxWrong();
+      resetStreakBar();
+      SFX.wrong(); HAPTICS.wrong();
     }
     // Re-habilitar botones y generar nuevos candles
     setTimeout(()=>{
@@ -3463,10 +3480,12 @@ function survivalNextRound(){
 }
 
 function survivalPlay(action){
-  // Bloquear botones
+  SFX.tap(); HAPTICS.tap();
+  const prevLives = STATE.survival.lives;
   const btnRow = document.getElementById('sv-actions');
   if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
   animateResultAndScore('survival-chart', survivalCandles, action, (correct, result)=>{
+    // ── Game logic ──
     if(action === 'skip'){
       STATE.survival.streak = 0;
       showToast(t('toast.roundSkip'));
@@ -3486,6 +3505,23 @@ function survivalPlay(action){
         if(btnRow){ btnRow.style.pointerEvents = ''; btnRow.style.opacity = '1'; }
         return survivorGameOver();
       }
+    }
+    // ── SFX + FX (ahora dentro del callback, sincronizado) ──
+    if(action==='skip'){ SFX.skip(); fxSkip(); }
+    else if(correct){
+      const s = STATE.survival.streak;
+      fxCorrect(s);
+      updateStreakBar(s);
+      showMultiplierPopup(s);
+      if(s>=5){ SFX.streak5(); HAPTICS.streak(); }
+      else if(s>=3){ SFX.streak3(); HAPTICS.correct(); }
+      else { SFX.correct(); HAPTICS.correct(); }
+    } else if(STATE.survival.lives <= 0){
+      SFX.gameOver(); HAPTICS.gameOver();
+    } else if(STATE.survival.lives < prevLives){
+      SFX.loseLife(); HAPTICS.loseLife(); fxLoseLife();
+    } else {
+      fxWrong(); resetStreakBar(); SFX.wrong(); HAPTICS.wrong();
     }
     STATE.survival.round++;
     updateSurvivalUI();
@@ -9223,54 +9259,7 @@ var HAPTICS = {
 // PATCH: inyectar SFX + HAPTICS en funciones existentes
 // ============================================================
 
-// — Classic —
-const _classicPlay_orig = classicPlay;
-classicPlay = function(action){
-  SFX.tap(); HAPTICS.tap();
-  const prevStreak = STATE.classic.streak;
-  const prevScore = STATE.classic.score;
-  _classicPlay_orig(action);
-  const newStreak = STATE.classic.streak;
-  const gained = STATE.classic.score - prevScore;
-  if(action==='skip'){ SFX.skip(); fxSkip(); return; }
-  if(gained>0){
-    fxCorrect(newStreak);
-    updateStreakBar(newStreak);
-    showMultiplierPopup(newStreak);
-    if(newStreak>=5){ SFX.streak5(); HAPTICS.streak(); }
-    else if(newStreak>=3){ SFX.streak3(); HAPTICS.correct(); }
-    else { SFX.correct(); HAPTICS.correct(); }
-    if(gained>0) setTimeout(()=>SFX.xp(),300);
-  } else {
-    fxWrong();
-    resetStreakBar();
-    SFX.wrong(); HAPTICS.wrong();
-  }
-};
-
 // — Survival —
-const _survivalPlay_orig = survivalPlay;
-survivalPlay = function(action){
-  SFX.tap(); HAPTICS.tap();
-  const prevLives = STATE.survival.lives;
-  const prevScore = STATE.survival.score;
-  _survivalPlay_orig(action);
-  if(action==='skip'){ SFX.skip(); fxSkip(); return; }
-  const gained = STATE.survival.score - prevScore;
-  const livesNow = STATE.survival.lives;
-  if(livesNow <= 0){ SFX.gameOver(); HAPTICS.gameOver(); return; }
-  if(livesNow < prevLives){ SFX.loseLife(); HAPTICS.loseLife(); fxLoseLife(); return; }
-  if(gained>0){
-    const streak = STATE.survival.streak;
-    fxCorrect(streak);
-    updateStreakBar(streak);
-    showMultiplierPopup(streak);
-    if(streak>=5){ SFX.streak5(); HAPTICS.streak(); }
-    else if(streak>=3){ SFX.streak3(); HAPTICS.correct(); }
-    else { SFX.correct(); HAPTICS.correct(); }
-  } else { fxWrong(); resetStreakBar(); SFX.wrong(); HAPTICS.wrong(); }
-};
-
 // — Daily —
 const _dailyPlay_orig = dailyPlay;
 dailyPlay = function(action){
@@ -9326,8 +9315,23 @@ torneoFinish = function(){
 // — XP + Unlock —
 const _addXP_orig = addXP;
 addXP = function(amount){
-  _addXP_orig(amount);
+  const ret = _addXP_orig(amount);
+  // Actualizar UI de XP en toda la app
+  const nextRank = RANKS.find(r=>r.min>STATE.xp) || RANKS[RANKS.length-1];
+  const prevRank = RANKS.slice().reverse().find(r=>r.min<=STATE.xp) || RANKS[0];
+  const pct = nextRank===RANKS[RANKS.length-1] ? 100 : Math.round((STATE.xp-prevRank.min)/(nextRank.min-prevRank.min)*100);
+  document.querySelectorAll('.badge-xp').forEach(el=>{ el.textContent='✦ '+STATE.xp.toLocaleString()+' XP'; });
+  document.querySelectorAll('.badge-rank').forEach(el=>{ el.textContent='⚔ '+prevRank.name; });
+  document.querySelectorAll('.hero-xp-label span:first-child').forEach(el=>{
+    if(el.style.color) el.innerHTML='✦ '+STATE.xp.toLocaleString()+' XP';
+  });
+  document.querySelectorAll('.hero-xp-label span:last-child').forEach(el=>{
+    if(nextRank!==RANKS[RANKS.length-1]) el.textContent=STATE.xp.toLocaleString()+' / '+nextRank.min.toLocaleString();
+    else el.textContent='★ MÁXIMO';
+  });
+  document.querySelectorAll('.xp-bar-fill').forEach(el=>{ el.style.width=pct+'%'; });
   if(amount>=100) setTimeout(()=>SFX.xp(),200);
+  return ret;
 };
 
 // buyItem is now handled by shopItemClick in tienda system

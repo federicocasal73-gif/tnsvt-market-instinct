@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-06-24T00:28:00-03:00",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "results": [
+    {"status":"PASS","test":"05_arena_lobby","desc":"Lobby visible"}
+  ]
+}

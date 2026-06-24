@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-06-24T00:44:13-03:00",
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "results": [
+    {"status":"PASS","test":"00_setup","desc":"Onboarding completed"},
+    {"status":"PASS","test":"00_setup_ready","desc":"On inicio screen"}
+  ]
+}

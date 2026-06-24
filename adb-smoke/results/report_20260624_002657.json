@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-06-24T00:26:57-03:00",
+  "passed": 0,
+  "failed": 2,
+  "skipped": 1,
+  "results": [
+    {"status":"FAIL","test":"01_classic_screen","desc":"Classic screen loaded (LONG button visible)"},
+    {"status":"FAIL","test":"01_classic_screen","desc":"SHORT button visible"},
+    {"status":"SKIP","test":"01_classic_round","desc":"No feedback detected"}
+  ]
+}
