@@ -213,9 +213,9 @@ input:focus,select:focus,textarea:focus{
 @keyframes toast-in{from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes toast-out{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-10px) scale(.9)}}
 
-.shop-scroll{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.shop-scroll::-webkit-scrollbar{display:none}
-.shop-card{min-width:clamp(200px,60vw,280px);flex-shrink:0;scroll-snap-align:start}
+.shop-scroll{display:flex;flex-direction:column;gap:12px;padding:4px 16px 12px}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:4px 16px 12px}
+.shop-card{}
 
 /* MODAL */
 .modal-overlay{
@@ -5531,7 +5531,7 @@ function renderShopGrid(cat){
 
 // ── FRAMES GRID ──────────────────────────────────────────────
 function renderFramesGrid(){
-  return `<div class="shop-scroll">
+  return `<div class="shop-grid">
     ${FRAMES.map((f,i)=>{
       const owned = f.free || STATE.shopOwned.has(f.id);
       const active = EQUIPPED.frame===f.id;
@@ -5636,7 +5636,7 @@ function renderThemesGrid(){
         </div>`;
       }).join('');
       return `<div onclick="shopItemClick('theme','${t.id}','${t.name}')" class="shop-card"
-        border-radius:14px;overflow:hidden;cursor:pointer;
+        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(147,83,255,.25)':'var(--border)'};border-radius:14px;overflow:hidden;cursor:pointer;
         transition:all .25s;animation:shop-card-in .3s ease ${i*0.05}s both;
         ${active?'box-shadow:0 0 16px rgba(74,222,128,.15)':''}">
         <!-- CANDLE PREVIEW -->
@@ -5686,6 +5686,7 @@ function renderEffectsGrid(){
       const active = EQUIPPED.effect===ef.id;
       const triggerPill = ef.id==='ef0' ? '' : '<span style="display:inline-block;padding:2px 6px;background:rgba(74,222,128,.15);color:var(--green);border-radius:6px;font-size:9px;font-weight:600;margin-left:6px;letter-spacing:.5px">⚡ AL ACERTAR</span>';
       return `<div onclick="shopItemClick('effect','${ef.id}','${ef.name}')" class="shop-card"
+        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(147,83,255,.25)':'var(--border)'};border-radius:14px;overflow:hidden;cursor:pointer;transition:all .25s;animation:shop-card-in .3s ease ${i*0.04}s both;${active?'box-shadow:0 0 16px rgba(74,222,128,.12)':''}">
         <!-- PREVIEW -->
         ${ef.preview()}
         <!-- INFO ROW -->
@@ -5967,7 +5968,7 @@ function applyBackground(id){
   document.body.classList.add('has-bg');
   const overlay = document.createElement('div');
   overlay.id = 'bg-overlay';
-  overlay.style.cssText = 'position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden';
+  overlay.style.cssText = 'position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden';
 
   // Read theme accent colors for integration
   const cs = getComputedStyle(document.documentElement);
@@ -5980,14 +5981,13 @@ function applyBackground(id){
 
   if(id==='bg1'){ // ═══ MATRIX RAIN ═══
     document.body.classList.add('has-bg-matrix');
-    overlay.style.background = '#000a00';
-    // Scan lines
+    // Scan lines (more visible)
     const scan = document.createElement('div');
-    scan.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,65,.03) 3px,rgba(0,255,65,.03) 4px)';
+    scan.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,65,.06) 3px,rgba(0,255,65,.06) 4px)';
     overlay.appendChild(scan);
-    // Bottom glow
+    // Bottom glow (more visible)
     const gb = document.createElement('div');
-    gb.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(0deg,rgba(0,255,65,.12),transparent)';
+    gb.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(0deg,rgba(0,255,65,.25),transparent)';
     overlay.appendChild(gb);
     // 28 columns of falling code — each column = stack of 5 chars
     const CHARS = '01БОSLGGHHLБОS01БОS'.split('');
@@ -5999,16 +5999,14 @@ function applyBackground(id){
       const sz = 7+Math.random()*5;
       const c = COLORS[i%COLORS.length];
       col.style.cssText = `position:absolute;left:${x}%;top:-60px;font-family:'JetBrains Mono',monospace;text-align:center;animation:mf ${speed}s linear ${Math.random()*1.8}s infinite;white-space:nowrap;line-height:1`;
-      // Build a stack of chars (5 per column) with varying opacity
       let html = `<span style="color:${c};text-shadow:0 0 10px ${c};font-size:${sz+3}px;opacity:.95">${pick(CHARS)}</span>`;
-      for(let j=1;j<5;j++) html += `<span style="color:${c};font-size:${sz+2-j*1.5}px;opacity:${0.6-j*0.12}">${pick(CHARS)}</span>`;
+      for(let j=1;j<5;j++) html += `<span style="color:${c};font-size:${sz+2-j*1.5}px;opacity:${0.7-j*0.12}">${pick(CHARS)}</span>`;
       col.innerHTML = html;
       overlay.appendChild(col);
     }
   } else if(id==='bg2'){ // ═══ STAR RAIN ═══
     document.body.classList.add('has-bg-stars');
-    overlay.style.background = '#040210';
-    // 30 stars with mixed sizes, twinkling
+    // 30 stars with mixed sizes, twinkling — higher opacity
     const STARS = ['✦','✧','★','◈','+'];
     const COLS = [GO,V,'#fff9c4',A,'#ffd700'];
     for(let i=0;i<30;i++){
@@ -6019,22 +6017,21 @@ function applyBackground(id){
       const spd = 0.8+Math.random()*1.2;
       const del = Math.random()*2;
       const twinkle = i%4===0 ? 'tf ' : '';
-      s.style.cssText = `position:absolute;font-size:${sz}px;left:${x}%;top:-20px;color:${c};filter:drop-shadow(0 0 ${sz*0.5}px ${c});animation:${twinkle}sf ${spd}s linear ${del}s infinite;opacity:${0.5+Math.random()*0.4}`;
+      s.style.cssText = `position:absolute;font-size:${sz}px;left:${x}%;top:-20px;color:${c};filter:drop-shadow(0 0 ${sz*0.7}px ${c});animation:${twinkle}sf ${spd}s linear ${del}s infinite;opacity:${0.7+Math.random()*0.3}`;
       s.textContent = STARS[i%STARS.length];
       overlay.appendChild(s);
     }
-    // Shooting star every ~4s via delayed animation
+    // Shooting star every ~4s
     const shooter = document.createElement('div');
-    shooter.style.cssText = 'position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;top:-5px;left:0;box-shadow:0 0 6px #fff,0 0 12px #fff;animation:ss 4s ease-in-out infinite';
+    shooter.style.cssText = 'position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;top:-5px;left:0;box-shadow:0 0 8px #fff,0 0 16px #fff;animation:ss 4s ease-in-out infinite';
     overlay.appendChild(shooter);
   } else if(id==='bg3'){ // ═══ AURORA CURTAIN ═══
     document.body.classList.add('has-bg-aurora');
-    overlay.style.background = '#010a14';
-    // Base subtle gradient
+    // Base gradient (more visible)
     const base = document.createElement('div');
-    base.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.08),rgba(147,83,255,.12),rgba(96,165,250,.08),transparent 80%);background-size:200% 200%;animation:a-drift 8s ease infinite';
+    base.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.15),rgba(147,83,255,.2),rgba(96,165,250,.15),transparent 80%);background-size:200% 200%;animation:a-drift 8s ease infinite';
     overlay.appendChild(base);
-    // 3 aurora bands at different heights
+    // 3 aurora bands — more opacity
     const bands = [
       {top:'15%',h:'55%',spd:'6s',del:'0s',c1:G,c2:V,c3:A},
       {top:'30%',h:'40%',spd:'8s',del:'1.5s',c1:V,c2:A,c3:GO},
@@ -6042,27 +6039,26 @@ function applyBackground(id){
     ];
     bands.forEach(b=>{
       const band = document.createElement('div');
-      band.style.cssText = `position:absolute;top:${b.top};left:-10%;width:120%;height:${b.h};background:linear-gradient(90deg,transparent,${b.c1}30,${b.c2}40,${b.c3}30,transparent);animation:a-wave ${b.spd} ease-in-out ${b.del} infinite;border-radius:50%;filter:blur(25px)`;
+      band.style.cssText = `position:absolute;top:${b.top};left:-10%;width:120%;height:${b.h};background:linear-gradient(90deg,transparent,${b.c1}50,${b.c2}60,${b.c3}50,transparent);animation:a-wave ${b.spd} ease-in-out ${b.del} infinite;border-radius:50%;filter:blur(25px)`;
       overlay.appendChild(band);
     });
-    // Sparkle particles
-    for(let i=0;i<15;i++){
+    // Sparkle particles — more
+    for(let i=0;i<20;i++){
       const sp = document.createElement('div');
-      sp.style.cssText = `position:absolute;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;border-radius:50%;background:#fff;top:${Math.random()*70+5}%;left:${Math.random()*90+5}%;opacity:0;box-shadow:0 0 4px ${pick([G,V,A,GO])};animation:sparkle ${1+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
+      sp.style.cssText = `position:absolute;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;border-radius:50%;background:#fff;top:${Math.random()*70+5}%;left:${Math.random()*90+5}%;opacity:0;box-shadow:0 0 6px ${pick([G,V,A,GO])};animation:sparkle ${1+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
       overlay.appendChild(sp);
     }
   } else if(id==='bg4'){ // ═══ GALAXY PARTICLES ═══
     document.body.classList.add('has-bg-galaxy');
-    overlay.style.background = '#03000e';
-    // Nebula clouds
+    // Nebula clouds — more visible
     const nebula = document.createElement('div');
-    nebula.style.cssText = 'position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(147,83,255,.1) 0%, transparent 60%),radial-gradient(ellipse at 30% 60%, rgba(74,222,128,.05) 0%, transparent 50%),radial-gradient(ellipse at 70% 40%, rgba(96,165,250,.06) 0%, transparent 50%)';
+    nebula.style.cssText = 'position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(147,83,255,.15) 0%, transparent 60%),radial-gradient(ellipse at 30% 60%, rgba(74,222,128,.08) 0%, transparent 50%),radial-gradient(ellipse at 70% 40%, rgba(96,165,250,.1) 0%, transparent 50%)';
     overlay.appendChild(nebula);
-    // Core glow
+    // Core glow — more visible
     const core = document.createElement('div');
-    core.style.cssText = 'position:absolute;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:cg 3s ease-in-out infinite';
+    core.style.cssText = 'position:absolute;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(147,83,255,.5),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:cg 3s ease-in-out infinite';
     overlay.appendChild(core);
-    // 40 orbiting particles
+    // 40 orbiting particles — higher opacity
     const PCOLS = [V,GO,'#c8a0ff',A,G];
     for(let i=0;i<40;i++){
       const p = document.createElement('div');
@@ -6075,7 +6071,7 @@ function applyBackground(id){
     // Distant background stars (fixed, twinkling)
     for(let i=0;i<20;i++){
       const ds = document.createElement('div');
-      ds.style.cssText = `position:absolute;width:1px;height:1px;border-radius:50%;background:#fff;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${0.1+Math.random()*0.3};animation:tf ${1.5+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
+      ds.style.cssText = `position:absolute;width:1px;height:1px;border-radius:50%;background:#fff;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${0.2+Math.random()*0.4};animation:tf ${1.5+Math.random()*2}s ease-in-out ${Math.random()*2}s infinite`;
       overlay.appendChild(ds);
     }
   }
@@ -9579,13 +9575,8 @@ async function bnCreatePayment(){
 try { applyBackground(EQUIPPED.background); } catch(e){}
 // Update XP display after loading state
 try { updateXPDisplay(); } catch(e){}
-// Unlock all + reset stats (one-time flag)
-try {
-  if(!localStorage.getItem('tnsvt_reset_done')){
-    unlockAllAndReset();
-    localStorage.setItem('tnsvt_reset_done','1');
-  }
-} catch(e){}
+// Unlock all + reset stats (every load)
+try { unlockAllAndReset(); } catch(e){}
 </script>
 
 <!-- ============================================================ -->
