@@ -5164,6 +5164,7 @@ const THEMES = [
     bg:'#100400', bull:'#f97316', bear:'#ef4444', accent:'#f97316', gold:'#fbbf24',
     preview_bg:'linear-gradient(135deg,#100400,#201000)',
     candle_bull:'#f97316', candle_bear:'#ef4444',
+    isLava:true,
   },
   {
     id:'th8', name:'🌈 Rainbow', price:'$0.99',
@@ -5200,6 +5201,15 @@ const THEMES = [
     preview_bg:'linear-gradient(135deg,#1e1b4b,#0a0a14 50%,#831843)',
     candle_bull:'#f0abfc', candle_bear:'#22d3ee',
     isNeon:true,
+  },
+  {
+    id:'th12', name:'💎 Diamond', price:'$0.99',
+    xpCost: 3500,
+    desc:'Cristal líquido y diamante azul. La joya de la corona.',
+    bg:'#060618', bull:'#e0e7ff', bear:'#60a5fa', accent:'#a5b4fc', gold:'#e0e7ff',
+    preview_bg:'linear-gradient(135deg,#060618,#1e1b6b,#060618)',
+    candle_bull:'#e0e7ff', candle_bear:'#818cf8',
+    isDiamond:true,
   },
 ];
 
@@ -5424,24 +5434,30 @@ function injectShopKeyframes(){
 
 /* THEME: RAINBOW (th8) */
 @keyframes rainbow-border{
-  0%{border-color:#ff0080;box-shadow:0 0 8px rgba(255,0,128,.3),inset 0 0 8px rgba(255,0,128,.08)}
-  16%{border-color:#ff8c00;box-shadow:0 0 8px rgba(255,140,0,.3),inset 0 0 8px rgba(255,140,0,.08)}
-  33%{border-color:#ffd700;box-shadow:0 0 8px rgba(255,215,0,.3),inset 0 0 8px rgba(255,215,0,.08)}
-  50%{border-color:#00ff41;box-shadow:0 0 8px rgba(0,255,65,.3),inset 0 0 8px rgba(0,255,65,.08)}
-  66%{border-color:#00bfff;box-shadow:0 0 8px rgba(0,191,255,.3),inset 0 0 8px rgba(0,191,255,.08)}
-  83%{border-color:#8b00ff;box-shadow:0 0 8px rgba(139,0,255,.3),inset 0 0 8px rgba(139,0,255,.08)}
-  100%{border-color:#ff0080;box-shadow:0 0 8px rgba(255,0,128,.3),inset 0 0 8px rgba(255,0,128,.08)}
+  0%{border-color:#ff0080;box-shadow:0 0 10px rgba(255,0,128,.35),inset 0 0 10px rgba(255,0,128,.1)}
+  16%{border-color:#ff8c00;box-shadow:0 0 10px rgba(255,140,0,.35),inset 0 0 10px rgba(255,140,0,.1)}
+  33%{border-color:#ffd700;box-shadow:0 0 10px rgba(255,215,0,.35),inset 0 0 10px rgba(255,215,0,.1)}
+  50%{border-color:#00ff41;box-shadow:0 0 10px rgba(0,255,65,.35),inset 0 0 10px rgba(0,255,65,.1)}
+  66%{border-color:#00bfff;box-shadow:0 0 10px rgba(0,191,255,.35),inset 0 0 10px rgba(0,191,255,.1)}
+  83%{border-color:#8b00ff;box-shadow:0 0 10px rgba(139,0,255,.35),inset 0 0 10px rgba(139,0,255,.1)}
+  100%{border-color:#ff0080;box-shadow:0 0 10px rgba(255,0,128,.35),inset 0 0 10px rgba(255,0,128,.1)}
 }
 body.theme-rainbow .screen,
 body.theme-rainbow .panel,
 body.theme-rainbow [class*="panel"],
-body.theme-rainbow [class*="card"]{border:1px solid;animation:rainbow-border 3s linear infinite}
-body.theme-rainbow .screen::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%, rgba(255,0,128,.04), transparent 70%);pointer-events:none;z-index:0}
+body.theme-rainbow [class*="card"]{border:2px solid;animation:rainbow-border 3s linear infinite}
+body.theme-rainbow .screen::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%, rgba(255,0,128,.06), transparent 70%);pointer-events:none;z-index:0}
 
-/* THEME: LAVA (th9) */
+/* THEME: LAVA (th7/th9) */
 @keyframes lava-pulse{0%,100%{box-shadow:inset 0 0 80px rgba(255,80,0,.4),inset 0 0 30px rgba(255,180,0,.3)}50%{box-shadow:inset 0 0 120px rgba(255,40,0,.6),inset 0 0 60px rgba(255,140,0,.5)}}
-@keyframes lava-bubble{0%{transform:translateY(0) scale(1);opacity:.6}50%{transform:translateY(-20px) scale(1.1);opacity:.9}100%{transform:translateY(-40px) scale(.7);opacity:0}}
+@keyframes lava-glow{0%,100%{border-color:#f97316;box-shadow:0 0 10px rgba(249,115,22,.35),inset 0 0 10px rgba(249,115,22,.1)}50%{border-color:#ef4444;box-shadow:0 0 16px rgba(239,68,68,.5),inset 0 0 14px rgba(239,68,68,.15)}}
+@keyframes lava-bubble{0%{transform:translateY(0) scale(1);opacity:.6}50%{transform:translateY(-25px) scale(1.15);opacity:.9}100%{transform:translateY(-50px) scale(.6);opacity:0}}
 body.theme-lava{background:radial-gradient(circle at 30% 30%, #4a0e0e, #0a0000 70%)!important;animation:lava-pulse 4s ease-in-out infinite}
+body.theme-lava .screen,
+body.theme-lava .panel,
+body.theme-lava [class*="panel"],
+body.theme-lava [class*="card"]{border:2px solid #f97316;animation:lava-glow 2s ease-in-out infinite}
+body.theme-lava .screen::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 100%, rgba(249,115,22,.07), transparent 60%);pointer-events:none;z-index:0}
 
 /* THEME: AURORA (th10) */
 @keyframes aurora-drift{0%{background-position:0% 0%,100% 0%}50%{background-position:100% 100%,0% 100%}100%{background-position:0% 0%,100% 0%}}
@@ -5452,6 +5468,14 @@ body.theme-aurora{background:linear-gradient(135deg,#022c22,#0c0a1f,#1e1b4b,#022
 @keyframes neon-scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
 body.theme-neon{background:linear-gradient(180deg,#1e1b4b,#0a0a14 50%,#831843)!important;position:relative}
 body.theme-neon::after{content:"";position:fixed;inset:0;background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.02) 2px, rgba(255,255,255,.02) 3px);pointer-events:none;z-index:1}
+
+/* THEME: DIAMOND (th12) */
+@keyframes diamond-sparkle{0%,100%{border-color:#e0e7ff;box-shadow:0 0 10px rgba(224,231,255,.3),inset 0 0 10px rgba(224,231,255,.08)}25%{border-color:#a5b4fc;box-shadow:0 0 14px rgba(165,180,252,.5),inset 0 0 12px rgba(165,180,252,.12)}50%{border-color:#e0e7ff;box-shadow:0 0 20px rgba(224,231,255,.6),inset 0 0 16px rgba(224,231,255,.15)}75%{border-color:#818cf8;box-shadow:0 0 14px rgba(129,140,248,.5),inset 0 0 12px rgba(129,140,248,.12)}}
+body.theme-diamond .screen,
+body.theme-diamond .panel,
+body.theme-diamond [class*="panel"],
+body.theme-diamond [class*="card"]{border:2px solid #e0e7ff;animation:diamond-sparkle 4s ease-in-out infinite}
+body.theme-diamond .screen::before{content:"";position:fixed;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(224,231,255,.04) 50%,transparent 70%),repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,.015) 40px,rgba(255,255,255,.015) 41px);pointer-events:none;z-index:0}
 @keyframes equip-flash{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 4px rgba(74,222,128,.5),0 0 20px rgba(74,222,128,.3)}}
 `;
   document.head.appendChild(style);
@@ -5871,11 +5895,12 @@ function applyTheme(id){
 
   // Update body background directly
   document.body.style.background = t.bg;
-  document.body.classList.remove('theme-rainbow','theme-lava','theme-aurora','theme-neon');
+  document.body.classList.remove('theme-rainbow','theme-lava','theme-aurora','theme-neon','theme-diamond');
   if(t.isRainbow) document.body.classList.add('theme-rainbow');
   if(t.isLava) document.body.classList.add('theme-lava');
   if(t.isAurora) document.body.classList.add('theme-aurora');
   if(t.isNeon) document.body.classList.add('theme-neon');
+  if(t.isDiamond) document.body.classList.add('theme-diamond');
 
   // Inject theme-specific candle colors for canvas charts
   STATE.themeCandles = {bull: t.candle_bull, bear: t.candle_bear, accent: t.accent};
@@ -6073,79 +6098,77 @@ function triggerActiveEffect(){
 
 // ── EFECTO 1: Confetti Storm ──────────────────────────────────
 function effectConfettiStorm(){
-  const cols=['#f0c060','#9353ff','#4ade80','#f87171','#60a5fa','#c8a0ff','#f97316'];
-  for(let i=0;i<40;i++){
+  const cols=['#f0c060','#9353ff','#4ade80','#f87171','#60a5fa','#ffd700','#f97316'];
+  for(let i=0;i<30;i++){
     setTimeout(()=>{
       const el=document.createElement('div');
       const c=cols[Math.floor(Math.random()*cols.length)];
       const size=5+Math.random()*8;
-      const shapes=['2px','50%','0'];
+      const elStyle=document.createElement('style');
       el.style.cssText=`
         position:fixed;z-index:9999;pointer-events:none;
-        width:${size}px;height:${size}px;
-        border-radius:${shapes[Math.floor(Math.random()*3)]};
-        background:${c};
+        width:${size}px;height:${size}px;border-radius:2px;
+        background:${c};box-shadow:0 0 6px ${c};
         left:${Math.random()*100}vw;top:-10px;
-        animation:cfall ${0.8+Math.random()*1.2}s linear forwards;
+        animation:cfall ${0.6+Math.random()*0.8}s linear forwards;
         transform:rotate(${Math.random()*360}deg);
-        box-shadow:0 0 4px ${c};
       `;
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(),2200);
-    },i*40);
+      setTimeout(()=>el.remove(),1600);
+    },i*30);
   }
+  // Central flash
+  const flash=document.createElement('div');
+  flash.style.cssText='position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);z-index:9999;pointer-events:none;font-family:\'Cinzel\',serif;font-size:24px;font-weight:700;color:#f0c060;text-shadow:0 0 20px rgba(240,192,96,.8);animation:score-rise .9s ease-out forwards;letter-spacing:3px';
+  flash.textContent='✦ CORRECTO ✦';
+  document.body.appendChild(flash);
+  setTimeout(()=>flash.remove(),1000);
 }
 
 // ── EFECTO 2: Lightning Strike ────────────────────────────────
 function effectLightningStrike(){
   const overlay=document.createElement('div');
-  overlay.style.cssText=`
-    position:fixed;inset:0;z-index:9998;pointer-events:none;
-    display:flex;align-items:center;justify-content:center;
-    background:rgba(240,192,96,0);
-  `;
-  // SVG lightning bolt
-  overlay.innerHTML=`
-    <svg width="80" height="200" viewBox="0 0 80 200" style="filter:drop-shadow(0 0 20px #f0c060);animation:bolt-appear .6s ease forwards">
-      <polygon points="50,0 20,90 45,90 30,200 70,80 42,80 65,0" fill="#f0c060" opacity="0.95"/>
-    </svg>`;
+  overlay.style.cssText='position:fixed;inset:0;z-index:9998;pointer-events:none;display:flex;align-items:center;justify-content:center';
+  overlay.innerHTML=`<svg width="100" height="220" viewBox="0 0 100 220" style="filter:drop-shadow(0 0 30px #f0c060);animation:bolt-appear .4s ease forwards">
+    <polygon points="60,0 25,100 52,100 35,220 80,90 48,90 75,0" fill="#f0c060" opacity="0.95"/>
+  </svg>`;
   document.body.appendChild(overlay);
-  // Screen flash yellow
+  // Screen flash
   const flash=document.getElementById('screen-flash');
   if(flash){
-    flash.style.background='rgba(240,192,96,.25)';
+    flash.style.background='rgba(240,192,96,.3)';
     flash.style.opacity='1';
-    setTimeout(()=>{flash.style.opacity='0';flash.style.background='';},300);
+    setTimeout(()=>{flash.style.opacity='0';flash.style.background='';},250);
   }
-  // Extra bolt left
-  setTimeout(()=>{
-    const b2=document.createElement('div');
-    b2.style.cssText=`position:fixed;top:0;left:20%;z-index:9999;pointer-events:none;
-      font-size:60px;filter:drop-shadow(0 0 15px #f0c060);animation:bolt-flash .5s ease forwards;opacity:0`;
-    b2.textContent='⚡';
-    document.body.appendChild(b2);
-    b2.style.opacity='1';
-    setTimeout(()=>b2.remove(),600);
-  },100);
-  setTimeout(()=>overlay.remove(),800);
+  // Two emoji bolts
+  for(let i=0;i<2;i++){
+    setTimeout(()=>{
+      const b=document.createElement('div');
+      b.style.cssText=`position:fixed;top:${i*30+10}%;left:${i*60+15}%;z-index:9999;pointer-events:none;font-size:50px;filter:drop-shadow(0 0 15px #f0c060);animation:bolt-flash .4s ease forwards;opacity:0`;
+      b.textContent='⚡';
+      document.body.appendChild(b);
+      setTimeout(()=>b.remove(),500);
+    },i*80+50);
+  }
+  setTimeout(()=>overlay.remove(),600);
 }
 
 // ── EFECTO 3: Nova Explosion ──────────────────────────────────
 function effectNovaExplosion(){
-  const cx=window.innerWidth/2, cy=window.innerHeight*0.5;
-  const cols=['#f0c060','#f87171','#c8a0ff','#4ade80','#f97316','#60a5fa','#fff'];
-  for(let i=0;i<28;i++){
+  const cx=window.innerWidth/2, cy=window.innerHeight*0.45;
+  const cols=['#f0c060','#f87171','#c8a0ff','#4ade80','#f97316','#60a5fa','#fff','#ffd700'];
+  for(let i=0;i<36;i++){
     const el=document.createElement('div');
-    const angle=(i/28)*Math.PI*2;
-    const dist=80+Math.random()*120;
-    const size=6+Math.random()*8;
+    const angle=(i/36)*Math.PI*2;
+    const dist=80+Math.random()*140;
+    const size=5+Math.random()*8;
     const c=cols[i%cols.length];
     el.style.cssText=`
       position:fixed;z-index:9999;pointer-events:none;
       width:${size}px;height:${size}px;border-radius:50%;
-      background:${c};box-shadow:0 0 8px ${c};
+      background:${c};box-shadow:0 0 10px ${c};
       left:${cx}px;top:${cy}px;
-      transition:all ${0.5+Math.random()*0.3}s cubic-bezier(.2,.8,.2,1);
+      transition:all ${0.4+Math.random()*0.2}s cubic-bezier(.15,.8,.2,1);
     `;
     document.body.appendChild(el);
     setTimeout(()=>{
@@ -6153,149 +6176,111 @@ function effectNovaExplosion(){
       el.style.top=`${cy+Math.sin(angle)*dist}px`;
       el.style.opacity='0';
       el.style.transform='scale(0)';
-    },20);
-    setTimeout(()=>el.remove(),900);
+    },15);
+    setTimeout(()=>el.remove(),750);
   }
   // Central BOOM
   const boom=document.createElement('div');
-  boom.style.cssText=`
-    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-    z-index:9999;pointer-events:none;
-    font-family:'Cinzel',serif;font-size:28px;font-weight:900;
-    color:#f87171;text-shadow:0 0 20px #f87171,0 0 40px #f0c060;
-    animation:nova-core .6s ease-out forwards;
-  `;
+  boom.style.cssText='position:fixed;left:50%;top:45%;transform:translate(-50%,-50%);z-index:9999;pointer-events:none;font-family:\'Cinzel\',serif;font-size:36px;font-weight:900;color:#f87171;text-shadow:0 0 30px #f87171,0 0 60px #f0c060;animation:nova-core .5s ease-out forwards';
   boom.textContent='💥';
   document.body.appendChild(boom);
-  setTimeout(()=>boom.remove(),700);
+  setTimeout(()=>boom.remove(),600);
 }
 
 // ── EFECTO 4: Star Rain ───────────────────────────────────────
 function effectStarRain(){
-  const stars=['✦','✧','★','◈','✦','◇','✸'];
-  const cols=['#f0c060','#c8a0ff','#fff9c4','#ffd700','#f0c060'];
-  for(let i=0;i<22;i++){
+  const stars=['✦','✧','★','◈','+','✸','◇'];
+  const cols=['#f0c060','#c8a0ff','#fff9c4','#ffd700','#a78bfa','#f0c060'];
+  for(let i=0;i<28;i++){
     setTimeout(()=>{
       const el=document.createElement('div');
       const s=stars[i%stars.length];
       const c=cols[i%cols.length];
-      const size=10+Math.random()*14;
+      const size=9+Math.random()*14;
       el.style.cssText=`
         position:fixed;z-index:9999;pointer-events:none;
         font-size:${size}px;color:${c};
-        filter:drop-shadow(0 0 6px ${c});
+        filter:drop-shadow(0 0 8px ${c});
         left:${Math.random()*100}vw;top:-20px;
-        animation:star-rain ${0.8+Math.random()*0.8}s linear ${Math.random()*0.4}s forwards;
+        animation:star-rain ${0.7+Math.random()*0.7}s linear ${Math.random()*0.3}s forwards;
       `;
       el.textContent=s;
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(),2000);
-    },i*55);
+      setTimeout(()=>el.remove(),1600);
+    },i*40);
   }
-  // Gold text
   const txt=document.createElement('div');
-  txt.style.cssText=`
-    position:fixed;top:20%;left:50%;transform:translateX(-50%);
-    z-index:9999;pointer-events:none;
-    font-family:'Cinzel',serif;font-size:22px;font-weight:700;
-    color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,.8);
-    animation:score-rise .9s ease-out forwards;letter-spacing:3px;
-  `;
+  txt.style.cssText='position:fixed;top:20%;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;font-family:\'Cinzel\',serif;font-size:22px;font-weight:700;color:#ffd700;text-shadow:0 0 25px rgba(255,215,0,.8);animation:score-rise .8s ease-out forwards;letter-spacing:3px';
   txt.textContent='✦ CORRECTO ✦';
   document.body.appendChild(txt);
-  setTimeout(()=>txt.remove(),1000);
+  setTimeout(()=>txt.remove(),900);
 }
 
 // ── EFECTO 5: Matrix Rain ─────────────────────────────────────
 function effectMatrixRain(){
-  const chars='01BOSLGHHHLLHBOSBOS2STEP'.split('');
-  const cols=['#00ff41','#00cc33','#00ff88','#00ff41'];
-  for(let i=0;i<18;i++){
+  const chars='01БОSLGGHHLБОS01STEP'.split('');
+  const cols=['#00ff41','#00cc33','#00ff88'];
+  for(let i=0;i<22;i++){
     setTimeout(()=>{
       const el=document.createElement('div');
       const c=cols[i%cols.length];
       el.style.cssText=`
         position:fixed;z-index:9999;pointer-events:none;
-        font-family:'JetBrains Mono',monospace;font-size:13px;
-        color:${c};text-shadow:0 0 8px ${c};
-        left:${Math.random()*100}vw;top:-20px;
-        animation:star-rain ${0.5+Math.random()*0.6}s linear ${Math.random()*0.3}s forwards;
-        white-space:nowrap;letter-spacing:2px;
+        font-family:'JetBrains Mono',monospace;font-size:12px;
+        color:${c};text-shadow:0 0 10px ${c};
+        left:${Math.random()*100}vw;top:-25px;
+        animation:star-rain ${0.4+Math.random()*0.5}s linear ${Math.random()*0.25}s forwards;
+        white-space:nowrap;letter-spacing:3px;
       `;
       el.textContent=chars[Math.floor(Math.random()*chars.length)];
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(),1200);
-    },i*35);
+      setTimeout(()=>el.remove(),1000);
+    },i*30);
   }
-  // Centered FRACTAL OK
   const txt=document.createElement('div');
-  txt.style.cssText=`
-    position:fixed;top:45%;left:50%;transform:translateX(-50%);
-    z-index:9999;pointer-events:none;
-    font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;
-    color:#00ff41;text-shadow:0 0 16px #00ff41;
-    animation:score-rise .8s ease-out forwards;letter-spacing:3px;
-  `;
+  txt.style.cssText='position:fixed;top:45%;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;font-family:\'JetBrains Mono\',monospace;font-size:18px;font-weight:700;color:#00ff41;text-shadow:0 0 25px #00ff41,0 0 50px #00ff41;animation:score-rise .7s ease-out forwards;letter-spacing:4px';
   txt.textContent='FRACTAL OK';
   document.body.appendChild(txt);
-  setTimeout(()=>txt.remove(),900);
+  setTimeout(()=>txt.remove(),800);
 }
 
 // ── EFECTO 6: Aurora ─────────────────────────────────────────
 function effectAurora(){
   const overlay=document.createElement('div');
-  overlay.style.cssText=`
-    position:fixed;inset:0;z-index:9998;pointer-events:none;
-    overflow:hidden;
-  `;
+  overlay.style.cssText='position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden';
   overlay.innerHTML=`
-    <div style="position:absolute;top:0;left:-20%;width:140%;height:40%;
-      background:linear-gradient(90deg,transparent,rgba(74,222,128,.35),rgba(147,83,255,.45),rgba(96,165,250,.35),transparent);
-      animation:aurora-wave 1.5s ease-in-out;border-radius:50%"></div>
-    <div style="position:absolute;top:10%;left:-20%;width:140%;height:25%;
-      background:linear-gradient(90deg,transparent,rgba(240,192,96,.2),rgba(74,222,128,.25),rgba(147,83,255,.2),transparent);
-      animation:aurora-wave 1.5s ease-in-out .2s;border-radius:50%"></div>
-    <div style="position:absolute;top:20%;left:-20%;width:140%;height:20%;
-      background:linear-gradient(90deg,transparent,rgba(96,165,250,.15),rgba(74,222,128,.2),transparent);
-      animation:aurora-wave 1.5s ease-in-out .4s;border-radius:50%"></div>
-  `;
+    <div style="position:absolute;top:0;left:-20%;width:140%;height:45%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.35),rgba(147,83,255,.45),rgba(96,165,250,.35),transparent);animation:aurora-wave 1.2s ease-in-out;border-radius:50%"></div>
+    <div style="position:absolute;top:10%;left:-15%;width:130%;height:30%;background:linear-gradient(90deg,transparent,rgba(240,192,96,.2),rgba(74,222,128,.25),rgba(147,83,255,.2),transparent);animation:aurora-wave 1.2s ease-in-out .15s;border-radius:50%"></div>
+    <div style="position:absolute;top:22%;left:-25%;width:150%;height:20%;background:linear-gradient(90deg,transparent,rgba(96,165,250,.15),rgba(74,222,128,.2),transparent);animation:aurora-wave 1.2s ease-in-out .3s;border-radius:50%"></div>`;
   document.body.appendChild(overlay);
-  setTimeout(()=>overlay.remove(),2000);
+  setTimeout(()=>overlay.remove(),1600);
 }
 
 // ── EFECTO 7: Shockwave ───────────────────────────────────────
 function effectShockwave(){
   const cx=window.innerWidth/2, cy=window.innerHeight/2;
-  const cols=['#9353ff','#c8a0ff','#f0c060'];
+  const cols=['#9353ff','#c8a0ff','#f0c060','#a78bfa'];
   cols.forEach((c,i)=>{
     setTimeout(()=>{
       const ring=document.createElement('div');
       ring.style.cssText=`
         position:fixed;border-radius:50%;
         border:3px solid ${c};
-        box-shadow:0 0 12px ${c},inset 0 0 12px ${c};
+        box-shadow:0 0 15px ${c},inset 0 0 15px ${c};
         width:40px;height:40px;
         left:${cx-20}px;top:${cy-20}px;
         z-index:9999;pointer-events:none;
-        animation:shockwave .8s ease-out forwards;
+        animation:shockwave .7s ease-out forwards;
       `;
       document.body.appendChild(ring);
-      setTimeout(()=>ring.remove(),900);
-    },i*150);
+      setTimeout(()=>ring.remove(),800);
+    },i*120);
   });
-  // Center icon
   const icon=document.createElement('div');
-  icon.style.cssText=`
-    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-    z-index:9999;pointer-events:none;
-    font-size:40px;
-    filter:drop-shadow(0 0 16px #9353ff);
-    animation:nova-core .5s ease-out forwards;
-  `;
+  icon.style.cssText='position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;pointer-events:none;font-size:44px;filter:drop-shadow(0 0 25px #9353ff);animation:nova-core .45s ease-out forwards';
   icon.textContent='⚡';
   document.body.appendChild(icon);
-  setTimeout(()=>icon.remove(),600);
-  SFX.streak5();
+  setTimeout(()=>icon.remove(),550);
 }
 
 // ============================================================
