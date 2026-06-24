@@ -5915,7 +5915,7 @@ function applyBackground(id){
 
   const overlay = document.createElement('div');
   overlay.id = 'bg-overlay';
-  overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden';
+  overlay.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden';
 
   if(id==='bg1'){ // Matrix Rain
     document.body.classList.add('has-bg-matrix');
@@ -5923,7 +5923,7 @@ function applyBackground(id){
     const cols = 18;
     for(let i=0;i<cols;i++){
       const span = document.createElement('div');
-      span.style.cssText = `position:absolute;left:${i*(100/cols)}%;top:-30px;font-size:${7+Math.random()*5}px;color:rgba(0,255,65,${0.15+Math.random()*0.2});font-family:'JetBrains Mono',monospace;animation:matrix-col ${0.8+Math.random()*0.8}s linear ${Math.random()*1.5}s infinite;white-space:nowrap`;
+      span.style.cssText = `position:absolute;left:${i*(100/cols)}%;top:-30px;font-size:${7+Math.random()*5}px;color:rgba(0,255,65,${0.3+Math.random()*0.4});font-family:'JetBrains Mono',monospace;animation:matrix-col ${0.8+Math.random()*0.8}s linear ${Math.random()*1.5}s infinite;white-space:nowrap`;
       const chars='01BOS HL LGG BOS01 10'.split(' ');
       span.textContent = chars[i%chars.length];
       overlay.appendChild(span);
@@ -5941,8 +5941,8 @@ function applyBackground(id){
   } else if(id==='bg3'){ // Aurora Curtain
     document.body.classList.add('has-bg-aurora');
     overlay.innerHTML = `
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.04),rgba(147,83,255,.06),rgba(96,165,250,.04),transparent 80%);background-size:200% 200%;animation:aurora-drift 8s ease infinite"></div>
-      <div style="position:absolute;top:-30%;left:-10%;width:120%;height:60%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.06),rgba(147,83,255,.08),rgba(96,165,250,.06),transparent);animation:aurora-drift 10s ease infinite 2s;border-radius:50%;filter:blur(20px)"></div>`;
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.12),rgba(147,83,255,.18),rgba(96,165,250,.12),transparent 80%);background-size:200% 200%;animation:aurora-drift 8s ease infinite"></div>
+      <div style="position:absolute;top:-30%;left:-10%;width:120%;height:60%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.15),rgba(147,83,255,.2),rgba(96,165,250,.15),transparent);animation:aurora-drift 10s ease infinite 2s;border-radius:50%;filter:blur(20px)"></div>`;
   } else if(id==='bg4'){ // Galaxy Particles
     document.body.classList.add('has-bg-galaxy');
     const cols=['#9353ff','#f0c060','#c8a0ff','#60a5fa','#4ade80'];
@@ -5952,7 +5952,7 @@ function applyBackground(id){
       const size=2+Math.random()*4;
       const d=20+Math.random()*35;
       const p = document.createElement('div');
-      p.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:${c};top:50%;left:50%;box-shadow:0 0 6px ${c};transform-origin:0 0;animation:nova-pt 2.5s ease-in-out ${i*0.1}s infinite;--angle:${angle}deg;--dist:${d}px;opacity:.5`;
+      p.style.cssText = `position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:${c};top:50%;left:50%;box-shadow:0 0 6px ${c};transform-origin:0 0;animation:nova-pt 2.5s ease-in-out ${i*0.1}s infinite;--angle:${angle}deg;--dist:${d}px;opacity:.8`;
       overlay.appendChild(p);
     }
   }
