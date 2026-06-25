@@ -4121,6 +4121,7 @@ let torneoLev=5;
 let currentTorneo=null;
 let trLev=5;
 let trSizeMode='usd';
+let trPriceInterval=null;
 let torneoState={
   portfolio:50000, peakPortfolio:50000, round:1, totalRounds:12,
   trades:[], position:null, eliminated:false, drawdownPct:0, active:false,
@@ -4131,15 +4132,17 @@ let torneoState={
 
 
 let trSelectedAsset='BTC';
+let trLastPrice=null;
 
 function trUpdateLivePrice(){
   const sym=trSelectedAsset;
   const a=ASSETS[sym];
   if(!a) return;
   const base=STATE.prices[sym]||a.base;
-  const change=(Math.random()*4-2);
-  const high=base*(1+Math.random()*0.03);
-  const low=base*(1-Math.random()*0.03);
+  const change=trLastPrice&&trLastPrice>0?((base-trLastPrice)/trLastPrice*100):0;
+  trLastPrice=base;
+  const high=base*(1+Math.random()*0.005);
+  const low=base*(1-Math.random()*0.005);
   document.getElementById('tr-asset-label').textContent=sym+'/USD';
   document.getElementById('tr-live-price').textContent=fmtPrice(base);
   const chEl=document.getElementById('tr-live-change');
@@ -4280,6 +4283,7 @@ function toggleLeaderboard(){
 function resumeTorneo(){
   if(!torneoState.active) return;
   trSelectedAsset=torneoState.asset||'BTC';
+  trStartPricePolling();
   trInitTradePanel();
   document.getElementById('torneo-lobby').style.display='none';
   const g=document.getElementById('torneo-game');
@@ -4599,6 +4603,7 @@ function nextRound(){
 }
 
 function torneoFinish(){
+  trStopPricePolling();
   const s=torneoState;
   const tier=getTier(s.tier);
   const fmt=getFormat(s.format);
@@ -4707,11 +4712,38 @@ function torneoFinish(){
 
 // ============================================================
 // TORNEO — Integrated Trade Panel functions
+// ── Price polling ────────────────────────────────────────
+async function trFetchPrices(){
+  if(!TNSVT_CONFIG.serverUrl) return;
+  const url = TNSVT_CONFIG.serverUrl.replace(/\/$/,'') + '/api/market/prices';
+  try {
+    const r = await fetch(url, { method:'GET', headers:{'Accept':'application/json'} });
+    if(!r.ok) return;
+    const d = await r.json();
+    if(d && d.prices){
+      if(!STATE.prices) STATE.prices={};
+      Object.assign(STATE.prices, d.prices);
+      trUpdateLivePrice();
+    }
+  } catch(_){}
+}
+
+function trStartPricePolling(){
+  if(trPriceInterval) clearInterval(trPriceInterval);
+  trFetchPrices();
+  trPriceInterval = setInterval(trFetchPrices, 5000);
+}
+
+function trStopPricePolling(){
+  if(trPriceInterval){ clearInterval(trPriceInterval); trPriceInterval=null; }
+}
+
 // ============================================================
 function trInitTradePanel(){
   trSelectedAsset='BTC';
   trLev=torneoLev||5;
   trSizeMode='usd';
+  trStartPricePolling();
   // Set leverage slider
   const levSlider=document.getElementById('tr-leverage');
   if(levSlider){ levSlider.value=trLev; document.getElementById('tr-lev-label').textContent=trLev+'×'; }
