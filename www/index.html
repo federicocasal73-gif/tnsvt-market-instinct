@@ -967,6 +967,62 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     scroll-behavior:auto!important;
   }
 }
+
+/* ============================================================
+   PHASE 4: ONBOARDING TOUR
+   ============================================================ */
+.onboard-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.78);
+  z-index:9000;opacity:0;pointer-events:none;
+  transition:opacity .3s;
+}
+.onboard-overlay.active{opacity:1;pointer-events:auto}
+.onboard-spotlight{
+  position:fixed;border-radius:12px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.78),0 0 0 2px rgba(147,83,255,.7),0 0 32px 4px rgba(147,83,255,.5);
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;z-index:9001;
+}
+.onboard-tooltip{
+  position:fixed;background:linear-gradient(135deg,#1a1238,#120a28);
+  border:1px solid rgba(147,83,255,.4);border-radius:14px;padding:18px 20px;
+  color:var(--text);font-size:14px;line-height:1.5;max-width:280px;
+  box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(147,83,255,.15);
+  z-index:9002;opacity:0;transform:translateY(10px) scale(.95);
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.onboard-tooltip.active{opacity:1;transform:translateY(0) scale(1)}
+.onboard-tooltip h3{
+  margin:0 0 6px;font-size:16px;font-weight:700;
+  background:linear-gradient(135deg,var(--violet3),var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  display:flex;align-items:center;gap:8px;
+}
+.onboard-tooltip p{margin:0 0 14px;color:var(--text2);font-size:13px}
+.onboard-tooltip .ob-actions{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.onboard-tooltip .ob-skip{
+  background:transparent;border:none;color:var(--text3);font-size:12px;
+  cursor:pointer;padding:4px 8px;font-family:Inter,sans-serif;
+}
+.onboard-tooltip .ob-skip:hover{color:var(--text)}
+.onboard-tooltip .ob-next{
+  background:linear-gradient(135deg,var(--violet),var(--violet2));
+  color:#fff;border:none;padding:8px 16px;border-radius:8px;
+  font-size:13px;font-weight:600;cursor:pointer;
+  font-family:Inter,sans-serif;transition:transform .15s;
+}
+.onboard-tooltip .ob-next:hover{transform:translateY(-1px)}
+.onboard-tooltip .ob-next:active{transform:translateY(0) scale(.97)}
+.onboard-tooltip .ob-step{
+  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--violet3);font-weight:700;
+}
+.onboard-arrow{
+  position:absolute;width:0;height:0;
+  border:10px solid transparent;
+}
+.onboard-arrow.up{bottom:-20px;left:50%;transform:translateX(-50%);border-top-color:rgba(147,83,255,.4)}
+.onboard-arrow.down{top:-20px;left:50%;transform:translateX(-50%);border-bottom-color:rgba(147,83,255,.4)}
 </style>
 </head>
 <body>
@@ -3272,10 +3328,208 @@ function genCandles(n=40, base=100, vol=0.02, trending=null){
   return candles;
 }
 
+// ── Phase 3: Candle entrance animation ──────────────────────────
+// Refs a las animaciones activas por canvas para poder cancelarlas
+const _chartAnimations = {};
+let _animProgress = 1;
+
+function animateChartIn(canvasId, candles){
+  if(STATE.animEnabled === false) return;
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  // Cancel any existing animation for this canvas
+  if(_chartAnimations[canvasId]){
+    cancelAnimationFrame(_chartAnimations[canvasId]);
+  }
+  const start = performance.now();
+  const total = 600; // 600ms total
+  function frame(now){
+    const t = Math.min(1, (now - start) / total);
+    _animProgress = t;
+    renderCandleChart(canvasId, candles);
+    _animProgress = 1;
+    if(t < 1){
+      _chartAnimations[canvasId] = requestAnimationFrame(frame);
+    } else {
+      delete _chartAnimations[canvasId];
+    }
+  }
+  _chartAnimations[canvasId] = requestAnimationFrame(frame);
+}
+
+// ── Phase 3c: Crosshair overlay ─────────────────────────────────
+const _chartCrosshair = {};
+
+function setupChartCrosshair(canvasId){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  if(canvas.dataset._crosshairReady === '1') return;
+  canvas.dataset._crosshairReady = '1';
+  // Crear overlay
+  const overlay = document.createElement('canvas');
+  overlay.className = 'chart-crosshair-overlay';
+  overlay.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s`;
+  const parent = canvas.parentElement;
+  if(!parent) return;
+  if(getComputedStyle(parent).position === 'static') parent.style.position = 'relative';
+  parent.appendChild(overlay);
+  const meta = _chartCrosshair[canvasId] = {
+    overlay,
+    visible: false,
+    x: 0, y: 0,
+    candles: [],
+    dpr: window.devicePixelRatio || 1,
+    W: 0, H: 0,
+    PRICE_W: 52, LEFT: 2,
+    PAD_TOP: 8, PAD_BOT: 18,
+    yMin: 0, yMax: 0,
+  };
+  function onPointer(e){
+    const r = canvas.getBoundingClientRect();
+    const px = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    const py = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+    const chartW = meta.W - meta.PRICE_W - meta.LEFT;
+    if(px < meta.LEFT || px > meta.LEFT + chartW || py < meta.PAD_TOP || py > meta.H - meta.PAD_BOT) {
+      hideCrosshair();
+      return;
+    }
+    showCrosshair(px, py);
+  }
+  function showCrosshair(px, py){
+    meta.visible = true; meta.x = px; meta.y = py;
+    overlay.style.opacity = '1';
+    drawCrosshair();
+  }
+  function hideCrosshair(){
+    meta.visible = false;
+    overlay.style.opacity = '0';
+  }
+  function drawCrosshair(){
+    const octx = overlay.getContext('2d');
+    const dpr = meta.dpr;
+    const W = meta.W * dpr, H = meta.H * dpr;
+    if(overlay.width !== W || overlay.height !== H){
+      overlay.width = W; overlay.height = H;
+      overlay.style.width = meta.W + 'px'; overlay.style.height = meta.H + 'px';
+    }
+    octx.setTransform(1,0,0,1,0,0);
+    octx.clearRect(0, 0, W, H);
+    octx.scale(dpr, dpr);
+    const chartW = meta.W - meta.PRICE_W - meta.LEFT;
+    const chartH = meta.H - meta.PAD_TOP - meta.PAD_BOT;
+    const x = meta.x, y = meta.y;
+    // Encontrar vela bajo el puntero
+    const candles = meta.candles;
+    const n = candles.length;
+    const bwFull = chartW / n;
+    const idx = Math.floor((x - meta.LEFT) / bwFull);
+    if(idx < 0 || idx >= n) return;
+    const c = candles[idx];
+    if(!c) return;
+    // ── Vertical line ──
+    octx.strokeStyle = 'rgba(200,160,255,.55)';
+    octx.lineWidth = 1;
+    octx.setLineDash([4,3]);
+    octx.beginPath(); octx.moveTo(x, meta.PAD_TOP); octx.lineTo(x, meta.H - meta.PAD_BOT); octx.stroke();
+    // ── Horizontal line ──
+    octx.beginPath(); octx.moveTo(meta.LEFT, y); octx.lineTo(meta.W - meta.PRICE_W, y); octx.stroke();
+    octx.setLineDash([]);
+    // ── Price pill on right axis ──
+    const price = meta.yMax - ((y - meta.PAD_TOP) / chartH) * (meta.yMax - meta.yMin);
+    const pillW = meta.PRICE_W - 2, pillH = 18;
+    const pillY = Math.max(meta.PAD_TOP, Math.min(meta.H - meta.PAD_BOT - pillH, y - pillH/2));
+    octx.fillStyle = 'rgba(147,83,255,.85)';
+    octx.shadowColor = 'rgba(147,83,255,.6)';
+    octx.shadowBlur = 6;
+    const r = 4;
+    octx.beginPath();
+    octx.moveTo(meta.W - meta.PRICE_W + 1 + r, pillY);
+    octx.lineTo(meta.W - 4 - r, pillY);
+    octx.quadraticCurveTo(meta.W - 4, pillY, meta.W - 4, pillY + r);
+    octx.lineTo(meta.W - 4, pillY + pillH - r);
+    octx.quadraticCurveTo(meta.W - 4, pillY + pillH, meta.W - 4 - r, pillY + pillH);
+    octx.lineTo(meta.W - meta.PRICE_W + 1 + r, pillY + pillH);
+    octx.quadraticCurveTo(meta.W - meta.PRICE_W + 1, pillY + pillH, meta.W - meta.PRICE_W + 1, pillY + pillH - r);
+    octx.lineTo(meta.W - meta.PRICE_W + 1, pillY + r);
+    octx.quadraticCurveTo(meta.W - meta.PRICE_W + 1, pillY, meta.W - meta.PRICE_W + 1 + r, pillY);
+    octx.closePath();
+    octx.fill();
+    octx.shadowBlur = 0;
+    octx.fillStyle = '#fff';
+    octx.font = `bold 9px "JetBrains Mono", monospace`;
+    octx.textAlign = 'center';
+    octx.fillText(fmtPrice(price), meta.W - meta.PRICE_W + 1 + pillW/2, pillY + 12);
+    // ── Tooltip con OHLC ──
+    const tipX = Math.min(meta.W - meta.PRICE_W - 130, Math.max(meta.LEFT, x + 12));
+    const tipY = Math.max(meta.PAD_TOP, Math.min(meta.H - meta.PAD_BOT - 80, y - 80));
+    const tipW = 124, tipH = 78;
+    octx.fillStyle = 'rgba(20,14,38,.95)';
+    octx.strokeStyle = 'rgba(147,83,255,.45)';
+    octx.lineWidth = 1;
+    octx.beginPath();
+    const tr = 6;
+    octx.moveTo(tipX + tr, tipY);
+    octx.lineTo(tipX + tipW - tr, tipY);
+    octx.quadraticCurveTo(tipX + tipW, tipY, tipX + tipW, tipY + tr);
+    octx.lineTo(tipX + tipW, tipY + tipH - tr);
+    octx.quadraticCurveTo(tipX + tipW, tipY + tipH, tipX + tipW - tr, tipY + tipH);
+    octx.lineTo(tipX + tr, tipY + tipH);
+    octx.quadraticCurveTo(tipX, tipY + tipH, tipX, tipY + tipH - tr);
+    octx.lineTo(tipX, tipY + tr);
+    octx.quadraticCurveTo(tipX, tipY, tipX + tr, tipY);
+    octx.closePath();
+    octx.fill(); octx.stroke();
+    octx.font = '9px Inter, sans-serif';
+    octx.textAlign = 'left';
+    let row = 0;
+    function line(label, val, color){
+      octx.fillStyle = 'rgba(150,120,200,.7)';
+      octx.fillText(label, tipX + 8, tipY + 14 + row * 13);
+      octx.fillStyle = color;
+      octx.textAlign = 'right';
+      octx.fillText(val, tipX + tipW - 8, tipY + 14 + row * 13);
+      octx.textAlign = 'left';
+      row++;
+    }
+    line('O', fmtPrice(c.o), '#fff');
+    line('H', fmtPrice(c.h), '#4ade80');
+    line('L', fmtPrice(c.l), '#f87171');
+    line('C', fmtPrice(c.c), c.c >= c.o ? '#4ade80' : '#f87171');
+    line('Δ', ((c.c-c.o)/c.o*100 >= 0 ? '+' : '') + ((c.c-c.o)/c.o*100).toFixed(2) + '%', c.c >= c.o ? '#4ade80' : '#f87171');
+    // ── Highlight candle under cursor ──
+    const cx = meta.LEFT + idx * bwFull + bwFull * 0.12;
+    const cw = Math.max(2, bwFull * 0.76);
+    octx.fillStyle = c.c >= c.o ? 'rgba(74,222,128,.18)' : 'rgba(248,113,113,.18)';
+    octx.fillRect(cx - 2, meta.PAD_TOP, cw + 4, chartH);
+  }
+  canvas.addEventListener('pointermove', onPointer, {passive:true});
+  canvas.addEventListener('pointerleave', hideCrosshair, {passive:true});
+  canvas.addEventListener('touchmove', onPointer, {passive:true});
+  canvas.addEventListener('touchend', hideCrosshair, {passive:true});
+}
+
 function renderCandleChart(canvasId, candles, chartRef=null){
   const canvas = document.getElementById(canvasId);
   if(!canvas) return null;
   if(chartRef) chartRef.destroy();
+
+  // Phase 3a: deteccion de re-render con animación
+  const prevN = parseInt(canvas.dataset._animN||'-1');
+  const animEnabled = STATE.animEnabled !== false;
+  const firstRender = prevN === -1;
+  // Animar en primer render (entrada) y cuando cambian las candles
+  const shouldAnimate = animEnabled && (
+    firstRender ||
+    prevN !== candles.length ||
+    canvas.dataset._animForce === '1'
+  );
+  canvas.dataset._animN = candles.length;
+  canvas.dataset._animForce = '0';
+  // Si debe animar, lanzar el loop animado y salir (no dibujar síncrono)
+  if(shouldAnimate){
+    animateChartIn(canvasId, candles);
+    return null;
+  }
 
   // Hi-DPI / retina support
   const dpr = window.devicePixelRatio || 1;
@@ -3308,6 +3562,23 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   bgGrad.addColorStop(1,'#06040f');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0,0,W,H);
+
+  // Phase 3c: setup crosshair + store metadata
+  setupChartCrosshair(canvasId);
+  const ch = _chartCrosshair[canvasId];
+  if(ch){
+    ch.candles = candles;
+    ch.dpr = dpr;
+    ch.W = W; ch.H = H;
+    ch.PRICE_W = PRICE_W; ch.LEFT = LEFT;
+    ch.PAD_TOP = PAD_TOP; ch.PAD_BOT = PAD_BOT;
+    ch.yMin = yMin; ch.yMax = yMax;
+    // Hide crosshair if canvas resized
+    const overlay = ch.overlay;
+    if(overlay && ch.visible){
+      ch.visible = false; overlay.style.opacity = '0';
+    }
+  }
 
   // ── Price axis panel ──
   ctx.fillStyle = 'rgba(10,7,20,.6)';
@@ -3383,7 +3654,14 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   ctx.stroke();
 
   // ── Candles ──
+  // Phase 3a: per-candle entrance progress (stagger 30ms entre velas)
+  const _ap = (typeof _animProgress === 'number') ? _animProgress : 1;
   candles.forEach((c,i)=>{
+    // Per-candle progress: stagger de 30ms entre velas, animación total 600ms
+    const candleStart = i * 0.012; // ~30ms / 2500ms (ratio)
+    const candleDur   = 0.06;       // ~150ms de animación individual
+    const p = _ap >= 1 ? 1 : Math.max(0, Math.min(1, (_ap - candleStart) / candleDur));
+    if(p <= 0) return; // skip if not yet animated
     const bull = c.c >= c.o;
     const doji = Math.abs(c.c-c.o) < range*0.003;
     const x = LEFT + i*bwFull;
@@ -3401,23 +3679,31 @@ function renderCandleChart(canvasId, candles, chartRef=null){
     const tBullD= STATE.themeCandles ? '#15803d' : '#16a34a';
     const tBearD= STATE.themeCandles ? '#991b1b' : '#dc2626';
 
-    // Wick — 1.5px, bright
+    // Wick — crece desde el open hacia ambos extremos
+    const wickTop = oY + (hY - oY) * p;
+    const wickBot = oY + (lY - oY) * p;
+    ctx.globalAlpha = p;
     ctx.strokeStyle = bull ? tBull : tBear;
     ctx.lineWidth = Math.max(1, candleW*.12);
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(cx, hY); ctx.lineTo(cx, lY);
+    ctx.moveTo(cx, wickTop); ctx.lineTo(cx, wickBot);
     ctx.stroke();
     ctx.lineCap = 'butt';
 
     if(doji){
-      // Doji — just a cross
+      // Doji — fade in
       ctx.strokeStyle = 'rgba(200,160,255,.8)';
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(candleX, oY); ctx.lineTo(candleX+candleW, oY); ctx.stroke();
+      ctx.globalAlpha = 1;
     } else {
+      // Body crece desde el open hacia close (animación natural)
+      const animBodyTop = oY + (bodyTop - oY) * p;
+      const animBodyBot = oY + (bodyBot - oY) * p;
+      const animBodyH = Math.max(0.5, animBodyBot - animBodyTop);
       // Body gradient — strong fill
-      const bGrad = ctx.createLinearGradient(0, bodyTop, 0, bodyBot);
+      const bGrad = ctx.createLinearGradient(0, animBodyTop, 0, animBodyBot);
       if(bull){
         bGrad.addColorStop(0, tBull);
         bGrad.addColorStop(1, tBullD);
@@ -3426,12 +3712,13 @@ function renderCandleChart(canvasId, candles, chartRef=null){
         bGrad.addColorStop(1, tBear);
       }
       ctx.fillStyle = bGrad;
-      ctx.fillRect(candleX, bodyTop, candleW, bodyH);
+      ctx.fillRect(candleX, animBodyTop, candleW, animBodyH);
 
       // Body border for definition
       ctx.strokeStyle = bull ? tBull : tBear;
       ctx.lineWidth = .8;
-      ctx.strokeRect(candleX, bodyTop, candleW, bodyH);
+      ctx.strokeRect(candleX, animBodyTop, candleW, animBodyH);
+      ctx.globalAlpha = 1;
     }
   });
 
@@ -4502,6 +4789,8 @@ function startTorneo(){
   document.getElementById('tr-waiting').style.display='none';
   torneoUpdateHUD();
   torneoNextRound();
+  // Phase 4: tour onboarding en primera entrada al torneo
+  maybeStartTorneoTour();
 }
 
 async function joinTorneo(id){
@@ -8142,6 +8431,27 @@ function initPortfolio(){
       if(STATE.screen==='s-portfolio') drawPort24hChart();
     }, 30000);
   }
+  // Phase 4d: animated counter para first-time users (no saved portfolio)
+  try {
+    if(!localStorage.getItem('tnsvt_portfolio')){
+      const eqEl = document.getElementById('port-equity');
+      const balEl = document.getElementById('port-balance-sm');
+      const targetEq = PORT.balance;
+      const startTime = performance.now();
+      const dur = 1200;
+      function countUp(now){
+        const t = Math.min(1, (now - startTime) / dur);
+        const e = 1 - Math.pow(1 - t, 3); // easeOutCubic
+        const v = targetEq * e;
+        if(eqEl) eqEl.textContent = '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+        if(balEl) balEl.textContent = '$' + Math.floor(v).toLocaleString('en-US');
+        if(t < 1) requestAnimationFrame(countUp);
+      }
+      requestAnimationFrame(countUp);
+    }
+  } catch(e){}
+  // Phase 4: tour onboarding en primera entrada
+  maybeStartPortfolioTour();
 }
 
 // ── Price tick — usa precios reales + micro drift ──────────
@@ -10146,6 +10456,254 @@ function setSkeleton(el, on){
       delete el.dataset._prevText;
     }
   }
+}
+
+// ============================================================
+// PHASE 4: ONBOARDING TOUR SYSTEM
+// ============================================================
+const ONBOARD_KEY = 'tnsvt_onboarded_v1';
+const _onboard = {
+  active: false,
+  step: 0,
+  steps: [],
+  overlay: null,
+  spotlight: null,
+  tooltip: null,
+};
+
+function isOnboarded(){
+  try { return localStorage.getItem(ONBOARD_KEY) === '1'; } catch(e){ return false; }
+}
+
+function setOnboarded(v){
+  try { localStorage.setItem(ONBOARD_KEY, v ? '1' : '0'); } catch(e){}
+}
+
+function startOnboarding(steps){
+  if(_onboard.active) return;
+  if(isOnboarded()) return;
+  if(!Array.isArray(steps) || !steps.length) return;
+  // Crear overlay + spotlight + tooltip
+  const overlay = document.createElement('div');
+  overlay.className = 'onboard-overlay';
+  document.body.appendChild(overlay);
+  // Forzar reflow para activar transición
+  void overlay.offsetWidth;
+  overlay.classList.add('active');
+  const spotlight = document.createElement('div');
+  spotlight.className = 'onboard-spotlight';
+  document.body.appendChild(spotlight);
+  const tooltip = document.createElement('div');
+  tooltip.className = 'onboard-tooltip';
+  tooltip.innerHTML = `
+    <div class="ob-step" id="ob-step-label"></div>
+    <h3 id="ob-title"></h3>
+    <p id="ob-text"></p>
+    <div class="ob-actions">
+      <button class="ob-skip" id="ob-skip">Saltar</button>
+      <button class="ob-next" id="ob-next">Siguiente →</button>
+    </div>
+  `;
+  document.body.appendChild(tooltip);
+  _onboard.active = true;
+  _onboard.step = 0;
+  _onboard.steps = steps;
+  _onboard.overlay = overlay;
+  _onboard.spotlight = spotlight;
+  _onboard.tooltip = tooltip;
+  tooltip.querySelector('#ob-skip').onclick = endOnboarding;
+  tooltip.querySelector('#ob-next').onclick = nextOnboardingStep;
+  // Cerrar al tap fuera del tooltip
+  overlay.onclick = (e) => {
+    if(e.target === overlay) endOnboarding();
+  };
+  showOnboardingStep(0);
+}
+
+function showOnboardingStep(idx){
+  if(!_onboard.active) return;
+  const step = _onboard.steps[idx];
+  if(!step){ endOnboarding(); return; }
+  _onboard.step = idx;
+  const tooltip = _onboard.tooltip;
+  const spotlight = _onboard.spotlight;
+  tooltip.querySelector('#ob-step-label').textContent = `Paso ${idx+1} de ${_onboard.steps.length}`;
+  tooltip.querySelector('#ob-title').innerHTML = step.icon ? `<span>${step.icon}</span> ${step.title}` : step.title;
+  tooltip.querySelector('#ob-text').textContent = step.text;
+  const nextBtn = tooltip.querySelector('#ob-next');
+  nextBtn.textContent = idx === _onboard.steps.length-1 ? '¡Empezar! 🚀' : 'Siguiente →';
+  // Buscar el target
+  const target = typeof step.target === 'string' ? document.querySelector(step.target) : step.target;
+  if(target){
+    // Scroll al target
+    try { target.scrollIntoView({behavior:'smooth', block:'center'}); } catch(e){}
+    setTimeout(() => positionOnboard(target, step), 200);
+  } else {
+    // Step sin target (e.g. welcome modal) — centrar
+    positionOnboardCenter();
+  }
+  // Activar tooltip
+  setTimeout(() => tooltip.classList.add('active'), 50);
+  if(SFX.tap) SFX.tap();
+  if(HAPTICS.tap) HAPTICS.tap();
+}
+
+function positionOnboard(target, step){
+  const tooltip = _onboard.tooltip;
+  const spotlight = _onboard.spotlight;
+  const rect = target.getBoundingClientRect();
+  const pad = step.spotPad || 8;
+  // Posicionar spotlight
+  spotlight.style.left = (rect.left - pad) + 'px';
+  spotlight.style.top = (rect.top - pad) + 'px';
+  spotlight.style.width = (rect.width + pad*2) + 'px';
+  spotlight.style.height = (rect.height + pad*2) + 'px';
+  // Quitar flecha previa
+  tooltip.querySelectorAll('.onboard-arrow').forEach(a=>a.remove());
+  // Posicionar tooltip
+  const tipW = 280;
+  const tipH = 180;
+  const margin = 16;
+  let tx, ty, arrowDir = 'down';
+  const placement = step.placement || 'auto';
+  // Auto-placement
+  if(placement === 'auto' || placement === 'bottom'){
+    tx = rect.left + rect.width/2 - tipW/2;
+    ty = rect.bottom + margin;
+    arrowDir = 'up';
+    if(ty + tipH > window.innerHeight - 10){
+      // flip arriba
+      ty = rect.top - tipH - margin;
+      arrowDir = 'down';
+    }
+  } else if(placement === 'top'){
+    tx = rect.left + rect.width/2 - tipW/2;
+    ty = rect.top - tipH - margin;
+    arrowDir = 'down';
+  } else if(placement === 'left'){
+    tx = rect.left - tipW - margin;
+    ty = rect.top + rect.height/2 - tipH/2;
+    arrowDir = 'right';
+  } else if(placement === 'right'){
+    tx = rect.right + margin;
+    ty = rect.top + rect.height/2 - tipH/2;
+    arrowDir = 'left';
+  }
+  // Clamp to viewport
+  tx = Math.max(8, Math.min(window.innerWidth - tipW - 8, tx));
+  ty = Math.max(8, Math.min(window.innerHeight - tipH - 8, ty));
+  tooltip.style.left = tx + 'px';
+  tooltip.style.top = ty + 'px';
+  // Añadir flecha
+  const arrow = document.createElement('div');
+  arrow.className = 'onboard-arrow ' + arrowDir;
+  tooltip.appendChild(arrow);
+}
+
+function positionOnboardCenter(){
+  const tooltip = _onboard.tooltip;
+  tooltip.style.left = (window.innerWidth/2 - 140) + 'px';
+  tooltip.style.top = (window.innerHeight/2 - 90) + 'px';
+  tooltip.querySelectorAll('.onboard-arrow').forEach(a=>a.remove());
+}
+
+function nextOnboardingStep(){
+  if(!_onboard.active) return;
+  const next = _onboard.step + 1;
+  _onboard.tooltip.classList.remove('active');
+  setTimeout(() => showOnboardingStep(next), 250);
+}
+
+function endOnboarding(){
+  if(!_onboard.active) return;
+  _onboard.active = false;
+  _onboard.tooltip.classList.remove('active');
+  _onboard.overlay.classList.remove('active');
+  setTimeout(() => {
+    _onboard.overlay?.remove();
+    _onboard.spotlight?.remove();
+    _onboard.tooltip?.remove();
+    _onboard.overlay = null;
+    _onboard.spotlight = null;
+    _onboard.tooltip = null;
+  }, 400);
+  setOnboarded(true);
+  if(SFX.win) SFX.win();
+  if(HAPTICS.win) HAPTICS.win();
+}
+
+// ── Specific tour definitions ────────────────────────────────
+function maybeStartPortfolioTour(){
+  if(isOnboarded()) return;
+  // Esperar a que la pantalla esté visible y los elementos existan
+  setTimeout(() => {
+    if(!document.getElementById('port-trade')) return;
+    startOnboarding([
+      {
+        icon: '👋',
+        title: '¡Bienvenido al Portfolio!',
+        text: 'Acá operás con dinero virtual pero precios reales de CoinGecko y Yahoo Finance. Empezás con $50,000.',
+        placement: 'center',
+      },
+      {
+        icon: '🎯',
+        title: 'Elegí un instrumento',
+        text: 'Tocá una pill para cambiar entre crypto, stocks, índices y forex. Cada uno tiene su propio spread y volatilidad.',
+        target: '#s-portfolio .asset-pills',
+        placement: 'bottom',
+      },
+      {
+        icon: '💰',
+        title: 'Configurá tu posición',
+        text: 'Tamaño, apalancamiento, Stop Loss y Take Profit. El preview abajo te muestra margen y R:R antes de operar.',
+        target: '#port-trade',
+        placement: 'top',
+      },
+      {
+        icon: '🚀',
+        title: 'Ejecutá LONG o SHORT',
+        text: 'Comprá si creés que sube, vendé si creés que baja. Cerrá manualmente cuando quieras o usá SL/TP para protegerte.',
+        target: '#port-trade .action-row, #port-trade button',
+        placement: 'top',
+      },
+    ]);
+  }, 600);
+}
+
+function maybeStartTorneoTour(){
+  if(isOnboarded()) return;
+  setTimeout(() => {
+    if(!document.getElementById('tr-trade-panel')) return;
+    startOnboarding([
+      {
+        icon: '🏆',
+        title: 'Torneo: Competí y ganá',
+        text: 'Operás con portfolio independiente. Sobreviví las 12 rondas sin quebrar y llegá al podio.',
+        placement: 'center',
+      },
+      {
+        icon: '🎯',
+        title: 'Elegí el activo',
+        text: 'Cada ronda genera velas nuevas para el activo que elijas. Cambialo en cualquier momento.',
+        target: '#tr-trade-panel .asset-pills, #tr-trade-panel [data-tr-asset]',
+        placement: 'bottom',
+      },
+      {
+        icon: '🛡',
+        title: 'SL/TP y trailing stop',
+        text: 'Stop Loss y Take Profit se evalúan contra cada vela, no solo el cierre. Trailing sigue al precio.',
+        target: '#tr-trade-panel',
+        placement: 'top',
+      },
+      {
+        icon: '⚡',
+        title: 'Ejecutá rápido',
+        text: 'Tenés 25 segundos por ronda. LONG si pensás que sube, SHORT si baja, SKIP para pasar.',
+        target: '#tr-trade-panel .action-row',
+        placement: 'top',
+      },
+    ]);
+  }, 600);
 }
 
 // ============================================================
