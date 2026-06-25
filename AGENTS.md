@@ -12,6 +12,21 @@ Aplicación standalone del juego Market Instinct, conector al backend Symfony en
 ## Bugs conocidos
 1. **WebView crash al cargar**: `TypeError: Cannot read properties of undefined (reading 'triggerEvent')` — Error del runtime de Capacitor, no del código de la app. Se agregó `window.onerror` global para capturarlo. Hacer `npx cap sync android` asegura que el bridge esté actualizado.
 
+## Cambios grandes (2026-06-25)
+- **Panel de trading integral en torneos**: reemplacé el panel básico del torneo por el mismo diseño profesional del portfolio:
+  - Asset selector con 9 instrumentos (BTC, ETH, SOL, BNB, XRP, GOLD, SP500, EURUSD, NASDAQ)
+  - Live price card con precio, cambio %, spread, 24h high/low
+  - Tamaño de posición con tabs USD/%/Unidades + botones rápidos 10/25/50/75/100%
+  - Apalancamiento con slider 1x-25x
+  - Stop Loss con modos %/$/Precio/Pips + botones rápidos
+  - Take Profit con modos %/$/Precio/R:R + botones rápidos
+  - Trailing Stop toggle con slider de distancia
+  - Order preview con tamaño, nocional, margen, SL/TP prices, R:R visual
+  - Botones LONG / SKIP / SHORT / Leaderboard
+- **SL/TP/Trailing contra velas**: `torneoPlay()` ahora itera todas las velas generadas y verifica SL, TP y trailing stop en cada vela (no solo contra el close final)
+- **Asset seleccionable**: el torneo genera velas para el activo que elijas en las pills, no random
+- Funciones nuevas: `trInitTradePanel`, `trAssetSelect`, `trSizeTab`, `trQuickSize`, `trSetLev`, `trToggleSL/TP`, `trSetSL/TP`, `trToggleTrail`, `trCalcPreview`, `trGetUsdSize`, `trUpdateLivePrice`
+
 ## Estructura
 ```
 www/index.html              # Juego completo (~9674 líneas) - modos + wallet + torneos + fondos

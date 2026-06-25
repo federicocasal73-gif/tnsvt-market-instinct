@@ -1429,62 +1429,160 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
         <canvas id="torneo-chart" height="200"></canvas>
       </div>
     </div>
-    <!-- Trade Panel -->
-    <div id="tr-trade-panel" style="padding:4px 12px 8px;flex:1;display:flex;flex-direction:column;gap:6px">
-      <!-- Size (slider + USD input) & Leverage row -->
-      <div style="display:flex;gap:6px;align-items:flex-start">
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">
-            <span>TAMAÑO</span>
-            <span id="tr-size-label" style="color:var(--violet);font-weight:700;font-family:'JetBrains Mono',monospace">$25,000</span>
-          </div>
-          <div style="display:flex;gap:6px;align-items:center">
-            <input type="range" id="tr-size" min="1" max="100" step="1" value="50" oninput="torneoSizeSync('slider')" style="flex:1;accent-color:var(--violet);height:4px">
-            <input type="number" id="tr-size-input" value="25000" min="100" max="999999" step="100" oninput="torneoSizeSync('input')" style="width:72px;padding:3px 5px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;font-family:'JetBrains Mono',monospace;text-align:right">
-          </div>
-        </div>
-        <div style="width:80px">
-          <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">APALANC.</div>
-          <div style="display:flex;gap:2px">
-            <button class="lev-btn" data-lev="1" onclick="torneoSetLev(1)">1x</button>
-            <button class="lev-btn" data-lev="2" onclick="torneoSetLev(2)">2x</button>
-            <button class="lev-btn lev-active" data-lev="5" onclick="torneoSetLev(5)">5x</button>
-            <button class="lev-btn" data-lev="10" onclick="torneoSetLev(10)">10x</button>
-            <button class="lev-btn" data-lev="25" onclick="torneoSetLev(25)">25x</button>
-          </div>
+    <!-- Trade Panel (integrated — portfolio-style) -->
+    <div id="tr-trade-panel" style="padding:4px 12px 8px;flex:1;display:flex;flex-direction:column;gap:6px;overflow-y:auto">
+      <!-- ASSET SELECTOR -->
+      <div>
+        <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Instrumento</div>
+        <div style="display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px">
+          <div class="asset-pill active" data-tr-asset="BTC" onclick="trAssetSelect('BTC',this)">₿ BTC</div>
+          <div class="asset-pill" data-tr-asset="ETH" onclick="trAssetSelect('ETH',this)">Ξ ETH</div>
+          <div class="asset-pill" data-tr-asset="SOL" onclick="trAssetSelect('SOL',this)">◎ SOL</div>
+          <div class="asset-pill" data-tr-asset="BNB" onclick="trAssetSelect('BNB',this)">⬡ BNB</div>
+          <div class="asset-pill" data-tr-asset="XRP" onclick="trAssetSelect('XRP',this)">✕ XRP</div>
+          <div class="asset-pill" data-tr-asset="GOLD" onclick="trAssetSelect('GOLD',this)">🥇 GOLD</div>
+          <div class="asset-pill" data-tr-asset="SP500" onclick="trAssetSelect('SP500',this)">📈 SP500</div>
+          <div class="asset-pill" data-tr-asset="EURUSD" onclick="trAssetSelect('EURUSD',this)">€ EURUSD</div>
+          <div class="asset-pill" data-tr-asset="NASDAQ" onclick="trAssetSelect('NASDAQ',this)">💹 NASDAQ</div>
         </div>
       </div>
-      <!-- SL / TP row -->
-      <div style="display:flex;gap:6px">
-        <div style="flex:1">
-          <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">STOP LOSS</div>
-          <input type="text" id="tr-sl" placeholder="—" style="width:100%;padding:4px 6px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--red);font-size:11px;font-family:'JetBrains Mono',monospace">
+      <!-- LIVE PRICE CARD -->
+      <div id="tr-price-card" style="background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);padding:8px 10px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:9px;letter-spacing:1px;color:var(--text3);margin-bottom:2px" id="tr-asset-label">BTC/USD</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700" id="tr-live-price">—</div>
+          <div style="font-size:10px;font-weight:600;margin-top:1px" id="tr-live-change">—</div>
         </div>
-        <div style="flex:1">
-          <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;margin-bottom:2px">TAKE PROFIT</div>
-          <input type="text" id="tr-tp" placeholder="—" style="width:100%;padding:4px 6px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--green);font-size:11px;font-family:'JetBrains Mono',monospace">
+        <div style="text-align:right;font-size:10px;color:var(--text3)">
+          <div>Spread: <strong id="tr-spread" style="color:var(--text)">—</strong></div>
+          <div>24h High: <strong id="tr-24h-high" style="color:var(--green)">—</strong></div>
+          <div>24h Low: <strong id="tr-24h-low" style="color:var(--red)">—</strong></div>
         </div>
       </div>
-      <!-- Trailing stop row -->
-      <div style="display:flex;gap:6px;align-items:center;padding:1px 0">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px">↗ TRAILING</div>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
-          <input type="checkbox" id="tr-trailing" onchange="torneoTrailingToggle()" style="accent-color:var(--violet)">
-          <div style="position:relative;width:28px;height:14px">
-            <div id="tr-trailing-track" style="position:absolute;inset:0;border-radius:7px;background:var(--border);transition:background .2s"></div>
-            <div id="tr-trailing-thumb" style="position:absolute;top:1.5px;left:1.5px;width:11px;height:11px;border-radius:50%;background:#fff;transition:transform .2s"></div>
-          </div>
-        </label>
-        <div id="tr-trailing-opts" style="flex:1;display:none;align-items:center;gap:6px">
-          <input type="range" id="tr-trailing-dist" min="0.5" max="5" step="0.5" value="1.5" oninput="document.getElementById('tr-trailing-val').textContent=this.value+'%'" style="flex:1;height:3px;accent-color:var(--violet)">
-          <span id="tr-trailing-val" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--violet3);min-width:28px">1.5%</span>
+      <!-- TAMAÑO -->
+      <div>
+        <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Tamaño de posición</div>
+        <div style="display:flex;gap:5px;margin-bottom:4px">
+          <button class="btn btn-ghost btn-sm tr-sz-tab active" id="tr-sz-tab-usd" onclick="trSizeTab('usd',this)">$ USD</button>
+          <button class="btn btn-ghost btn-sm tr-sz-tab" id="tr-sz-tab-pct" onclick="trSizeTab('pct',this)">% Capital</button>
+          <button class="btn btn-ghost btn-sm tr-sz-tab" id="tr-sz-tab-units" onclick="trSizeTab('units',this)">Unidades</button>
         </div>
+        <div style="position:relative">
+          <input type="number" id="tr-size-input" placeholder="1000" min="1" style="width:100%;padding:8px 40px 8px 8px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:14px;font-family:'JetBrains Mono',monospace;outline:none" oninput="trCalcPreview()">
+          <span id="tr-size-unit" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text3);pointer-events:none">USD</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:4px">
+          <button onclick="trQuickSize(10)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">10%</button>
+          <button onclick="trQuickSize(25)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">25%</button>
+          <button onclick="trQuickSize(50)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">50%</button>
+          <button onclick="trQuickSize(75)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">75%</button>
+          <button onclick="trQuickSize(100)" style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">100%</button>
+        </div>
+      </div>
+      <!-- APALANCAMIENTO -->
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">
+          <span>Apalancamiento</span>
+          <span style="color:var(--gold);font-family:'JetBrains Mono',monospace" id="tr-lev-label">5×</span>
+        </div>
+        <input type="range" id="tr-leverage" min="1" max="25" step="1" value="5"
+          style="width:100%;accent-color:var(--violet);height:4px;cursor:pointer"
+          oninput="trSetLev(this.value)">
+        <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--text3);margin-top:2px">
+          <span>1×</span><span>5×</span><span>10×</span><span>15×</span><span>25×</span>
+        </div>
+      </div>
+      <!-- STOP LOSS -->
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)">Stop Loss</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <label style="display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text3);cursor:pointer">
+              <input type="checkbox" id="tr-sl-enabled" checked onchange="trToggleSL()" style="accent-color:var(--red)"> Activar
+            </label>
+            <select id="tr-sl-mode" onchange="trCalcPreview()" style="background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:2px 5px;color:var(--text3);font-size:9px;cursor:pointer;outline:none">
+              <option value="pct">%</option>
+              <option value="usd">$</option>
+              <option value="price">Precio</option>
+              <option value="pips">Pips</option>
+            </select>
+          </div>
+        </div>
+        <div style="position:relative">
+          <input type="number" id="tr-sl-val" value="2" step="0.1"
+            style="width:100%;padding:7px 40px 7px 8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:var(--r2);color:var(--red);font-size:13px;font-family:'JetBrains Mono',monospace;outline:none"
+            oninput="trCalcPreview()">
+          <span id="tr-sl-unit" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(248,113,113,.6);pointer-events:none">%</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:3px">
+          <button onclick="trSetSL(1)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">1%</button>
+          <button onclick="trSetSL(2)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">2%</button>
+          <button onclick="trSetSL(5)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">5%</button>
+          <button onclick="trSetSL(10)"  style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">10%</button>
+        </div>
+      </div>
+      <!-- TAKE PROFIT -->
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)">Take Profit</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <label style="display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text3);cursor:pointer">
+              <input type="checkbox" id="tr-tp-enabled" checked onchange="trToggleTP()" style="accent-color:var(--green)"> Activar
+            </label>
+            <select id="tr-tp-mode" onchange="trCalcPreview()" style="background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:2px 5px;color:var(--text3);font-size:9px;cursor:pointer;outline:none">
+              <option value="pct">%</option>
+              <option value="usd">$</option>
+              <option value="price">Precio</option>
+              <option value="rr">R:R</option>
+            </select>
+          </div>
+        </div>
+        <div style="position:relative">
+          <input type="number" id="tr-tp-val" value="5" step="0.1"
+            style="width:100%;padding:7px 40px 7px 8px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);border-radius:var(--r2);color:var(--green);font-size:13px;font-family:'JetBrains Mono',monospace;outline:none"
+            oninput="trCalcPreview()">
+          <span id="tr-tp-unit" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(74,222,128,.6);pointer-events:none">%</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:3px">
+          <button onclick="trSetTP(3)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(74,222,128,.2);background:transparent;color:rgba(74,222,128,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">3%</button>
+          <button onclick="trSetTP(5)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(74,222,128,.2);background:transparent;color:rgba(74,222,128,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">5%</button>
+          <button onclick="trSetTP(10)"  style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(74,222,128,.2);background:transparent;color:rgba(74,222,128,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">10%</button>
+          <button onclick="trSetTP(20)"  style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(74,222,128,.2);background:transparent;color:rgba(74,222,128,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">20%</button>
+        </div>
+      </div>
+      <!-- TRAILING STOP -->
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);padding:8px 10px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:11px;font-weight:600;margin-bottom:1px">Trailing Stop</div>
+            <div style="font-size:9px;color:var(--text3)">Sigue el precio automáticamente</div>
+          </div>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
+            <input type="checkbox" id="tr-trailing" style="accent-color:var(--violet)">
+            <div style="position:relative;width:34px;height:18px" onclick="document.getElementById('tr-trailing').click()">
+              <div id="tr-trailing-track" style="position:absolute;inset:0;border-radius:9px;background:var(--border);transition:background .2s"></div>
+              <div id="tr-trailing-thumb" style="position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s"></div>
+            </div>
+          </label>
+        </div>
+        <div id="tr-trailing-opts" style="display:none;margin-top:6px">
+          <div style="font-size:9px;color:var(--text3);margin-bottom:3px">Distancia trailing (%)</div>
+          <input type="range" id="tr-trailing-dist" min="0.5" max="5" step="0.5" value="1.5"
+            style="width:100%;accent-color:var(--violet)" oninput="document.getElementById('tr-trailing-val').textContent=this.value+'%'">
+          <div style="text-align:center;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--violet3)"><span id="tr-trailing-val">1.5%</span></div>
+        </div>
+      </div>
+      <!-- ORDER PREVIEW -->
+      <div id="tr-preview" style="background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);padding:10px;display:none">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">Vista previa</div>
+        <div id="tr-preview-content" style="display:flex;flex-direction:column;gap:4px;font-size:11px"></div>
+        <div style="margin-top:8px" id="tr-rr-visual"></div>
       </div>
       <!-- Direction buttons -->
-      <div style="display:flex;gap:6px;margin-top:2px">
-        <button class="action-btn action-long" onclick="torneoPlay('long')" style="padding:10px;font-size:13px">▲ LONG</button>
-        <button class="action-btn action-skip" onclick="torneoPlay('skip')" style="flex:.4;padding:10px;font-size:13px">⏭</button>
-        <button class="action-btn action-short" onclick="torneoPlay('short')" style="padding:10px;font-size:13px">▼ SHORT</button>
+      <div style="display:flex;gap:6px;margin-top:2px;padding-bottom:4px">
+        <button class="action-btn action-long" onclick="torneoPlay('long')" style="padding:10px;font-size:13px;flex:1">▲ LONG</button>
+        <button class="action-btn action-skip" onclick="torneoPlay('skip')" style="flex:.4;padding:10px;font-size:13px">⏭ SKIP</button>
+        <button class="action-btn action-short" onclick="torneoPlay('short')" style="padding:10px;font-size:13px;flex:1">▼ SHORT</button>
         <button onclick="toggleLeaderboard()" style="padding:4px 8px;background:rgba(168,160,200,.06);border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:11px;cursor:pointer">📊</button>
       </div>
     </div>
@@ -4021,14 +4119,35 @@ let torneoTimerInt=null;
 let torneoWaited=false;
 let torneoLev=5;
 let currentTorneo=null;
+let trLev=5;
+let trSizeMode='usd';
 let torneoState={
   portfolio:50000, peakPortfolio:50000, round:1, totalRounds:12,
-  trades:[], position:null, eliminated:false, drawdownPct:0, active:false
+  trades:[], position:null, eliminated:false, drawdownPct:0, active:false,
+  entryPrice:0, slPrice:null, tpPrice:null, trailingActive:false, trailingDist:1.5,
+  trailPeakPrice:0, asset:'BTC'
 };
 
-function torneoSetLev(lev){
-  torneoLev=lev;
-  document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===lev));
+
+
+let trSelectedAsset='BTC';
+
+function trUpdateLivePrice(){
+  const sym=trSelectedAsset;
+  const a=ASSETS[sym];
+  if(!a) return;
+  const base=STATE.prices[sym]||a.base;
+  const change=(Math.random()*4-2);
+  const high=base*(1+Math.random()*0.03);
+  const low=base*(1-Math.random()*0.03);
+  document.getElementById('tr-asset-label').textContent=sym+'/USD';
+  document.getElementById('tr-live-price').textContent=fmtPrice(base);
+  const chEl=document.getElementById('tr-live-change');
+  chEl.textContent=(change>=0?'+':'')+change.toFixed(2)+'%';
+  chEl.style.color=change>=0?'var(--green)':'var(--red)';
+  document.getElementById('tr-spread').textContent='$'+(Math.random()*0.5).toFixed(2);
+  document.getElementById('tr-24h-high').textContent=fmtPrice(high);
+  document.getElementById('tr-24h-low').textContent=fmtPrice(low);
 }
 
 function torneoUpdateHUD(){
@@ -4042,7 +4161,7 @@ function torneoUpdateHUD(){
   pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
   document.getElementById('tr-pnl-pct').textContent=(pnlPct>=0?'+':'')+pnlPct.toFixed(2)+'%';
   document.getElementById('tr-round').textContent=s.round+'/'+s.totalRounds;
-  document.getElementById('tr-size-label').textContent=document.getElementById('tr-size').value+'%';
+  trUpdateLivePrice();
   // Position bar
   const posBar=document.getElementById('tr-position-bar');
   if(s.position){
@@ -4066,6 +4185,8 @@ function torneoUpdateHUD(){
   } else {
     posBar.style.display='none';
   }
+  // Update position size label in preview
+  trCalcPreview();
 }
 
 const TORNADO_TIERS={
@@ -4158,11 +4279,14 @@ function toggleLeaderboard(){
 }
 function resumeTorneo(){
   if(!torneoState.active) return;
+  trSelectedAsset=torneoState.asset||'BTC';
+  trInitTradePanel();
   document.getElementById('torneo-lobby').style.display='none';
   const g=document.getElementById('torneo-game');
   g.style.display='flex';
   document.getElementById('tr-trade-panel').style.display='flex';
   document.getElementById('tr-waiting').style.display='none';
+  torneoUpdateHUD();
   if(window.showToast) showToast('▶ Torneo reanudado (ronda '+torneoState.round+'/'+torneoState.totalRounds+')');
 }
 
@@ -4173,14 +4297,17 @@ function startTorneo(){
   const tier=getTier(tierKey);
   // Snapshot Portfolio balance — torneo toma "prestado" del portfolio real
   const loanStart = PORT.balance;
+  trSelectedAsset='BTC';
+  trLev=tier.startingLev;
+  trSizeMode='usd';
   torneoState={portfolio:tier.startingEquity,peakPortfolio:tier.startingEquity,round:1,totalRounds:12,
     trades:[],position:null,eliminated:false,drawdownPct:0,
     stage:'qualifying',stageRound:1,totalStageRounds:12,
     tier:tierKey,format:fmtKey,knockoutOpponent:null,consistencyScores:[],
     currentNews:null,jackpotWon:false,
-    loanStart:loanStart,loanSize:tier.startingEquity,active:true};
-  torneoLev=tier.startingLev;
-  document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===torneoLev));
+    loanStart:loanStart,loanSize:tier.startingEquity,active:true,
+    entryPrice:0,slPrice:null,tpPrice:null,trailingActive:false,trailingDist:1.5,trailPeakPrice:0,asset:'BTC'};
+  trInitTradePanel();
   document.getElementById('torneo-lobby').style.display='none';
   const g=document.getElementById('torneo-game');
   g.style.display='flex';
@@ -4226,9 +4353,11 @@ async function joinTorneo(id){
       trades:[],position:null,eliminated:false,drawdownPct:0,
       stage:'qualifying',stageRound:1,totalStageRounds:12,
       tier:tierKey,format:fmtKey,knockoutOpponent:null,consistencyScores:[],
-      currentNews:null,jackpotWon:false,active:true};
-    torneoLev=tier.startingLev;
-    document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===torneoLev));
+      currentNews:null,jackpotWon:false,active:true,
+      entryPrice:0,slPrice:null,tpPrice:null,trailingActive:false,trailingDist:1.5,trailPeakPrice:0,asset:'BTC'};
+    trSelectedAsset='BTC';
+    trLev=tier.startingLev;
+    trInitTradePanel();
     document.getElementById('tr-tier-badge').style.display='flex';
     document.getElementById('tr-tier-badge').querySelector('.hud-val').textContent=tier.icon+' '+tier.label;
     document.getElementById('tr-format-badge').style.display='flex';
@@ -4293,8 +4422,8 @@ function torneoNextRound(){
   // Leaderboard
   if(!lbCompetitors.length&&s.round===1) generateCompetitors(5);
   renderLeaderboard();
-  // Generate candle with news impact
-  const sym=SV_ASSETS[Math.floor(Math.random()*SV_ASSETS.length)];
+  // Generate candle with selected asset
+  const sym=trSelectedAsset;
   const a=ASSETS[sym];
   const base=STATE.prices[sym]||a.base;
   const baseTrend=s.round>6?-1:(s.round>3?1:0);
@@ -4303,11 +4432,13 @@ function torneoNextRound(){
   const volMul=news.volMul||1;
   torneoCandles=genCandles(40,base,a.vol*1.2*volMul,trend);
   renderCandleChart('torneo-chart',torneoCandles);
+  s.asset=sym;
   document.getElementById('tr-asset-name').textContent=sym+'/USDT';
   document.getElementById('tr-current-price').textContent='$'+base.toFixed(base<1?4:2);
   document.getElementById('tr-stage-label').textContent=STAGE_LABELS[s.stage]||s.stage;
   document.getElementById('tr-stage-round').textContent='Ronda '+s.stageRound+'/'+totalStage;
   torneoUpdateHUD();
+  trCalcPreview();
   if(torneoTimerInt)clearInterval(torneoTimerInt);
   let t=25;document.getElementById('tr-timer').textContent=t;
   const trEl=document.getElementById('tr-timer');
@@ -4324,29 +4455,56 @@ function torneoCalcPnl(entryPrice, exitPrice, direction, sizePct, leverage){
   return { pnlPct:posPct*100, pnlUsd:torneoState.portfolio*posPct };
 }
 
+function trGetUsdSize(){
+  const s=torneoState;
+  const inp=parseFloat(document.getElementById('tr-size-input')?.value)||0;
+  if(trSizeMode==='usd') return inp;
+  if(trSizeMode==='pct') return s.portfolio*(inp/100);
+  if(trSizeMode==='units'){
+    const sym=trSelectedAsset;
+    const price=STATE.prices[sym]||ASSETS[sym]?.base||1;
+    return inp*price;
+  }
+  return inp;
+}
+
 function torneoPlay(direction){
   if(torneoWaited)return;
   torneoWaited=true;
   clearInterval(torneoTimerInt);
   const s=torneoState;
   if(s.eliminated){ torneoFinish(); return; }
-  const lastCandle=torneoCandles[torneoCandles.length-1];
-  const entryPrice=lastCandle.c;
-  const sym=document.getElementById('tr-asset-name').textContent.replace('/USDT','');
-  const sizePct=parseInt(document.getElementById('tr-size').value);
-  const lev=torneoLev;
-  // Parse SL/TP
-  const slRaw=document.getElementById('tr-sl').value.trim();
-  const tpRaw=document.getElementById('tr-tp').value.trim();
+  const firstCandle=torneoCandles[0];
+  if(!firstCandle){ torneoFinish(); return; }
+  const entryPrice=firstCandle.o;
+  const sym=trSelectedAsset;
+  const usdSize=trGetUsdSize();
+  const sizePct=usdSize>0&&s.portfolio>0?Math.min(100,(usdSize/s.portfolio)*100):0;
+  const lev=trLev;
+  // Calculate SL/TP prices from panel
   let slPrice=null, tpPrice=null;
-  if(slRaw){
-    if(slRaw.includes('%')) slPrice=entryPrice*(1+(direction==='long'?-1:1)*parseFloat(slRaw)/100);
-    else slPrice=parseFloat(slRaw);
+  const slEnabled=document.getElementById('tr-sl-enabled')?.checked;
+  const slMode=document.getElementById('tr-sl-mode')?.value||'pct';
+  const slVal=parseFloat(document.getElementById('tr-sl-val')?.value)||2;
+  const tpEnabled=document.getElementById('tr-tp-enabled')?.checked;
+  const tpMode=document.getElementById('tr-tp-mode')?.value||'pct';
+  const tpVal=parseFloat(document.getElementById('tr-tp-val')?.value)||5;
+  const notional=usdSize*lev;
+  const qty=notional/entryPrice;
+  if(slEnabled&&entryPrice>0){
+    if(slMode==='pct')   slPrice=direction==='long'?entryPrice*(1-slVal/100):entryPrice*(1+slVal/100);
+    if(slMode==='usd')   slPrice=direction==='long'?entryPrice-(slVal/qty):entryPrice+(slVal/qty);
+    if(slMode==='price') slPrice=slVal;
+    if(slMode==='pips')  slPrice=direction==='long'?entryPrice-slVal*0.0001:entryPrice+slVal*0.0001;
   }
-  if(tpRaw){
-    if(tpRaw.includes('%')) tpPrice=entryPrice*(1+(direction==='long'?1:-1)*parseFloat(tpRaw)/100);
-    else tpPrice=parseFloat(tpRaw);
+  if(tpEnabled&&entryPrice>0){
+    if(tpMode==='pct')   tpPrice=direction==='long'?entryPrice*(1+tpVal/100):entryPrice*(1-tpVal/100);
+    if(tpMode==='usd')   tpPrice=direction==='long'?entryPrice+(tpVal/qty):entryPrice-(tpVal/qty);
+    if(tpMode==='price') tpPrice=tpVal;
+    if(tpMode==='rr')    { const slU=Math.abs(entryPrice-(slPrice||entryPrice))*qty; tpPrice=direction==='long'?entryPrice+(slU*tpVal/qty):entryPrice-(slU*tpVal/qty); }
   }
+  const trailing=document.getElementById('tr-trailing')?.checked;
+  const trailingDist=parseFloat(document.getElementById('tr-trailing-dist')?.value)||1.5;
   // Skip
   if(direction==='skip'){
     s.position=null;
@@ -4358,28 +4516,39 @@ function torneoPlay(direction){
     setTimeout(()=>nextRound(),1200);
     return;
   }
-  // Simulate candle movement to exit
-  const exitCandle=torneoCandles[torneoCandles.length-1];
-  const high=exitCandle.h; const low=exitCandle.l; const close=exitCandle.c;
-  let exitPrice=close;
+  // Walk through candles to check SL/TP/trailing
+  let exitPrice=null;
   let exitReason='close';
-  // Check SL
-  if(slPrice){
-    if((direction==='long'&&low<=slPrice)||(direction==='short'&&high>=slPrice)){
-      exitPrice=slPrice; exitReason='sl';
+  let trailPeak=entryPrice;
+  for(let i=1;i<torneoCandles.length;i++){
+    const c=torneoCandles[i];
+    const hi=c.h, lo=c.l, cl=c.c;
+    // Trailing: update peak
+    if(trailing){
+      if(direction==='long'&&hi>trailPeak) trailPeak=hi;
+      if(direction==='short'&&lo<trailPeak) trailPeak=lo;
+      const trailTrigger=direction==='long'?trailPeak*(1-trailingDist/100):trailPeak*(1+trailingDist/100);
+      if((direction==='long'&&lo<=trailTrigger)||(direction==='short'&&hi>=trailTrigger)){
+        exitPrice=trailTrigger; exitReason='trailing'; break;
+      }
     }
-  }
-  // Check TP (unless SL already hit)
-  if(exitReason!=='sl'&&tpPrice){
-    if((direction==='long'&&high>=tpPrice)||(direction==='short'&&low<=tpPrice)){
-      exitPrice=tpPrice; exitReason='tp';
+    // SL check
+    if(slPrice&&((direction==='long'&&lo<=slPrice)||(direction==='short'&&hi>=slPrice))){
+      exitPrice=slPrice; exitReason='sl'; break;
     }
+    // TP check
+    if(tpPrice&&((direction==='long'&&hi>=tpPrice)||(direction==='short'&&lo<=tpPrice))){
+      exitPrice=tpPrice; exitReason='tp'; break;
+    }
+    exitPrice=cl;
   }
+  if(!exitPrice) exitPrice=torneoCandles[torneoCandles.length-1].c;
   const pnl=torneoCalcPnl(entryPrice,exitPrice,direction,sizePct,lev);
   s.portfolio+=pnl.pnlUsd;
   if(s.portfolio>s.peakPortfolio) s.peakPortfolio=s.portfolio;
   s.drawdownPct=((s.peakPortfolio-s.portfolio)/s.peakPortfolio)*100;
-  s.trades.push({asset:sym,entryPrice,exitPrice,direction,size:sizePct,leverage:lev,pnlUsd:pnl.pnlUsd,pnlPct:pnl.pnlPct,exitReason});
+  const usdLabel=usdSize>0?'$'+usdSize.toFixed(0):sizePct.toFixed(0)+'%';
+  s.trades.push({asset:sym,entryPrice,exitPrice,direction,size:sizePct,leverage:lev,pnlUsd:pnl.pnlUsd,pnlPct:pnl.pnlPct,exitReason,usdSize});
   s.position=null;
   // Format: consistency — track score
   if(s.format==='consistency') s.consistencyScores.push(pnl.pnlPct);
@@ -4391,28 +4560,19 @@ function torneoPlay(direction){
   updateCompetitors(pnl.pnlPct);
   renderLeaderboard();
   // Check elimination
-  if(s.portfolio<=0){
-    s.eliminated=true; s.portfolio=0;
-  }
-  // Format: survival — check drawdown elimination
-  if(s.format==='survival'&&s.drawdownPct>=50){
-    s.eliminated=true;
-  }
-  // Format: knockout — check if opponent won the round
+  if(s.portfolio<=0){ s.eliminated=true; s.portfolio=0; }
+  if(s.format==='survival'&&s.drawdownPct>=50) s.eliminated=true;
   if(s.format==='knockout'&&s.knockoutOpponent){
-    const playerRoundPnl=pnl.pnlPct||0;
-    const oppRoundPnl=s.knockoutOpponent.returnPct||0;
-    if(direction==='skip'||playerRoundPnl<=oppRoundPnl){
-      s.eliminated=true;
-    }
+    const oppR=s.knockoutOpponent.returnPct||0;
+    if(pnl.pnlPct<=oppR) s.eliminated=true;
   }
   // Show result
   document.getElementById('tr-trade-panel').style.display='none';
   document.getElementById('tr-waiting').style.display='flex';
   const emoji=pnl.pnlUsd>0?'✅':(pnl.pnlUsd<0?'❌':'➖');
-  const reasonLabel={sl:'Stop Loss',tp:'Take Profit',close:'Cierre'};
+  const reasonLabel={sl:'Stop Loss',tp:'Take Profit',close:'Cierre',trailing:'Trailing'};
   let resultText=(pnl.pnlUsd>=0?'+':'')+'$'+pnl.pnlUsd.toFixed(2)+' ('+(pnl.pnlPct>=0?'+':'')+pnl.pnlPct.toFixed(2)+'%)';
-  let resultDetail=`${direction==='long'?'▲ LONG':'▼ SHORT'} ${sym} ${sizePct}% ${lev}x · ${reasonLabel[exitReason]}`;
+  let resultDetail=`${direction==='long'?'▲ LONG':'▼ SHORT'} ${sym} ${usdLabel} ${lev}x · ${reasonLabel[exitReason]||'Cierre'}`;
   if(s.format==='knockout'&&s.knockoutOpponent){
     const oppPnl=s.knockoutOpponent.returnPct;
     resultText+=' vs AI '+(oppPnl>=0?'+':'')+oppPnl.toFixed(2)+'%';
@@ -4429,8 +4589,6 @@ function torneoPlay(direction){
 function nextRound(){
   document.getElementById('tr-trade-panel').style.display='flex';
   document.getElementById('tr-waiting').style.display='none';
-  document.getElementById('tr-sl').value='';
-  document.getElementById('tr-tp').value='';
   const s=torneoState;
   if(s.eliminated||(s.stage==='final'&&s.stageRound>=12)){
     torneoFinish();
@@ -4545,6 +4703,162 @@ function torneoFinish(){
     document.getElementById('torneo-lobby').style.display='';
     goScreen('s-torneos');
   });
+}
+
+// ============================================================
+// TORNEO — Integrated Trade Panel functions
+// ============================================================
+function trInitTradePanel(){
+  trSelectedAsset='BTC';
+  trLev=torneoLev||5;
+  trSizeMode='usd';
+  // Set leverage slider
+  const levSlider=document.getElementById('tr-leverage');
+  if(levSlider){ levSlider.value=trLev; document.getElementById('tr-lev-label').textContent=trLev+'×'; }
+  // Set default asset pill active
+  document.querySelectorAll('#tr-trade-panel .asset-pill').forEach(p=>p.classList.remove('active'));
+  const defPill=document.querySelector('#tr-trade-panel .asset-pill[data-tr-asset="BTC"]');
+  if(defPill) defPill.classList.add('active');
+  // Set default size mode
+  document.querySelectorAll('.tr-sz-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tr-sz-tab-usd')?.classList.add('active');
+  document.getElementById('tr-size-unit').textContent='USD';
+  // Default size input
+  const szInp=document.getElementById('tr-size-input');
+  if(szInp) szInp.value='';
+  // Reset trailing
+  document.getElementById('tr-trailing').checked=false;
+  document.getElementById('tr-trailing-track').style.background='var(--border)';
+  document.getElementById('tr-trailing-thumb').style.transform='';
+  document.getElementById('tr-trailing-opts').style.display='none';
+  // Preview
+  trCalcPreview();
+  // Wire trailing toggle
+  document.getElementById('tr-trailing').onchange=trToggleTrail;
+  // Wire SL/TP mode changes
+  document.addEventListener('change', function(e){
+    if(e.target.id==='tr-sl-mode'||e.target.id==='tr-tp-mode'){
+      const type=e.target.id.includes('sl')?'sl':'tp';
+      const map={pct:'%',usd:'$',price:'px',pips:'pip',rr:'R'};
+      const unit=document.getElementById('tr-'+type+'-unit');
+      if(unit) unit.textContent=map[e.target.value]||'%';
+    }
+  });
+}
+
+function trAssetSelect(sym, el){
+  trSelectedAsset=sym;
+  document.querySelectorAll('#tr-trade-panel .asset-pill').forEach(p=>p.classList.remove('active'));
+  if(el) el.classList.add('active');
+  trUpdateLivePrice();
+  trCalcPreview();
+}
+
+function trSizeTab(mode, btn){
+  trSizeMode=mode;
+  document.querySelectorAll('.tr-sz-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const unitEl=document.getElementById('tr-size-unit');
+  const inp=document.getElementById('tr-size-input');
+  if(mode==='usd')  { if(unitEl) unitEl.textContent='USD'; if(inp){ inp.placeholder='1000'; inp.value=''; } }
+  if(mode==='pct')  { if(unitEl) unitEl.textContent='%';   if(inp){ inp.placeholder='10';   inp.value=''; } }
+  if(mode==='units'){ if(unitEl) unitEl.textContent='uds'; if(inp){ inp.placeholder='0.01'; inp.value=''; } }
+  trCalcPreview();
+}
+
+function trQuickSize(pct){
+  trSizeMode='usd';
+  document.querySelectorAll('.tr-sz-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tr-sz-tab-usd')?.classList.add('active');
+  document.getElementById('tr-size-unit').textContent='USD';
+  const portVal=torneoState.portfolio;
+  document.getElementById('tr-size-input').value=Math.floor(portVal*pct/100);
+  trCalcPreview();
+}
+
+function trSetLev(v){
+  trLev=parseInt(v);
+  document.getElementById('tr-lev-label').textContent=trLev+'×';
+  trCalcPreview();
+}
+
+function trToggleSL(){ trCalcPreview(); }
+function trToggleTP(){ trCalcPreview(); }
+function trSetSL(v){ document.getElementById('tr-sl-val').value=v; trCalcPreview(); }
+function trSetTP(v){ document.getElementById('tr-tp-val').value=v; trCalcPreview(); }
+
+function trToggleTrail(){
+  const on=document.getElementById('tr-trailing').checked;
+  document.getElementById('tr-trailing-track').style.background=on?'var(--violet)':'var(--border)';
+  document.getElementById('tr-trailing-thumb').style.transform=on?'translateX(16px)':'';
+  document.getElementById('tr-trailing-opts').style.display=on?'block':'none';
+}
+
+function trCalcPreview(){
+  const a=ASSETS[trSelectedAsset];
+  if(!a) return;
+  const price=STATE.prices[trSelectedAsset]||a.base||1;
+  const portVal=torneoState.portfolio;
+  const sizeInp=parseFloat(document.getElementById('tr-size-input')?.value)||0;
+  const lev=trLev;
+  let usdSize=0;
+  if(trSizeMode==='usd')   usdSize=sizeInp;
+  if(trSizeMode==='pct')   usdSize=portVal*(sizeInp/100);
+  if(trSizeMode==='units') usdSize=sizeInp*price;
+  const sizePct=usdSize>0&&portVal>0?Math.min(100,(usdSize/portVal)*100):0;
+  const notional=usdSize*lev;
+  const margin=usdSize;
+  const qty=notional/price;
+  // SL calc
+  const slEnabled=document.getElementById('tr-sl-enabled')?.checked;
+  const slMode=document.getElementById('tr-sl-mode')?.value||'pct';
+  const slVal=parseFloat(document.getElementById('tr-sl-val')?.value)||2;
+  let slPrice=null, slUsd=null;
+  if(slEnabled&&price>0){
+    if(slMode==='pct')  { slPrice=price*(1-slVal/100); slUsd=notional*(slVal/100); }
+    if(slMode==='usd')  { slUsd=slVal; slPrice=price-(slVal/qty); }
+    if(slMode==='price'){ slPrice=slVal; slUsd=Math.abs(price-slVal)*qty; }
+    if(slMode==='pips') { slPrice=price-(slVal*0.0001); slUsd=slVal*0.0001*qty; }
+  }
+  // TP calc
+  const tpEnabled=document.getElementById('tr-tp-enabled')?.checked;
+  const tpMode=document.getElementById('tr-tp-mode')?.value||'pct';
+  const tpVal=parseFloat(document.getElementById('tr-tp-val')?.value)||5;
+  let tpPrice=null, tpUsd=null;
+  if(tpEnabled&&price>0){
+    if(tpMode==='pct')  { tpPrice=price*(1+tpVal/100); tpUsd=notional*(tpVal/100); }
+    if(tpMode==='usd')  { tpUsd=tpVal; tpPrice=price+(tpVal/qty); }
+    if(tpMode==='price'){ tpPrice=tpVal; tpUsd=Math.abs(tpVal-price)*qty; }
+    if(tpMode==='rr')   { if(slUsd){ tpUsd=slUsd*tpVal; tpPrice=price+(tpUsd/qty); } }
+  }
+  const rr=(slUsd&&tpUsd)?(tpUsd/slUsd):null;
+  const slUnit=document.getElementById('tr-sl-unit');
+  const tpUnit=document.getElementById('tr-tp-unit');
+  const slMap={pct:'%',usd:'$',price:'px',pips:'pip'}; const tpMap={pct:'%',usd:'$',price:'px',rr:'R'};
+  if(slUnit) slUnit.textContent=slMap[slMode]||'%';
+  if(tpUnit) tpUnit.textContent=tpMap[tpMode]||'%';
+  const prev=document.getElementById('tr-preview');
+  if(!usdSize||usdSize<=0||!portVal){ if(prev) prev.style.display='none'; return; }
+  if(prev) prev.style.display='';
+  const row=(lbl,val,col='')=>'<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(45,31,85,.3)"><span style="color:var(--text3)">'+lbl+'</span><strong style="font-family:\'JetBrains Mono\',monospace;'+(col?'color:'+col:'')+'">'+val+'</strong></div>';
+  const pC=document.getElementById('tr-preview-content');
+  if(pC) pC.innerHTML=
+    row('Tamaño',sizePct.toFixed(1)+'% · $'+usdSize.toFixed(0))+
+    row('Nocional ×'+lev,'$'+notional.toLocaleString('en-US',{maximumFractionDigits:0}),'var(--violet3)')+
+    row('Margen','$'+margin.toFixed(0))+
+    (slEnabled&&slPrice?row('Stop Loss',fmtPrice(slPrice)+' (−$'+(slUsd||0).toFixed(2)+')','var(--red)'):'')+
+    (tpEnabled&&tpPrice?row('Take Profit',fmtPrice(tpPrice)+' (+$'+(tpUsd||0).toFixed(2)+')','var(--green)'):'')+
+    (rr?row('R:R','1 : '+rr.toFixed(2),rr>=2?'var(--green)':rr>=1?'var(--gold)':'var(--red)'):'');
+  // R:R visual
+  const rrVis=document.getElementById('tr-rr-visual');
+  if(rrVis&&rr){
+    const pct=Math.min(100,(rr/3)*100);
+    const col=rr>=2?'var(--green)':rr>=1?'var(--gold)':'var(--red)';
+    rrVis.innerHTML='<div style="font-size:9px;color:var(--text3);margin-bottom:3px">Calidad del setup (R:R)</div>'
+      +'<div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">'
+      +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:3px;transition:width .4s"></div></div>'
+      +'<div style="font-size:9px;margin-top:2px;color:'+col+'">'+(rr>=2?'✓ Setup válido':rr>=1?'⚠ Setup marginal':'✗ Riesgo elevado')+' — R:R '+rr.toFixed(2)+'</div>';
+  }
 }
 
 // ==== Admin: Create Tournament ====
