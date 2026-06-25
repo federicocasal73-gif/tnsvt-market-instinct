@@ -1368,6 +1368,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
         </div>
       </div>
       <button class="btn btn-secondary btn-lg" style="width:100%;margin-bottom:4px" onclick="startTorneo()">🎮 Iniciar Práctica</button>
+      <button id="btn-resume-torneo" onclick="resumeTorneo()" style="display:none;width:100%;padding:9px;background:linear-gradient(135deg,var(--violet),var(--violet2));border:0;color:#fff;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:4px">▶ Reanudar Torneo</button>
       <div style="text-align:center;font-size:10px;color:var(--text3);margin-top:4px">Práctica libre · +200 XP base · No afecta tu wallet</div>
     </div>
   </div>
@@ -1479,27 +1480,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
           <span id="tr-trailing-val" style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--violet3);min-width:28px">1.5%</span>
         </div>
       </div>
-      <!-- Bounty row -->
-      <div style="display:flex;gap:6px;align-items:center;padding:1px 0">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;display:flex;align-items:center;gap:3px">
-          🎯 BOUNTY
-          <span style="font-size:7px;color:var(--text3);cursor:pointer;padding:1px 4px;border:1px solid var(--border);border-radius:6px" onclick="showToast('💰 Ganas el bounty si tu PnL en la ronda supera al del trader rival que elijas. El monto se suma directo a tu portfolio.')">?</span>
-        </div>
-        <select id="tr-bounty-target" style="flex:1;padding:2px 4px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:10px">
-          <option value="">Sin bounty</option>
-        </select>
-        <div style="display:flex;gap:2px">
-          <button class="bounty-amt" onclick="setBounty(5)" style="padding:2px 5px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:9px;cursor:pointer">$5</button>
-          <button class="bounty-amt" onclick="setBounty(25)" style="padding:2px 5px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:9px;cursor:pointer">$25</button>
-          <button class="bounty-amt" onclick="setBounty(100)" style="padding:2px 5px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-size:9px;cursor:pointer">$100</button>
-        </div>
-        <button onclick="toggleLeaderboard()" style="padding:2px 6px;background:rgba(168,160,200,.06);border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:9px;cursor:pointer">📊 LB</button>
-      </div>
       <!-- Direction buttons -->
       <div style="display:flex;gap:6px;margin-top:2px">
         <button class="action-btn action-long" onclick="torneoPlay('long')" style="padding:10px;font-size:13px">▲ LONG</button>
         <button class="action-btn action-skip" onclick="torneoPlay('skip')" style="flex:.4;padding:10px;font-size:13px">⏭</button>
         <button class="action-btn action-short" onclick="torneoPlay('short')" style="padding:10px;font-size:13px">▼ SHORT</button>
+        <button onclick="toggleLeaderboard()" style="padding:4px 8px;background:rgba(168,160,200,.06);border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:11px;cursor:pointer">📊</button>
       </div>
     </div>
     <!-- Leaderboard panel (hidden by default) -->
@@ -2915,7 +2901,7 @@ function goScreen(id){
   if(id==='s-arena') initArena();
   if(id==='s-fractal'){ document.getElementById('fractal-lobby').style.display='block'; document.getElementById('fractal-game').style.display='none'; }
   if(id==='s-glosario') initGlosario();
-  if(id==='s-torneos') { document.getElementById('torneo-lobby').style.display='';document.getElementById('torneo-game').style.display='none'; if(typeof loadActiveTorneos==='function') loadActiveTorneos(); const abtn=document.getElementById('admin-torneo-btn'); if(abtn) abtn.style.display=(TNSVT_CONFIG.enabled&&TNSVT_CONFIG.adminPassword)?'flex':'none'; }
+  if(id==='s-torneos') { document.getElementById('torneo-lobby').style.display='';document.getElementById('torneo-game').style.display='none'; if(typeof loadActiveTorneos==='function') loadActiveTorneos(); const abtn=document.getElementById('admin-torneo-btn'); if(abtn) abtn.style.display=(TNSVT_CONFIG.enabled&&TNSVT_CONFIG.adminPassword)?'flex':'none'; const rbtn=document.getElementById('btn-resume-torneo'); if(rbtn) rbtn.style.display=torneoState.active?'block':'none'; }
 }
 
 // VIP-gated wrapper. Use for screens that require VIP.
@@ -4037,7 +4023,7 @@ let torneoLev=5;
 let currentTorneo=null;
 let torneoState={
   portfolio:50000, peakPortfolio:50000, round:1, totalRounds:12,
-  trades:[], position:null, eliminated:false, drawdownPct:0
+  trades:[], position:null, eliminated:false, drawdownPct:0, active:false
 };
 
 function torneoSetLev(lev){
@@ -4170,20 +4156,14 @@ function toggleLeaderboard(){
   const el=document.getElementById('tr-leaderboard');
   if(el) el.style.display=el.style.display==='none'?'block':'none';
 }
-function populateBountyTargets(){
-  const sel=document.getElementById('tr-bounty-target');if(!sel)return;
-  const current=sel.value;
-  sel.innerHTML='<option value="">Sin bounty</option>'+lbCompetitors.map(c=>'<option value="'+c.name+'">'+c.name+' ('+(c.pnlPct>=0?'+':'')+c.pnlPct.toFixed(1)+'%)</option>').join('');
-  if(current) sel.value=current;
-}
-function setBounty(amount){
-  const sel=document.getElementById('tr-bounty-target');if(!sel)return;
-  const target=sel.value;
-  if(!target){if(window.showToast) showToast('🎯 Seleccioná un target primero');return;}
-  torneoState.bountyTarget=target;
-  torneoState.bountyAmount=amount;
-  if(window.showToast) showToast('🎯 Bounty $'+amount+' en '+target);
-  document.querySelectorAll('.bounty-amt').forEach(b=>b.style.borderColor=b.textContent==='$'+amount?'var(--gold)':'var(--border)');
+function resumeTorneo(){
+  if(!torneoState.active) return;
+  document.getElementById('torneo-lobby').style.display='none';
+  const g=document.getElementById('torneo-game');
+  g.style.display='flex';
+  document.getElementById('tr-trade-panel').style.display='flex';
+  document.getElementById('tr-waiting').style.display='none';
+  if(window.showToast) showToast('▶ Torneo reanudado (ronda '+torneoState.round+'/'+torneoState.totalRounds+')');
 }
 
 function startTorneo(){
@@ -4197,8 +4177,8 @@ function startTorneo(){
     trades:[],position:null,eliminated:false,drawdownPct:0,
     stage:'qualifying',stageRound:1,totalStageRounds:12,
     tier:tierKey,format:fmtKey,knockoutOpponent:null,consistencyScores:[],
-    currentNews:null,bountyTarget:null,bountyAmount:0,jackpotWon:false,
-    loanStart:loanStart,loanSize:tier.startingEquity};
+    currentNews:null,jackpotWon:false,
+    loanStart:loanStart,loanSize:tier.startingEquity,active:true};
   torneoLev=tier.startingLev;
   document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===torneoLev));
   document.getElementById('torneo-lobby').style.display='none';
@@ -4246,7 +4226,7 @@ async function joinTorneo(id){
       trades:[],position:null,eliminated:false,drawdownPct:0,
       stage:'qualifying',stageRound:1,totalStageRounds:12,
       tier:tierKey,format:fmtKey,knockoutOpponent:null,consistencyScores:[],
-      currentNews:null,bountyTarget:null,bountyAmount:0,jackpotWon:false};
+      currentNews:null,jackpotWon:false,active:true};
     torneoLev=tier.startingLev;
     document.querySelectorAll('.lev-btn').forEach(b=>b.classList.toggle('lev-active',parseInt(b.dataset.lev)===torneoLev));
     document.getElementById('tr-tier-badge').style.display='flex';
@@ -4313,8 +4293,6 @@ function torneoNextRound(){
   // Leaderboard
   if(!lbCompetitors.length&&s.round===1) generateCompetitors(5);
   renderLeaderboard();
-  // Populate bounty dropdown
-  populateBountyTargets();
   // Generate candle with news impact
   const sym=SV_ASSETS[Math.floor(Math.random()*SV_ASSETS.length)];
   const a=ASSETS[sym];
@@ -4412,15 +4390,6 @@ function torneoPlay(direction){
   // Update leaderboard competitors
   updateCompetitors(pnl.pnlPct);
   renderLeaderboard();
-  // Bounty check — if player outperformed bounty target this round
-  if(s.bountyTarget&&s.bountyAmount>0){
-    const target=lbCompetitors.find(c=>c.name===s.bountyTarget);
-    if(target&&pnl.pnlPct>target.pnlPct){
-      if(window.showToast) showToast('🎯 Bounty cobrado! +$'+s.bountyAmount+' por superar a '+s.bountyTarget);
-      s.portfolio+=s.bountyAmount;
-      s.bountyAmount=0;s.bountyTarget=null;
-    }
-  }
   // Check elimination
   if(s.portfolio<=0){
     s.eliminated=true; s.portfolio=0;
@@ -4526,6 +4495,7 @@ function torneoFinish(){
     .then(d=>{if(window.showToast) showToast('📊 PnL: '+(parseFloat(d.pnl_pct)>=0?'+':'')+parseFloat(d.pnl_pct).toFixed(2)+'% ($'+d.pnl_usd+')');})
     .catch(err=>{if(window.showToast) showToast('⚠ Equity update: '+(err.error||err.message||'error'));});
   }else{currentTorneo=null;}
+  s.active=false;
   // Jackpot check
   let jackpotWon=false;let jackpotAmount=0;
   if(effPnlPct>=JACKPOT_WIN_PNL&&globalJackpot>0){
