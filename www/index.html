@@ -1052,6 +1052,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <div class="asset-pill active" onclick="selectAsset('BTC',this)">₿ BTC</div>
     <div class="asset-pill" onclick="selectAsset('ETH',this)">Ξ ETH</div>
     <div class="asset-pill" onclick="selectAsset('SOL',this)">◎ SOL</div>
+    <div class="asset-pill" onclick="selectAsset('AMD',this)">🔲 AMD</div>
+    <div class="asset-pill" onclick="selectAsset('MSFT',this)">⊞ MSFT</div>
+    <div class="asset-pill" onclick="selectAsset('NVDA',this)">🟩 NVDA</div>
+    <div class="asset-pill" onclick="selectAsset('AAPL',this)">🍎 AAPL</div>
+    <div class="asset-pill" onclick="selectAsset('TSLA',this)">⚡ TSLA</div>
     <div class="asset-pill" onclick="selectAsset('SP500',this)">📈 S&P500</div>
     <div class="asset-pill" onclick="selectAsset('EURUSD',this)">€ EUR/USD</div>
     <div class="asset-pill" onclick="selectAsset('GOLD',this)">🥇 GOLD</div>
@@ -1440,6 +1445,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
           <div class="asset-pill" data-tr-asset="SOL" onclick="trAssetSelect('SOL',this)">◎ SOL</div>
           <div class="asset-pill" data-tr-asset="BNB" onclick="trAssetSelect('BNB',this)">⬡ BNB</div>
           <div class="asset-pill" data-tr-asset="XRP" onclick="trAssetSelect('XRP',this)">✕ XRP</div>
+          <div class="asset-pill" data-tr-asset="AMD" onclick="trAssetSelect('AMD',this)">🔲 AMD</div>
+          <div class="asset-pill" data-tr-asset="MSFT" onclick="trAssetSelect('MSFT',this)">⊞ MSFT</div>
+          <div class="asset-pill" data-tr-asset="NVDA" onclick="trAssetSelect('NVDA',this)">🟩 NVDA</div>
+          <div class="asset-pill" data-tr-asset="AAPL" onclick="trAssetSelect('AAPL',this)">🍎 AAPL</div>
+          <div class="asset-pill" data-tr-asset="TSLA" onclick="trAssetSelect('TSLA',this)">⚡ TSLA</div>
+          <div class="asset-pill" data-tr-asset="GOOGL" onclick="trAssetSelect('GOOGL',this)">🔵 GOOGL</div>
+          <div class="asset-pill" data-tr-asset="AMZN" onclick="trAssetSelect('AMZN',this)">📦 AMZN</div>
+          <div class="asset-pill" data-tr-asset="META" onclick="trAssetSelect('META',this)">👤 META</div>
           <div class="asset-pill" data-tr-asset="GOLD" onclick="trAssetSelect('GOLD',this)">🥇 GOLD</div>
           <div class="asset-pill" data-tr-asset="SP500" onclick="trAssetSelect('SP500',this)">📈 SP500</div>
           <div class="asset-pill" data-tr-asset="EURUSD" onclick="trAssetSelect('EURUSD',this)">€ EURUSD</div>
@@ -2414,11 +2427,17 @@ const ASSETS = {
   SOL:   { sym:'SOL',    name:'Solana',       emoji:'◎',  vol:0.04,  base:180    },
   BNB:   { sym:'BNB',    name:'BNB',          emoji:'⬡',  vol:0.022, base:620    },
   XRP:   { sym:'XRP',    name:'XRP',          emoji:'✕',  vol:0.035, base:0.55   },
+  AMD:   { sym:'AMD',    name:'AMD',          emoji:'🔲', vol:0.02,  base:160    },
+  MSFT:  { sym:'MSFT',   name:'Microsoft',    emoji:'⊞',  vol:0.015, base:490    },
+  NVDA:  { sym:'NVDA',   name:'NVIDIA',       emoji:'🟩', vol:0.025, base:130    },
+  AAPL:  { sym:'AAPL',   name:'Apple',        emoji:'🍎', vol:0.016, base:230    },
+  TSLA:  { sym:'TSLA',   name:'Tesla',        emoji:'⚡', vol:0.03,  base:250    },
+  GOOGL: { sym:'GOOGL',  name:'Alphabet',     emoji:'🔵', vol:0.014, base:185    },
+  AMZN:  { sym:'AMZN',   name:'Amazon',       emoji:'📦', vol:0.017, base:220    },
+  META:  { sym:'META',   name:'Meta',         emoji:'👤', vol:0.018, base:550    },
   SP500: { sym:'SP500',  name:'S&P 500',      emoji:'📈', vol:0.008, base:5300   },
-  NAS100:{ sym:'NAS100', name:'Nasdaq 100',   emoji:'💹', vol:0.012, base:18800  },
   EURUSD:{ sym:'EURUSD', name:'EUR/USD',      emoji:'€',  vol:0.006, base:1.085  },
   GOLD:  { sym:'GOLD',   name:'Gold',         emoji:'🥇', vol:0.009, base:2385   },
-  DXY:   { sym:'DXY',    name:'DXY Index',    emoji:'💵', vol:0.005, base:104.5  },
   NASDAQ:{ sym:'NASDAQ', name:'Nasdaq',       emoji:'💹', vol:0.012, base:18500  },
   WTI:   { sym:'WTI',    name:'Petróleo WTI', emoji:'🛢', vol:0.018, base:82     },
 };
