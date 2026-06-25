@@ -1212,6 +1212,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
     </div>
   </div>
 
+  <!-- PHASE 6: COVERFLOW HERO (3D mode only) -->
+  <div id="coverflow-mount"></div>
+
   <!-- MISIONES RÁPIDAS -->
   <div class="sec-hdr"><span class="sec-title" data-i18n="home.missions.title">Misiones de Hoy</span><span class="sec-link" onclick="goScreen('s-misiones')" data-i18n="home.missions.all">Ver todas →</span></div>
   <div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:6px">
@@ -1407,9 +1410,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
   </div>
 
   <div class="action-row" style="padding:10px 12px">
-    <button class="action-btn action-long" onclick="classicPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="action-btn action-long pro3d-trade-btn" onclick="classicPlay('long')" data-i18n="btn.long">▲ LONG</button>
     <button class="action-btn action-skip" onclick="classicPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-    <button class="action-btn action-short" onclick="classicPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+    <button class="action-btn action-short pro3d-trade-btn" onclick="classicPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 </div>
 
@@ -1461,9 +1464,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
   <div style="padding:4px 16px 8px;background:var(--panel2);margin:0 16px;border-radius:var(--r2);font-size:12px;color:var(--text3);border:1px solid var(--border)" id="sv-hint"></div>
 
   <div class="action-row">
-    <button class="action-btn action-long" onclick="survivalPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="action-btn action-long pro3d-trade-btn" onclick="survivalPlay('long')" data-i18n="btn.long">▲ LONG</button>
     <button class="action-btn action-skip" onclick="survivalPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-    <button class="action-btn action-short" onclick="survivalPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+    <button class="action-btn action-short pro3d-trade-btn" onclick="survivalPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 </div>
 
@@ -1501,9 +1504,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
   </div>
 
   <div class="action-row" id="dc-action-row">
-    <button class="action-btn action-long" onclick="dailyPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="action-btn action-long pro3d-trade-btn" onclick="dailyPlay('long')" data-i18n="btn.long">▲ LONG</button>
     <button class="action-btn action-skip" onclick="dailyPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-    <button class="action-btn action-short" onclick="dailyPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+    <button class="action-btn action-short pro3d-trade-btn" onclick="dailyPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 
   <!-- RANKING DAILY -->
@@ -1565,9 +1568,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
       </div>
     </div>
     <div class="action-row" id="ar-actions">
-      <button class="action-btn action-long" onclick="arenaPlay('long')" data-i18n="btn.long">▲ LONG</button>
+      <button class="action-btn action-long pro3d-trade-btn" onclick="arenaPlay('long')" data-i18n="btn.long">▲ LONG</button>
       <button class="action-btn action-skip" onclick="arenaPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-      <button class="action-btn action-short" onclick="arenaPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+      <button class="action-btn action-short pro3d-trade-btn" onclick="arenaPlay('short')" data-i18n="btn.short">▼ SHORT</button>
     </div>
   </div>
 </div>
@@ -1612,9 +1615,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
       </div>
     </div>
     <div class="action-row" id="hg-actions">
-      <button class="action-btn action-long" onclick="histPlay('long')" data-i18n="btn.long">▲ LONG</button>
+      <button class="action-btn action-long pro3d-trade-btn" onclick="histPlay('long')" data-i18n="btn.long">▲ LONG</button>
       <button class="action-btn action-skip" onclick="histPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-      <button class="action-btn action-short" onclick="histPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+      <button class="action-btn action-short pro3d-trade-btn" onclick="histPlay('short')" data-i18n="btn.short">▼ SHORT</button>
     </div>
     <div id="hg-lesson" style="display:none;margin:0 16px;padding:16px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r)"></div>
   </div>
@@ -1902,9 +1905,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
       </div>
       <!-- Direction buttons -->
       <div style="display:flex;gap:6px;margin-top:2px;padding-bottom:4px">
-        <button class="action-btn action-long" onclick="torneoPlay('long')" style="padding:10px;font-size:13px;flex:1">▲ LONG</button>
+        <button class="action-btn action-long pro3d-trade-btn" onclick="torneoPlay('long')" style="padding:10px;font-size:13px;flex:1">▲ LONG</button>
         <button class="action-btn action-skip" onclick="torneoPlay('skip')" style="flex:.4;padding:10px;font-size:13px">⏭ SKIP</button>
-        <button class="action-btn action-short" onclick="torneoPlay('short')" style="padding:10px;font-size:13px;flex:1">▼ SHORT</button>
+        <button class="action-btn action-short pro3d-trade-btn" onclick="torneoPlay('short')" style="padding:10px;font-size:13px;flex:1">▼ SHORT</button>
         <button onclick="toggleLeaderboard()" style="padding:4px 8px;background:rgba(168,160,200,.06);border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:11px;cursor:pointer">📊</button>
       </div>
     </div>
@@ -3335,6 +3338,10 @@ function goScreen(id){
   if(id==='s-portfolio') initPortfolio();
   // Phase 6: re-tag any newly-rendered cards as pro3d
   setTimeout(applyPro3DClass, 50);
+  // Phase 6 Feature 5: setup coverflow en lobby
+  if(id === 's-inicio'){
+    setTimeout(setupCoverflow, 80);
+  }
   if(id==='s-daily') initDaily();
   if(id==='s-arena') initArena();
   if(id==='s-fractal'){ document.getElementById('fractal-lobby').style.display='block'; document.getElementById('fractal-game').style.display='none'; }
@@ -11113,12 +11120,15 @@ function togglePro3D(){
   }
   if(SFX.modeToggle) SFX.modeToggle();
   if(HAPTICS.tap) HAPTICS.tap();
+  // Phase 6 Feature 5: refresh coverflow al togglear modo
+  setTimeout(setupCoverflow, 60);
 }
 function resetPro3DParallax(){
   document.querySelectorAll('.pro3d-card').forEach(c=>{
     c.style.setProperty('--rx','0deg');
     c.style.setProperty('--ry','0deg');
     c.style.setProperty('--tz','0px');
+    c.style.setProperty('--dof-blur','0px');
   });
 }
 
@@ -11239,9 +11249,94 @@ function toggleMusic(){
     card.style.setProperty('--rx', rx + 'deg');
     card.style.setProperty('--ry', ry + 'deg');
     card.style.setProperty('--tz', '8px');
+    // Phase 6 Feature 6: lighting — actualiza light-x/y basado en mouse
+    card.style.setProperty('--light-x', (x * 100).toFixed(1) + '%');
+    card.style.setProperty('--light-y', (y * 100).toFixed(1) + '%');
   }, {passive:true});
-  document.addEventListener('mouseleave', resetPro3DParallax);
+  document.addEventListener('mouseleave', ()=>{
+    resetPro3DParallax();
+    // Reset light vars too
+    document.querySelectorAll('.pro3d-lit').forEach(c=>{
+      c.style.setProperty('--light-x','50%');
+      c.style.setProperty('--light-y','50%');
+    });
+  });
 })();
+
+// ============================================================
+// PHASE 6 EXPANDED: COVERFLOW + LIGHTING
+// ============================================================
+
+// ── Feature 5: Coverflow Hero Cards ────────────────────────────
+// Top 3 main modes del lobby en efecto coverflow 3D
+const COVERFLOW_MODES = [
+  { id:'s-classic',   action:'startClassic',  emoji:'📊', title:'Clásico',     subtitle:'Trading puro',     hint:'Tocá para jugar' },
+  { id:'s-survival',  action:'startSurvival', emoji:'⚔️', title:'Supervivencia', subtitle:'Sin vidas extra',  hint:'Tocá para jugar' },
+  { id:'s-portfolio', action:"goScreen('s-portfolio')", emoji:'💼', title:'Portfolio', subtitle:'Sandbox $50K', hint:'Tocá para abrir' },
+];
+
+let _coverflowIndex = 1; // index 1 = center (Classic is center)
+let _coverflowTouchStartX = 0;
+
+function setupCoverflow(){
+  const mount = document.getElementById('coverflow-mount');
+  if(!mount) return;
+  // Solo en modo pro3d
+  if(!isPro3D()){
+    mount.innerHTML = '';
+    return;
+  }
+  // Render coverflow cards
+  const html = `
+    <div class="coverflow-container" id="coverflow-container">
+      ${COVERFLOW_MODES.map((m, i)=>`
+        <div class="coverflow-card" data-coverflow-pos="${i - _coverflowIndex}" data-mode="${m.id}" data-action="${m.action}">
+          <div class="cf-emoji">${m.emoji}</div>
+          <div class="cf-title">${m.title}</div>
+          <div class="cf-subtitle">${m.subtitle}</div>
+          <div class="cf-action">${m.hint}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="coverflow-hint">‹ Tocá las cards laterales ›</div>
+  `;
+  mount.innerHTML = html;
+  const cards = mount.querySelectorAll('.coverflow-card');
+  cards.forEach(card=>{
+    card.onclick = ()=>{
+      const pos = parseInt(card.dataset.coverflowPos);
+      if(pos === 0){
+        // Center card → ejecutar acción
+        const action = card.dataset.action;
+        try { eval(action + '()'); } catch(e){}
+        if(SFX.tap) SFX.tap();
+        if(HAPTICS.success) HAPTICS.success();
+      } else {
+        // Side card → rotar al centro
+        const dir = pos < 0 ? -1 : 1;
+        _coverflowIndex = Math.max(0, Math.min(COVERFLOW_MODES.length-1, _coverflowIndex + dir));
+        setupCoverflow();
+        if(SFX.tap) SFX.tap();
+        if(HAPTICS.tap) HAPTICS.tap();
+      }
+    };
+  });
+  // Swipe gesture
+  const container = mount.querySelector('#coverflow-container');
+  if(container && !window.matchMedia('(pointer: coarse)').matches){
+    container.addEventListener('touchstart', (e)=>{
+      _coverflowTouchStartX = e.touches[0].clientX;
+    }, {passive:true});
+    container.addEventListener('touchend', (e)=>{
+      const dx = (e.changedTouches[0].clientX - _coverflowTouchStartX);
+      if(Math.abs(dx) > 30){
+        const dir = dx > 0 ? -1 : 1;
+        _coverflowIndex = Math.max(0, Math.min(COVERFLOW_MODES.length-1, _coverflowIndex + dir));
+        setupCoverflow();
+      }
+    }, {passive:true});
+  }
+}
 
 // ── Auto-tag main cards as pro3d-card + glass ─────────────────
 function applyPro3DClass(){
@@ -11252,6 +11347,8 @@ function applyPro3DClass(){
   ];
   document.querySelectorAll(selectors.join(',')).forEach(el=>{
     if(!el.classList.contains('pro3d-card')) el.classList.add('pro3d-card');
+    // Phase 6 Feature 6: add lighting class
+    if(!el.classList.contains('pro3d-lit')) el.classList.add('pro3d-lit');
   });
 }
 
@@ -11261,9 +11358,18 @@ function applyGlassClasses(){
   document.querySelectorAll('.stat-box').forEach(el=>el.classList.add('glass'));
   // Position card in portfolio
   const portPriceCard = document.getElementById('port-price-card');
-  if(portPriceCard) portPriceCard.classList.add('glass');
+  if(portPriceCard){
+    portPriceCard.classList.add('glass');
+    // Phase 6 Feature 4: animated gradient on portfolio price card
+    portPriceCard.classList.add('glass-animated');
+  }
   const trPriceCard = document.getElementById('tr-price-card');
-  if(trPriceCard) trPriceCard.classList.add('glass');
+  if(trPriceCard){
+    trPriceCard.classList.add('glass');
+    trPriceCard.classList.add('glass-animated');
+  }
+  // Lobby header cards
+  document.querySelectorAll('.glass-strong-target').forEach(el=>el.classList.add('glass','glass-animated'));
 }
 
 // ── Card parallax en scroll (lobby) ───────────────────────────
@@ -11285,6 +11391,10 @@ function updateParallax(){
       const ry = dist * 6;
       c.style.setProperty('--tz', tz.toFixed(1) + 'px');
       c.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      // Phase 6 Feature 3: DOF blur — más blur cuanto más atrás (tz negativo)
+      // tz=-24 → 4px blur, tz=24 → 0px blur
+      const blur = Math.max(0, Math.min(4, -tz / 6));
+      c.style.setProperty('--dof-blur', blur.toFixed(1) + 'px');
     }
   });
 }
