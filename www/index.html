@@ -2037,8 +2037,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
         <div class="asset-pill" onclick="portSelectAsset('SOL',this)">◎ SOL</div>
         <div class="asset-pill" onclick="portSelectAsset('BNB',this)">⬡ BNB</div>
         <div class="asset-pill" onclick="portSelectAsset('XRP',this)">✕ XRP</div>
+        <div class="asset-pill" onclick="portSelectAsset('AMD',this)">🔲 AMD</div>
+        <div class="asset-pill" onclick="portSelectAsset('MSFT',this)">⊞ MSFT</div>
+        <div class="asset-pill" onclick="portSelectAsset('NVDA',this)">🟩 NVDA</div>
+        <div class="asset-pill" onclick="portSelectAsset('AAPL',this)">🍎 AAPL</div>
+        <div class="asset-pill" onclick="portSelectAsset('TSLA',this)">⚡ TSLA</div>
+        <div class="asset-pill" onclick="portSelectAsset('GOOGL',this)">🔵 GOOGL</div>
+        <div class="asset-pill" onclick="portSelectAsset('AMZN',this)">📦 AMZN</div>
+        <div class="asset-pill" onclick="portSelectAsset('META',this)">👤 META</div>
         <div class="asset-pill" onclick="portSelectAsset('GOLD',this)">🥇 GOLD</div>
         <div class="asset-pill" onclick="portSelectAsset('SP500',this)">📈 SP500</div>
+        <div class="asset-pill" onclick="portSelectAsset('NASDAQ',this)">💹 NASDAQ</div>
+        <div class="asset-pill" onclick="portSelectAsset('WTI',this)">🛢 WTI</div>
       </div>
     </div>
 
@@ -7913,13 +7923,23 @@ try {
 } catch(e){}
 
 const PORT_ASSETS = {
-  BTC:  { sym:'BTC',  label:'BTC/USD',  lotSize:1,    prec:2, spread:15,   vol:0.025 },
-  ETH:  { sym:'ETH',  label:'ETH/USD',  lotSize:1,    prec:2, spread:0.8,  vol:0.028 },
-  SOL:  { sym:'SOL',  label:'SOL/USD',  lotSize:1,    prec:3, spread:0.05, vol:0.035 },
-  BNB:  { sym:'BNB',  label:'BNB/USD',  lotSize:1,    prec:2, spread:0.2,  vol:0.022 },
-  XRP:  { sym:'XRP',  label:'XRP/USD',  lotSize:1,    prec:5, spread:0.0002,vol:0.04 },
-  GOLD: { sym:'GOLD', label:'XAU/USD',  lotSize:1,    prec:2, spread:0.3,  vol:0.009 },
-  SP500:{ sym:'SP500',label:'SP500',    lotSize:1,    prec:1, spread:0.5,  vol:0.008 },
+  BTC:  { sym:'BTC',  label:'BTC/USD',  lotSize:1,   prec:2, spread:15,    vol:0.025 },
+  ETH:  { sym:'ETH',  label:'ETH/USD',  lotSize:1,   prec:2, spread:0.8,   vol:0.028 },
+  SOL:  { sym:'SOL',  label:'SOL/USD',  lotSize:1,   prec:3, spread:0.05,  vol:0.035 },
+  BNB:  { sym:'BNB',  label:'BNB/USD',  lotSize:1,   prec:2, spread:0.2,   vol:0.022 },
+  XRP:  { sym:'XRP',  label:'XRP/USD',  lotSize:1,   prec:5, spread:0.0002,vol:0.04  },
+  AMD:  { sym:'AMD',  label:'AMD/USD',  lotSize:1,   prec:2, spread:0.25,  vol:0.022 },
+  MSFT: { sym:'MSFT', label:'MSFT/USD', lotSize:1,   prec:2, spread:0.30,  vol:0.015 },
+  NVDA: { sym:'NVDA', label:'NVDA/USD', lotSize:1,   prec:2, spread:0.35,  vol:0.025 },
+  AAPL: { sym:'AAPL', label:'AAPL/USD', lotSize:1,   prec:2, spread:0.20,  vol:0.016 },
+  TSLA: { sym:'TSLA', label:'TSLA/USD', lotSize:1,   prec:2, spread:0.40,  vol:0.030 },
+  GOOGL:{ sym:'GOOGL',label:'GOOGL/USD',lotSize:1,  prec:2, spread:0.25,  vol:0.014 },
+  AMZN: { sym:'AMZN', label:'AMZN/USD', lotSize:1,   prec:2, spread:0.30,  vol:0.017 },
+  META: { sym:'META', label:'META/USD', lotSize:1,   prec:2, spread:0.35,  vol:0.018 },
+  GOLD: { sym:'GOLD', label:'XAU/USD',  lotSize:1,   prec:2, spread:0.3,   vol:0.009 },
+  SP500:{ sym:'SP500',label:'SP500',    lotSize:1,   prec:1, spread:0.5,   vol:0.008 },
+  NASDAQ:{sym:'NASDAQ',label:'NASDAQ',  lotSize:1,  prec:1, spread:0.6,   vol:0.012 },
+  WTI:  { sym:'WTI',  label:'WTI/USD',  lotSize:100,prec:2, spread:0.05,  vol:0.018 },
 };
 
 let portTickInterval   = null;
