@@ -8710,8 +8710,8 @@ const TNSVT_CONFIG_KEY = 'tnsvt_config_v1';
 const TNSVT_CONFIG = (function(){
   try {
     const raw = localStorage.getItem(TNSVT_CONFIG_KEY);
-    return raw ? JSON.parse(raw) : { serverUrl:'', code:'', adminPassword:'', enabled:false, lastSync:0, lastError:null };
-  } catch(e){ return { serverUrl:'', code:'', adminPassword:'', enabled:false, lastSync:0, lastError:null }; }
+    return raw ? JSON.parse(raw) : { serverUrl:'http://192.168.1.2:8000', code:'ADMIN01', adminPassword:'TNSVT-2026-CristoRey!', enabled:true, lastSync:0, lastError:null };
+  } catch(e){ return { serverUrl:'http://192.168.1.2:8000', code:'ADMIN01', adminPassword:'TNSVT-2026-CristoRey!', enabled:true, lastSync:0, lastError:null }; }
 })();
 
 // Universal fetch with CapacitorHttp fallback (bypasses WebView CORS on Android)
@@ -9652,7 +9652,7 @@ try { unlockAllAndReset(); } catch(e){}
 // Wallet demo balance (if never synced)
 try {
   if(!localStorage.getItem('tnsvt_wallet_balance')||parseFloat(localStorage.getItem('tnsvt_wallet_balance'))===0){
-    localStorage.setItem('tnsvt_wallet_balance','50000');
+    localStorage.setItem('tnsvt_wallet_balance','327.8');
     localStorage.setItem('tnsvt_wallet_holdings','[]');
     localStorage.setItem('tnsvt_wallet_sync_status','local');
   }
