@@ -1023,6 +1023,137 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 }
 .onboard-arrow.up{bottom:-20px;left:50%;transform:translateX(-50%);border-top-color:rgba(147,83,255,.4)}
 .onboard-arrow.down{top:-20px;left:50%;transform:translateX(-50%);border-bottom-color:rgba(147,83,255,.4)}
+
+/* ============================================================
+   PHASE 5+6: POLISH, GLASSMORPHISM, 3D MODE
+   ============================================================ */
+
+/* ── Glassmorphism fuerte en paneles principales ──────────────── */
+.glass{
+  background:rgba(26,18,48,.55)!important;
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid rgba(200,160,255,.18)!important;
+  box-shadow:0 8px 32px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* ── Round transition (slide horizontal) ─────────────────────── */
+@keyframes slide-in-right{
+  0%{transform:translateX(60px);opacity:0}
+  100%{transform:translateX(0);opacity:1}
+}
+@keyframes slide-in-left{
+  0%{transform:translateX(-60px);opacity:0}
+  100%{transform:translateX(0);opacity:1}
+}
+@keyframes slide-out-left{
+  0%{transform:translateX(0);opacity:1}
+  100%{transform:translateX(-60px);opacity:0}
+}
+@keyframes slide-out-right{
+  0%{transform:translateX(0);opacity:1}
+  100%{transform:translateX(60px);opacity:0}
+}
+.round-slide-in{animation:slide-in-right 350ms cubic-bezier(.4,0,.2,1)}
+.round-slide-out{animation:slide-out-left 280ms cubic-bezier(.4,0,.2,1) forwards}
+
+/* ── Countdown 3-2-1 entre rondas ────────────────────────────── */
+.round-countdown{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  z-index:8500;pointer-events:none;
+}
+.round-countdown .cd-num{
+  font-size:clamp(80px,20vw,140px);font-weight:800;
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(135deg,var(--violet3),var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 40px rgba(147,83,255,.5);
+  animation:cd-pop 800ms cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes cd-pop{
+  0%{transform:scale(.3) rotate(-15deg);opacity:0}
+  30%{transform:scale(1.3) rotate(5deg);opacity:1}
+  60%{transform:scale(1) rotate(0);opacity:1}
+  100%{transform:scale(.6) rotate(0);opacity:0}
+}
+
+/* ── Win podium ──────────────────────────────────────────────── */
+@keyframes podium-rise{
+  0%{transform:translateY(60px) scale(.8);opacity:0}
+  60%{transform:translateY(-8px) scale(1.05);opacity:1}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+.podium-rise{animation:podium-rise 600ms cubic-bezier(.34,1.56,.64,1) backwards}
+
+/* ── Theme transition crossfade ──────────────────────────────── */
+@keyframes theme-crossfade{
+  0%{opacity:1}
+  50%{opacity:0}
+  100%{opacity:1}
+}
+body.theme-changing{animation:theme-crossfade 400ms ease}
+
+/* ============================================================
+   PHASE 6: PRO 3D MODE
+   ============================================================ */
+
+/* ── Enable 3D context ───────────────────────────────────────── */
+body.pro3d{
+  --pro-3d-perspective:1400px;
+}
+body.pro3d *{
+  transform-style:preserve-3d;
+}
+
+/* ── Card parallax / 3D hover ────────────────────────────────── */
+.pro3d-card{
+  transform:perspective(var(--pro-3d-perspective)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(var(--tz,0px));
+  transition:transform 250ms cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.pro3d-card:hover{
+  box-shadow:0 20px 50px rgba(147,83,255,.3),inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* ── Stronger glassmorphism in 3D mode ──────────────────────── */
+body.pro3d .glass-strong{
+  background:rgba(26,18,48,.4)!important;
+  backdrop-filter:blur(30px) saturate(200%);
+  -webkit-backdrop-filter:blur(30px) saturate(200%);
+  border:1px solid rgba(200,160,255,.25)!important;
+  box-shadow:0 12px 48px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* ── 3D flip cards (achievements) ────────────────────────────── */
+.flip-card{
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 600ms cubic-bezier(.4,0,.2,1);
+}
+.flip-card.flipped{transform:rotateY(180deg)}
+.flip-card .flip-front,.flip-card .flip-back{
+  position:absolute;inset:0;backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+.flip-card .flip-back{transform:rotateY(180deg)}
+
+/* ── Parallax helper (set via JS) ────────────────────────────── */
+.parallax{will-change:transform}
+
+/* ── 3D toggle button ────────────────────────────────────────── */
+.pro3d-toggle{
+  background:rgba(147,83,255,.15);border:1px solid rgba(147,83,255,.3);
+  border-radius:20px;padding:3px 10px;color:#c8a0ff;font-size:12px;
+  cursor:pointer;transition:all .2s;font-family:Inter,sans-serif;
+  flex-shrink:0;
+}
+.pro3d-toggle:hover{background:rgba(147,83,255,.25)}
+body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,192,96,.4);color:#f0c060}
+
+/* Disable 3D on devices that prefer reduced motion */
+@media (prefers-reduced-motion:reduce){
+  body.pro3d *{transform:none!important}
+}
 </style>
 </head>
 <body>
@@ -3202,6 +3333,8 @@ function goScreen(id){
   if(id==='s-perfil') initPerfil();
   if(id==='s-historico') initHist();
   if(id==='s-portfolio') initPortfolio();
+  // Phase 6: re-tag any newly-rendered cards as pro3d
+  setTimeout(applyPro3DClass, 50);
   if(id==='s-daily') initDaily();
   if(id==='s-arena') initArena();
   if(id==='s-fractal'){ document.getElementById('fractal-lobby').style.display='block'; document.getElementById('fractal-game').style.display='none'; }
@@ -4743,6 +4876,13 @@ function renderLeaderboard(){
     +'<span style="color:'+(c.pnlPct>=0?'var(--green)':'var(--red)')+'">'+(c.pnlPct>=0?'+':'')+c.pnlPct.toFixed(1)+'%</span>'
     +(c.eliminated?'<span style="color:var(--red);margin-left:4px">💀</span>':'')
     +'</div>').join('');
+  // Phase 5d: podium-rise para top 3 (solo la primera vez que aparece el podium)
+  const rows = el.querySelectorAll(':scope > div');
+  const top3 = Array.from(rows).slice(0, 3);
+  if(!el.dataset._podiumDone){
+    el.dataset._podiumDone = '1';
+    animatePodium(top3);
+  }
 }
 function getStageEquity(s,tierKey){return {qualifying:0.5,semifinal:0.75,final:1}[s]*getTier(tierKey).startingEquity||50000;}
 
@@ -5094,7 +5234,11 @@ function nextRound(){
     torneoFinish();
   } else {
     s.round++;s.stageRound++;
-    torneoNextRound();
+    // Phase 5b+c: round transition con countdown
+    const panel = document.getElementById('tr-trade-panel');
+    roundTransition(panel, ()=>{
+      showRoundCountdown(()=>torneoNextRound());
+    });
   }
 }
 
@@ -10726,6 +10870,200 @@ function maybeStartTorneoTour(){
   };
   ticker.appendChild(btn);
 })();
+
+// ============================================================
+// PHASE 6: PRO 3D MODE TOGGLE
+// ============================================================
+const PRO3D_KEY = 'tnsvt_pro3d_v1';
+function isPro3D(){
+  try { return localStorage.getItem(PRO3D_KEY) === '1'; } catch(e){ return false; }
+}
+function setPro3D(v){
+  try { localStorage.setItem(PRO3D_KEY, v ? '1' : '0'); } catch(e){}
+  document.body.classList.toggle('pro3d', !!v);
+  if(!v) resetPro3DParallax();
+}
+function togglePro3D(){
+  setPro3D(!isPro3D());
+  const btn = document.getElementById('pro3d-toggle');
+  if(btn){
+    btn.textContent = isPro3D() ? '🟡 3D PRO' : '⚪ 2D';
+    showToast(isPro3D() ? '🟡 Modo 3D PRO activado' : '⚪ Modo 2D clásico');
+  }
+  if(SFX.tap) SFX.tap();
+  if(HAPTICS.tap) HAPTICS.tap();
+}
+function resetPro3DParallax(){
+  document.querySelectorAll('.pro3d-card').forEach(c=>{
+    c.style.setProperty('--rx','0deg');
+    c.style.setProperty('--ry','0deg');
+    c.style.setProperty('--tz','0px');
+  });
+}
+
+(function injectPro3DToggle(){
+  const ticker = document.getElementById('ticker');
+  if(!ticker) return;
+  const btn = document.createElement('button');
+  btn.id = 'pro3d-toggle';
+  btn.className = 'pro3d-toggle';
+  btn.style.marginLeft = '6px';
+  btn.textContent = isPro3D() ? '🟡 3D PRO' : '⚪ 2D';
+  btn.title = 'Modo 3D PRO (parallax, glassmorphism fuerte, tilt)';
+  btn.onclick = togglePro3D;
+  ticker.appendChild(btn);
+  // Apply state on load
+  setPro3D(isPro3D());
+})();
+
+// ── 3D tilt on hover (solo en modo pro3d y desktop) ───────────
+(function setupPro3DTilt(){
+  if(window.matchMedia('(pointer: coarse)').matches) return; // skip on touch
+  document.addEventListener('mousemove', (e)=>{
+    if(!isPro3D()) return;
+    const card = e.target.closest('.pro3d-card');
+    if(!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rx = (0.5 - y) * 10; // -5deg to 5deg
+    const ry = (x - 0.5) * 10;
+    card.style.setProperty('--rx', rx + 'deg');
+    card.style.setProperty('--ry', ry + 'deg');
+    card.style.setProperty('--tz', '8px');
+  }, {passive:true});
+  document.addEventListener('mouseleave', resetPro3DParallax);
+})();
+
+// ── Auto-tag main cards as pro3d-card + glass ─────────────────
+function applyPro3DClass(){
+  const selectors = [
+    '.mode-card', '.tema-card', '.avatar-card', '.item',
+    '#s-classic .action-long, #s-classic .action-short',
+    '.stat-box',
+  ];
+  document.querySelectorAll(selectors.join(',')).forEach(el=>{
+    if(!el.classList.contains('pro3d-card')) el.classList.add('pro3d-card');
+  });
+}
+
+// ── Apply glass class a paneles principales (one-time) ────────
+function applyGlassClasses(){
+  // Stat boxes (small cards in lobby)
+  document.querySelectorAll('.stat-box').forEach(el=>el.classList.add('glass'));
+  // Position card in portfolio
+  const portPriceCard = document.getElementById('port-price-card');
+  if(portPriceCard) portPriceCard.classList.add('glass');
+  const trPriceCard = document.getElementById('tr-price-card');
+  if(trPriceCard) trPriceCard.classList.add('glass');
+}
+
+// ── Card parallax en scroll (lobby) ───────────────────────────
+let _parallaxRaf = null;
+function updateParallax(){
+  _parallaxRaf = null;
+  if(!isPro3D()) return;
+  const cards = document.querySelectorAll('.pro3d-card');
+  const scrollY = window.scrollY || window.pageYOffset;
+  cards.forEach((c, i)=>{
+    const rect = c.getBoundingClientRect();
+    const center = rect.top + rect.height/2;
+    const vh = window.innerHeight;
+    // Distance from center of viewport
+    const dist = (center - vh/2) / vh;
+    // Only translate elements near viewport
+    if(Math.abs(dist) < 0.8){
+      const tz = -dist * 30;
+      const ry = dist * 6;
+      c.style.setProperty('--tz', tz.toFixed(1) + 'px');
+      c.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+    }
+  });
+}
+window.addEventListener('scroll', ()=>{
+  if(_parallaxRaf) return;
+  _parallaxRaf = requestAnimationFrame(updateParallax);
+}, {passive:true});
+window.addEventListener('resize', ()=>{
+  if(_parallaxRaf) return;
+  _parallaxRaf = requestAnimationFrame(updateParallax);
+}, {passive:true});
+
+// ── Theme change with crossfade ───────────────────────────────
+const _origApplyTheme = applyTheme;
+applyTheme = function(id){
+  document.body.classList.add('theme-changing');
+  _origApplyTheme(id);
+  setTimeout(()=>document.body.classList.remove('theme-changing'), 400);
+  applyPro3DClass();
+  applyGlassClasses();
+};
+
+// ── Initial run cuando el DOM esté listo ──────────────────────
+function tnsvtFinalInit(){
+  applyPro3DClass();
+  applyGlassClasses();
+  setPro3D(isPro3D());
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', tnsvtFinalInit);
+} else {
+  tnsvtFinalInit();
+}
+
+// ── Helper: countdown 3-2-1 entre rondas ─────────────────────
+function showRoundCountdown(cb){
+  const overlay = document.createElement('div');
+  overlay.className = 'round-countdown';
+  document.body.appendChild(overlay);
+  let n = 3;
+  function tick(){
+    if(n <= 0){
+      overlay.remove();
+      if(typeof cb === 'function') cb();
+      return;
+    }
+    const num = document.createElement('div');
+    num.className = 'cd-num';
+    num.textContent = n === 0 ? 'GO!' : n;
+    overlay.innerHTML = '';
+    overlay.appendChild(num);
+    if(SFX.tap) SFX.tap();
+    if(HAPTICS.tap) HAPTICS.tap();
+    n--;
+    setTimeout(tick, 800);
+  }
+  tick();
+}
+
+// ── Helper: podium rise for top 3 ─────────────────────────────
+function animatePodium(elements){
+  // elements: array of DOM nodes in order [1st, 2nd, 3rd]
+  elements.forEach((el, i)=>{
+    if(!el) return;
+    el.style.opacity = '0';
+    setTimeout(()=>{
+      el.classList.add('podium-rise');
+      el.style.animationDelay = (i * 180) + 'ms';
+      setTimeout(()=>{
+        el.classList.remove('podium-rise');
+        el.style.opacity = '';
+      }, 800);
+    }, 50);
+  });
+}
+
+// ── Round transition wrapper ─────────────────────────────────
+function roundTransition(panel, cb){
+  if(!panel){ if(typeof cb==='function') cb(); return; }
+  panel.classList.add('round-slide-out');
+  setTimeout(()=>{
+    panel.classList.remove('round-slide-out');
+    panel.classList.add('round-slide-in');
+    if(typeof cb==='function') cb();
+    setTimeout(()=>panel.classList.remove('round-slide-in'), 360);
+  }, 260);
+}
 
 // ============================================================
 // PATCH: inyectar SFX + HAPTICS en funciones existentes
