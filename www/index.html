@@ -339,7 +339,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 /* ASSET SELECTOR */
 .asset-pills{display:flex;gap:6px;overflow-x:auto;padding:0 16px;scrollbar-width:none}
 .asset-pills::-webkit-scrollbar{display:none}
-.asset-pill{flex-shrink:0;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);color:var(--text3);background:var(--panel);transition:all .2s}
+.asset-pill{flex-shrink:0;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);color:var(--text3);background:var(--panel);transition:all .2s;position:relative;overflow:hidden}
 .asset-pill.active{border-color:var(--violet);color:var(--violet3);background:rgba(147,83,255,.12);box-shadow:0 0 12px rgba(147,83,255,.15)}
 
 /* TF PILLS */
@@ -845,6 +845,128 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   font-weight:600;transition:background .2s;
 }
 #chat-send:hover{background:var(--violet2)}
+
+/* ============================================================
+   PHASE 1+2: MICROINTERACTIONS & TRADING ANIMATIONS
+   ============================================================ */
+
+/* Press effect for all interactive elements */
+.press{transition:transform 80ms cubic-bezier(.4,0,.2,1),box-shadow .25s,filter .25s}
+.press:active{transform:scale(.96)}
+
+/* Ripple effect on buttons */
+.ripple{position:relative;overflow:hidden}
+.ripple .ripple-wave{
+  position:absolute;border-radius:50%;transform:scale(0);
+  background:radial-gradient(circle,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 70%);
+  animation:ripple-grow 600ms ease-out forwards;pointer-events:none;
+}
+@keyframes ripple-grow{
+  0%{transform:scale(0);opacity:.6}
+  100%{transform:scale(2.5);opacity:0}
+}
+
+/* Pill selection bounce */
+@keyframes pill-bounce{
+  0%{transform:scale(1)}
+  30%{transform:scale(1.18)}
+  60%{transform:scale(.94)}
+  100%{transform:scale(1)}
+}
+.asset-pill.just-selected{animation:pill-bounce 320ms cubic-bezier(.34,1.56,.64,1)}
+
+/* Skeleton loader (shimmer) */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skeleton{
+  background:linear-gradient(90deg,rgba(147,83,255,.08) 0%,rgba(147,83,255,.22) 50%,rgba(147,83,255,.08) 100%);
+  background-size:200% 100%;
+  animation:shimmer 1.6s infinite linear;
+  border-radius:6px;color:transparent!important;
+  user-select:none;
+}
+
+/* Trade execution flash */
+@keyframes flash-long{
+  0%{background:rgba(74,222,128,0)}
+  20%{background:rgba(74,222,128,.35)}
+  100%{background:rgba(74,222,128,0)}
+}
+@keyframes flash-short{
+  0%{background:rgba(248,113,113,0)}
+  20%{background:rgba(248,113,113,.35)}
+  100%{background:rgba(248,113,113,0)}
+}
+.flash-long{animation:flash-long 600ms ease-out}
+.flash-short{animation:flash-short 600ms ease-out}
+
+/* Price tick animation */
+@keyframes tick-up{
+  0%{transform:translateY(0);color:var(--text)}
+  25%{transform:translateY(-3px);color:var(--green)}
+  100%{transform:translateY(0);color:var(--text)}
+}
+@keyframes tick-down{
+  0%{transform:translateY(0);color:var(--text)}
+  25%{transform:translateY(3px);color:var(--red)}
+  100%{transform:translateY(0);color:var(--text)}
+}
+.tick-up{animation:tick-up 280ms ease-out}
+.tick-down{animation:tick-down 280ms ease-out}
+
+/* P&L top bar glow */
+@keyframes pnl-glow-green{
+  0%,100%{box-shadow:0 0 0 rgba(74,222,128,0)}
+  50%{box-shadow:0 0 16px rgba(74,222,128,.55),inset 0 0 8px rgba(74,222,128,.15)}
+}
+@keyframes pnl-glow-red{
+  0%,100%{box-shadow:0 0 0 rgba(248,113,113,0)}
+  50%{box-shadow:0 0 16px rgba(248,113,113,.55),inset 0 0 8px rgba(248,113,113,.15)}
+}
+.pnl-glow-green{animation:pnl-glow-green 1.6s ease-in-out infinite}
+.pnl-glow-red{animation:pnl-glow-red 1.6s ease-in-out infinite}
+
+/* Burst particles (used by burstParticles via .burst-particle) */
+.burst-particle{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:9999;
+  animation:burst-fly 800ms cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes burst-fly{
+  0%{transform:translate(0,0) scale(1);opacity:1}
+  100%{transform:translate(var(--bx),var(--by)) scale(0);opacity:0}
+}
+
+/* Score pop-up */
+.score-pop{
+  position:fixed;font-weight:800;pointer-events:none;z-index:10000;
+  text-shadow:0 1px 3px rgba(0,0,0,.6);
+  animation:score-rise 900ms ease-out forwards;
+}
+@keyframes score-rise{
+  0%{transform:translate(-50%,-50%) scale(.5);opacity:0}
+  20%{transform:translate(-50%,-50%) scale(1.3);opacity:1}
+  100%{transform:translate(-50%,-150%) scale(.9);opacity:0}
+}
+
+/* Combo ring */
+.combo-ring{
+  position:fixed;border:3px solid;border-radius:50%;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  animation:ring-expand 600ms ease-out forwards;
+}
+@keyframes ring-expand{
+  0%{width:50px;height:50px;opacity:.9}
+  100%{width:300px;height:300px;opacity:0}
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
 </style>
 </head>
 <body>
@@ -3513,7 +3635,7 @@ function startClassic(){
 function selectAsset(sym, el){
   STATE.classic.asset = sym;
   document.querySelectorAll('#s-classic .asset-pill').forEach(p=>p.classList.remove('active'));
-  if(el) el.classList.add('active');
+  if(el){ el.classList.add('active'); bouncePill(el); }
   const a = ASSETS[sym];
   document.getElementById('cl-asset-name').textContent = a.emoji+' '+a.name;
   document.getElementById('cl-tf-label').textContent = STATE.classic.tf;
@@ -4169,11 +4291,17 @@ function trUpdateLivePrice(){
   if(!a) return;
   const base=STATE.prices[sym]||a.base;
   const change=trLastPrice&&trLastPrice>0?((base-trLastPrice)/trLastPrice*100):0;
+  const prevBase=trLastPrice;
   trLastPrice=base;
   const high=base*(1+Math.random()*0.005);
   const low=base*(1-Math.random()*0.005);
   document.getElementById('tr-asset-label').textContent=sym+'/USD';
-  document.getElementById('tr-live-price').textContent=fmtPrice(base);
+  const priceEl=document.getElementById('tr-live-price');
+  priceEl.textContent=fmtPrice(base);
+  // Phase 2c: tick animation cuando cambia el precio
+  if(prevBase!==null && Math.abs(base-prevBase)/Math.max(prevBase,1e-9) > 0.00005){
+    applyTick(priceEl, prevBase, base, true);
+  }
   const chEl=document.getElementById('tr-live-change');
   chEl.textContent=(change>=0?'+':'')+change.toFixed(2)+'%';
   chEl.style.color=change>=0?'var(--green)':'var(--red)';
@@ -4187,10 +4315,36 @@ function torneoUpdateHUD(){
   const startingEq=getStageEquity(s.stage,s.tier);
   const pnl=s.portfolio-startingEq;
   const pnlPct=startingEq>0?(pnl/startingEq*100):0;
-  document.getElementById('tr-portfolio').textContent='$'+s.portfolio.toFixed(2);
+  // Phase 2b: animated number counters
+  const portEl=document.getElementById('tr-portfolio');
+  const prevPort=parseFloat((portEl.dataset._last||'0'));
+  if(portEl && portEl.dataset._anim!=='1'){
+    portEl.dataset._anim='1';
+    if(Math.abs(prevPort-s.portfolio)>0.01){
+      animateNumber(portEl, prevPort, s.portfolio, 500, v=>'$'+v.toFixed(2));
+    } else {
+      portEl.textContent='$'+s.portfolio.toFixed(2);
+    }
+    portEl.dataset._last=s.portfolio.toFixed(4);
+    setTimeout(()=>{ portEl.dataset._anim='0'; }, 520);
+  }
   const pnlEl=document.getElementById('tr-pnl');
-  pnlEl.textContent=(pnl>=0?'+':'')+'$'+pnl.toFixed(2);
-  pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
+  const prevPnl=parseFloat((pnlEl.dataset._last||'0'));
+  if(pnlEl && pnlEl.dataset._anim!=='1'){
+    pnlEl.dataset._anim='1';
+    if(Math.abs(prevPnl-pnl)>0.01){
+      animateNumber(pnlEl, prevPnl, pnl, 500, v=>(v>=0?'+':'')+'$'+v.toFixed(2));
+    } else {
+      pnlEl.textContent=(pnl>=0?'+':'')+'$'+pnl.toFixed(2);
+    }
+    pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
+    pnlEl.dataset._last=pnl.toFixed(4);
+    setTimeout(()=>{ pnlEl.dataset._anim='0'; }, 520);
+  }
+  // Phase 2e: PnL top bar glow
+  if(prevPnl!==0 && Math.sign(prevPnl)!==Math.sign(pnl) && pnl!==0){
+    applyPnlGlow(pnlEl, pnl);
+  }
   document.getElementById('tr-pnl-pct').textContent=(pnlPct>=0?'+':'')+pnlPct.toFixed(2)+'%';
   document.getElementById('tr-round').textContent=s.round+'/'+s.totalRounds;
   trUpdateLivePrice();
@@ -4509,6 +4663,19 @@ function torneoPlay(direction){
   if(s.eliminated){ torneoFinish(); return; }
   const firstCandle=torneoCandles[0];
   if(!firstCandle){ torneoFinish(); return; }
+  // Phase 2: feedback inmediato al click (flash + haptic + sound)
+  if(direction==='long'){
+    flashTrade('long','tr-trade-panel');
+    if(HAPTICS.long) HAPTICS.long();
+    if(SFX.tradeLong) SFX.tradeLong();
+  } else if(direction==='short'){
+    flashTrade('short','tr-trade-panel');
+    if(HAPTICS.short) HAPTICS.short();
+    if(SFX.tradeShort) SFX.tradeShort();
+  } else if(direction==='skip'){
+    if(HAPTICS.skip) HAPTICS.skip();
+    if(SFX.skip) SFX.skip();
+  }
   const entryPrice=firstCandle.o;
   const sym=trSelectedAsset;
   const usdSize=trGetUsdSize();
@@ -4615,6 +4782,17 @@ function torneoPlay(direction){
   document.getElementById('tr-result-emoji').textContent=emoji;
   document.getElementById('tr-result-text').textContent=resultText;
   document.getElementById('tr-result-detail').innerHTML=resultDetail;
+  // Phase 2: win/loss burst + haptic feedback
+  if(direction!=='skip'){
+    const waitingEl=document.getElementById('tr-waiting');
+    const r=waitingEl?waitingEl.getBoundingClientRect():null;
+    const cx=r?r.left+r.width/2:window.innerWidth/2;
+    const cy=r?r.top+r.height/2:window.innerHeight/2;
+    fxTradeResult(pnl.pnlUsd, direction, cx, cy);
+    if(pnl.pnlUsd>0){ if(HAPTICS.success) HAPTICS.success(); if(SFX.correct) SFX.correct(); }
+    else if(pnl.pnlUsd<0){ if(HAPTICS.alert) HAPTICS.alert(); if(SFX.wrong) SFX.wrong(); }
+    if(s.eliminated && HAPTICS.gameOver) HAPTICS.gameOver();
+  }
   torneoUpdateHUD();
   setTimeout(()=>nextRound(),1800);
 }
@@ -4810,7 +4988,7 @@ function trInitTradePanel(){
 function trAssetSelect(sym, el){
   trSelectedAsset=sym;
   document.querySelectorAll('#tr-trade-panel .asset-pill').forEach(p=>p.classList.remove('active'));
-  if(el) el.classList.add('active');
+  if(el){ el.classList.add('active'); bouncePill(el); }
   trUpdateLivePrice();
   trCalcPreview();
 }
@@ -8255,6 +8433,10 @@ async function portUpdateLivePrice(){
   if(aEl) aEl.textContent = a.label;
   const spEl = document.getElementById('port-spread');
   if(spEl) spEl.textContent = fmtPrice(a.spread);
+  // Phase 2c: tick animation para portfolio (sin SFX, solo visual)
+  if(el && prev!==price && Math.abs(chg) > 0.001){
+    applyTick(el, prev, price, false);
+  }
   // 24h data: usa CoinGecko (real) si está, sino fallback a session
   STATE.port24h = STATE.port24h || {};
   const cache = STATE.port24h[portAsset];
@@ -8294,9 +8476,35 @@ function portRenderHeader(){
   const pct = Math.max(0, Math.min(100, (equity/50000)*100));
 
   const eq = document.getElementById('port-equity');
-  if(eq){ eq.textContent='$'+equity.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); eq.style.color=equity>=50000?'var(--green)':equity<45000?'var(--red)':'var(--text)'; }
+  if(eq){
+    const prevEq=parseFloat((eq.dataset._last||'0'));
+    eq.style.color=equity>=50000?'var(--green)':equity<45000?'var(--red)':'var(--text)';
+    if(eq.dataset._anim!=='1' && Math.abs(prevEq-equity)>0.01){
+      eq.dataset._anim='1';
+      animateNumber(eq, prevEq, equity, 500, v=>'$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
+      eq.dataset._last=equity.toFixed(4);
+      setTimeout(()=>{ eq.dataset._anim='0'; }, 520);
+    } else if(eq.dataset._anim!=='1') {
+      eq.textContent='$'+equity.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+  }
   const pnlEl = document.getElementById('port-pnl-total');
-  if(pnlEl){ pnlEl.textContent=(openPnl>=0?'+':'')+' $'+Math.abs(openPnl).toFixed(2); pnlEl.style.color=openPnl>=0?'var(--green)':'var(--red)'; }
+  if(pnlEl){
+    const prevPnl=parseFloat((pnlEl.dataset._last||'0'));
+    pnlEl.style.color=openPnl>=0?'var(--green)':'var(--red)';
+    if(pnlEl.dataset._anim!=='1' && Math.abs(prevPnl-openPnl)>0.01){
+      pnlEl.dataset._anim='1';
+      animateNumber(pnlEl, prevPnl, openPnl, 500, v=>(v>=0?'+':'')+' $'+Math.abs(v).toFixed(2));
+      pnlEl.dataset._last=openPnl.toFixed(4);
+      setTimeout(()=>{ pnlEl.dataset._anim='0'; }, 520);
+    } else if(pnlEl.dataset._anim!=='1') {
+      pnlEl.textContent=(openPnl>=0?'+':'')+' $'+Math.abs(openPnl).toFixed(2);
+    }
+    // Phase 2e: glow on sign change
+    if(prevPnl!==0 && Math.sign(prevPnl)!==Math.sign(openPnl) && openPnl!==0){
+      applyPnlGlow(pnlEl, openPnl);
+    }
+  }
   const cpEl = document.getElementById('port-pnl-closed');
   if(cpEl){ cpEl.textContent='$'+(PORT.closedPnl>=0?'+':'')+PORT.closedPnl.toFixed(2)+' cerrado'; cpEl.style.color=PORT.closedPnl>=0?'rgba(74,222,128,.6)':'rgba(248,113,113,.6)'; }
   const balEl = document.getElementById('port-balance-sm');
@@ -8330,7 +8538,7 @@ function portSelectAsset(sym, el){
   PORT.asset = sym;
   savePort();
   document.querySelectorAll('#s-portfolio .asset-pill').forEach(p=>p.classList.remove('active'));
-  if(el) el.classList.add('active');
+  if(el){ el.classList.add('active'); bouncePill(el); }
   portUpdateLivePrice();
   portCalcPreview();
   SFX.tap(); HAPTICS.tap();
@@ -8475,6 +8683,11 @@ function portOpen(dir){
   const a     = PORT_ASSETS[portAsset];
   const price = STATE.prices[portAsset] || ASSETS[portAsset]?.base || 1;
   const lev   = PORT.leverage||1;
+  // Phase 2: flash + haptic + sound inmediato
+  flashTrade(dir, 'port-trade');
+  if(dir==='long' && SFX.tradeLong) SFX.tradeLong();
+  else if(dir==='short' && SFX.tradeShort) SFX.tradeShort();
+  if(HAPTICS.burst) HAPTICS.burst();
   const sizeInp = parseFloat(document.getElementById('port-size-input')?.value)||0;
   let usdSize=0;
   if(PORT.sizeMode==='usd')   usdSize=sizeInp;
@@ -8563,8 +8776,10 @@ function portClose(id){
   portRenderPositions();
   portUpdateStats();
   showToast(`✓ Cerrado ${pos.sym} — ${pos.pnl>=0?'+':''}$${pos.pnl.toFixed(2)}`);
-  if(pos.pnl>=0){ SFX.correct(); HAPTICS.correct(); screenFlash('correct'); }
-  else          { SFX.wrong();   HAPTICS.wrong();   }
+  if(pos.pnl>=0){ SFX.correct(); HAPTICS.success(); screenFlash('correct'); }
+  else          { SFX.wrong();   HAPTICS.alert();    }
+  // Phase 2d: burst con score pop
+  fxTradeResult(pos.pnl, pos.dir);
 }
 
 // ── Modify SL/TP inline ──────────────────────────────────────
@@ -9777,7 +9992,161 @@ var HAPTICS = {
   win:      ()=>haptic([50,30,50,30,100,30,200]),
   tap:      ()=>haptic([15]),
   unlock:   ()=>haptic([40,20,40,20,80]),
+  // Trading-specific patterns
+  long:     ()=>haptic([25]),                          // tap corto
+  short:    ()=>haptic([25]),                          // tap corto (igual a long)
+  skip:     ()=>haptic([10]),                          // micro-tap
+  success:  ()=>haptic([30,20,30,20,80]),              // TP / win
+  alert:    ()=>haptic([80,40,80,40,120]),             // SL / stop hit
+  burst:    ()=>haptic([25,15,40]),                    // trade ejecutado
+  tick:     ()=>haptic([5]),                           // micro tick de precio
 };
+
+// ── Trading sounds (extensión de SFX) ──────────────────────────────
+SFX.tradeLong = function(){
+  // Sonido tipo "snap up" — acorde mayor ascendente rápido
+  playTone(523,'triangle',0.04,0.10);
+  setTimeout(()=>playTone(659,'triangle',0.04,0.10),40);
+  setTimeout(()=>playTone(880,'triangle',0.06,0.08),80);
+};
+SFX.tradeShort = function(){
+  // Sonido tipo "snap down" — acorde menor descendente rápido
+  playTone(523,'triangle',0.04,0.10);
+  setTimeout(()=>playTone(440,'triangle',0.04,0.10),40);
+  setTimeout(()=>playTone(330,'triangle',0.06,0.08),80);
+};
+SFX.tickUp = function(){ playTone(1200,'sine',0.015,0.02); };
+SFX.tickDown = function(){ playTone(900,'sine',0.015,0.02); };
+
+// ============================================================
+// PHASE 1+2: ANIMATION HELPERS
+// ============================================================
+
+// ── Ripple effect ───────────────────────────────────────────────
+function addRipple(el, x, y){
+  const rect = el.getBoundingClientRect();
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple-wave';
+  const size = Math.max(rect.width, rect.height) * 1.2;
+  ripple.style.width = ripple.style.height = size + 'px';
+  ripple.style.left = (x - rect.left - size/2) + 'px';
+  ripple.style.top = (y - rect.top - size/2) + 'px';
+  el.appendChild(ripple);
+  setTimeout(()=>ripple.remove(), 700);
+}
+
+// Aplica ripple a TODOS los botones y pills (delegación global)
+document.addEventListener('pointerdown', function(e){
+  const t = e.target.closest('.btn, .asset-pill, button, .ripple');
+  if(!t) return;
+  addRipple(t, e.clientX, e.clientY);
+}, {passive:true});
+
+// ── Pill bounce on select ───────────────────────────────────────
+function bouncePill(el){
+  if(!el) return;
+  el.classList.remove('just-selected');
+  // force reflow to restart animation
+  void el.offsetWidth;
+  el.classList.add('just-selected');
+  setTimeout(()=>el.classList.remove('just-selected'), 360);
+}
+
+// ── Animated number counter ──────────────────────────────────────
+const _animNumbers = {};
+function animateNumber(el, from, to, duration, formatFn){
+  if(!el) return;
+  const key = el.id || el;
+  if(_animNumbers[key]) cancelAnimationFrame(_animNumbers[key]);
+  const start = performance.now();
+  const diff = to - from;
+  const dur = Math.max(120, duration || 600);
+  function tick(now){
+    const t = Math.min(1, (now - start) / dur);
+    // easeOutCubic
+    const e = 1 - Math.pow(1 - t, 3);
+    const v = from + diff * e;
+    el.textContent = formatFn ? formatFn(v) : v.toFixed(2);
+    if(t < 1){
+      _animNumbers[key] = requestAnimationFrame(tick);
+    } else {
+      _animNumbers[key] = null;
+    }
+  }
+  _animNumbers[key] = requestAnimationFrame(tick);
+}
+
+// ── Price tick animation ────────────────────────────────────────
+function applyTick(el, prevPrice, newPrice, sound){
+  if(!el || newPrice === prevPrice) return;
+  const direction = newPrice > prevPrice ? 'up' : 'down';
+  el.classList.remove('tick-up', 'tick-down');
+  void el.offsetWidth; // restart animation
+  el.classList.add(direction === 'up' ? 'tick-up' : 'tick-down');
+  setTimeout(()=>el.classList.remove('tick-up','tick-down'), 320);
+  if(sound && typeof SFX !== 'undefined'){
+    if(direction === 'up' && SFX.tickUp) SFX.tickUp();
+    else if(direction === 'down' && SFX.tickDown) SFX.tickDown();
+    if(HAPTICS && HAPTICS.tick) HAPTICS.tick();
+  }
+}
+
+// ── Trade execution flash ───────────────────────────────────────
+function flashTrade(direction, panelId){
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+  panel.classList.remove('flash-long', 'flash-short');
+  void panel.offsetWidth;
+  panel.classList.add(direction === 'long' ? 'flash-long' : 'flash-short');
+  setTimeout(()=>panel.classList.remove('flash-long','flash-short'), 650);
+}
+
+// ── P&L top bar glow ─────────────────────────────────────────────
+function applyPnlGlow(el, value){
+  if(!el) return;
+  el.classList.remove('pnl-glow-green', 'pnl-glow-red');
+  void el.offsetWidth;
+  if(value > 0) el.classList.add('pnl-glow-green');
+  else if(value < 0) el.classList.add('pnl-glow-red');
+  setTimeout(()=>el.classList.remove('pnl-glow-green','pnl-glow-red'), 1600);
+}
+
+// ── Trade result burst (más fuerte que fxCorrect) ───────────────
+function fxTradeResult(pnl, direction, x, y){
+  const win = pnl > 0;
+  const lose = pnl < 0;
+  const cx = x || window.innerWidth/2;
+  const cy = y || window.innerHeight/2;
+  if(win){
+    const color = direction === 'long' ? '#4ade80' : '#a78bfa';
+    burstParticles(cx, cy, color, 18);
+    burstParticles(cx-40, cy+20, '#f0c060', 8);
+    scorePop(cx, cy-60, '+$' + Math.abs(pnl).toFixed(2), color);
+    if(comboRing) comboRing(cx, cy, color);
+  } else if(lose){
+    burstParticles(cx, cy, '#f87171', 14);
+    scorePop(cx, cy-60, '-$' + Math.abs(pnl).toFixed(2), '#f87171');
+    if(typeof screenShake === 'function') screenShake();
+  } else {
+    scorePop(cx, cy-60, '±$0', 'rgba(200,160,255,.6)');
+  }
+}
+
+// ── Skeleton helper (reemplaza "—" con shimmer) ─────────────────
+function setSkeleton(el, on){
+  if(!el) return;
+  if(on){
+    el.dataset._prevText = el.dataset._prevText ?? el.textContent;
+    el.classList.add('skeleton');
+    el.textContent = '•••';
+  } else {
+    el.classList.remove('skeleton');
+    if(el.dataset._prevText !== undefined){
+      el.textContent = el.dataset._prevText;
+      delete el.dataset._prevText;
+    }
+  }
+}
 
 // ============================================================
 // SOUND TOGGLE BUTTON — inyectado en el ticker
