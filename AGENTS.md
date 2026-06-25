@@ -29,3 +29,11 @@ android/                    # Android build con Capacitor v6
 - Default sync config: ADMIN01 / TNSVT-2026-CristoRey! / http://192.168.1.2:8000
 - DEMO user deleted from DB (ID 40, code DEMO, $50k wallet removed)
 - Wallet demo balance changed from 50000 to 327.8 (ADMIN01's real balance)
+
+## Session 2026-06-24/25
+- Added **Reanudar Torneo** button in lobby (conditional on `torneoState.active`)
+- `resumeTorneo()` restores game panel, shows toast with current round
+- Removed **Bounty system**: HTML row, `setBounty()`, `populateBountyTargets()`, bounty fields from state
+- Moved leaderboard button next to direction buttons
+- `torneoState.active = true` on `startTorneo()`
+- Backend 1v1 Duel mode: Duel + DuelRound entities, DuelController, 7 endpoints (create/join/get/next-round/play/cancel), wallet integration, PnL calculation, migration
