@@ -4999,6 +4999,9 @@ async function joinTorneo(id){
 function torneoNextRound(){
   if(torneoState.eliminated){ torneoFinish(); return; }
   torneoWaited=false;
+  // Phase 7: roundStart sound
+  if(SFX.roundStart) SFX.roundStart();
+  if(HAPTICS.roundStart) HAPTICS.roundStart();
   const s=torneoState;
   // Stage transition
   const stageRounds={qualifying:12,semifinal:12,final:12};
@@ -5009,6 +5012,9 @@ function torneoNextRound(){
     s.peakPortfolio=s.portfolio;
     s.round=1;
     if(window.showToast) showToast('🏆 Avanzaste a Semifinal!');
+    // Phase 7: tier up sound
+    if(SFX.tierUp) SFX.tierUp();
+    if(HAPTICS.tierUp) HAPTICS.tierUp();
   }
   if(s.stage==='semifinal'&&s.stageRound>totalStage){
     s.stage='final';s.stageRound=1;
@@ -5016,6 +5022,9 @@ function torneoNextRound(){
     s.peakPortfolio=s.portfolio;
     s.round=1;
     if(window.showToast) showToast('🏆 Llegaste a la Final!');
+    // Phase 7: tier up sound
+    if(SFX.tierUp) SFX.tierUp();
+    if(HAPTICS.tierUp) HAPTICS.tierUp();
   }
   // Knockout: generate opponent return this round
   if(s.format==='knockout'){
@@ -5218,9 +5227,30 @@ function torneoPlay(direction){
     const cx=r?r.left+r.width/2:window.innerWidth/2;
     const cy=r?r.top+r.height/2:window.innerHeight/2;
     fxTradeResult(pnl.pnlUsd, direction, cx, cy);
-    if(pnl.pnlUsd>0){ if(HAPTICS.success) HAPTICS.success(); if(SFX.correct) SFX.correct(); }
-    else if(pnl.pnlUsd<0){ if(HAPTICS.alert) HAPTICS.alert(); if(SFX.wrong) SFX.wrong(); }
-    if(s.eliminated && HAPTICS.gameOver) HAPTICS.gameOver();
+    // Phase 7: differentiated SFX+HAPTICS por exitReason
+    if(exitReason==='tp' && pnl.pnlUsd>0){
+      if(SFX.tpHit) SFX.tpHit();
+      if(HAPTICS.tpHit) HAPTICS.tpHit();
+    } else if(exitReason==='sl' && pnl.pnlUsd<0){
+      if(SFX.slHit) SFX.slHit();
+      if(HAPTICS.slHit) HAPTICS.slHit();
+    } else if(exitReason==='trailing'){
+      if(SFX.trailingHit) SFX.trailingHit();
+      if(HAPTICS.trailingHit) HAPTICS.trailingHit();
+    } else if(pnl.pnlUsd>0){
+      if(SFX.correct) SFX.correct();
+      if(HAPTICS.success) HAPTICS.success();
+    } else if(pnl.pnlUsd<0){
+      if(SFX.wrong) SFX.wrong();
+      if(HAPTICS.alert) HAPTICS.alert();
+    }
+    // Eliminated feedback
+    if(s.eliminated){
+      if(SFX.eliminated) SFX.eliminated();
+      if(HAPTICS.eliminated) HAPTICS.eliminated();
+    }
+  } else if(direction==='skip'){
+    if(SFX.tradeSkip) SFX.tradeSkip();
   }
   torneoUpdateHUD();
   setTimeout(()=>nextRound(),1800);
@@ -5273,6 +5303,11 @@ function torneoFinish(){
   else if(effPnlPct>=0){xpRaw=300;rank='Top 10';}
   else {xpRaw=Math.max(50,200+Math.floor(effPnlPct*2));rank='Participante';}
   const xp = addXP(xpRaw);
+  // Phase 7: bigWin sound si top 3
+  if(effPnlPct >= 25){
+    if(SFX.bigWin) SFX.bigWin();
+    if(HAPTICS.bigWin) HAPTICS.bigWin();
+  }
   tnsvtSync('torneo', Math.max(0,s.portfolio), xp, { position:rank, round:s.round, pnl:totalPnlPct.toFixed(2), stage:s.stage, format:s.format });
   // Stage advancement check
   if(!s.eliminated&&s.stage!=='final'&&s.stageRound>=12){
@@ -9150,7 +9185,7 @@ function portOpen(dir){
   if(!usdSize||usdSize<1){ showToast('Ingresá un tamaño válido'); return; }
   const marginUsed = PORT.positions.reduce((s,p)=>s+p.margin,0);
   const freeM = PORT.balance - marginUsed;
-  if(usdSize > freeM){ showToast('⚠ Margen insuficiente'); SFX.wrong(); return; }
+  if(usdSize > freeM){ showToast('⚠ Margen insuficiente'); if(SFX.error) SFX.error(); if(HAPTICS.error) HAPTICS.error(); return; }
 
   const notional = usdSize * lev;
   const qty      = notional / price;
@@ -9210,7 +9245,10 @@ function portOpen(dir){
   const slStr = sl ? ` | SL ${fmtPrice(sl)}` : '';
   const tpStr = tp ? ` | TP ${fmtPrice(tp)}` : '';
   showToast(`${dir==='long'?'▲ BUY':'▼ SELL'} ${a.sym} × ${qty.toFixed(4)} @ ${fmtPrice(price)}${slStr}${tpStr}`);
-  SFX.correct(); HAPTICS.correct(); burstParticles(window.innerWidth/2, window.innerHeight*.6, dir==='long'?'#4ade80':'#f87171', 8);
+  // Phase 7: position open con sonido diferenciado
+  if(SFX.positionOpen) SFX.positionOpen();
+  if(HAPTICS.positionOpen) HAPTICS.positionOpen();
+  burstParticles(window.innerWidth/2, window.innerHeight*.6, dir==='long'?'#4ade80':'#f87171', 8);
 }
 
 // ── Manual close ─────────────────────────────────────────────
@@ -9230,8 +9268,15 @@ function portClose(id){
   portRenderPositions();
   portUpdateStats();
   showToast(`✓ Cerrado ${pos.sym} — ${pos.pnl>=0?'+':''}$${pos.pnl.toFixed(2)}`);
-  if(pos.pnl>=0){ SFX.correct(); HAPTICS.success(); screenFlash('correct'); }
-  else          { SFX.wrong();   HAPTICS.alert();    }
+  // Phase 7: position close sound + differentiated feedback
+  if(pos.pnl>=0){
+    if(SFX.positionClose) SFX.positionClose();
+    if(HAPTICS.positionClose) HAPTICS.positionClose();
+    screenFlash('correct');
+  } else {
+    if(SFX.slHit) SFX.slHit();
+    if(HAPTICS.slHit) HAPTICS.slHit();
+  }
   // Phase 2d: burst con score pop
   fxTradeResult(pos.pnl, pos.dir);
 }
@@ -9661,7 +9706,17 @@ function addXP(amount){
   STATE.xp += amount;
   try { localStorage.setItem('tnsvt_xp', STATE.xp); } catch(e){}
   const r = RANKS.slice().reverse().find(r=>STATE.xp>=r.min);
-  if(r && r.name !== STATE.rank){ STATE.rank=r.name; showToast(t('toast.newRank')+' '+r.name+'!'); confetti(); }
+  if(r && r.name !== STATE.rank){
+    STATE.rank=r.name;
+    showToast(t('toast.newRank')+' '+r.name+'!');
+    confetti();
+    // Phase 7: level up sound + haptic
+    if(SFX.levelUp) SFX.levelUp();
+    if(HAPTICS.levelUp) HAPTICS.levelUp();
+  } else if(amount > 0){
+    // XP gained (not a level up) — small XP sound
+    if(SFX.xp) SFX.xp();
+  }
   return amount;
 }
 function updateXPDisplay(){
@@ -10323,6 +10378,7 @@ function fxWin(){
 // ============================================================
 let audioCtx = null;
 let soundEnabled = true;
+let sfxVolume = 1; // Phase 7: global volume multiplier
 
 function getAudio(){
   if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
@@ -10340,8 +10396,10 @@ function playTone(frequency, type='sine', duration=0.12, volume=0.18, delay=0){
     osc.type = type;
     osc.frequency.setValueAtTime(frequency, ctx.currentTime + delay);
     osc.frequency.exponentialRampToValueAtTime(frequency*0.95, ctx.currentTime + delay + duration);
+    // Phase 7: apply sfxVolume multiplier
+    const finalVol = volume * (typeof sfxVolume !== 'undefined' ? sfxVolume : 1);
     gain.gain.setValueAtTime(0, ctx.currentTime + delay);
-    gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + delay + 0.01);
+    gain.gain.linearRampToValueAtTime(finalVol, ctx.currentTime + delay + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
     osc.start(ctx.currentTime + delay);
     osc.stop(ctx.currentTime + delay + duration + 0.05);
@@ -10427,6 +10485,129 @@ var SFX = {
     setTimeout(()=>playChord([440,554,659],'triangle',0.1,0.12),150);
     setTimeout(()=>playTone(880,'triangle',0.25,0.18),320);
   },
+
+  // ============================================================
+  // PHASE 7: EXTENDED TRADING & EVENT SOUNDS
+  // ============================================================
+  // Trade executed — LONG (acorde mayor ascendente rápido)
+  tradeLong(){
+    playTone(523,'triangle',0.04,0.10);
+    setTimeout(()=>playTone(659,'triangle',0.04,0.10),40);
+    setTimeout(()=>playTone(880,'triangle',0.06,0.08),80);
+  },
+  // Trade executed — SHORT (acorde menor descendente rápido)
+  tradeShort(){
+    playTone(523,'triangle',0.04,0.10);
+    setTimeout(()=>playTone(440,'triangle',0.04,0.10),40);
+    setTimeout(()=>playTone(330,'triangle',0.06,0.08),80);
+  },
+  // Trade SKIP (tono neutro descendente)
+  tradeSkip(){
+    playTone(440,'sine',0.06,0.06);
+    setTimeout(()=>playTone(400,'sine',0.08,0.04),70);
+  },
+  // Take Profit hit — campanita feliz (rising chime)
+  tpHit(){
+    playTone(880,'sine',0.06,0.12);
+    setTimeout(()=>playTone(1100,'sine',0.08,0.12),60);
+    setTimeout(()=>playTone(1320,'sine',0.10,0.14),140);
+    setTimeout(()=>playChord([880,1100,1320],'triangle',0.18,0.10),220);
+  },
+  // Stop Loss hit — buzzer descendente (alarma)
+  slHit(){
+    playTone(440,'square',0.10,0.15);
+    setTimeout(()=>playTone(330,'square',0.12,0.15),100);
+    setTimeout(()=>playTone(220,'square',0.18,0.12),220);
+  },
+  // Trailing Stop hit — sonido neutro tipo "tap" + drip
+  trailingHit(){
+    playTone(660,'sine',0.06,0.10);
+    setTimeout(()=>playTone(523,'sine',0.08,0.10),60);
+  },
+  // Round start — campana de boxing
+  roundStart(){
+    playTone(523,'triangle',0.06,0.12);
+    setTimeout(()=>playTone(659,'triangle',0.06,0.12),80);
+    setTimeout(()=>playTone(784,'triangle',0.12,0.15),160);
+  },
+  // Countdown tick — beep corto
+  countdownTick(){
+    playTone(660,'square',0.04,0.06);
+  },
+  // Countdown GO! — buzzer agudo
+  countdownGo(){
+    playTone(1320,'square',0.08,0.10);
+    setTimeout(()=>playTone(1760,'triangle',0.12,0.10),60);
+  },
+  // Big win — fanfarria
+  bigWin(){
+    playChord([523,659,784],'triangle',0.12,0.18);
+    setTimeout(()=>playChord([659,784,988],'triangle',0.14,0.18),150);
+    setTimeout(()=>playChord([784,988,1175],'triangle',0.16,0.18),300);
+    setTimeout(()=>playChord([988,1175,1568],'triangle',0.25,0.18),480);
+    setTimeout(()=>playChord([1175,1568,1976],'triangle',0.4,0.15),700);
+  },
+  // Eliminated — dramatic descending
+  eliminated(){
+    [440,392,349,294,247,220,196].forEach((f,i)=>playTone(f,'sawtooth',0.14,0.10,i*0.10));
+  },
+  // Tier up — glissando ascendente
+  tierUp(){
+    let f = 392;
+    const interval = setInterval(()=>{
+      playTone(f,'triangle',0.04,0.08);
+      f *= 1.06;
+      if(f > 1568) clearInterval(interval);
+    }, 50);
+  },
+  // Level up — acorde brillante
+  levelUp(){
+    playChord([523,659,784,1047],'triangle',0.10,0.15);
+    setTimeout(()=>playChord([659,784,988,1319],'triangle',0.12,0.15),120);
+    setTimeout(()=>playTone(1760,'sine',0.25,0.12),280);
+  },
+  // Combo / streak 10x — épico
+  streak10(){
+    [523,659,784,1047,1319,1568].forEach((f,i)=>playTone(f,'triangle',0.10,0.16,i*0.05));
+    setTimeout(()=>playChord([784,988,1175,1568],'triangle',0.5,0.16),400);
+  },
+  // Click on price tick
+  tickUp(){ playTone(1200,'sine',0.015,0.02); },
+  tickDown(){ playTone(900,'sine',0.015,0.02); },
+  // Position open confirmation
+  positionOpen(){
+    playTone(660,'sine',0.05,0.08);
+    setTimeout(()=>playTone(880,'sine',0.05,0.08),50);
+  },
+  // Position close — cash register
+  positionClose(){
+    playTone(1320,'square',0.04,0.06);
+    setTimeout(()=>playTone(880,'square',0.05,0.06),40);
+  },
+  // Achievement unlock
+  achievement(){
+    playTone(523,'sine',0.08,0.10);
+    setTimeout(()=>playTone(659,'sine',0.08,0.10),60);
+    setTimeout(()=>playTone(784,'sine',0.08,0.10),120);
+    setTimeout(()=>playTone(1047,'sine',0.08,0.10),180);
+    setTimeout(()=>playChord([784,988,1175,1319],'sine',0.4,0.12),260);
+  },
+  // Insufficient margin / error
+  error(){
+    playTone(220,'square',0.08,0.12);
+    setTimeout(()=>playTone(196,'square',0.10,0.10),80);
+  },
+  // Notification
+  notification(){
+    playTone(880,'sine',0.05,0.08);
+    setTimeout(()=>playTone(1100,'sine',0.05,0.08),60);
+  },
+  // 3D mode toggle
+  modeToggle(){
+    playTone(523,'sine',0.03,0.04);
+    setTimeout(()=>playTone(784,'sine',0.03,0.04),30);
+    setTimeout(()=>playTone(1047,'sine',0.04,0.04),60);
+  },
 };
 
 // ============================================================
@@ -10454,6 +10635,23 @@ var HAPTICS = {
   alert:    ()=>haptic([80,40,80,40,120]),             // SL / stop hit
   burst:    ()=>haptic([25,15,40]),                    // trade ejecutado
   tick:     ()=>haptic([5]),                           // micro tick de precio
+  // Phase 7: more contextual patterns
+  tpHit:    ()=>haptic([30,20,40,20,60]),              // campanita (TP)
+  slHit:    ()=>haptic([120,60,120,60,200]),           // alarma larga (SL)
+  trailingHit: ()=>haptic([40,30,40]),                 // tap doble trailing
+  roundStart: ()=>haptic([60,40,80]),                  // campana de boxing
+  countdownTick: ()=>haptic([20]),                     // beep corto
+  countdownGo: ()=>haptic([60,30,80]),                 // GO buzzer
+  bigWin:   ()=>haptic([50,30,80,30,100,30,150,30,200]), // fanfarria
+  eliminated: ()=>haptic([200,100,200,100,300]),       // dramática descendente
+  tierUp:   ()=>haptic([30,15,30,15,30,15,80]),        // glissando
+  levelUp:  ()=>haptic([40,20,60,20,80,20,120]),       // level up
+  streak10: ()=>haptic([30,15,30,15,30,15,30,15,100]), // racha 10x
+  positionOpen: ()=>haptic([20,15,30]),                // posición abierta
+  positionClose: ()=>haptic([25,15,20]),               // posición cerrada
+  achievement: ()=>haptic([30,20,40,20,60,20,80,20,100]), // achievement
+  error:    ()=>haptic([100,60,100]),                  // error/margen
+  notification: ()=>haptic([30,20,30]),                // notificación
 };
 
 // ── Trading sounds (extensión de SFX) ──────────────────────────────
@@ -10860,7 +11058,7 @@ function maybeStartTorneoTour(){
   btn.id = 'sound-toggle';
   btn.style.cssText='flex-shrink:0;background:rgba(147,83,255,.15);border:1px solid rgba(147,83,255,.3);border-radius:20px;padding:3px 10px;color:#c8a0ff;font-size:12px;cursor:pointer;margin-left:auto;transition:all .2s;font-family:Inter,sans-serif';
   btn.textContent='🔊';
-  btn.title='Sonido ON/OFF';
+  btn.title='Sonido ON/OFF (long press = volumen)';
   btn.onclick=()=>{
     soundEnabled=!soundEnabled;
     btn.textContent=soundEnabled?'🔊':'🔇';
@@ -10869,6 +11067,29 @@ function maybeStartTorneoTour(){
     showToast(soundEnabled?'🔊 Sonido activado':'🔇 Sonido desactivado');
   };
   ticker.appendChild(btn);
+
+  // Phase 7: volume slider (long-press on sound toggle to reveal)
+  const volSlider = document.createElement('input');
+  volSlider.type = 'range';
+  volSlider.id = 'sfx-volume';
+  volSlider.min = '0';
+  volSlider.max = '100';
+  volSlider.value = String(Math.round((typeof sfxVolume!=='undefined'?sfxVolume:1)*100));
+  volSlider.style.cssText='flex-shrink:0;width:60px;height:14px;-webkit-appearance:none;appearance:none;background:rgba(147,83,255,.2);border-radius:7px;outline:none;cursor:pointer;margin-left:4px';
+  volSlider.title='Volumen SFX';
+  volSlider.oninput = (e)=>{
+    sfxVolume = e.target.value / 100;
+    try { localStorage.setItem('tnsvt_sfxvol', String(sfxVolume)); } catch(_){}
+  };
+  // Restore saved volume
+  try {
+    const savedVol = localStorage.getItem('tnsvt_sfxvol');
+    if(savedVol !== null){
+      sfxVolume = parseFloat(savedVol);
+      volSlider.value = String(Math.round(sfxVolume * 100));
+    }
+  } catch(_){}
+  ticker.appendChild(volSlider);
 })();
 
 // ============================================================
@@ -10890,7 +11111,7 @@ function togglePro3D(){
     btn.textContent = isPro3D() ? '🟡 3D PRO' : '⚪ 2D';
     showToast(isPro3D() ? '🟡 Modo 3D PRO activado' : '⚪ Modo 2D clásico');
   }
-  if(SFX.tap) SFX.tap();
+  if(SFX.modeToggle) SFX.modeToggle();
   if(HAPTICS.tap) HAPTICS.tap();
 }
 function resetPro3DParallax(){
@@ -10914,6 +11135,93 @@ function resetPro3DParallax(){
   ticker.appendChild(btn);
   // Apply state on load
   setPro3D(isPro3D());
+})();
+
+// ============================================================
+// PHASE 7h: BACKGROUND MUSIC (procedural ambient loop)
+// ============================================================
+const MUSIC_KEY = 'tnsvt_music_v1';
+let musicEnabled = false;
+let musicNode = null;
+let musicInterval = null;
+
+function isMusicEnabled(){
+  try { return localStorage.getItem(MUSIC_KEY) === '1'; } catch(e){ return false; }
+}
+
+function setMusicEnabled(v){
+  musicEnabled = !!v;
+  try { localStorage.setItem(MUSIC_KEY, musicEnabled ? '1' : '0'); } catch(e){}
+  if(musicEnabled) startMusic();
+  else stopMusic();
+}
+
+function startMusic(){
+  if(musicInterval) return;
+  // Procedural ambient: drone + slow melody en pentatonic menor
+  // Notas: A2 (110), C3 (131), D3 (147), E3 (165), G3 (196)
+  const scale = [110, 131, 147, 165, 196, 220, 261, 294];
+  let step = 0;
+  function playNote(){
+    if(!musicEnabled || !soundEnabled) return;
+    try {
+      const ctx = getAudio();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      const note = scale[step % scale.length];
+      osc.frequency.setValueAtTime(note, ctx.currentTime);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(800, ctx.currentTime);
+      const vol = 0.04 * (typeof sfxVolume !== 'undefined' ? sfxVolume : 1);
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.5);
+      gain.gain.linearRampToValueAtTime(vol * 0.7, ctx.currentTime + 2.0);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 3.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 4);
+    } catch(e){}
+    step++;
+  }
+  // Play first note immediately, then every 3s
+  playNote();
+  musicInterval = setInterval(playNote, 3000);
+}
+
+function stopMusic(){
+  if(musicInterval){
+    clearInterval(musicInterval);
+    musicInterval = null;
+  }
+}
+
+function toggleMusic(){
+  setMusicEnabled(!isMusicEnabled());
+  const btn = document.getElementById('music-toggle');
+  if(btn){
+    btn.textContent = musicEnabled ? '🎵' : '🎶';
+    btn.style.color = musicEnabled ? '#c8a0ff' : '#6a5a8a';
+    showToast(musicEnabled ? '🎵 Música activada' : '🎶 Música desactivada');
+  }
+  if(SFX.tap) SFX.tap();
+  if(HAPTICS.tap) HAPTICS.tap();
+}
+
+(function injectMusicToggle(){
+  const ticker = document.getElementById('ticker');
+  if(!ticker) return;
+  const btn = document.createElement('button');
+  btn.id = 'music-toggle';
+  btn.className = 'pro3d-toggle';
+  btn.style.marginLeft = '4px';
+  btn.textContent = isMusicEnabled() ? '🎵' : '🎶';
+  btn.title = 'Música ambiental ON/OFF';
+  btn.onclick = toggleMusic;
+  ticker.appendChild(btn);
+  // Apply state on load
+  if(isMusicEnabled()) startMusic();
 })();
 
 // ── 3D tilt on hover (solo en modo pro3d y desktop) ───────────
@@ -11020,6 +11328,9 @@ function showRoundCountdown(cb){
   function tick(){
     if(n <= 0){
       overlay.remove();
+      // Phase 7: countdown GO!
+      if(SFX.countdownGo) SFX.countdownGo();
+      if(HAPTICS.countdownGo) HAPTICS.countdownGo();
       if(typeof cb === 'function') cb();
       return;
     }
@@ -11028,8 +11339,9 @@ function showRoundCountdown(cb){
     num.textContent = n === 0 ? 'GO!' : n;
     overlay.innerHTML = '';
     overlay.appendChild(num);
-    if(SFX.tap) SFX.tap();
-    if(HAPTICS.tap) HAPTICS.tap();
+    // Phase 7: tick sound diferenciado
+    if(SFX.countdownTick) SFX.countdownTick();
+    if(HAPTICS.countdownTick) HAPTICS.countdownTick();
     n--;
     setTimeout(tick, 800);
   }
