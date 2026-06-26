@@ -18,7 +18,7 @@
 .tick-chg.dn{color:var(--red)}
 .tick-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse2 2s infinite}
 @keyframes pulse2{0%,100%{opacity:1}50%{opacity:.4}}
-.lang-btn.active{color:var(--violet3)!important;background:rgba(147,83,255,.12)!important;box-shadow:0 0 8px rgba(147,83,255,.3)}
+.lang-btn.active{color:var(--violet3)!important;background:rgba(139,92,246,.12)!important;box-shadow:0 0 8px rgba(139,92,246,.3)}
 .lang-btn:hover{color:var(--text)!important}
 
 /* MAIN CONTAINER */
@@ -46,15 +46,15 @@ body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
 
 /* BOTTOM NAV */
 #nav{
-  height:68px;background:linear-gradient(180deg,rgba(13,10,26,.85),rgba(26,18,48,.95));
-  border-top:1px solid rgba(147,83,255,.25);
+  height:68px;background:linear-gradient(180deg,rgba(18,13,31,.92),rgba(26,18,40,.96));
+  border-top:1px solid rgba(170,120,255,.2);
   display:flex;align-items:stretch;flex-shrink:0;
   position:fixed;bottom:0;left:0;right:0;z-index:100;
-  box-shadow:0 -8px 32px rgba(0,0,0,.5),0 -2px 12px rgba(147,83,255,.15);
+  box-shadow:0 -8px 32px rgba(120,70,255,.18),0 -2px 12px rgba(170,120,255,.15);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-#nav::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(147,83,255,.6) 30%,rgba(240,192,96,.5) 70%,transparent)}
+#nav::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.5) 30%,rgba(245,200,106,.4) 70%,transparent)}
 .nav-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:4px;cursor:pointer;transition:color .25s,transform .15s;
@@ -78,8 +78,8 @@ body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
 .nav-btn.play-btn{color:var(--gold)}
 .nav-btn.play-btn svg{filter:drop-shadow(0 0 8px var(--gold))}
 /* Nav SVG glow + animation per-icon */
-.nav-svg{filter:drop-shadow(0 0 2px rgba(147,83,255,.3))}
-.nav-btn:hover .nav-svg{transform:scale(1.08);filter:drop-shadow(0 0 6px rgba(147,83,255,.5))}
+.nav-svg{filter:drop-shadow(0 0 2px rgba(139,92,246,.3))}
+.nav-btn:hover .nav-svg{transform:scale(1.08);filter:drop-shadow(0 0 6px rgba(139,92,246,.5))}
 .nav-btn.active .nav-svg{filter:drop-shadow(0 0 10px currentColor) drop-shadow(0 0 2px currentColor)}
 .nav-svg-play circle:nth-child(1){animation:nav-ring-pulse 3s ease-in-out infinite;transform-origin:14px 14px}
 .nav-svg-play circle:nth-child(4){animation:nav-dot-orbit 4s linear infinite;transform-origin:14px 14px}
@@ -101,7 +101,7 @@ body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
   min-width:8px;height:8px;border-radius:50%;
   background:var(--gold);box-shadow:0 0 6px var(--gold);
   pointer-events:none;z-index:2;
-  font-size:7px;font-weight:700;color:#06040f;line-height:8px;text-align:center;padding:0;
+  font-size:7px;font-weight:700;color:#09070F;line-height:8px;text-align:center;padding:0;
 }
 .nav-badge:empty{animation:badge-pulse 1.5s ease-in-out infinite}
 .nav-badge:not(:empty){

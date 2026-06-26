@@ -16,15 +16,15 @@ body.pro3d .flip-card{
   will-change:transform;
 }
 .pro3d-card:hover{
-  box-shadow:0 20px 50px rgba(147,83,255,.3),inset 0 1px 0 rgba(255,255,255,.08);
+  box-shadow:0 20px 50px rgba(139,92,246,.3),inset 0 1px 0 rgba(255,255,255,.08);
 }
 
 /* ── Stronger glassmorphism in 3D mode ──────────────────────── */
 body.pro3d .glass-strong{
-  background:rgba(26,18,48,.4)!important;
+  background:rgba(26,18,40,.4)!important;
   backdrop-filter:blur(30px) saturate(200%);
   -webkit-backdrop-filter:blur(30px) saturate(200%);
-  border:1px solid rgba(200,160,255,.25)!important;
+  border:1px solid rgba(185,131,255,.25)!important;
   box-shadow:0 12px 48px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);
 }
 
@@ -46,13 +46,13 @@ body.pro3d .glass-strong{
 
 /* ── 3D toggle button ────────────────────────────────────────── */
 .pro3d-toggle{
-  background:rgba(147,83,255,.15);border:1px solid rgba(147,83,255,.3);
-  border-radius:20px;padding:3px 10px;color:#c8a0ff;font-size:12px;
+  background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);
+  border-radius:20px;padding:3px 10px;color:#B983FF;font-size:12px;
   cursor:pointer;transition:all .2s;font-family:Inter,sans-serif;
   flex-shrink:0;
 }
-.pro3d-toggle:hover{background:rgba(147,83,255,.25)}
-body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,192,96,.4);color:#f0c060}
+.pro3d-toggle:hover{background:rgba(139,92,246,.25)}
+body.pro3d .pro3d-toggle{background:rgba(245,200,106,.2);border-color:rgba(245,200,106,.4);color:#F5C86A}
 
 /* ── Coverflow removed in Ola 9 ─────────────────────────────── */
 

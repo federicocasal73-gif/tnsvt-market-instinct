@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Market Instinct">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#06040f">
+<meta name="theme-color" content="#09070F">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://fonts.googleapis.com https://*.gstatic.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://*.gstatic.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' http://192.168.1.2:8000 https://api.coingecko.com https://*.gstatic.com">
 <title>T.N.S.V.T — Market Instinct</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2306040f'/><rect x='18' y='48' width='14' height='32' rx='3' fill='%239353ff' opacity='.9'/><rect x='40' y='30' width='14' height='50' rx='3' fill='%23f0c060' opacity='.9'/><rect x='62' y='38' width='14' height='42' rx='3' fill='%234ade80' opacity='.9'/><polyline points='25,55 47,35 69,55' stroke='%23c8a0ff' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>">
@@ -17,15 +17,15 @@
   #nav { padding-bottom: env(safe-area-inset-bottom, 0px); }
   body { padding-top: env(safe-area-inset-top, 0px); }
   /* Splash screen — Modern Dark Cinema style */
-  #app-splash{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1a0840 0%,#06040f 70%);overflow:hidden;transition:opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1)}
+  #app-splash{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1A0840 0%,#09070F 70%);overflow:hidden;transition:opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1)}
   #app-splash.hidden{opacity:0;transform:scale(1.05);pointer-events:none}
   /* Ambient blobs (slow breathing) */
   .splash-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:0;pointer-events:none;will-change:transform,opacity}
-  .splash-blob-violet{width:380px;height:380px;background:radial-gradient(circle,#9353ff,transparent 70%);top:-90px;left:-100px;animation:splash-breathe 7s 200ms cubic-bezier(.4,0,.6,1) forwards}
-  .splash-blob-gold{width:280px;height:280px;background:radial-gradient(circle,#f0c060,transparent 70%);bottom:-80px;right:-80px;animation:splash-breathe 7s 200ms cubic-bezier(.4,0,.6,1) forwards;animation-delay:400ms}
+  .splash-blob-violet{width:380px;height:380px;background:radial-gradient(circle,#8B5CF6,transparent 70%);top:-90px;left:-100px;animation:splash-breathe 7s 200ms cubic-bezier(.4,0,.6,1) forwards}
+  .splash-blob-gold{width:280px;height:280px;background:radial-gradient(circle,#F5C86A,transparent 70%);bottom:-80px;right:-80px;animation:splash-breathe 7s 200ms cubic-bezier(.4,0,.6,1) forwards;animation-delay:400ms}
   @keyframes splash-breathe{0%{opacity:0;transform:scale(.8)}30%{opacity:.18;transform:scale(1)}70%{opacity:.12;transform:scale(1.08)}100%{opacity:.15;transform:scale(1.02)}}
   .splash-inner{text-align:center;position:relative;z-index:1}
-  .splash-icon{margin-bottom:18px;filter:drop-shadow(0 0 24px rgba(147,83,255,.35))}
+  .splash-icon{margin-bottom:18px;filter:drop-shadow(0 0 24px rgba(139,92,246,.35))}
   .splash-icon svg{width:76px;height:76px;overflow:visible}
   .splash-c{opacity:0;animation:splash-rise 600ms cubic-bezier(.16,1,.3,1) forwards}
   .splash-c.c1{animation-delay:100ms}
@@ -55,10 +55,10 @@
   /* Skip-to-main link (a11y) */
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   /* Daily Streak indicator (home) */
-  .ds-card{display:flex;align-items:center;gap:12px;margin:10px 16px 0;padding:10px 12px;background:linear-gradient(135deg,rgba(147,83,255,.08),rgba(240,192,96,.05));border:1px solid rgba(147,83,255,.25);border-radius:var(--r);cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1)}
+  .ds-card{display:flex;align-items:center;gap:12px;margin:10px 16px 0;padding:10px 12px;background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(245,200,106,.05));border:1px solid rgba(139,92,246,.25);border-radius:var(--r);cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1)}
   .ds-card:active{transform:scale(.98)}
-  .ds-card.ds-played{border-color:rgba(74,222,128,.4);background:linear-gradient(135deg,rgba(74,222,128,.1),rgba(147,83,255,.05))}
-  .ds-icon{width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 12px rgba(147,83,255,.2)}
+  .ds-card.ds-played{border-color:rgba(74,222,128,.4);background:linear-gradient(135deg,rgba(74,222,128,.1),rgba(139,92,246,.05))}
+  .ds-icon{width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 12px rgba(139,92,246,.2)}
   .ds-info{flex:1;min-width:0}
   .ds-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:600}
   .ds-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
@@ -69,7 +69,7 @@
   .ds-sub{font-size:10px;color:var(--text3)}
   .ds-arrow{font-size:16px;color:var(--text3);flex-shrink:0}
   /* Achievement home preview */
-  .ha-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px;font-size:11px;font-family:'Cinzel',serif;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase}
+   .ha-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px;font-size:11px;font-family:'Cormorant Garamond',serif;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase}
   .ha-sec-hdr .ha-link{font-family:'Inter',sans-serif;font-size:11px;color:var(--violet3);text-transform:none;letter-spacing:0;cursor:pointer}
   .ha-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 12px}
   .ha-card{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;transition:transform .2s, border-color .25s}
@@ -77,8 +77,8 @@
   .ha-card.ha-locked{opacity:.55}
   .ha-card.ha-rarity-common{border-color:var(--border)}
   .ha-card.ha-rarity-rare{border-color:rgba(96,165,250,.5)}
-  .ha-card.ha-rarity-epic{border-color:rgba(147,83,255,.5)}
-  .ha-card.ha-rarity-legendary{border-color:rgba(240,192,96,.6);background:linear-gradient(135deg,rgba(240,192,96,.08),var(--panel))}
+  .ha-card.ha-rarity-epic{border-color:rgba(139,92,246,.5)}
+  .ha-card.ha-rarity-legendary{border-color:rgba(245,200,106,.6);background:linear-gradient(135deg,rgba(245,200,106,.08),var(--panel))}
   .ha-emoji{font-size:26px;margin-bottom:4px;display:block}
   .ha-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.2}
   .ha-locked .ha-name{color:var(--text3)}
@@ -100,8 +100,8 @@
   .ach-modal-rarity{display:inline-block;padding:4px 12px;border-radius:12px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:14px}
   .ach-modal-rarity.common{background:rgba(106,90,138,.2);color:var(--text3)}
   .ach-modal-rarity.rare{background:rgba(96,165,250,.15);color:var(--blue)}
-  .ach-modal-rarity.epic{background:rgba(147,83,255,.15);color:var(--violet3)}
-  .ach-modal-rarity.legendary{background:rgba(240,192,96,.15);color:var(--gold)}
+  .ach-modal-rarity.epic{background:rgba(139,92,246,.15);color:var(--violet3)}
+  .ach-modal-rarity.legendary{background:rgba(245,200,106,.15);color:var(--gold)}
   .ach-modal-xp{font-size:14px;color:var(--gold);font-weight:700;margin-bottom:14px}
   .ach-modal-prog-wrap{margin:14px 0;text-align:left}
   .ach-modal-prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px}
@@ -109,8 +109,8 @@
   .ach-modal-prog-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--gold));border-radius:4px;transition:width .6s cubic-bezier(.16,1,.3,1)}
   .ach-modal-close{margin-top:14px;padding:10px 20px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;font-size:13px;font-weight:600}
   /* Settings */
-  .set-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid var(--border);border-radius:14px;transition:border-color .2s}
-  .set-row:hover{border-color:rgba(147,83,255,.3)}
+  .set-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(135deg,rgba(26,18,40,.6),rgba(36,23,56,.4));border:1px solid var(--border);border-radius:14px;transition:border-color .2s}
+  .set-row:hover{border-color:rgba(139,92,246,.3)}
   .set-info{flex:1;min-width:0}
   .set-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--text)}
   .set-desc{font-size:11px;color:var(--text3);margin-top:3px;line-height:1.4}
@@ -120,30 +120,30 @@
     transition:background .25s,border-color .25s;flex-shrink:0;
     -webkit-tap-highlight-color:transparent;
   }
-  .set-toggle[data-on="1"],body.light .set-toggle[data-on="dark"]{background:linear-gradient(135deg,var(--violet),var(--violet2));border-color:rgba(147,83,255,.5);box-shadow:0 0 12px rgba(147,83,255,.3)}
+  .set-toggle[data-on="1"],body.light .set-toggle[data-on="dark"]{background:linear-gradient(135deg,var(--violet),var(--violet2));border-color:rgba(139,92,246,.5);box-shadow:0 0 12px rgba(139,92,246,.3)}
   .set-toggle-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--text);transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .2s;box-shadow:0 2px 6px rgba(0,0,0,.4)}
   .set-toggle[data-on="1"] .set-toggle-knob,body.light .set-toggle[data-on="dark"] .set-toggle-knob{transform:translateX(26px);background:#fff}
   .set-toggle-label{position:absolute;top:50%;right:8px;transform:translateY(-50%);font-size:14px;pointer-events:none}
   .set-toggle[data-on="1"] .set-toggle-label,body.light .set-toggle[data-on="dark"] .set-toggle-label{right:auto;left:8px}
   .set-lang-btn{flex:1;padding:10px;border-radius:10px;background:var(--panel);border:1px solid var(--border);color:var(--text);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s}
-  .set-lang-btn.active{background:linear-gradient(135deg,var(--violet),var(--violet2));border-color:var(--violet);color:#fff;box-shadow:0 2px 8px rgba(147,83,255,.3)}
-  .set-danger-btn{margin-top:14px;padding:12px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:10px;color:var(--red);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s}
-  .set-danger-btn:hover{background:rgba(248,113,113,.2)}
+  .set-lang-btn.active{background:linear-gradient(135deg,var(--violet),var(--violet2));border-color:var(--violet);color:#fff;box-shadow:0 2px 8px rgba(139,92,246,.3)}
+  .set-danger-btn{margin-top:14px;padding:12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;color:var(--red);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s}
+  .set-danger-btn:hover{background:rgba(239,68,68,.2)}
   .set-danger-btn:active{transform:scale(.97)}
   /* My position pill in Liga */
-  .my-pos-pill{display:flex;align-items:center;gap:8px;margin:0 auto 12px;padding:8px 14px;background:linear-gradient(135deg,rgba(147,83,255,.12),rgba(240,192,96,.08));border:1px solid rgba(147,83,255,.3);border-radius:20px;font-size:12px;width:fit-content;animation:my-pos-in .5s cubic-bezier(.16,1,.3,1)}
+  .my-pos-pill{display:flex;align-items:center;gap:8px;margin:0 auto 12px;padding:8px 14px;background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(245,200,106,.08));border:1px solid rgba(139,92,246,.3);border-radius:20px;font-size:12px;width:fit-content;animation:my-pos-in .5s cubic-bezier(.16,1,.3,1)}
   @keyframes my-pos-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
   .my-pos-label{color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:10px}
   .my-pos-rank{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);line-height:1}
   .my-pos-of{color:var(--text3);font-size:11px}
-  .my-pos-share{background:rgba(147,83,255,.15);border:1px solid rgba(147,83,255,.3);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .2s;flex-shrink:0}
+  .my-pos-share{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .2s;flex-shrink:0}
   .my-pos-share:active{transform:scale(.9)}
   /* My position chip on home */
-  .home-rank-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:linear-gradient(135deg,rgba(147,83,255,.12),rgba(240,192,96,.08));border:1px solid rgba(147,83,255,.3);border-radius:14px;font-size:11px;color:var(--text);font-weight:600;cursor:pointer;transition:all .2s}
+  .home-rank-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(245,200,106,.08));border:1px solid rgba(139,92,246,.3);border-radius:14px;font-size:11px;color:var(--text);font-weight:600;cursor:pointer;transition:all .2s}
   .home-rank-chip:active{transform:scale(.97)}
   .home-rank-chip .hr-rank{color:var(--gold);font-family:'Cinzel',serif;font-weight:700}
   /* Liga rank-row is-me highlight */
-.rank-row.is-me{background:linear-gradient(135deg,rgba(147,83,255,.22),rgba(240,192,96,.08));border:1.5px solid var(--violet);box-shadow:0 0 18px rgba(147,83,255,.3),inset 0 0 12px rgba(147,83,255,.08)}
+.rank-row.is-me{background:linear-gradient(135deg,rgba(139,92,246,.22),rgba(245,200,106,.08));border:1.5px solid var(--violet);box-shadow:0 0 18px rgba(139,92,246,.3),inset 0 0 12px rgba(139,92,246,.08)}
   /* ============================================================
      TNSVT GLOW UP — estilos nuevos (Ritual, Cofradías, Sintonía)
      Pegado del bundle integration/new-styles.css. Todas las clases
@@ -152,54 +152,54 @@
   /* Keyframes */
   @keyframes gu-ringSpin     { from { transform: rotate(0deg);   } to { transform: rotate(360deg); } }
   @keyframes gu-ringSpinRev  { from { transform: rotate(360deg); } to { transform: rotate(0deg);   } }
-  @keyframes gu-orbPulse     { 0%,100% { box-shadow: 0 0 40px 6px rgba(147,83,255,.35), inset 0 0 30px rgba(240,192,96,.18); }
-                               50%     { box-shadow: 0 0 70px 14px rgba(147,83,255,.55), inset 0 0 44px rgba(240,192,96,.30); } }
+  @keyframes gu-orbPulse     { 0%,100% { box-shadow: 0 0 40px 6px rgba(139,92,246,.35), inset 0 0 30px rgba(245,200,106,.18); }
+                               50%     { box-shadow: 0 0 70px 14px rgba(139,92,246,.55), inset 0 0 44px rgba(245,200,106,.30); } }
   @keyframes gu-flameFlick   { 0%,100% { transform: scale(1)    rotate(-2deg); filter: drop-shadow(0 0 6px #ff9500); }
                                50%     { transform: scale(1.12) rotate( 2deg); filter: drop-shadow(0 0 12px #ffd700); } }
   /* Oracle orb */
   .gu-orb-wrap   { position:relative; width:230px; height:230px; display:flex; align-items:center; justify-content:center; }
   .gu-ring       { position:absolute; border-radius:50%; }
-  .gu-ring.r1    { inset:0;    border:1px dashed rgba(240,192,96,.45); animation:gu-ringSpin   40s linear infinite; }
-  .gu-ring.r2    { inset:16px; border:1px solid  rgba(147,83,255,.40); animation:gu-ringSpinRev 30s linear infinite; }
-  .gu-ring.r3    { inset:30px; border:1px dashed rgba(200,160,255,.30); animation:gu-ringSpin   24s linear infinite; }
+  .gu-ring.r1    { inset:0;    border:1px dashed rgba(245,200,106,.45); animation:gu-ringSpin   40s linear infinite; }
+  .gu-ring.r2    { inset:16px; border:1px solid  rgba(139,92,246,.40); animation:gu-ringSpinRev 30s linear infinite; }
+  .gu-ring.r3    { inset:30px; border:1px dashed rgba(185,131,255,.30); animation:gu-ringSpin   24s linear infinite; }
   .gu-orb-core   { width:158px; height:158px; border-radius:50%;
                    background:radial-gradient(circle at 35% 30%, #2a1d4e, var(--bg2) 75%);
                    display:flex; flex-direction:column; align-items:center; justify-content:center;
-                   border:1px solid rgba(240,192,96,.30); animation:gu-orbPulse 4s ease-in-out infinite; }
+                   border:1px solid rgba(245,200,106,.30); animation:gu-orbPulse 4s ease-in-out infinite; }
   .gu-flame      { animation:gu-flameFlick 1.6s ease-in-out infinite; }
   /* Resonance radial */
   .gu-reso       { position:relative; width:266px; height:266px; margin:0 auto; }
   .gu-reso > div { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; }
   .gu-reso-core  { background:radial-gradient(circle at 35% 30%, #2a1d4e, var(--bg2) 78%);
-                   border:1px solid rgba(240,192,96,.35); animation:gu-orbPulse 4s ease-in-out infinite;
+                   border:1px solid rgba(245,200,106,.35); animation:gu-orbPulse 4s ease-in-out infinite;
                    display:flex; flex-direction:column; align-items:center; justify-content:center; }
   /* Ladder row destacada (tú) */
   .gu-row        { display:flex; align-items:center; gap:11px; border-radius:12px; padding:10px 12px;
                    background:var(--panel); border:1px solid var(--border); }
   .gu-row.promo  { border-color:rgba(74,222,128,.25); }
   .gu-row.you    { padding:11px 12px; border:1.5px solid var(--violet);
-                   background:linear-gradient(135deg,rgba(147,83,255,.22),rgba(240,192,96,.08));
-                   box-shadow:0 0 18px rgba(147,83,255,.30); }
-  .gu-row-rank   { font-family:'JetBrains Mono',monospace; font-size:13px; width:18px; color:var(--text2); }
+                   background:linear-gradient(135deg,rgba(139,92,246,.22),rgba(245,200,106,.08));
+                   box-shadow:0 0 18px rgba(139,92,246,.30); }
+   .gu-row-rank   { font-family:'Space Grotesk',sans-serif; font-size:13px; width:18px; color:var(--text2); }
   .gu-row-av     { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
-  .gu-num        { font-family:'JetBrains Mono',monospace; }
+   .gu-num        { font-family:'Space Grotesk',sans-serif; }
   /* ============================================================
      GLOW UP OLA 1 — Sistema de Top Bar reutilizable
      Un header consistente para todas las screens (mismas reglas
      que Ritual del Oráculo y Cofradías).
      ============================================================ */
-  .gu-screen-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(147,83,255,.05),transparent)}
+  .gu-screen-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(139,92,246,.05),transparent)}
   .gu-screen-header.compact{padding:10px 14px 6px}
   .gu-header-label{flex:1;min-width:0}
-  .gu-header-eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;line-height:1}
+   .gu-header-eyebrow{font-family:'Cormorant Garamond',serif;font-size:9px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;line-height:1}
   .gu-header-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-top:4px;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
   .gu-header-sub{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.4}
   .gu-header-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-  .gu-header-asset{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:14px;background:rgba(147,83,255,.12);border:1px solid rgba(147,83,255,.3);font-size:11px;font-weight:600;color:var(--violet3)}
+  .gu-header-asset{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:14px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);font-size:11px;font-weight:600;color:var(--violet3)}
   .gu-header-status{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:600;letter-spacing:.3px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:var(--green)}
   .gu-header-status.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:badge-pulse 1.5s ease-in-out infinite}
   /* Glass card unificada (mejorada sobre .card existente) */
-  .card.gu-card{background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.25)}
+  .card.gu-card{background:linear-gradient(135deg,rgba(26,18,40,.6),rgba(36,23,56,.4));border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.25)}
   /* Pill reutilizable */
   .gu-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:18px;background:var(--panel);border:1px solid var(--border);font-size:12px;color:var(--text)}
   .gu-pill-icon{font-size:16px}
@@ -209,10 +209,10 @@
   .gu-action{flex:1;padding:15px;border-radius:14px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px;transition:transform .15s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
   .gu-action:active{transform:scale(.97)}
   .gu-action.long{color:var(--bg);background:linear-gradient(135deg,var(--green),#16a34a);box-shadow:0 4px 18px rgba(74,222,128,.3)}
-  .gu-action.short{color:#fff;background:linear-gradient(135deg,var(--red),#b91c1c);box-shadow:0 4px 18px rgba(248,113,113,.3)}
+  .gu-action.short{color:#fff;background:linear-gradient(135deg,var(--red),#b91c1c);box-shadow:0 4px 18px rgba(239,68,68,.3)}
   .gu-action.skip{width:74px;background:var(--panel2);color:var(--text);border:1px solid var(--border);font-size:13px}
   .gu-action.long:hover{box-shadow:0 6px 24px rgba(74,222,128,.5)}
-  .gu-action.short:hover{box-shadow:0 6px 24px rgba(248,113,113,.5)}
+  .gu-action.short:hover{box-shadow:0 6px 24px rgba(239,68,68,.5)}
 </style>
 <script>
 window.onerror = function(msg, url, line, col, err) {
@@ -222,7 +222,7 @@ window.onerror = function(msg, url, line, col, err) {
     if (!el) {
       const d = document.createElement('div');
       d.id = 'error-display';
-      d.style.cssText = 'position:fixed;bottom:70px;left:0;right:0;background:rgba(248,113,113,.95);color:#fff;padding:8px 12px;font-size:12px;z-index:9999;display:block;border-top:2px solid #f87171';
+      d.style.cssText = 'position:fixed;bottom:70px;left:0;right:0;background:rgba(239,68,68,.95);color:#fff;padding:8px 12px;font-size:12px;z-index:9999;display:block;border-top:2px solid #f87171';
       d.textContent = '[ERROR] ' + (msg || '') + ' at line ' + (line || '?');
       document.body.appendChild(d);
     } else {
@@ -245,7 +245,7 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
 }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/layout.css">
@@ -267,12 +267,12 @@ if('serviceWorker' in navigator){
   <span class="tick-item" id="t-SOL"><span class="tick-sym">SOL</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
   <span class="tick-item" id="t-BNB"><span class="tick-sym">BNB</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
   <span class="tick-item" id="t-XRP"><span class="tick-sym">XRP</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
-  <span class="tick-item" id="t-GOLD" style="border-left:1px solid rgba(45,31,85,.6);padding-left:12px;margin-left:4px"><span class="tick-sym" style="color:var(--gold)">GOLD</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
+  <span class="tick-item" id="t-GOLD" style="border-left:1px solid rgba(170,120,255,.6);padding-left:12px;margin-left:4px"><span class="tick-sym" style="color:var(--gold)">GOLD</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
   <span class="tick-item" id="t-SP500"><span class="tick-sym" style="color:var(--blue)">SP500</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
   <span class="tick-item" id="t-NAS100"><span class="tick-sym" style="color:var(--blue)">NAS100</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
-  <span class="tick-item" id="t-DXY"><span class="tick-sym" style="color:rgba(200,160,255,.8)">DXY</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
-  <span class="tick-item" id="t-EURUSD"><span class="tick-sym" style="color:rgba(200,160,255,.8)">EUR/USD</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
-  <span class="tick-item" style="border-left:1px solid rgba(45,31,85,.6);padding-left:10px;margin-left:6px;display:flex;gap:4px;align-items:center;flex-shrink:0">
+  <span class="tick-item" id="t-DXY"><span class="tick-sym" style="color:rgba(185,131,255,.8)">DXY</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
+  <span class="tick-item" id="t-EURUSD"><span class="tick-sym" style="color:rgba(185,131,255,.8)">EUR/USD</span><span class="tick-price">...</span><span class="tick-chg">...</span></span>
+  <span class="tick-item" style="border-left:1px solid rgba(170,120,255,.6);padding-left:10px;margin-left:6px;display:flex;gap:4px;align-items:center;flex-shrink:0">
     <button class="lang-btn active" data-lang="es" onclick="setLang('es')" style="background:0;border:0;color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:inherit;letter-spacing:.3px">🇦🇷 ES</button>
     <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:0;border:0;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:inherit;letter-spacing:.3px">🇺🇸 EN</button>
   </span>
@@ -304,14 +304,14 @@ if('serviceWorker' in navigator){
   <div class="splash-blob splash-blob-gold"></div>
   <div class="splash-inner">
     <div class="splash-icon">
-      <svg viewBox="0 0 80 80" fill="none"><rect class="splash-c c1" x="4" y="20" width="12" height="40" rx="2" stroke="var(--violet3)" stroke-width="2.5" fill="rgba(147,83,255,.15)"/><rect class="splash-c c2" x="20" y="12" width="12" height="48" rx="2" stroke="var(--gold)" stroke-width="2.5" fill="rgba(240,192,96,.15)"/><rect class="splash-c c3" x="36" y="26" width="12" height="34" rx="2" stroke="var(--green)" stroke-width="2.5" fill="rgba(74,222,128,.15)"/><polyline class="splash-trend" points="10,48 26,32 42,40 58,30" stroke="var(--violet3)" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 80 80" fill="none"><rect class="splash-c c1" x="4" y="20" width="12" height="40" rx="2" stroke="var(--violet3)" stroke-width="2.5" fill="rgba(139,92,246,.15)"/><rect class="splash-c c2" x="20" y="12" width="12" height="48" rx="2" stroke="var(--gold)" stroke-width="2.5" fill="rgba(245,200,106,.15)"/><rect class="splash-c c3" x="36" y="26" width="12" height="34" rx="2" stroke="var(--green)" stroke-width="2.5" fill="rgba(74,222,128,.15)"/><polyline class="splash-trend" points="10,48 26,32 42,40 58,30" stroke="var(--violet3)" stroke-width="2" stroke-linecap="round"/></svg>
     </div>
     <div class="splash-title">T.N.S.V.T</div>
     <div class="splash-sub">Market Instinct</div>
     <div class="splash-tagline">TWO-STEP MULTIFRACTAL THEORY</div>
     <div class="splash-ring">
       <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="20" r="17" stroke="rgba(147,83,255,.15)" stroke-width="2.5"/>
+        <circle cx="20" cy="20" r="17" stroke="rgba(139,92,246,.15)" stroke-width="2.5"/>
         <path d="M20,3 A17,17 0 0,1 37,20" stroke="url(#splash-ring-grad)" stroke-width="2.5" stroke-linecap="round"/>
         <defs>
           <linearGradient id="splash-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -364,7 +364,7 @@ if('serviceWorker' in navigator){
         </div>
       </div>
       <div style="display:flex; flex-direction:column; align-items:center; margin:22px 0 8px;">
-        <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; color:var(--text2); text-transform:uppercase; margin-bottom:16px;" data-i18n="ritual.oracle">· Oráculo del día ·</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:4px; color:var(--text2); text-transform:uppercase; margin-bottom:16px;" data-i18n="ritual.oracle">· Oráculo del día ·</div>
         <div class="gu-orb-wrap">
           <div class="gu-ring r1"></div>
           <div class="gu-ring r2"></div>
@@ -375,7 +375,7 @@ if('serviceWorker' in navigator){
             <div style="font-size:9px; color:var(--text3); margin-top:2px; letter-spacing:2px; text-transform:uppercase;" data-i18n="ritual.energy">Energía hoy</div>
           </div>
         </div>
-        <div style="font-family:'Cinzel',serif; font-style:italic; font-size:13px; color:var(--violet3); text-align:center; line-height:1.6; max-width:280px; margin-top:18px; text-shadow:0 0 10px rgba(147,83,255,.3);" id="gu-mantra-home">"El mercado respira con quien escucha. Hoy, la estructura favorece la paciencia."</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:var(--violet3); text-align:center; line-height:1.6; max-width:280px; margin-top:18px; text-shadow:0 0 10px rgba(139,92,246,.3);" id="gu-mantra-home">"El mercado respira con quien escucha. Hoy, la estructura favorece la paciencia."</div>
       </div>
       <div class="card" style="margin-top:18px;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
@@ -459,7 +459,7 @@ if('serviceWorker' in navigator){
         <div class="mode-desc" data-i18n="mode.classic.desc">Long · Short · Sin Trade — el juego base</div>
         <div class="mode-meta">
           <span class="mode-tag" style="background:rgba(74,222,128,.15);color:var(--green)" data-i18n="tag.libre">LIBRE</span>
-          <span class="mode-tag" style="background:rgba(147,83,255,.15);color:var(--violet3)">8 ACTIVOS</span>
+          <span class="mode-tag" style="background:rgba(139,92,246,.15);color:var(--violet3)">8 ACTIVOS</span>
         </div>
       </div>
       <div class="mode-arrow">›</div>
@@ -470,7 +470,7 @@ if('serviceWorker' in navigator){
         <div class="mode-name" data-i18n="mode.survival.name">Survival</div>
         <div class="mode-desc" data-i18n="mode.survival.desc">3 vidas · dificultad creciente</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(248,113,113,.15);color:var(--red)" data-i18n="tag.intenso">INTENSO</span>
+          <span class="mode-tag" style="background:rgba(239,68,68,.15);color:var(--red)" data-i18n="tag.intenso">INTENSO</span>
         </div>
       </div>
       <div class="mode-arrow">›</div>
@@ -481,7 +481,7 @@ if('serviceWorker' in navigator){
         <div class="mode-name" data-i18n="mode.arena.name">Arena 1vs1</div>
         <div class="mode-desc" data-i18n="mode.arena.desc">Desafiá a otro trader en tiempo real</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(240,192,96,.15);color:var(--gold)" data-i18n="tag.competitivo">COMPETITIVO</span>
+          <span class="mode-tag" style="background:rgba(245,200,106,.15);color:var(--gold)" data-i18n="tag.competitivo">COMPETITIVO</span>
         </div>
       </div>
       <div class="mode-arrow">›</div>
@@ -494,7 +494,7 @@ if('serviceWorker' in navigator){
         <div class="mode-meta">
           <span class="mode-tag" style="background:rgba(255,215,0,.15);color:#ffd700" data-i18n="tag.metodologia">METODOLOGÍA</span>
           <span class="mode-tag" style="background:rgba(74,222,128,.1);color:var(--green)" data-i18n="tag.new">NUEVO</span>
-          <span class="mode-tag" style="background:linear-gradient(135deg,rgba(240,192,96,.25),rgba(212,160,48,.25));color:var(--gold);border:1px solid var(--gold)" data-i18n="tag.vip">👑 VIP</span>
+          <span class="mode-tag" style="background:linear-gradient(135deg,rgba(245,200,106,.25),rgba(230,168,59,.25));color:var(--gold);border:1px solid var(--gold)" data-i18n="tag.vip">👑 VIP</span>
         </div>
       </div>
       <div style="font-size:18px">🔒</div>
@@ -588,7 +588,7 @@ if('serviceWorker' in navigator){
 
   <!-- CHART -->
   <div style="padding:0 16px 8px">
-    <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(147,83,255,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(147,83,255,.15)">
+    <div style="background:linear-gradient(135deg,rgba(26,18,40,.6),rgba(36,23,56,.4));border:1px solid rgba(139,92,246,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(139,92,246,.15)">
       <canvas id="classic-chart" height="260"></canvas>
     </div>
   </div>
@@ -626,7 +626,7 @@ if('serviceWorker' in navigator){
       <span class="gu-num" id="sv-score" style="font-size:14px;color:var(--gold);font-weight:700">0</span>
       <span class="gu-pill-sub" data-i18n="hud.score">Score</span>
     </div>
-    <div class="gu-pill" id="sv-lives" style="padding:5px 10px;background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)">
+    <div class="gu-pill" id="sv-lives" style="padding:5px 10px;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">
       <span class="gu-pill-icon">❤️</span>
       <span class="gu-pill-icon">❤️</span>
       <span class="gu-pill-icon">❤️</span>
@@ -644,7 +644,7 @@ if('serviceWorker' in navigator){
   </div>
 
   <div style="padding:0 16px 8px">
-    <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(248,113,113,.25);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(248,113,113,.12)">
+    <div style="background:linear-gradient(135deg,rgba(26,18,40,.6),rgba(36,23,56,.4));border:1px solid rgba(239,68,68,.25);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(239,68,68,.12)">
       <canvas id="survival-chart" height="250"></canvas>
     </div>
   </div>
@@ -675,7 +675,7 @@ if('serviceWorker' in navigator){
 <template id="tmpl-s-daily">
 <div class="screen" id="s-daily">
   <div style="padding:8px 16px;display:flex;gap:6px;align-items:center;justify-content:space-between">
-    <div class="gu-pill" style="padding:6px 11px;background:rgba(240,192,96,.12);border-color:rgba(240,192,96,.3)">
+    <div class="gu-pill" style="padding:6px 11px;background:rgba(245,200,106,.12);border-color:rgba(245,200,106,.3)">
       <span class="gu-pill-icon">📅</span>
       <span class="gu-pill-sub" data-i18n="daily.renews">Renueva</span>
       <span class="gu-num" id="dc-countdown" style="font-size:13px;color:var(--gold);font-weight:700">--:--:--</span>
@@ -685,7 +685,7 @@ if('serviceWorker' in navigator){
 
   <div style="padding:0 16px 8px;margin-top:8px">
     <div id="dc-asset-title" style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);text-align:center;padding:6px 0 4px;letter-spacing:.5px"></div>
-    <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(240,192,96,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(240,192,96,.12)">
+    <div style="background:linear-gradient(135deg,rgba(26,18,40,.6),rgba(36,23,56,.4));border:1px solid rgba(245,200,106,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(245,200,106,.12)">
       <canvas id="daily-chart" height="250"></canvas>
     </div>
   </div>
@@ -702,7 +702,7 @@ if('serviceWorker' in navigator){
     </div>
   </div>
 
-  <div style="margin:0 16px 12px;padding:12px;background:linear-gradient(135deg,rgba(26,18,48,.5),rgba(33,24,64,.3));border:1px solid var(--border);border-radius:12px;font-size:12px;color:var(--text2)">
+  <div style="margin:0 16px 12px;padding:12px;background:linear-gradient(135deg,rgba(26,18,40,.5),rgba(36,23,56,.3));border:1px solid var(--border);border-radius:12px;font-size:12px;color:var(--text2)">
     <strong style="color:var(--gold)">📊 El mismo chart para todos.</strong> Un solo intento por día. Tu decisión queda registrada en el ranking global.
   </div>
 
@@ -723,7 +723,7 @@ if('serviceWorker' in navigator){
   <!-- LOBBY -->
   <div id="arena-lobby">
     <div style="padding:8px 16px;display:flex;gap:6px;align-items:center;justify-content:space-between">
-      <div class="gu-pill" style="padding:5px 10px;background:rgba(147,83,255,.12);border-color:rgba(147,83,255,.3)">
+      <div class="gu-pill" style="padding:5px 10px;background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.3)">
         <span class="gu-pill-icon">⚔️</span>
         <span class="gu-pill-sub">Ranking</span>
         <span class="gu-num" style="font-size:13px;color:var(--violet3);font-weight:700">TOP 1%</span>
@@ -731,7 +731,7 @@ if('serviceWorker' in navigator){
       <button class="gu-action skip" style="width:auto;padding:8px 12px;font-size:11px;flex:0" onclick="goScreen('s-inicio')">✕</button>
     </div>
     <div style="padding:18px 16px;text-align:center">
-      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:3px;margin-bottom:6px">· DESAFÍA ·</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--text3);letter-spacing:3px;margin-bottom:6px">· DESAFÍA ·</div>
       <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="arena.title">Arena 1vs1</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.5" data-i18n="arena.subtitle">Desafiá a traders reales. 5 rondas. El que más acierta, gana.</div>
     </div>
@@ -750,13 +750,13 @@ if('serviceWorker' in navigator){
         <span class="gu-num" id="ar-my-score" style="font-size:14px;color:var(--green);font-weight:700">0</span>
         <span class="gu-pill-sub" data-i18n="hud.me">Yo</span>
       </div>
-      <div class="gu-pill" style="padding:5px 10px;background:rgba(240,192,96,.1);border-color:rgba(240,192,96,.3)">
+      <div class="gu-pill" style="padding:5px 10px;background:rgba(245,200,106,.1);border-color:rgba(245,200,106,.3)">
         <span class="gu-pill-sub" data-i18n="hud.round">Ronda</span>
         <span class="gu-num" id="ar-round" style="font-size:13px;color:var(--gold);font-weight:700">1</span>
         <span style="color:var(--text3);font-size:11px">/5</span>
         <span class="gu-num" id="ar-timer-val" style="font-size:14px;color:var(--text);font-weight:700;margin-left:4px">15</span>
       </div>
-      <div class="gu-pill" style="padding:5px 10px;background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)">
+      <div class="gu-pill" style="padding:5px 10px;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)">
         <span class="gu-pill-icon" id="ar-rival-avatar-mini">🤖</span>
         <span class="gu-num" id="ar-rival-score" style="font-size:14px;color:var(--red);font-weight:700">0</span>
         <span class="gu-pill-sub" id="ar-rival-name-hud">Rival</span>
@@ -779,7 +779,7 @@ if('serviceWorker' in navigator){
       </div>
     </div>
     <div style="padding:0 16px 8px">
-      <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(147,83,255,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(147,83,255,.15)">
+      <div style="background:linear-gradient(135deg,rgba(26,18,40,.6),rgba(36,23,56,.4));border:1px solid rgba(139,92,246,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(139,92,246,.15)">
         <canvas id="arena-chart" height="230"></canvas>
       </div>
     </div>
@@ -795,9 +795,9 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-historico">
 <div class="screen" id="s-historico">
-  <div style="padding:18px 16px 14px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(96,165,250,.3);position:relative;overflow:hidden">
+  <div style="padding:18px 16px 14px;background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(96,165,250,.3);position:relative;overflow:hidden">
     <div style="position:absolute;top:-30px;left:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%);pointer-events:none"></div>
-    <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;position:relative" data-i18n="mode.historico.name">· MODO HISTÓRICO ·</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;position:relative" data-i18n="mode.historico.name">· MODO HISTÓRICO ·</div>
     <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--blue),var(--violet3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative" data-i18n="hist.title">Eventos Reales</div>
     <div style="font-size:12px;color:var(--text2);position:relative" data-i18n="hist.subtitle">Viajá al pasado. Leé el chart como si fuera hoy.</div>
   </div>
@@ -824,7 +824,7 @@ if('serviceWorker' in navigator){
       <div id="hg-event-name" style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;margin-bottom:4px"></div>
       <div id="hg-event-ctx" style="font-size:12px;color:var(--text2)"></div>
     </div>
-    <div id="hg-macro" style="display:none;margin:0 16px 8px;padding:12px;background:linear-gradient(135deg,rgba(147,83,255,.08),rgba(74,222,128,.05));border:1px solid rgba(147,83,255,.25);border-radius:var(--r);font-size:12px;line-height:1.55;color:var(--text2)">
+    <div id="hg-macro" style="display:none;margin:0 16px 8px;padding:12px;background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(74,222,128,.05));border:1px solid rgba(139,92,246,.25);border-radius:var(--r);font-size:12px;line-height:1.55;color:var(--text2)">
       <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--violet3);letter-spacing:.5px;margin-bottom:6px" data-i18n="hist.macro.title">🌐 CONTEXTO MACRO / GEOPOLÍTICO / CRIPTO</div>
       <div id="hg-macro-text"></div>
     </div>
@@ -847,11 +847,11 @@ if('serviceWorker' in navigator){
 <template id="tmpl-s-torneos">
 <div class="screen" id="s-torneos">
   <div id="torneo-lobby">
-    <div style="padding:16px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(240,192,96,.3);position:relative;overflow:hidden">
-      <div style="position:absolute;top:-30px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(240,192,96,.3),transparent 70%);pointer-events:none"></div>
+    <div style="padding:16px;background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(245,200,106,.3);position:relative;overflow:hidden">
+      <div style="position:absolute;top:-30px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(245,200,106,.3),transparent 70%);pointer-events:none"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;position:relative;flex-wrap:wrap">
         <div style="flex:1;min-width:0">
-          <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">· COMPETÍ ·</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">· COMPETÍ ·</div>
           <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--violet3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="tor.title">🏆 Torneos</div>
           <div style="font-size:11px;color:var(--text2);margin-top:2px" data-i18n="tor.subtitle">Competí por premios en USD reales</div>
         </div>
@@ -863,7 +863,7 @@ if('serviceWorker' in navigator){
           <button onclick="goScreen('s-admin-torneos')" style="padding:4px 8px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:16px;cursor:pointer;line-height:1" title="Admin Torneos">⚙️</button>
         </div>
       </div>
-      <div id="torneosNotAuth" style="display:none;margin-top:8px;padding:8px 10px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:6px;font-size:11px;color:#fca5a5">⚠ No estás conectado a TNSVT. Configurá tu código en <b>Perfil → Sync TNSVT</b> para inscribirte.</div>
+      <div id="torneosNotAuth" style="display:none;margin-top:8px;padding:8px 10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:6px;font-size:11px;color:#fca5a5">⚠ No estás conectado a TNSVT. Configurá tu código en <b>Perfil → Sync TNSVT</b> para inscribirte.</div>
     </div>
 
     <div style="padding:10px 16px 0;display:flex;gap:6px;align-items:center">
@@ -877,11 +877,11 @@ if('serviceWorker' in navigator){
       <button onclick="bnShowModal()" style="flex:1;padding:7px 8px;background:linear-gradient(135deg,var(--violet),#f0b90b);color:#fff;border:0;border-radius:8px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap">B Cargar con Binance</button>
     </div>
 
-    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;padding:14px 16px 6px">DISPONIBLES</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;padding:14px 16px 6px">DISPONIBLES</div>
     <div id="torneosList" style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px"><div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card w80"></div></div>
 
     <div id="torneosMySection" style="display:none">
-      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;padding:8px 16px 6px">MIS TORNEOS</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;padding:8px 16px 6px">MIS TORNEOS</div>
       <div id="torneosMyList" style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px"></div>
     </div>
 
@@ -962,7 +962,7 @@ if('serviceWorker' in navigator){
     <!-- Chart -->
     <div style="padding:0 12px 4px;margin-top:4px">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-        <div style="padding:4px 10px 0;display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">
+        <div style="padding:4px 10px 0;display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:'Space Grotesk',sans-serif">
           <span id="tr-asset-name">BTC/USDT</span>
           <span id="tr-current-price">—</span>
         </div>
@@ -998,7 +998,7 @@ if('serviceWorker' in navigator){
       <div id="tr-price-card" style="background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);padding:8px 10px;display:flex;justify-content:space-between;align-items:center">
         <div>
           <div style="font-size:9px;letter-spacing:1px;color:var(--text3);margin-bottom:2px" id="tr-asset-label">BTC/USD</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700" id="tr-live-price">—</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700" id="tr-live-price">—</div>
           <div style="font-size:10px;font-weight:600;margin-top:1px" id="tr-live-change">—</div>
         </div>
         <div style="text-align:right;font-size:10px;color:var(--text3)">
@@ -1020,18 +1020,18 @@ if('serviceWorker' in navigator){
           <span id="tr-size-unit" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text3);pointer-events:none">USD</span>
         </div>
         <div style="display:flex;gap:4px;margin-top:4px">
-          <button onclick="trQuickSize(10)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">10%</button>
-          <button onclick="trQuickSize(25)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">25%</button>
-          <button onclick="trQuickSize(50)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">50%</button>
-          <button onclick="trQuickSize(75)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">75%</button>
-          <button onclick="trQuickSize(100)" style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">100%</button>
+          <button onclick="trQuickSize(10)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">10%</button>
+          <button onclick="trQuickSize(25)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">25%</button>
+          <button onclick="trQuickSize(50)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">50%</button>
+          <button onclick="trQuickSize(75)"  style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">75%</button>
+          <button onclick="trQuickSize(100)" style="flex:1;padding:4px 2px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">100%</button>
         </div>
       </div>
       <!-- APALANCAMIENTO -->
       <div>
         <div style="display:flex;justify-content:space-between;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">
           <span>Apalancamiento</span>
-          <span style="color:var(--gold);font-family:'JetBrains Mono',monospace" id="tr-lev-label">5×</span>
+          <span style="color:var(--gold);font-family:'Space Grotesk',sans-serif" id="tr-lev-label">5×</span>
         </div>
         <input type="range" id="tr-leverage" min="1" max="25" step="1" value="5"
           style="width:100%;accent-color:var(--violet);height:4px;cursor:pointer"
@@ -1058,15 +1058,15 @@ if('serviceWorker' in navigator){
         </div>
         <div style="position:relative">
           <input type="number" id="tr-sl-val" value="2" step="0.1"
-            style="width:100%;padding:7px 40px 7px 8px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:var(--r2);color:var(--red);font-size:13px;font-family:'JetBrains Mono',monospace;outline:none"
+            style="width:100%;padding:7px 40px 7px 8px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:var(--r2);color:var(--red);font-size:13px;font-family:'JetBrains Mono',monospace;outline:none"
             oninput="trCalcPreview()">
-          <span id="tr-sl-unit" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(248,113,113,.6);pointer-events:none">%</span>
+          <span id="tr-sl-unit" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(239,68,68,.6);pointer-events:none">%</span>
         </div>
         <div style="display:flex;gap:4px;margin-top:3px">
-          <button onclick="trSetSL(1)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">1%</button>
-          <button onclick="trSetSL(2)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">2%</button>
-          <button onclick="trSetSL(5)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">5%</button>
-          <button onclick="trSetSL(10)"  style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">10%</button>
+          <button onclick="trSetSL(1)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">1%</button>
+          <button onclick="trSetSL(2)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">2%</button>
+          <button onclick="trSetSL(5)"   style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">5%</button>
+          <button onclick="trSetSL(10)"  style="flex:1;padding:3px 2px;border-radius:5px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:9px;cursor:pointer;font-family:'JetBrains Mono',monospace">10%</button>
         </div>
       </div>
       <!-- TAKE PROFIT -->
@@ -1228,10 +1228,10 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-liga">
 <div class="screen" id="s-liga">
-  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
-    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
+  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(139,92,246,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(139,92,246,.3),transparent 70%);pointer-events:none"></div>
     <div style="position:relative">
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px" data-i18n="liga.subtitle">· LIGA GLOBAL ·</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px" data-i18n="liga.subtitle">· LIGA GLOBAL ·</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="liga.title">Rankings</div>
         <span class="gu-header-status live" data-i18n="liga.live">● EN VIVO</span>
@@ -1255,7 +1255,7 @@ if('serviceWorker' in navigator){
       <div class="stat-box"><div class="stat-val" id="ls-acc">0%</div><div class="stat-lbl" data-i18n="prof.precision">Precisión</div></div>
       <div class="stat-box"><div class="stat-val" id="ls-streak">0</div><div class="stat-lbl" data-i18n="prof.rachaMax">Racha max</div></div>
     </div>
-    <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:10px" data-i18n="liga.history">HISTORIAL RECIENTE</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:10px" data-i18n="liga.history">HISTORIAL RECIENTE</div>
     <div id="ls-history"></div>
   </div>
 </div>
@@ -1264,11 +1264,11 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-perfil">
 <div class="screen" id="s-perfil">
-  <div id="perfil-header" style="background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
-    <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
+  <div id="perfil-header" style="background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(139,92,246,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.3),transparent 70%);pointer-events:none"></div>
     <div class="hero" style="position:relative">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-        <div id="perfil-hero-av" class="avatar-frame" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--violet2));display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid rgba(147,83,255,.4);box-shadow:0 0 20px rgba(147,83,255,.3);flex-shrink:0;transition:all .3s"><span class="avatar-emoji">🎯</span></div>
+        <div id="perfil-hero-av" class="avatar-frame" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--violet2));display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid rgba(139,92,246,.4);box-shadow:0 0 20px rgba(139,92,246,.3);flex-shrink:0;transition:all .3s"><span class="avatar-emoji">🎯</span></div>
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <div id="perfil-hero-name" style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Trader</div>
@@ -1289,8 +1289,8 @@ if('serviceWorker' in navigator){
       <div class="stat-box"><div class="stat-val" style="color:var(--green)">68%</div><div class="stat-lbl" data-i18n="prof.precision">Precisión</div></div>
       <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl" data-i18n="prof.rachaMax">Racha max</div></div>
     </div>
-    <button class="btn btn-ghost btn-sm" onclick="replayTutorial()" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px;background:linear-gradient(135deg,rgba(147,83,255,.1),rgba(240,192,96,.05));border:1px solid rgba(147,83,255,.25);color:var(--violet3)" data-i18n="prof.replayTutorial">📖 Ver tutorial de nuevo</button>
-    <button class="btn btn-ghost btn-sm" onclick="goScreen('s-settings')" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px;background:linear-gradient(135deg,rgba(96,165,250,.1),rgba(147,83,255,.05));border:1px solid rgba(96,165,250,.3);color:var(--blue)" data-i18n="prof.settings">⚙️ Configuración / Ajustes</button>
+    <button class="btn btn-ghost btn-sm" onclick="replayTutorial()" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px;background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(245,200,106,.05));border:1px solid rgba(139,92,246,.25);color:var(--violet3)" data-i18n="prof.replayTutorial">📖 Ver tutorial de nuevo</button>
+    <button class="btn btn-ghost btn-sm" onclick="goScreen('s-settings')" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px;background:linear-gradient(135deg,rgba(96,165,250,.1),rgba(139,92,246,.05));border:1px solid rgba(96,165,250,.3);color:var(--blue)" data-i18n="prof.settings">⚙️ Configuración / Ajustes</button>
     <div class="tabs">
       <div class="tab active" id="tab-logros" onclick="perfilTab('logros',this)" data-i18n="prof.logros">Logros</div>
       <div class="tab" id="tab-historial" onclick="perfilTab('historial',this)" data-i18n="prof.historial">Historial</div>
@@ -1326,7 +1326,7 @@ if('serviceWorker' in navigator){
       </div>
     </div>
     <div style="display:flex; flex-direction:column; align-items:center; margin:22px 0 8px;">
-      <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; color:var(--text2); text-transform:uppercase; margin-bottom:16px;" data-i18n="ritual.oracle">· Oráculo del día ·</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:4px; color:var(--text2); text-transform:uppercase; margin-bottom:16px;" data-i18n="ritual.oracle">· Oráculo del día ·</div>
       <div class="gu-orb-wrap">
         <div class="gu-ring r1"></div>
         <div class="gu-ring r2"></div>
@@ -1337,7 +1337,7 @@ if('serviceWorker' in navigator){
           <div style="font-size:9px; color:var(--text3); margin-top:2px; letter-spacing:2px; text-transform:uppercase;" data-i18n="ritual.energy">Energía hoy</div>
         </div>
       </div>
-      <div style="font-family:'Cinzel',serif; font-style:italic; font-size:13px; color:var(--violet3); text-align:center; line-height:1.6; max-width:280px; margin-top:18px; text-shadow:0 0 10px rgba(147,83,255,.3);" id="gu-mantra">"El mercado respira con quien escucha. Hoy, la estructura favorece la paciencia."</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:var(--violet3); text-align:center; line-height:1.6; max-width:280px; margin-top:18px; text-shadow:0 0 10px rgba(139,92,246,.3);" id="gu-mantra">"El mercado respira con quien escucha. Hoy, la estructura favorece la paciencia."</div>
     </div>
     <div class="card" style="margin-top:18px;">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
@@ -1383,7 +1383,7 @@ if('serviceWorker' in navigator){
       <div class="gu-liga-tab" data-tab="cofradia" style="flex:1; text-align:center; padding:8px; border-radius:8px; font-size:12px; font-weight:600; color:var(--text2);" data-i18n="liga.tab.cof">Cofradía</div>
       <div class="gu-liga-tab" data-tab="retos" style="flex:1; text-align:center; padding:8px; border-radius:8px; font-size:12px; font-weight:600; color:var(--text2);" data-i18n="liga.tab.ret">Retos</div>
     </div>
-    <div style="display:flex; align-items:center; gap:14px; background:linear-gradient(135deg,rgba(147,83,255,.14),rgba(240,192,96,.06)); border:1px solid rgba(147,83,255,.3); border-radius:18px; padding:16px; margin-bottom:18px;">
+    <div style="display:flex; align-items:center; gap:14px; background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(245,200,106,.06)); border:1px solid rgba(139,92,246,.3); border-radius:18px; padding:16px; margin-bottom:18px;">
       <div style="width:58px; height:64px; flex-shrink:0; background:linear-gradient(135deg,var(--gold),var(--violet)); clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); display:flex; align-items:center; justify-content:center;">
         <div style="width:50px; height:56px; background:var(--bg2); clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--gold3); text-shadow:0 0 10px var(--gold);">✦</div>
       </div>
@@ -1398,7 +1398,7 @@ if('serviceWorker' in navigator){
       <div class="gu-row promo"><span class="gu-row-rank" style="color:var(--gold);">1</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--gold),var(--gold2));">🐋</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">WhaleMind</div><div style="font-size:10px; color:var(--text3);">MAESTRO</div></div><span class="gu-num" style="font-size:12px; color:var(--violet3);">3,420</span></div>
       <div class="gu-row promo"><span class="gu-row-rank">2</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--violet),#4a1a8a);">🦊</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">FoxScalper</div><div style="font-size:10px; color:var(--text3);">ESTRATEGA</div></div><span class="gu-num" style="font-size:12px; color:var(--violet3);">2,890</span></div>
       <div class="gu-row promo"><span class="gu-row-rank">3</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--blue),#2563eb);">🦈</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">DeepShark</div><div style="font-size:10px; color:var(--text3);">ESTRATEGA</div></div><span class="gu-num" style="font-size:12px; color:var(--violet3);">2,510</span></div>
-      <div class="gu-row you"><span class="gu-row-rank" style="color:var(--gold);">4</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--gold),var(--violet)); box-shadow:0 0 10px rgba(240,192,96,.5);">✝</span><div style="flex:1;"><div style="font-size:13px; color:#fff; font-weight:700;">ADMIN01 <span style="font-size:10px; color:var(--gold);">(tú)</span></div><div style="font-size:10px; color:var(--violet3);">ORÁCULO</div></div><span class="gu-num" style="font-size:12px; color:var(--gold); font-weight:500;">2,140</span></div>
+      <div class="gu-row you"><span class="gu-row-rank" style="color:var(--gold);">4</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--gold),var(--violet)); box-shadow:0 0 10px rgba(245,200,106,.5);">✝</span><div style="flex:1;"><div style="font-size:13px; color:#fff; font-weight:700;">ADMIN01 <span style="font-size:10px; color:var(--gold);">(tú)</span></div><div style="font-size:10px; color:var(--violet3);">ORÁCULO</div></div><span class="gu-num" style="font-size:12px; color:var(--gold); font-weight:500;">2,140</span></div>
       <div class="gu-row" style="opacity:.85;"><span class="gu-row-rank" style="color:var(--text3);">5</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--green),#16a34a);">🤖</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">AlgoBot_X</div><div style="font-size:10px; color:var(--text3);">OPERADOR</div></div><span class="gu-num" style="font-size:12px; color:var(--text2);">1,980</span></div>
       <div class="gu-row" style="opacity:.85;"><span class="gu-row-rank" style="color:var(--text3);">6</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--red),#b91c1c);">🐂</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">BullRun88</div><div style="font-size:10px; color:var(--text3);">OPERADOR</div></div><span class="gu-num" style="font-size:12px; color:var(--text2);">1,760</span></div>
     </div>
@@ -1435,12 +1435,12 @@ if('serviceWorker' in navigator){
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-top:6px;" id="gu-reso-legend"></div>
     <div style="text-align:center; margin-top:18px; margin-bottom:12px;">
-      <div style="font-family:'Cinzel',serif; font-style:italic; font-size:13px; color:var(--violet3); line-height:1.5;" id="gu-reso-prompt">5 de 6 marcos en armonía alcista.<br>El 15M disuena. ¿Confías en la resonancia?</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:var(--violet3); line-height:1.5;" id="gu-reso-prompt">5 de 6 marcos en armonía alcista.<br>El 15M disuena. ¿Confías en la resonancia?</div>
     </div>
     <div style="display:flex; gap:10px;">
       <button style="flex:1; padding:15px; border-radius:14px; border:1px solid rgba(74,222,128,.4); cursor:pointer; font-family:'Inter',sans-serif; font-weight:700; font-size:15px; color:var(--bg); background:linear-gradient(135deg,var(--green),#16a34a); box-shadow:0 4px 18px rgba(74,222,128,.3); letter-spacing:.5px;" onclick="guSintoniaPlay('long')">▲ LONG</button>
       <button class="btn-ghost" style="width:74px; padding:15px 0; border-radius:14px; font-weight:600; font-size:13px;" onclick="guSintoniaPlay('skip')">SKIP</button>
-      <button style="flex:1; padding:15px; border-radius:14px; border:1px solid rgba(248,113,113,.4); cursor:pointer; font-family:'Inter',sans-serif; font-weight:700; font-size:15px; color:#fff; background:linear-gradient(135deg,var(--red),#b91c1c); box-shadow:0 4px 18px rgba(248,113,113,.3); letter-spacing:.5px;" onclick="guSintoniaPlay('short')">▼ SHORT</button>
+      <button style="flex:1; padding:15px; border-radius:14px; border:1px solid rgba(239,68,68,.4); cursor:pointer; font-family:'Inter',sans-serif; font-weight:700; font-size:15px; color:#fff; background:linear-gradient(135deg,var(--red),#b91c1c); box-shadow:0 4px 18px rgba(239,68,68,.3); letter-spacing:.5px;" onclick="guSintoniaPlay('short')">▼ SHORT</button>
     </div>
     <div style="display:flex; align-items:center; justify-content:center; gap:7px; margin-top:14px; font-size:11px; color:var(--text3);">
       <span style="color:var(--gold);">✦</span> <span data-i18n="sin.bonus.hint">Acierto con armonía &gt;80% =</span> <span class="gu-num" style="color:var(--gold);">+37 XP</span> <span data-i18n="sin.bonus">bonus resonancia</span>
@@ -1454,36 +1454,36 @@ if('serviceWorker' in navigator){
 <div class="screen" id="s-fractal">
   <!-- LOBBY -->
   <div id="fractal-lobby" style="overflow-y:auto;flex:1;padding-bottom:20px">
-    <div style="padding:20px 16px 16px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
-      <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(147,83,255,.45),transparent 70%);pointer-events:none;animation:gu-orbPulse 4s ease-in-out infinite"></div>
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;position:relative">· T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY ·</div>
+    <div style="padding:20px 16px 16px;background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(139,92,246,.3);position:relative;overflow:hidden">
+      <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.45),transparent 70%);pointer-events:none;animation:gu-orbPulse 4s ease-in-out infinite"></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;position:relative">· T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY ·</div>
       <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative" data-i18n="fr.title">Modo Fractal</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.6;position:relative" data-i18n="fr.desc">El sistema analiza el chart con tu metodología.<br>Identificá BOS · LG · Zonas · Setup 2-Step.</div>
     </div>
     <!-- SUB-MODES -->
     <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:2px" data-i18n="fr.submodes">ELIGE UN MÓDULO</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:2px" data-i18n="fr.submodes">ELIGE UN MÓDULO</div>
 
-      <div class="mode-card" onclick="vipFractalMode('bos')" style="border-color:rgba(147,83,255,.4);background:linear-gradient(135deg,rgba(147,83,255,.08),transparent)">
+      <div class="mode-card" onclick="vipFractalMode('bos')" style="border-color:rgba(139,92,246,.4);background:linear-gradient(135deg,rgba(139,92,246,.08),transparent)">
         <div class="mode-icon">🔱</div>
         <div class="mode-info">
           <div class="mode-name" style="color:var(--violet3)" data-i18n="fr.bos.name">BOS — Break of Structure</div>
           <div class="mode-desc" data-i18n="fr.bos.desc">Identificá rupturas de estructura alcistas y bajistas en el chart</div>
           <div class="mode-meta">
-            <span class="mode-tag" style="background:rgba(147,83,255,.15);color:var(--violet3)">ESTRUCTURA</span>
+            <span class="mode-tag" style="background:rgba(139,92,246,.15);color:var(--violet3)">ESTRUCTURA</span>
             <span class="mode-tag" style="background:rgba(74,222,128,.12);color:var(--green)">+200 XP</span>
           </div>
         </div>
         <div class="mode-arrow">›</div>
       </div>
 
-      <div class="mode-card" onclick="vipFractalMode('lg')" style="border-color:rgba(240,192,96,.3);background:linear-gradient(135deg,rgba(240,192,96,.06),transparent)">
+      <div class="mode-card" onclick="vipFractalMode('lg')" style="border-color:rgba(245,200,106,.3);background:linear-gradient(135deg,rgba(245,200,106,.06),transparent)">
         <div class="mode-icon">🎯</div>
         <div class="mode-info">
           <div class="mode-name" style="color:var(--gold)" data-i18n="fr.lg.name">LG — Last Gap</div>
           <div class="mode-desc" data-i18n="fr.lg.desc">Ubicá el último gap de liquidez antes del movimiento</div>
           <div class="mode-meta">
-            <span class="mode-tag" style="background:rgba(240,192,96,.15);color:var(--gold)">LIQUIDEZ</span>
+            <span class="mode-tag" style="background:rgba(245,200,106,.15);color:var(--gold)">LIQUIDEZ</span>
             <span class="mode-tag" style="background:rgba(74,222,128,.12);color:var(--green)">+250 XP</span>
           </div>
         </div>
@@ -1520,15 +1520,15 @@ if('serviceWorker' in navigator){
 
     <!-- FRACTAL THEORY CARD -->
     <div style="margin:0 16px 16px">
-      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:10px" data-i18n="fr.theory.title">TEORÍA RÁPIDA</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--text3);letter-spacing:1.5px;margin-bottom:10px" data-i18n="fr.theory.title">TEORÍA RÁPIDA</div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:16px">
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="display:flex;gap:10px;align-items:flex-start">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(147,83,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🔱</div>
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(139,92,246,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🔱</div>
             <div><div style="font-size:13px;font-weight:700;color:var(--violet3);margin-bottom:2px">BOS (Break of Structure)</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Ruptura del último máximo/mínimo relevante. Confirma cambio de dirección en la estructura de mercado.</div></div>
           </div>
           <div style="display:flex;gap:10px;align-items:flex-start">
-            <div style="width:32px;height:32px;border-radius:8px;background:rgba(240,192,96,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🎯</div>
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(245,200,106,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🎯</div>
             <div><div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:2px">LG (Last Gap)</div><div style="font-size:12px;color:var(--text2);line-height:1.5">Último vacío de liquidez antes del BOS. El precio regresa a este nivel para recoger órdenes antes de continuar.</div></div>
           </div>
           <div style="display:flex;gap:10px;align-items:flex-start">
@@ -1565,7 +1565,7 @@ if('serviceWorker' in navigator){
     </div>
 
     <!-- PREGUNTA / CONSIGNA -->
-    <div id="fg-question" style="padding:10px 16px 6px;background:linear-gradient(90deg,rgba(147,83,255,.08),transparent);border-bottom:1px solid var(--border)">
+    <div id="fg-question" style="padding:10px 16px 6px;background:linear-gradient(90deg,rgba(139,92,246,.08),transparent);border-bottom:1px solid var(--border)">
       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:3px" id="fg-task-label">TAREA</div>
       <div style="font-size:13px;color:var(--text);font-weight:500" id="fg-task-text">Identificá el BOS en este chart</div>
     </div>
@@ -1579,7 +1579,7 @@ if('serviceWorker' in navigator){
       </svg>
       <!-- Nivel correcto (oculto hasta revelar) -->
       <div id="fg-correct-level" style="position:absolute;left:0;right:0;height:2px;background:var(--green);display:none;pointer-events:none;box-shadow:0 0 8px rgba(74,222,128,.6)">
-        <span style="position:absolute;right:8px;top:-10px;font-size:10px;font-weight:700;color:var(--green);background:rgba(6,4,15,.9);padding:1px 5px;border-radius:3px" id="fg-correct-label">CORRECTO</span>
+        <span style="position:absolute;right:8px;top:-10px;font-size:10px;font-weight:700;color:var(--green);background:rgba(9,7,15,.9);padding:1px 5px;border-radius:3px" id="fg-correct-label">CORRECTO</span>
       </div>
     </div>
 
@@ -1617,7 +1617,7 @@ if('serviceWorker' in navigator){
       <!-- ANÁLISIS AUTOMÁTICO T.N.S.V.T -->
       <div id="fr-analysis" style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px"></div>
       <!-- LECCIÓN -->
-      <div id="fr-lesson" style="background:linear-gradient(135deg,rgba(147,83,255,.08),transparent);border:1px solid rgba(147,83,255,.25);border-radius:var(--r);padding:14px;margin-bottom:12px"></div>
+      <div id="fr-lesson" style="background:linear-gradient(135deg,rgba(139,92,246,.08),transparent);border:1px solid rgba(139,92,246,.25);border-radius:var(--r);padding:14px;margin-bottom:12px"></div>
       <button class="btn btn-primary" style="width:100%" id="fr-next-btn" onclick="fractalNext()">Siguiente →</button>
     </div>
   </div>
@@ -1627,9 +1627,9 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-glosario">
 <div class="screen" id="s-glosario">
-  <div style="background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);padding:18px 16px 14px;flex-shrink:0;position:relative;overflow:hidden">
-    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
-    <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:5px;position:relative">· T.N.S.V.T — EDUCACIÓN ·</div>
+  <div style="background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(139,92,246,.3);padding:18px 16px 14px;flex-shrink:0;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(139,92,246,.3),transparent 70%);pointer-events:none"></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:5px;position:relative">· T.N.S.V.T — EDUCACIÓN ·</div>
     <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;margin-bottom:4px;background:linear-gradient(135deg,var(--violet3),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative" data-i18n="glos.title">Conceptos Base</div>
     <div style="font-size:12px;color:var(--text2);position:relative" data-i18n="glos.subtitle">Abreviaciones, estructura y lógica institucional del mercado</div>
   </div>
@@ -1642,7 +1642,7 @@ if('serviceWorker' in navigator){
     </div>
   </div>
   <!-- Category pills -->
-  <div style="display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(45,31,85,.4);flex-shrink:0" id="glos-cats">
+  <div style="display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(170,120,255,.4);flex-shrink:0" id="glos-cats">
     <button class="glos-cat active" onclick="glosCat('all',this)" data-i18n="glos.cat.all">Todos</button>
     <button class="glos-cat" onclick="glosCat('poi',this)">📍 POI</button>
     <button class="glos-cat" onclick="glosCat('tf',this)">⏱ TF</button>
@@ -1659,10 +1659,10 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-modos">
 <div class="screen" id="s-modos">
-  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
-    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
+  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(139,92,246,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(139,92,246,.3),transparent 70%);pointer-events:none"></div>
     <div style="position:relative">
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">· MODOS ·</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">· MODOS ·</div>
       <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="mode.all.title">Todos los Modos</div>
     </div>
   </div>
@@ -1673,10 +1673,10 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-misiones">
 <div class="screen" id="s-misiones">
-  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(74,222,128,.3);position:relative;overflow:hidden">
+  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(74,222,128,.3);position:relative;overflow:hidden">
     <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(74,222,128,.25),transparent 70%);pointer-events:none"></div>
     <div style="position:relative">
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">· RETOS ·</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">· RETOS ·</div>
       <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--green),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="mode.misiones.name">Misiones</div>
     </div>
   </div>
@@ -1694,17 +1694,17 @@ if('serviceWorker' in navigator){
 <div class="screen" id="s-portfolio">
 
   <!-- EQUITY HEADER -->
-  <div id="port-header" style="background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);padding:14px 16px 10px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,.25)">
+  <div id="port-header" style="background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(139,92,246,.3);padding:14px 16px 10px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,.25)">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
       <div>
-        <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">· CUENTA DEMO ·</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="port-equity">$50,000.00</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">· CUENTA DEMO ·</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="port-equity">$50,000.00</div>
         <div style="font-size:11px;color:var(--text2);margin-top:4px">Equity total</div>
       </div>
       <div style="text-align:right">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700" id="port-pnl-total" style="color:var(--text)">$0.00</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700" id="port-pnl-total" style="color:var(--text)">$0.00</div>
         <div style="font-size:10px;color:var(--text3)">P&L abierto</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-top:3px" id="port-pnl-closed" style="color:var(--text3)">$0.00 cerrado</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;margin-top:3px" id="port-pnl-closed" style="color:var(--text3)">$0.00 cerrado</div>
       </div>
     </div>
     <!-- Equity pills -->
@@ -1769,7 +1769,7 @@ if('serviceWorker' in navigator){
     <div id="port-price-card" style="background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;display:flex;justify-content:space-between;align-items:center">
       <div>
         <div style="font-size:10px;letter-spacing:1px;color:var(--text3);margin-bottom:3px" id="port-asset-label">BTC/USD</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700" id="port-live-price">—</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700" id="port-live-price">—</div>
         <div style="font-size:11px;font-weight:600;margin-top:2px" id="port-live-change">—</div>
       </div>
       <div style="text-align:right;font-size:11px;color:var(--text3)">
@@ -1786,7 +1786,7 @@ if('serviceWorker' in navigator){
         <div id="port-price-source" style="font-size:9px">— Cargando…</div>
       </div>
       <canvas id="port-24h-chart" style="width:100%;height:120px;display:block;touch-action:pan-x"></canvas>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:4px;font-family:'JetBrains Mono',monospace">
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:4px;font-family:'Space Grotesk',sans-serif">
         <span>24h ago</span>
         <span id="port-24h-range">— / —</span>
         <span>now</span>
@@ -1806,10 +1806,10 @@ if('serviceWorker' in navigator){
         <span id="port-size-unit" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text3);pointer-events:none">USD</span>
       </div>
       <div style="display:flex;gap:5px;margin-top:6px">
-        <button onclick="portSetPct(10)"  style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">10%</button>
-        <button onclick="portSetPct(25)"  style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">25%</button>
-        <button onclick="portSetPct(50)"  style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">50%</button>
-        <button onclick="portSetPct(100)" style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(147,83,255,.15)'" onmouseout="this.style.background='transparent'">100%</button>
+        <button onclick="portSetPct(10)"  style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">10%</button>
+        <button onclick="portSetPct(25)"  style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">25%</button>
+        <button onclick="portSetPct(50)"  style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">50%</button>
+        <button onclick="portSetPct(100)" style="flex:1;padding:6px 2px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.background='rgba(139,92,246,.15)'" onmouseout="this.style.background='transparent'">100%</button>
       </div>
     </div>
 
@@ -1845,15 +1845,15 @@ if('serviceWorker' in navigator){
       </div>
       <div style="position:relative">
         <input type="number" id="port-sl-val" value="2" step="0.1"
-          style="width:100%;padding:10px 48px 10px 12px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);border-radius:var(--r2);color:var(--red);font-size:14px;font-family:'JetBrains Mono',monospace;outline:none"
+          style="width:100%;padding:10px 48px 10px 12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:var(--r2);color:var(--red);font-size:14px;font-family:'JetBrains Mono',monospace;outline:none"
           oninput="portCalcPreview()">
-        <span id="port-sl-unit" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;color:rgba(248,113,113,.6);pointer-events:none">%</span>
+        <span id="port-sl-unit" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;color:rgba(239,68,68,.6);pointer-events:none">%</span>
       </div>
       <div style="display:flex;gap:5px;margin-top:5px">
-        <button onclick="portSetSL(1)"   style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">1%</button>
-        <button onclick="portSetSL(2)"   style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">2%</button>
-        <button onclick="portSetSL(5)"   style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">5%</button>
-        <button onclick="portSetSL(10)"  style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(248,113,113,.2);background:transparent;color:rgba(248,113,113,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">10%</button>
+        <button onclick="portSetSL(1)"   style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">1%</button>
+        <button onclick="portSetSL(2)"   style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">2%</button>
+        <button onclick="portSetSL(5)"   style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">5%</button>
+        <button onclick="portSetSL(10)"  style="flex:1;padding:5px 2px;border-radius:6px;border:1px solid rgba(239,68,68,.2);background:transparent;color:rgba(239,68,68,.7);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace">10%</button>
       </div>
     </div>
 
@@ -1921,7 +1921,7 @@ if('serviceWorker' in navigator){
     <!-- BUY/SELL BUTTONS -->
     <div style="display:flex;gap:10px;padding-bottom:8px">
       <button onclick="portOpen('long')"  style="flex:1;padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(74,222,128,.25),rgba(74,222,128,.15));color:var(--green);border:1.5px solid rgba(74,222,128,.5);font-family:'Cinzel',serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:1px" onmouseover="this.style.background='linear-gradient(135deg,rgba(74,222,128,.38),rgba(74,222,128,.22))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(74,222,128,.25),rgba(74,222,128,.15))'">▲ BUY / LONG</button>
-      <button onclick="portOpen('short')" style="flex:1;padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(248,113,113,.25),rgba(248,113,113,.15));color:var(--red);border:1.5px solid rgba(248,113,113,.5);font-family:'Cinzel',serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:1px" onmouseover="this.style.background='linear-gradient(135deg,rgba(248,113,113,.38),rgba(248,113,113,.22))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(248,113,113,.25),rgba(248,113,113,.15))'">▼ SELL / SHORT</button>
+      <button onclick="portOpen('short')" style="flex:1;padding:16px;border-radius:var(--r2);background:linear-gradient(135deg,rgba(239,68,68,.25),rgba(239,68,68,.15));color:var(--red);border:1.5px solid rgba(239,68,68,.5);font-family:'Cinzel',serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:1px" onmouseover="this.style.background='linear-gradient(135deg,rgba(239,68,68,.38),rgba(239,68,68,.22))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(239,68,68,.25),rgba(239,68,68,.15))'">▼ SELL / SHORT</button>
     </div>
   </div>
 
@@ -2027,7 +2027,7 @@ if('serviceWorker' in navigator){
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px">
         <span style="font-size:16px">⚡⚡⚡⚡⚡</span><span style="font-size:13px;color:var(--text2)"><span data-i18n="hud.streak">Racha</span> ×5</span><span style="font-weight:700;color:var(--gold)">×2 XP</span>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(90deg,rgba(240,192,96,.08),transparent);border:1px solid rgba(240,192,96,.3);border-radius:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(90deg,rgba(245,200,106,.08),transparent);border:1px solid rgba(245,200,106,.3);border-radius:10px">
         <span style="font-size:16px">👑👑👑👑👑👑👑👑👑👑</span><span style="font-size:12px;color:var(--gold)">×10</span><span style="font-weight:700;color:#ffd700">×5 XP</span>
       </div>
     </div>
@@ -2163,7 +2163,7 @@ if('serviceWorker' in navigator){
 <!-- SETTINGS SCREEN -->
 <template id="tmpl-s-settings">
 <div class="screen" id="s-settings">
-  <div style="padding:14px 16px;display:flex;gap:8px;align-items:center;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative">
+  <div style="padding:14px 16px;display:flex;gap:8px;align-items:center;background:linear-gradient(135deg,rgba(26,18,40,.7),rgba(36,23,56,.5));border-bottom:1px solid rgba(139,92,246,.3);position:relative">
     <button class="gu-action skip" style="width:auto;padding:8px 12px;font-size:11px;flex:0" onclick="goScreen('s-perfil')" aria-label="Volver">←</button>
     <div style="flex:1">
       <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)">· AJUSTES ·</div>
@@ -3107,7 +3107,7 @@ function setupChartCrosshair(canvasId){
     const c = candles[idx];
     if(!c) return;
     // ── Vertical line ──
-    octx.strokeStyle = 'rgba(200,160,255,.55)';
+    octx.strokeStyle = 'rgba(185,131,255,.55)';
     octx.lineWidth = 1;
     octx.setLineDash([4,3]);
     octx.beginPath(); octx.moveTo(x, meta.PAD_TOP); octx.lineTo(x, meta.H - meta.PAD_BOT); octx.stroke();
@@ -3118,8 +3118,8 @@ function setupChartCrosshair(canvasId){
     const price = meta.yMax - ((y - meta.PAD_TOP) / chartH) * (meta.yMax - meta.yMin);
     const pillW = meta.PRICE_W - 2, pillH = 18;
     const pillY = Math.max(meta.PAD_TOP, Math.min(meta.H - meta.PAD_BOT - pillH, y - pillH/2));
-    octx.fillStyle = 'rgba(147,83,255,.85)';
-    octx.shadowColor = 'rgba(147,83,255,.6)';
+    octx.fillStyle = 'rgba(139,92,246,.85)';
+    octx.shadowColor = 'rgba(139,92,246,.6)';
     octx.shadowBlur = 6;
     const r = 4;
     octx.beginPath();
@@ -3144,7 +3144,7 @@ function setupChartCrosshair(canvasId){
     const tipY = Math.max(meta.PAD_TOP, Math.min(meta.H - meta.PAD_BOT - 80, y - 80));
     const tipW = 124, tipH = 78;
     octx.fillStyle = 'rgba(20,14,38,.95)';
-    octx.strokeStyle = 'rgba(147,83,255,.45)';
+    octx.strokeStyle = 'rgba(139,92,246,.45)';
     octx.lineWidth = 1;
     octx.beginPath();
     const tr = 6;
@@ -3179,7 +3179,7 @@ function setupChartCrosshair(canvasId){
     // ── Highlight candle under cursor ──
     const cx = meta.LEFT + idx * bwFull + bwFull * 0.12;
     const cw = Math.max(2, bwFull * 0.76);
-    octx.fillStyle = c.c >= c.o ? 'rgba(74,222,128,.18)' : 'rgba(248,113,113,.18)';
+    octx.fillStyle = c.c >= c.o ? 'rgba(74,222,128,.18)' : 'rgba(239,68,68,.18)';
     octx.fillRect(cx - 2, meta.PAD_TOP, cw + 4, chartH);
   }
   canvas.addEventListener('pointermove', onPointer, {passive:true});
@@ -3239,7 +3239,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   // ── Background ──
   const bgGrad = ctx.createLinearGradient(0,0,0,H);
   bgGrad.addColorStop(0,'#120d22');
-  bgGrad.addColorStop(1,'#06040f');
+  bgGrad.addColorStop(1,'#09070F');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0,0,W,H);
 
@@ -3263,7 +3263,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   // ── Price axis panel ──
   ctx.fillStyle = 'rgba(10,7,20,.6)';
   ctx.fillRect(W - PRICE_W, 0, PRICE_W, H);
-  ctx.strokeStyle = 'rgba(45,31,85,.8)';
+  ctx.strokeStyle = 'rgba(170,120,255,.8)';
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(W-PRICE_W,0); ctx.lineTo(W-PRICE_W,H); ctx.stroke();
 
@@ -3276,7 +3276,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
     const price = yMax - pct*(yMax-yMin);
     const y = PAD_TOP + pct*chartH;
     // grid line
-    ctx.strokeStyle = i===0||i===gridLevels ? 'rgba(45,31,85,.4)' : 'rgba(45,31,85,.25)';
+    ctx.strokeStyle = i===0||i===gridLevels ? 'rgba(170,120,255,.4)' : 'rgba(170,120,255,.25)';
     ctx.lineWidth = .5;
     ctx.setLineDash([]);
     ctx.beginPath(); ctx.moveTo(LEFT,y); ctx.lineTo(W-PRICE_W,y); ctx.stroke();
@@ -3295,7 +3295,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
     const vh = Math.max(1, (vol/maxVol) * VOL_H);
     const x = LEFT + i*bwFull + bwFull*.1;
     const w = bwFull*.8;
-    ctx.fillStyle = bull ? 'rgba(74,222,128,.25)' : 'rgba(248,113,113,.22)';
+    ctx.fillStyle = bull ? 'rgba(74,222,128,.25)' : 'rgba(239,68,68,.22)';
     ctx.fillRect(x, H-PAD_BOT+4, w, vh);
   });
   // Volume label
@@ -3308,7 +3308,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   const ema9 = [];
   const k9 = 2/(9+1);
   candles.forEach((c,i)=>{ ema9.push(i===0 ? c.c : c.c*k9 + ema9[i-1]*(1-k9)); });
-  ctx.strokeStyle = 'rgba(147,83,255,.35)';
+  ctx.strokeStyle = 'rgba(139,92,246,.35)';
   ctx.lineWidth = 1.2;
   ctx.setLineDash([]);
   ctx.beginPath();
@@ -3323,7 +3323,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   const ema21 = [];
   const k21 = 2/(21+1);
   candles.forEach((c,i)=>{ ema21.push(i===0 ? c.c : c.c*k21 + ema21[i-1]*(1-k21)); });
-  ctx.strokeStyle = 'rgba(240,192,96,.22)';
+  ctx.strokeStyle = 'rgba(245,200,106,.22)';
   ctx.lineWidth = 1;
   ctx.beginPath();
   ema21.forEach((v,i)=>{
@@ -3373,7 +3373,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
 
     if(doji){
       // Doji — fade in
-      ctx.strokeStyle = 'rgba(200,160,255,.8)';
+      ctx.strokeStyle = 'rgba(185,131,255,.8)';
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(candleX, oY); ctx.lineTo(candleX+candleW, oY); ctx.stroke();
       ctx.globalAlpha = 1;
@@ -3409,9 +3409,9 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   const lw = Math.max(2, bwFull*.76);
   const lBodyTop = Math.min(toY(last.o),toY(last.c));
   const lBodyH = Math.max(2, Math.abs(toY(last.o)-toY(last.c)));
-  ctx.shadowColor = lastBull ? 'rgba(74,222,128,.6)' : 'rgba(248,113,113,.6)';
+  ctx.shadowColor = lastBull ? 'rgba(74,222,128,.6)' : 'rgba(239,68,68,.6)';
   ctx.shadowBlur = 8;
-  ctx.fillStyle = lastBull ? 'rgba(74,222,128,.15)' : 'rgba(248,113,113,.12)';
+  ctx.fillStyle = lastBull ? 'rgba(74,222,128,.15)' : 'rgba(239,68,68,.12)';
   ctx.fillRect(lx-2, lBodyTop-2, lw+4, lBodyH+4);
   ctx.shadowBlur = 0;
 
@@ -3458,9 +3458,9 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   // ── EMA legend ──
   ctx.textAlign = 'left';
   ctx.font = '9px Inter,sans-serif';
-  ctx.fillStyle = 'rgba(147,83,255,.5)';
+  ctx.fillStyle = 'rgba(139,92,246,.5)';
   ctx.fillText('EMA9', LEFT+4, PAD_TOP+9);
-  ctx.fillStyle = 'rgba(240,192,96,.4)';
+  ctx.fillStyle = 'rgba(245,200,106,.4)';
   ctx.fillText('EMA21', LEFT+38, PAD_TOP+9);
 
   // ── T.N.S.V.T Engine branding (reemplaza visual de "TradingView") ──
@@ -3473,8 +3473,8 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   const brandH = 14;
   const brandX = W - PRICE_W - brandW - 4;
   const brandY = H - PAD_BOT + 4;
-  ctx.fillStyle = 'rgba(147,83,255,.12)';
-  ctx.strokeStyle = 'rgba(147,83,255,.35)';
+  ctx.fillStyle = 'rgba(139,92,246,.12)';
+  ctx.strokeStyle = 'rgba(139,92,246,.35)';
   ctx.lineWidth = 1;
   const br = 3;
   ctx.beginPath();
@@ -3491,7 +3491,7 @@ function renderCandleChart(canvasId, candles, chartRef=null){
   ctx.fill();
   ctx.stroke();
   // Brand text
-  ctx.fillStyle = 'rgba(200,160,255,.75)';
+  ctx.fillStyle = 'rgba(185,131,255,.75)';
   ctx.textAlign = 'center';
   ctx.fillText(brandText, brandX+brandW/2, brandY+10);
   ctx.restore();
@@ -3931,7 +3931,7 @@ function initArena(){
   document.getElementById('arena-game').style.display='none';
   const list = document.getElementById('rival-list');
   list.innerHTML = RIVALS.map((r,i)=>`
-    <div class="mode-card ${STATE.arena.rival===i?'active':''}" onclick="selectRival(${i},this)" style="${STATE.arena.rival===i?'border-color:var(--violet);background:rgba(147,83,255,.08)':''}">
+    <div class="mode-card ${STATE.arena.rival===i?'active':''}" onclick="selectRival(${i},this)" style="${STATE.arena.rival===i?'border-color:var(--violet);background:rgba(139,92,246,.08)':''}">
       <div class="mode-icon">${r.emoji}</div>
       <div class="mode-info">
         <div class="mode-name">${r.name}</div>
@@ -3948,7 +3948,7 @@ function selectRival(i,el){
   document.querySelectorAll('#rival-list .mode-card').forEach((c,j)=>{
     const wr = j===i;
     c.style.borderColor = wr?'var(--violet)':'';
-    c.style.background = wr?'rgba(147,83,255,.08)':'';
+    c.style.background = wr?'rgba(139,92,246,.08)':'';
     document.getElementById('rival-check-'+j).style.display = wr?'':'none';
   });
 }
@@ -4108,7 +4108,7 @@ function initHist(){
 function histFilter(cat, btn){
   histFilter_active = cat;
   document.querySelectorAll('#s-historico .btn').forEach(b=>b.style.background='');
-  if(btn) btn.style.background='rgba(147,83,255,.2)';
+  if(btn) btn.style.background='rgba(139,92,246,.2)';
   renderHistEvents();
 }
 
@@ -5087,7 +5087,7 @@ function trCalcPreview(){
   const prev=document.getElementById('tr-preview');
   if(!usdSize||usdSize<=0||!portVal){ if(prev) prev.style.display='none'; return; }
   if(prev) prev.style.display='';
-  const row=(lbl,val,col='')=>'<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(45,31,85,.3)"><span style="color:var(--text3)">'+lbl+'</span><strong style="font-family:\'JetBrains Mono\',monospace;'+(col?'color:'+col:'')+'">'+val+'</strong></div>';
+  const row=(lbl,val,col='')=>'<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(170,120,255,.3)"><span style="color:var(--text3)">'+lbl+'</span><strong style="font-family:\'JetBrains Mono\',monospace;'+(col?'color:'+col:'')+'">'+val+'</strong></div>';
   const pC=document.getElementById('tr-preview-content');
   if(pC) pC.innerHTML=
     row('Tamaño',sizePct.toFixed(1)+'% · $'+usdSize.toFixed(0))+
@@ -5739,7 +5739,7 @@ function renderLigaStats(){
     {mode:'Torneo',asset:'GOLD',result:'short',correct:true,pts:300,date:'Lun 16:00'},
   ];
   document.getElementById('ls-history').innerHTML = hist.map(h=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(45,31,85,.4)">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(170,120,255,.4)">
       <div style="font-size:20px">${h.correct?'✅':'❌'}</div>
       <div style="flex:1">
         <div style="font-weight:600;font-size:13px">${h.mode} · ${h.asset}</div>
@@ -5814,11 +5814,11 @@ const FRAMES = [
     id:'fr1', name:'Corona de Oro', price:'$0.99',
     xpCost: 300,
     desc:'Reservado para los que dominan el mercado',
-    css:`border:3px solid #f0c060;box-shadow:0 0 0 2px rgba(240,192,96,.2),0 0 20px rgba(240,192,96,.4),inset 0 0 12px rgba(240,192,96,.1)`,
+    css:`border:3px solid #f0c060;box-shadow:0 0 0 2px rgba(245,200,106,.2),0 0 20px rgba(245,200,106,.4),inset 0 0 12px rgba(245,200,106,.1)`,
     preview: () => `
       <div style="position:relative;width:72px;height:72px;margin:0 auto">
-        <div style="position:absolute;inset:-1px;border-radius:50%;border:3px solid #f0c060;box-shadow:0 0 0 3px rgba(240,192,96,.15),0 0 22px rgba(240,192,96,.5)"></div>
-        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(240,192,96,.18),rgba(240,192,96,.06));display:flex;align-items:center;justify-content:center;font-size:30px">🐂</div>
+        <div style="position:absolute;inset:-1px;border-radius:50%;border:3px solid #f0c060;box-shadow:0 0 0 3px rgba(245,200,106,.15),0 0 22px rgba(245,200,106,.5)"></div>
+        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(245,200,106,.18),rgba(245,200,106,.06));display:flex;align-items:center;justify-content:center;font-size:30px">🐂</div>
         <div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:16px">👑</div>
       </div>`,
   },
@@ -5826,18 +5826,18 @@ const FRAMES = [
     id:'fr2', name:'Aura Violeta', price:'$0.99',
     xpCost: 300,
     desc:'La firma del fractal. La marca T.N.S.V.T',
-    css:`border:3px solid #9353ff;box-shadow:0 0 0 3px rgba(147,83,255,.15),0 0 24px rgba(147,83,255,.5),0 0 48px rgba(147,83,255,.2)`,
+    css:`border:3px solid #9353ff;box-shadow:0 0 0 3px rgba(139,92,246,.15),0 0 24px rgba(139,92,246,.5),0 0 48px rgba(139,92,246,.2)`,
     preview: () => `
       <div style="position:relative;width:72px;height:72px;margin:0 auto">
-        <div style="position:absolute;inset:-2px;border-radius:50%;border:3px solid #9353ff;box-shadow:0 0 0 3px rgba(147,83,255,.12),0 0 20px rgba(147,83,255,.6),0 0 40px rgba(147,83,255,.2);animation:aura-pulse 2s ease-in-out infinite"></div>
-        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(147,83,255,.2),rgba(147,83,255,.06));display:flex;align-items:center;justify-content:center;font-size:30px">🔮</div>
+        <div style="position:absolute;inset:-2px;border-radius:50%;border:3px solid #9353ff;box-shadow:0 0 0 3px rgba(139,92,246,.12),0 0 20px rgba(139,92,246,.6),0 0 40px rgba(139,92,246,.2);animation:aura-pulse 2s ease-in-out infinite"></div>
+        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(139,92,246,.06));display:flex;align-items:center;justify-content:center;font-size:30px">🔮</div>
       </div>`,
   },
   {
     id:'fr3', name:'Llama Viva', price:'$0.99',
     xpCost: 300,
     desc:'Para los que nunca dejan de brillar en racha',
-    css:`border:3px solid #f97316;box-shadow:0 0 0 3px rgba(249,115,22,.15),0 0 20px rgba(249,115,22,.5),0 0 40px rgba(248,113,113,.2)`,
+    css:`border:3px solid #f97316;box-shadow:0 0 0 3px rgba(249,115,22,.15),0 0 20px rgba(249,115,22,.5),0 0 40px rgba(239,68,68,.2)`,
     preview: () => `
       <div style="position:relative;width:72px;height:72px;margin:0 auto">
         <div style="position:absolute;inset:-2px;border-radius:50%;border:3px solid #f97316;box-shadow:0 0 20px rgba(249,115,22,.6),0 0 40px rgba(249,115,22,.3);animation:fire-flicker 0.8s ease-in-out infinite alternate"></div>
@@ -5871,11 +5871,11 @@ const FRAMES = [
     id:'fr6', name:'Rojo Sangre', price:'$0.99',
     xpCost: 600,
     desc:'Bear mode activado. El mercado te teme',
-    css:`border:3px solid #f87171;box-shadow:0 0 0 3px rgba(248,113,113,.15),0 0 20px rgba(248,113,113,.5)`,
+    css:`border:3px solid #f87171;box-shadow:0 0 0 3px rgba(239,68,68,.15),0 0 20px rgba(239,68,68,.5)`,
     preview: () => `
       <div style="position:relative;width:72px;height:72px;margin:0 auto">
-        <div style="position:absolute;inset:-2px;border-radius:50%;border:3px solid #f87171;box-shadow:0 0 18px rgba(248,113,113,.6);animation:blood-pulse 1.2s ease-in-out infinite"></div>
-        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(248,113,113,.18),rgba(220,38,38,.1));display:flex;align-items:center;justify-content:center;font-size:30px">🐻</div>
+        <div style="position:absolute;inset:-2px;border-radius:50%;border:3px solid #f87171;box-shadow:0 0 18px rgba(239,68,68,.6);animation:blood-pulse 1.2s ease-in-out infinite"></div>
+        <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(239,68,68,.18),rgba(220,38,38,.1));display:flex;align-items:center;justify-content:center;font-size:30px">🐻</div>
       </div>`,
   },
   {
@@ -6035,9 +6035,9 @@ const THEMES = [
   {
     id:'th0', name:'T.N.S.V.T', price:'Free', free:true,
     desc:'Violeta místico y dorado imperial. El original.',
-    bg:'#06040f', bull:'#4ade80', bear:'#f87171', accent:'#9353ff', gold:'#f0c060',
-    preview_bg:'linear-gradient(135deg,#06040f 0%,#150f2a 100%)',
-    candle_bull:'#4ade80', candle_bear:'#f87171',
+    bg:'#09070F', bull:'#4ade80', bear:'#EF4444', accent:'#8B5CF6', gold:'#F5C86A',
+    preview_bg:'linear-gradient(135deg,#09070F 0%,#1A1228 100%)',
+    candle_bull:'#4ade80', candle_bear:'#EF4444',
   },
   {
     id:'th1', name:'Matrix', price:'$0.99',
@@ -6163,7 +6163,7 @@ const EFFECTS_SHOP = [
           const c=cols[i%cols.length];
           return `<div style="position:absolute;width:${5+Math.random()*5}px;height:${5+Math.random()*5}px;border-radius:2px;background:${c};left:${i*5}%;top:-8px;animation:cfall ${0.8+Math.random()*0.8}s linear ${Math.random()*0.5}s infinite;transform:rotate(${Math.random()*360}deg)"></div>`;
         }).join('')}
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;color:#f0c060;letter-spacing:2px;text-shadow:0 0 10px rgba(240,192,96,.5)">¡CORRECTO!</div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;color:#f0c060;letter-spacing:2px;text-shadow:0 0 10px rgba(245,200,106,.5)">¡CORRECTO!</div>
       </div>`,
   },
   {
@@ -6227,8 +6227,8 @@ const EFFECTS_SHOP = [
     desc:'Al acertar, una ola de luz boreal verde-violeta cruza la pantalla. Relajante y elegante.',
     preview: () => `
       <div style="position:relative;height:80px;background:#010818;border-radius:10px;overflow:hidden">
-        <div style="position:absolute;top:0;left:-20%;width:140%;height:100%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.3),rgba(147,83,255,.4),rgba(96,165,250,.3),transparent);animation:aurora-wave 2s ease-in-out infinite;border-radius:50%"></div>
-        <div style="position:absolute;top:10px;left:-20%;width:140%;height:60%;background:linear-gradient(90deg,transparent,rgba(240,192,96,.15),rgba(74,222,128,.2),rgba(147,83,255,.15),transparent);animation:aurora-wave 2s ease-in-out 0.5s infinite;border-radius:50%"></div>
+        <div style="position:absolute;top:0;left:-20%;width:140%;height:100%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.3),rgba(139,92,246,.4),rgba(96,165,250,.3),transparent);animation:aurora-wave 2s ease-in-out infinite;border-radius:50%"></div>
+        <div style="position:absolute;top:10px;left:-20%;width:140%;height:60%;background:linear-gradient(90deg,transparent,rgba(245,200,106,.15),rgba(74,222,128,.2),rgba(139,92,246,.15),transparent);animation:aurora-wave 2s ease-in-out 0.5s infinite;border-radius:50%"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;color:#4ade80;letter-spacing:2px;text-shadow:0 0 10px rgba(74,222,128,.7)">TORNEO ✦</div>
       </div>`,
   },
@@ -6242,7 +6242,7 @@ const EFFECTS_SHOP = [
         <div style="position:absolute;width:20px;height:20px;border-radius:50%;border:2px solid #c8a0ff;animation:shockwave 1s ease-out 0.25s infinite;opacity:0"></div>
         <div style="position:absolute;width:20px;height:20px;border-radius:50%;border:2px solid #f0c060;animation:shockwave 1s ease-out 0.5s infinite;opacity:0"></div>
         <div style="font-size:22px;z-index:1;filter:drop-shadow(0 0 10px #9353ff)">⚡</div>
-        <div style="position:absolute;font-family:'Cinzel',serif;font-size:11px;color:#c8a0ff;letter-spacing:2px;top:8px;width:100%;text-align:center;text-shadow:0 0 8px rgba(147,83,255,.6)">RACHA ×5</div>
+        <div style="position:absolute;font-family:'Cinzel',serif;font-size:11px;color:#c8a0ff;letter-spacing:2px;top:8px;width:100%;text-align:center;text-shadow:0 0 8px rgba(139,92,246,.6)">RACHA ×5</div>
       </div>`,
   },
 ];
@@ -6301,12 +6301,12 @@ const BACKGROUNDS = [
     bodyClass: 'has-bg-aurora',
     preview: () => `
       <div style="position:relative;height:80px;background:#010a14;border-radius:10px;overflow:hidden">
-        <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.12),rgba(147,83,255,.15),rgba(96,165,250,.1),transparent 80%);background-size:200% 200%;animation:a-drift 4s ease infinite"></div>
-        <div style="position:absolute;top:20%;left:-10%;width:120%;height:50%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.3),rgba(147,83,255,.35),rgba(96,165,250,.3),transparent);animation:a-wave 2.5s ease-in-out 0s infinite;border-radius:50%;filter:blur(8px)"></div>
-        <div style="position:absolute;top:40%;left:-10%;width:120%;height:35%;background:linear-gradient(90deg,transparent,rgba(147,83,255,.25),rgba(240,192,96,.3),rgba(74,222,128,.25),transparent);animation:a-wave 3s ease-in-out 1s infinite;border-radius:50%;filter:blur(8px)"></div>
-        <div style="position:absolute;top:55%;left:-10%;width:120%;height:30%;background:linear-gradient(90deg,transparent,rgba(96,165,250,.2),rgba(74,222,128,.25),rgba(147,83,255,.2),transparent);animation:a-wave 3.5s ease-in-out 2s infinite;border-radius:50%;filter:blur(8px)"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.12),rgba(139,92,246,.15),rgba(96,165,250,.1),transparent 80%);background-size:200% 200%;animation:a-drift 4s ease infinite"></div>
+        <div style="position:absolute;top:20%;left:-10%;width:120%;height:50%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.3),rgba(139,92,246,.35),rgba(96,165,250,.3),transparent);animation:a-wave 2.5s ease-in-out 0s infinite;border-radius:50%;filter:blur(8px)"></div>
+        <div style="position:absolute;top:40%;left:-10%;width:120%;height:35%;background:linear-gradient(90deg,transparent,rgba(139,92,246,.25),rgba(245,200,106,.3),rgba(74,222,128,.25),transparent);animation:a-wave 3s ease-in-out 1s infinite;border-radius:50%;filter:blur(8px)"></div>
+        <div style="position:absolute;top:55%;left:-10%;width:120%;height:30%;background:linear-gradient(90deg,transparent,rgba(96,165,250,.2),rgba(74,222,128,.25),rgba(139,92,246,.2),transparent);animation:a-wave 3.5s ease-in-out 2s infinite;border-radius:50%;filter:blur(8px)"></div>
         ${Array.from({length:8},(_,i)=>{
-          const cols=['rgba(74,222,128,.8)','rgba(147,83,255,.8)','rgba(96,165,250,.8)','rgba(240,192,96,.8)'];
+          const cols=['rgba(74,222,128,.8)','rgba(139,92,246,.8)','rgba(96,165,250,.8)','rgba(245,200,106,.8)'];
           return `<div style="position:absolute;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;border-radius:50%;background:#fff;top:${10+Math.random()*65}%;left:${5+Math.random()*90}%;opacity:0;box-shadow:0 0 4px ${cols[i%4]};animation:sparkle ${1+Math.random()*1.5}s ease-in-out ${Math.random()*2}s infinite"></div>`;
         }).join('')}
       </div>`,
@@ -6318,10 +6318,10 @@ const BACKGROUNDS = [
     bodyClass: 'has-bg-galaxy',
     preview: () => `
       <div style="position:relative;height:80px;background:#03000e;border-radius:10px;overflow:hidden">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(147,83,255,.12) 0%, transparent 60%),radial-gradient(ellipse at 30% 60%, rgba(74,222,128,.06) 0%, transparent 50%),radial-gradient(ellipse at 70% 40%, rgba(96,165,250,.07) 0%, transparent 50%)"></div>
-        <div style="position:absolute;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,rgba(147,83,255,.5),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:cg 2s ease-in-out infinite"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(139,92,246,.12) 0%, transparent 60%),radial-gradient(ellipse at 30% 60%, rgba(74,222,128,.06) 0%, transparent 50%),radial-gradient(ellipse at 70% 40%, rgba(96,165,250,.07) 0%, transparent 50%)"></div>
+        <div style="position:absolute;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.5),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:cg 2s ease-in-out infinite"></div>
         ${Array.from({length:18},(_,i)=>{
-          const cols=['rgba(147,83,255,.8)','rgba(240,192,96,.8)','rgba(200,160,255,.8)','rgba(96,165,250,.8)','rgba(74,222,128,.8)'];
+          const cols=['rgba(139,92,246,.8)','rgba(245,200,106,.8)','rgba(185,131,255,.8)','rgba(96,165,250,.8)','rgba(74,222,128,.8)'];
           const angle=(i/18)*360;
           const d=15+Math.random()*25;
           return `<div style="position:absolute;width:${2+Math.random()*3}px;height:${2+Math.random()*3}px;border-radius:50%;background:${cols[i%5]};top:50%;left:50%;box-shadow:0 0 6px ${cols[i%5]};transform-origin:0 0;animation:orb ${2+Math.random()*1.5}s ease-in-out ${i*0.1}s infinite;--dist:${d}px;opacity:${0.4+Math.random()*0.5}"></div>`;
@@ -6341,17 +6341,17 @@ function injectShopKeyframes(){
   const style = document.createElement('style');
   style.id='shop-kf';
   style.textContent=`
-@keyframes aura-pulse{0%,100%{box-shadow:0 0 0 3px rgba(147,83,255,.12),0 0 20px rgba(147,83,255,.6),0 0 40px rgba(147,83,255,.2)}50%{box-shadow:0 0 0 5px rgba(147,83,255,.08),0 0 32px rgba(147,83,255,.9),0 0 60px rgba(147,83,255,.35)}}
+@keyframes aura-pulse{0%,100%{box-shadow:0 0 0 3px rgba(139,92,246,.12),0 0 20px rgba(139,92,246,.6),0 0 40px rgba(139,92,246,.2)}50%{box-shadow:0 0 0 5px rgba(139,92,246,.08),0 0 32px rgba(139,92,246,.9),0 0 60px rgba(139,92,246,.35)}}
 @keyframes fire-flicker{from{box-shadow:0 0 14px rgba(249,115,22,.5),0 0 28px rgba(249,115,22,.25)}to{box-shadow:0 0 22px rgba(249,115,22,.8),0 0 44px rgba(249,115,22,.4),0 0 6px rgba(255,255,0,.3)}}
 @keyframes plasma-pulse{0%,100%{box-shadow:0 0 18px rgba(74,222,128,.6),0 0 36px rgba(74,222,128,.25)}50%{box-shadow:0 0 28px rgba(74,222,128,.9),0 0 56px rgba(74,222,128,.4)}}
-@keyframes blood-pulse{0%,100%{box-shadow:0 0 18px rgba(248,113,113,.5)}50%{box-shadow:0 0 28px rgba(248,113,113,.9),0 0 10px rgba(248,113,113,.3)}}
+@keyframes blood-pulse{0%,100%{box-shadow:0 0 18px rgba(239,68,68,.5)}50%{box-shadow:0 0 28px rgba(239,68,68,.9),0 0 10px rgba(239,68,68,.3)}}
 @property --angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 @keyframes spin-rainbow{to{--angle:360deg;}}
 @keyframes lightning-frame{0%,90%,100%{box-shadow:0 0 0 2px rgba(247,255,0,.2),0 0 18px rgba(247,255,0,.4),inset 0 0 10px rgba(247,255,0,.1)}5%,15%,25%,35%,45%,55%{box-shadow:0 0 0 3px rgba(247,255,0,.3),0 0 32px rgba(247,255,0,.85),inset 0 0 18px rgba(247,255,0,.4)}10%,20%,30%,40%,50%{box-shadow:0 0 0 2px rgba(247,255,0,.15),0 0 22px rgba(247,255,0,.5),inset 0 0 14px rgba(247,255,0,.2)}}
 @keyframes wave-rotate{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes fire-pulse{0%,100%{box-shadow:0 0 0 2px rgba(255,69,0,.2),0 0 18px rgba(255,69,0,.5),0 0 36px rgba(255,69,0,.2),inset 0 0 12px rgba(255,69,0,.15)}50%{box-shadow:0 0 0 3px rgba(255,69,0,.25),0 0 32px rgba(255,69,0,.85),0 0 64px rgba(255,69,0,.4),inset 0 0 18px rgba(255,140,0,.3)}}
 @keyframes spin-rainbow{to{--angle:360deg;}}
-@keyframes rainbow-border{0%{box-shadow:0 0 0 3px rgba(240,192,96,.3),0 0 20px rgba(240,192,96,.4)}25%{box-shadow:0 0 0 3px rgba(147,83,255,.3),0 0 20px rgba(147,83,255,.4)}50%{box-shadow:0 0 0 3px rgba(74,222,128,.3),0 0 20px rgba(74,222,128,.4)}75%{box-shadow:0 0 0 3px rgba(96,165,250,.3),0 0 20px rgba(96,165,250,.4)}100%{box-shadow:0 0 0 3px rgba(240,192,96,.3),0 0 20px rgba(240,192,96,.4)}}
+@keyframes rainbow-border{0%{box-shadow:0 0 0 3px rgba(245,200,106,.3),0 0 20px rgba(245,200,106,.4)}25%{box-shadow:0 0 0 3px rgba(139,92,246,.3),0 0 20px rgba(139,92,246,.4)}50%{box-shadow:0 0 0 3px rgba(74,222,128,.3),0 0 20px rgba(74,222,128,.4)}75%{box-shadow:0 0 0 3px rgba(96,165,250,.3),0 0 20px rgba(96,165,250,.4)}100%{box-shadow:0 0 0 3px rgba(245,200,106,.3),0 0 20px rgba(245,200,106,.4)}}
 @keyframes cfall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(90px) rotate(480deg);opacity:0}}
 @keyframes bolt-drop{0%{opacity:0;transform:scaleY(0)}20%{opacity:1;transform:scaleY(1)}80%{opacity:1}100%{opacity:0}}
 @keyframes bolt-flash{0%,100%{opacity:0.3;transform:scale(0.9)}15%,35%{opacity:1;transform:scale(1.2)}25%{opacity:0.1}}
@@ -6452,7 +6452,7 @@ function renderTienda(cat){
         <button onclick="renderTienda('${c.id}')"
           style="flex-shrink:0;padding:7px 14px;border-radius:20px;
           border:1.5px solid ${c.id===cat?'var(--violet)':'var(--border)'};
-          background:${c.id===cat?'rgba(147,83,255,.15)':'transparent'};
+          background:${c.id===cat?'rgba(139,92,246,.15)':'transparent'};
           color:${c.id===cat?'var(--violet3)':'var(--text3)'};
           font-size:12px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;
           transition:all .2s;white-space:nowrap">
@@ -6481,7 +6481,7 @@ function renderFramesGrid(){
       const owned = f.free || STATE.shopOwned.has(f.id);
       const active = EQUIPPED.frame===f.id;
       return `<div onclick="shopItemClick('frame','${f.id}','${f.name}')" class="shop-card"
-        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.6)':owned?'rgba(147,83,255,.3)':'var(--border)'};
+        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.6)':owned?'rgba(139,92,246,.3)':'var(--border)'};
         border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;
         transition:all .25s;animation:shop-card-in .3s ease ${i*0.04}s both;
         ${active?'box-shadow:0 0 0 2px rgba(74,222,128,.3),0 0 16px rgba(74,222,128,.15)':''}">
@@ -6493,9 +6493,9 @@ function renderFramesGrid(){
         ${active?`<div style="font-size:10px;color:var(--green);margin-bottom:6px;font-weight:700">✓ EQUIPADO</div>`:`<div style="font-size:10px;color:var(--text3);margin-bottom:6px">${f.desc}</div>`}
         <button style="width:100%;padding:7px;border-radius:8px;border:none;cursor:pointer;
           font-weight:700;font-size:11px;font-family:'Cinzel',serif;letter-spacing:.5px;
-          background:${active?'rgba(74,222,128,.15)':owned?'rgba(147,83,255,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
+          background:${active?'rgba(74,222,128,.15)':owned?'rgba(139,92,246,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
           color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
-          border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
+          border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(139,92,246,.3)':'none'};
           transition:all .2s">
           ${active?'Equipado ✓':owned?'Equipar':'💎 '+f.xpCost+' XP'}
         </button>
@@ -6512,17 +6512,17 @@ function renderAvatarsGrid(){
       const active = EQUIPPED.avatar===a.id;
       return `<div onclick="shopItemClick('avatar','${a.id}','${a.name}')" class="shop-card"
         style="display:flex;align-items:center;gap:14px;
-        background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(147,83,255,.25)':'var(--border)'};
+        background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(139,92,246,.25)':'var(--border)'};
         border-radius:14px;padding:13px 14px;cursor:pointer;
         transition:all .25s;animation:shop-card-in .3s ease ${i*0.04}s both;
         ${active?'box-shadow:0 0 16px rgba(74,222,128,.12)':''}">
         <!-- AVATAR BUBBLE -->
         <div style="position:relative;flex-shrink:0">
           <div style="width:56px;height:56px;border-radius:50%;
-            background:${active?'rgba(74,222,128,.1)':'rgba(147,83,255,.08)'};
-            border:2px solid ${active?'rgba(74,222,128,.5)':'rgba(147,83,255,.2)'};
+            background:${active?'rgba(74,222,128,.1)':'rgba(139,92,246,.08)'};
+            border:2px solid ${active?'rgba(74,222,128,.5)':'rgba(139,92,246,.2)'};
             display:flex;align-items:center;justify-content:center;font-size:26px;
-            box-shadow:${active?'0 0 14px rgba(74,222,128,.3)':'0 0 10px rgba(147,83,255,.1)'}">
+            box-shadow:${active?'0 0 14px rgba(74,222,128,.3)':'0 0 10px rgba(139,92,246,.1)'}">
             ${a.emoji}
           </div>
           ${active?`<div style="position:absolute;bottom:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:8px;color:#000;font-weight:700;border:2px solid var(--panel)">✓</div>`:''}
@@ -6531,7 +6531,7 @@ function renderAvatarsGrid(){
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">
             <span style="font-weight:700;font-size:14px;color:${a.color}">${a.name}</span>
-            <span style="font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(147,83,255,.1);color:var(--text3);font-weight:600">${a.rank}</span>
+            <span style="font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(139,92,246,.1);color:var(--text3);font-weight:600">${a.rank}</span>
           </div>
           <div style="font-size:11px;font-style:italic;color:var(--text3);margin-bottom:5px">"${a.tagline}"</div>
           <div style="display:flex;gap:8px;font-size:10px;color:var(--text3)">
@@ -6543,9 +6543,9 @@ function renderAvatarsGrid(){
         <div style="flex-shrink:0;text-align:center">
           <button style="padding:7px 12px;border-radius:8px;border:none;cursor:pointer;
             font-weight:700;font-size:11px;font-family:'Cinzel',serif;
-            background:${active?'rgba(74,222,128,.15)':owned?'rgba(147,83,255,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
+            background:${active?'rgba(74,222,128,.15)':owned?'rgba(139,92,246,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
-            border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
+            border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(139,92,246,.3)':'none'};
             transition:all .2s;white-space:nowrap">
             ${active?'✓ Activo':owned?'Equipar':'💎 '+a.xpCost+' XP'}
           </button>
@@ -6581,7 +6581,7 @@ function renderThemesGrid(){
         </div>`;
       }).join('');
       return `<div onclick="shopItemClick('theme','${t.id}','${t.name}')" class="shop-card"
-        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(147,83,255,.25)':'var(--border)'};border-radius:14px;overflow:hidden;cursor:pointer;
+        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(139,92,246,.25)':'var(--border)'};border-radius:14px;overflow:hidden;cursor:pointer;
         transition:all .25s;animation:shop-card-in .3s ease ${i*0.05}s both;
         ${active?'box-shadow:0 0 16px rgba(74,222,128,.15)':''}">
         <!-- CANDLE PREVIEW -->
@@ -6602,9 +6602,9 @@ function renderThemesGrid(){
           </div>
           <button style="padding:8px 14px;border-radius:8px;border:none;cursor:pointer;
             font-weight:700;font-size:11px;font-family:'Cinzel',serif;
-            background:${active?'rgba(74,222,128,.15)':owned?'rgba(147,83,255,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
+            background:${active?'rgba(74,222,128,.15)':owned?'rgba(139,92,246,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
-            border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
+            border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(139,92,246,.3)':'none'};
             transition:all .2s;white-space:nowrap;flex-shrink:0">
 ${active?'✓ Activo':owned?'Aplicar':'💎 '+(t.xpCost||500)+' XP'}
         </button>
@@ -6618,7 +6618,7 @@ ${active?'✓ Activo':owned?'Aplicar':'💎 '+(t.xpCost||500)+' XP'}
 function renderEffectsGrid(){
   return `<div style="display:flex;flex-direction:column;gap:10px">
     <!-- HEADER INFO -->
-    <div style="background:linear-gradient(135deg,rgba(147,83,255,.08),rgba(240,192,96,.05));border:1px solid rgba(147,83,255,.2);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px">
+    <div style="background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(245,200,106,.05));border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px">
       <span style="font-size:18px">✨</span>
       <div style="flex:1;font-size:11px;color:var(--text2);line-height:1.5">
         <strong style="color:var(--violet3)">Efectos visuales</strong> · Se disparan automáticamente al <strong style="color:var(--green)">acertar</strong> en cualquier modo.<br>
@@ -6631,7 +6631,7 @@ function renderEffectsGrid(){
       const active = EQUIPPED.effect===ef.id;
       const triggerPill = ef.id==='ef0' ? '' : '<span style="display:inline-block;padding:2px 6px;background:rgba(74,222,128,.15);color:var(--green);border-radius:6px;font-size:9px;font-weight:600;margin-left:6px;letter-spacing:.5px">⚡ AL ACERTAR</span>';
       return `<div onclick="shopItemClick('effect','${ef.id}','${ef.name}')" class="shop-card"
-        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(147,83,255,.25)':'var(--border)'};border-radius:14px;overflow:hidden;cursor:pointer;transition:all .25s;animation:shop-card-in .3s ease ${i*0.04}s both;${active?'box-shadow:0 0 16px rgba(74,222,128,.12)':''}">
+        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.5)':owned?'rgba(139,92,246,.25)':'var(--border)'};border-radius:14px;overflow:hidden;cursor:pointer;transition:all .25s;animation:shop-card-in .3s ease ${i*0.04}s both;${active?'box-shadow:0 0 16px rgba(74,222,128,.12)':''}">
         <!-- PREVIEW -->
         ${ef.preview()}
         <!-- INFO ROW -->
@@ -6642,9 +6642,9 @@ function renderEffectsGrid(){
           </div>
           <button style="padding:8px 14px;border-radius:8px;border:none;cursor:pointer;
             font-weight:700;font-size:11px;font-family:'Cinzel',serif;letter-spacing:.5px;
-            background:${active?'rgba(74,222,128,.15)':owned?'rgba(147,83,255,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
+            background:${active?'rgba(74,222,128,.15)':owned?'rgba(139,92,246,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
             color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
-            border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
+            border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(139,92,246,.3)':'none'};
             transition:all .2s;white-space:nowrap;flex-shrink:0">
             ${active?'✓ Activo':owned?'Equipar':'💎 '+ef.xpCost+' XP'}
           </button>
@@ -6661,7 +6661,7 @@ function renderBackgroundsGrid(){
       const owned = b.free || STATE.shopOwned.has(b.id);
       const active = EQUIPPED.background===b.id;
       return `<div onclick="shopItemClick('background','${b.id}','${b.name}')" class="shop-card"
-        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.6)':owned?'rgba(147,83,255,.3)':'var(--border)'};
+        style="background:var(--panel);border:1.5px solid ${active?'rgba(74,222,128,.6)':owned?'rgba(139,92,246,.3)':'var(--border)'};
         border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;
         transition:all .25s;animation:shop-card-in .3s ease ${i*0.04}s both;
         ${active?'box-shadow:0 0 0 2px rgba(74,222,128,.3),0 0 16px rgba(74,222,128,.15)':''}">
@@ -6673,9 +6673,9 @@ function renderBackgroundsGrid(){
         ${active?`<div style="font-size:10px;color:var(--green);margin-bottom:6px;font-weight:700">✓ ACTIVO</div>`:`<div style="font-size:10px;color:var(--text3);margin-bottom:6px">${b.desc}</div>`}
         <button style="width:100%;padding:7px;border-radius:8px;border:none;cursor:pointer;
           font-weight:700;font-size:11px;font-family:'Cinzel',serif;letter-spacing:.5px;
-          background:${active?'rgba(74,222,128,.15)':owned?'rgba(147,83,255,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
+          background:${active?'rgba(74,222,128,.15)':owned?'rgba(139,92,246,.12)':'linear-gradient(135deg,#9353ff,#7030df)'};
           color:${active?'var(--green)':owned?'var(--violet3)':'#fff'};
-          border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(147,83,255,.3)':'none'};
+          border:${active?'1px solid rgba(74,222,128,.3)':owned?'1px solid rgba(139,92,246,.3)':'none'};
           transition:all .2s">
           ${active?'Activo ✓':owned?'Activar':'💎 '+b.xpCost+' XP'}
         </button>
@@ -6753,11 +6753,11 @@ function applyFrame(id){
   if(!styleEl){ styleEl=document.createElement('style'); styleEl.id='frame-style'; document.head.appendChild(styleEl); }
 
   if(id==='fr0'){ // Sin marco
-    styleEl.textContent=`.avatar-frame{border:2px solid rgba(147,83,255,.3)!important;box-shadow:none!important;}`;
+    styleEl.textContent=`.avatar-frame{border:2px solid rgba(139,92,246,.3)!important;box-shadow:none!important;}`;
   } else if(id==='fr1'){ // Corona de Oro
-    styleEl.textContent=`.avatar-frame{border:3px solid #f0c060!important;box-shadow:0 0 0 2px rgba(240,192,96,.2),0 0 18px rgba(240,192,96,.5)!important;}`;
+    styleEl.textContent=`.avatar-frame{border:3px solid #f0c060!important;box-shadow:0 0 0 2px rgba(245,200,106,.2),0 0 18px rgba(245,200,106,.5)!important;}`;
   } else if(id==='fr2'){ // Aura Violeta
-    styleEl.textContent=`.avatar-frame{border:3px solid #9353ff!important;box-shadow:0 0 0 3px rgba(147,83,255,.15),0 0 22px rgba(147,83,255,.6)!important;animation:aura-pulse 2s ease-in-out infinite!important;}`;
+    styleEl.textContent=`.avatar-frame{border:3px solid #9353ff!important;box-shadow:0 0 0 3px rgba(139,92,246,.15),0 0 22px rgba(139,92,246,.6)!important;animation:aura-pulse 2s ease-in-out infinite!important;}`;
   } else if(id==='fr3'){ // Llama Viva
     styleEl.textContent=`.avatar-frame{border:3px solid #f97316!important;box-shadow:0 0 18px rgba(249,115,22,.6)!important;animation:fire-flicker 0.8s ease-in-out infinite alternate!important;}`;
   } else if(id==='fr4'){ // Diamante Prisma
@@ -6765,7 +6765,7 @@ function applyFrame(id){
   } else if(id==='fr5'){ // Plasma Verde
     styleEl.textContent=`.avatar-frame{border:3px solid #4ade80!important;box-shadow:0 0 18px rgba(74,222,128,.6)!important;animation:plasma-pulse 1.5s ease-in-out infinite!important;}`;
   } else if(id==='fr6'){ // Rojo Sangre
-    styleEl.textContent=`.avatar-frame{border:3px solid #f87171!important;box-shadow:0 0 18px rgba(248,113,113,.6)!important;animation:blood-pulse 1.2s ease-in-out infinite!important;}`;
+    styleEl.textContent=`.avatar-frame{border:3px solid #f87171!important;box-shadow:0 0 18px rgba(239,68,68,.6)!important;animation:blood-pulse 1.2s ease-in-out infinite!important;}`;
   } else if(id==='fr7'){ // Galaxia
     styleEl.textContent=`.avatar-frame{border:3px solid transparent!important;background:linear-gradient(#0e0a1e,#0e0a1e) padding-box,linear-gradient(var(--angle),#312e81,#7c3aed,#2563eb,#0891b2,#312e81) border-box!important;box-shadow:0 0 28px rgba(124,58,237,.55),0 0 56px rgba(37,99,235,.25)!important;animation:spin-rainbow 8s linear infinite!important;}`;
   } else if(id==='fr8'){ // ⚡ Rayo Eléctrico
@@ -6915,10 +6915,10 @@ function applyBackground(id){
   // Read theme accent colors for integration
   const cs = getComputedStyle(document.documentElement);
   const G = cs.getPropertyValue('--green').trim() || '#4ade80';
-  const V = cs.getPropertyValue('--violet').trim() || '#9353ff';
-  const GO = cs.getPropertyValue('--gold').trim() || '#f0c060';
-  const R = cs.getPropertyValue('--red').trim() || '#f87171';
-  const A = cs.getPropertyValue('--accent').trim() || '#9353ff';
+  const V = cs.getPropertyValue('--violet').trim() || '#8B5CF6';
+  const GO = cs.getPropertyValue('--gold').trim() || '#F5C86A';
+  const R = cs.getPropertyValue('--red').trim() || '#EF4444';
+  const A = cs.getPropertyValue('--accent').trim() || '#8B5CF6';
   const pick = arr => arr[Math.floor(Math.random()*arr.length)];
 
   if(id==='bg1'){ // ═══ MATRIX RAIN ═══
@@ -6971,7 +6971,7 @@ function applyBackground(id){
     document.body.classList.add('has-bg-aurora');
     // Base gradient
     const base = document.createElement('div');
-    base.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.08),rgba(147,83,255,.12),rgba(96,165,250,.08),transparent 80%);background-size:200% 200%;animation:a-drift 8s ease infinite';
+    base.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(74,222,128,.08),rgba(139,92,246,.12),rgba(96,165,250,.08),transparent 80%);background-size:200% 200%;animation:a-drift 8s ease infinite';
     overlay.appendChild(base);
     // 3 aurora bands
     const bands = [
@@ -6994,11 +6994,11 @@ function applyBackground(id){
     document.body.classList.add('has-bg-galaxy');
     // Nebula clouds — more visible
     const nebula = document.createElement('div');
-    nebula.style.cssText = 'position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(147,83,255,.15) 0%, transparent 60%),radial-gradient(ellipse at 30% 60%, rgba(74,222,128,.08) 0%, transparent 50%),radial-gradient(ellipse at 70% 40%, rgba(96,165,250,.1) 0%, transparent 50%)';
+    nebula.style.cssText = 'position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(139,92,246,.15) 0%, transparent 60%),radial-gradient(ellipse at 30% 60%, rgba(74,222,128,.08) 0%, transparent 50%),radial-gradient(ellipse at 70% 40%, rgba(96,165,250,.1) 0%, transparent 50%)';
     overlay.appendChild(nebula);
     // Core glow — more visible
     const core = document.createElement('div');
-    core.style.cssText = 'position:absolute;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(147,83,255,.5),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:cg 3s ease-in-out infinite';
+    core.style.cssText = 'position:absolute;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.5),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:cg 3s ease-in-out infinite';
     overlay.appendChild(core);
     // 40 orbiting particles — higher opacity
     const PCOLS = [V,GO,'#c8a0ff',A,G];
@@ -7057,7 +7057,7 @@ function effectConfettiStorm(){
   }
   // Central flash
   const flash=document.createElement('div');
-  flash.style.cssText='position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);z-index:9999;pointer-events:none;font-family:\'Cinzel\',serif;font-size:24px;font-weight:700;color:#f0c060;text-shadow:0 0 20px rgba(240,192,96,.8);animation:score-rise .9s ease-out forwards;letter-spacing:3px';
+  flash.style.cssText='position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);z-index:9999;pointer-events:none;font-family:\'Cinzel\',serif;font-size:24px;font-weight:700;color:#f0c060;text-shadow:0 0 20px rgba(245,200,106,.8);animation:score-rise .9s ease-out forwards;letter-spacing:3px';
   flash.textContent='✦ CORRECTO ✦';
   document.body.appendChild(flash);
   setTimeout(()=>flash.remove(),1000);
@@ -7074,7 +7074,7 @@ function effectLightningStrike(){
   // Screen flash
   const flash=document.getElementById('screen-flash');
   if(flash){
-    flash.style.background='rgba(240,192,96,.3)';
+    flash.style.background='rgba(245,200,106,.3)';
     flash.style.opacity='1';
     setTimeout(()=>{flash.style.opacity='0';flash.style.background='';},250);
   }
@@ -7187,8 +7187,8 @@ function effectAurora(){
   const overlay=document.createElement('div');
   overlay.style.cssText='position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden';
   overlay.innerHTML=`
-    <div style="position:absolute;top:0;left:-20%;width:140%;height:45%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.35),rgba(147,83,255,.45),rgba(96,165,250,.35),transparent);animation:aurora-wave 1.2s ease-in-out;border-radius:50%"></div>
-    <div style="position:absolute;top:10%;left:-15%;width:130%;height:30%;background:linear-gradient(90deg,transparent,rgba(240,192,96,.2),rgba(74,222,128,.25),rgba(147,83,255,.2),transparent);animation:aurora-wave 1.2s ease-in-out .15s;border-radius:50%"></div>
+    <div style="position:absolute;top:0;left:-20%;width:140%;height:45%;background:linear-gradient(90deg,transparent,rgba(74,222,128,.35),rgba(139,92,246,.45),rgba(96,165,250,.35),transparent);animation:aurora-wave 1.2s ease-in-out;border-radius:50%"></div>
+    <div style="position:absolute;top:10%;left:-15%;width:130%;height:30%;background:linear-gradient(90deg,transparent,rgba(245,200,106,.2),rgba(74,222,128,.25),rgba(139,92,246,.2),transparent);animation:aurora-wave 1.2s ease-in-out .15s;border-radius:50%"></div>
     <div style="position:absolute;top:22%;left:-25%;width:150%;height:20%;background:linear-gradient(90deg,transparent,rgba(96,165,250,.15),rgba(74,222,128,.2),transparent);animation:aurora-wave 1.2s ease-in-out .3s;border-radius:50%"></div>`;
   document.body.appendChild(overlay);
   setTimeout(()=>overlay.remove(),1600);
@@ -7287,7 +7287,7 @@ function showVipPaywall(featureName, onUnlock){
 
   const overlay = document.createElement('div');
   overlay.id = 'vipPaywall';
-  overlay.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(6,4,15,.92); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn .25s';
+  overlay.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(9,7,15,.92); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn .25s';
   const benefits = [
     'Modo Fractal completo (BOS, LG, Zonas, Setup 2-Step)',
     'Torneos con premios en USD reales',
@@ -7297,10 +7297,10 @@ function showVipPaywall(featureName, onUnlock){
   ].map(b => '<li style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;font-size:13px;color:var(--text2);line-height:1.5"><span style="color:var(--gold);font-weight:700;flex-shrink:0">✓</span><span>' + b + '</span></li>').join('');
 
   overlay.innerHTML = `
-    <div style="background:linear-gradient(135deg,var(--panel2),var(--panel));border:1.5px solid var(--gold);border-radius:20px;padding:24px 22px;max-width:380px;width:100%;position:relative;box-shadow:0 20px 60px rgba(240,192,96,.3);max-height:90vh;overflow-y:auto">
+    <div style="background:linear-gradient(135deg,var(--panel2),var(--panel));border:1.5px solid var(--gold);border-radius:20px;padding:24px 22px;max-width:380px;width:100%;position:relative;box-shadow:0 20px 60px rgba(245,200,106,.3);max-height:90vh;overflow-y:auto">
       <button id="vipPaywallClose" style="position:absolute;top:12px;right:12px;width:32px;height:32px;background:transparent;border:0;color:var(--text3);font-size:24px;cursor:pointer;line-height:1">&times;</button>
       <div style="text-align:center;margin-bottom:16px">
-        <div style="font-size:60px;margin-bottom:8px;filter:drop-shadow(0 0 12px rgba(240,192,96,.6))">👑</div>
+        <div style="font-size:60px;margin-bottom:8px;filter:drop-shadow(0 0 12px rgba(245,200,106,.6))">👑</div>
         <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:4px">T.N.S.V.T VIP</div>
         <div style="font-size:12px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase">Acceso premium</div>
       </div>
@@ -7451,8 +7451,8 @@ function renderTnsvtSettings(){
           <button onclick="tnsvtSave()" style="flex:1;padding:9px;background:linear-gradient(135deg,var(--violet),var(--violet2));border:0;color:#fff;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">💾 Guardar</button>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:8px">
-          <button onclick="tnsvtToggle()" style="flex:1;padding:9px;background:${c.enabled?'rgba(248,113,113,.15)':'rgba(74,222,128,.15)'};border:1px solid ${c.enabled?'var(--red)':'var(--green)'};color:${c.enabled?'var(--red)':'var(--green)'};border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">${c.enabled?'⏸ Desactivar':'▶ Activar'}</button>
-          <button onclick="tnsvtClear()" style="padding:9px 14px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.3);color:var(--red);border-radius:6px;font-size:12px;cursor:pointer">🗑</button>
+          <button onclick="tnsvtToggle()" style="flex:1;padding:9px;background:${c.enabled?'rgba(239,68,68,.15)':'rgba(74,222,128,.15)'};border:1px solid ${c.enabled?'var(--red)':'var(--green)'};color:${c.enabled?'var(--red)':'var(--green)'};border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">${c.enabled?'⏸ Desactivar':'▶ Activar'}</button>
+          <button onclick="tnsvtClear()" style="padding:9px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);color:var(--red);border-radius:6px;font-size:12px;cursor:pointer">🗑</button>
         </div>
         <div id="tnsvt-test-result" style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center"></div>
         <div style="font-size:10px;color:var(--text3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
@@ -7627,7 +7627,7 @@ function renderPHistorial(){
   if(!el) return;
   el.innerHTML=`<div style="padding:0 16px">
     ${HIST_RECORDS.map(h=>`
-      <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(45,31,85,.4)">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(170,120,255,.4)">
         <div style="font-size:24px;width:36px;text-align:center">${h.emoji}</div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:14px">${h.mode}</div>
@@ -7691,12 +7691,12 @@ function initModos(){
                     : (m.tag||'').toLowerCase() === 'intenso' ? 'tier-intense'
                     : (m.tag||'').toLowerCase() === 'educación' || (m.tag||'').toLowerCase() === 'educativo' ? 'tier-edu'
                     : m.vip ? 'tier-vip' : '';
-    const tagBg = m.vip ? 'background:linear-gradient(135deg,rgba(240,192,96,.15),rgba(212,160,48,.1));color:var(--gold);border:1px solid rgba(240,192,96,.4)'
+    const tagBg = m.vip ? 'background:linear-gradient(135deg,rgba(245,200,106,.15),rgba(230,168,59,.1));color:var(--gold);border:1px solid rgba(245,200,106,.4)'
                   : (m.tagColor && m.tagColor.includes('green')) ? 'background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.3)'
-                  : (m.tagColor && m.tagColor.includes('red')) ? 'background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)'
-                  : (m.tagColor && m.tagColor.includes('violet')) ? 'background:rgba(147,83,255,.15);color:var(--violet3);border:1px solid rgba(147,83,255,.4)'
+                  : (m.tagColor && m.tagColor.includes('red')) ? 'background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)'
+                  : (m.tagColor && m.tagColor.includes('violet')) ? 'background:rgba(139,92,246,.15);color:var(--violet3);border:1px solid rgba(139,92,246,.4)'
                   : (m.tagColor && m.tagColor.includes('blue')) ? 'background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.3)'
-                  : (m.tagColor && m.tagColor.includes('gold')) ? 'background:rgba(240,192,96,.12);color:var(--gold);border:1px solid rgba(240,192,96,.3)'
+                  : (m.tagColor && m.tagColor.includes('gold')) ? 'background:rgba(245,200,106,.12);color:var(--gold);border:1px solid rgba(245,200,106,.3)'
                   : `background:rgba(255,255,255,.06);color:${m.tagColor};border:1px solid var(--border)`;
     return `
     <div class="mode-card ${tierClass} ${isLocked?'locked':''}" onclick="(${m.action})()">
@@ -7706,7 +7706,7 @@ function initModos(){
         <div class="mode-desc">${m.desc}</div>
         <div class="mode-meta">
           <span class="mode-tag" style="${tagBg}">${m.tag}</span>
-          ${isLocked?'<span class="mode-tag" style="background:linear-gradient(135deg,rgba(240,192,96,.25),rgba(212,160,48,.25));color:var(--gold);border:1px solid var(--gold)">👑 $9.99</span>':''}
+          ${isLocked?'<span class="mode-tag" style="background:linear-gradient(135deg,rgba(245,200,106,.25),rgba(230,168,59,.25));color:var(--gold);border:1px solid var(--gold)">👑 $9.99</span>':''}
         </div>
       </div>
       <div class="mode-arrow" style="${isLocked?'color:var(--gold);':''}">${isLocked?'👑':'›'}</div>
@@ -8026,13 +8026,13 @@ function renderFractalChart(d){
 
   // ── Background ──────────────────────────────────────────────
   const bg = ctx.createLinearGradient(0,0,0,H);
-  bg.addColorStop(0,'#0e0a1e'); bg.addColorStop(1,'#06040f');
+  bg.addColorStop(0,'#0e0a1e'); bg.addColorStop(1,'#09070F');
   ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
   // ── Price axis panel ─────────────────────────────────────────
   ctx.fillStyle='rgba(6,4,14,.8)';
   ctx.fillRect(W-PRICE_W,0,PRICE_W,H);
-  ctx.strokeStyle='rgba(45,31,85,.9)'; ctx.lineWidth=.8;
+  ctx.strokeStyle='rgba(170,120,255,.9)'; ctx.lineWidth=.8;
   ctx.beginPath(); ctx.moveTo(W-PRICE_W,0); ctx.lineTo(W-PRICE_W,H); ctx.stroke();
 
   // ── Grid + price labels ──────────────────────────────────────
@@ -8040,7 +8040,7 @@ function renderFractalChart(d){
   for(let i=0;i<=5;i++){
     const y     = PAD_T+(i/5)*cH;
     const price = yMax-(i/5)*(yMax-yMin);
-    ctx.strokeStyle='rgba(45,31,85,.25)'; ctx.lineWidth=.5; ctx.setLineDash([]);
+    ctx.strokeStyle='rgba(170,120,255,.25)'; ctx.lineWidth=.5; ctx.setLineDash([]);
     ctx.beginPath(); ctx.moveTo(LEFT,y); ctx.lineTo(W-PRICE_W,y); ctx.stroke();
     ctx.fillStyle='rgba(160,130,230,.35)';
     ctx.fillText(fmtPrice(price), W-4, y+3);
@@ -8049,32 +8049,32 @@ function renderFractalChart(d){
   // ── ZONE box (demand/supply) — clear rectangle ───────────────
   const zy1 = toY(d.zoneHigh), zy2=toY(d.zoneLow);
   const zTop = Math.min(zy1,zy2), zH2=Math.abs(zy1-zy2);
-  const zCol = d.bullish?'rgba(74,222,128,':'rgba(248,113,113,';
+  const zCol = d.bullish?'rgba(74,222,128,':'rgba(239,68,68,';
   // fill
   const zGr=ctx.createLinearGradient(0,zTop,0,zTop+zH2);
   zGr.addColorStop(0,zCol+'.22)'); zGr.addColorStop(1,zCol+'.08)');
   ctx.fillStyle=zGr; ctx.fillRect(LEFT,zTop,cW,zH2);
   // border top/bottom
-  ctx.strokeStyle=d.bullish?'rgba(74,222,128,.65)':'rgba(248,113,113,.65)';
+  ctx.strokeStyle=d.bullish?'rgba(74,222,128,.65)':'rgba(239,68,68,.65)';
   ctx.lineWidth=1; ctx.setLineDash([]);
   ctx.strokeRect(LEFT,zTop,cW,zH2);
   // label
-  ctx.fillStyle=d.bullish?'rgba(74,222,128,.8)':'rgba(248,113,113,.8)';
+  ctx.fillStyle=d.bullish?'rgba(74,222,128,.8)':'rgba(239,68,68,.8)';
   ctx.font='bold 8px Inter,sans-serif'; ctx.textAlign='left';
   const zMidY=(zTop+zTop+zH2)/2+4;
   ctx.fillText(d.bullish?'ZONA DEMANDA':'ZONA OFERTA', LEFT+4, zMidY);
 
   // ── 50% equilibrium line ─────────────────────────────────────
   const midY=toY(d.midRange);
-  ctx.strokeStyle='rgba(147,83,255,.5)'; ctx.lineWidth=1; ctx.setLineDash([6,4]);
+  ctx.strokeStyle='rgba(139,92,246,.5)'; ctx.lineWidth=1; ctx.setLineDash([6,4]);
   ctx.beginPath(); ctx.moveTo(LEFT,midY); ctx.lineTo(W-PRICE_W,midY); ctx.stroke();
   ctx.setLineDash([]);
-  drawPill(ctx, LEFT+4, midY-6, '50% EQ','rgba(147,83,255,.7)','rgba(147,83,255,.15)',60,12);
+  drawPill(ctx, LEFT+4, midY-6, '50% EQ','rgba(139,92,246,.7)','rgba(139,92,246,.15)',60,12);
 
   // ── EMA 9 (thin, subtle) ─────────────────────────────────────
   const ema9=[]; const k9=2/10;
   candles.forEach((c,i)=>ema9.push(i===0?c.c:c.c*k9+ema9[i-1]*(1-k9)));
-  ctx.strokeStyle='rgba(147,83,255,.3)'; ctx.lineWidth=1; ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(139,92,246,.3)'; ctx.lineWidth=1; ctx.setLineDash([]);
   ctx.beginPath();
   ema9.forEach((v,i)=>{ const x=cx_of(i); i===0?ctx.moveTo(x,toY(v)):ctx.lineTo(x,toY(v)); });
   ctx.stroke();
@@ -8097,14 +8097,14 @@ function renderFractalChart(d){
     ctx.lineCap='butt';
 
     if(doji){
-      ctx.strokeStyle='rgba(200,160,255,.7)'; ctx.lineWidth=1.5;
+      ctx.strokeStyle='rgba(185,131,255,.7)'; ctx.lineWidth=1.5;
       ctx.beginPath(); ctx.moveTo(cX,oY); ctx.lineTo(cX+cWid,oY); ctx.stroke();
     } else {
       const gr=ctx.createLinearGradient(0,bTop,0,bTop+bH);
       if(bull){gr.addColorStop(0,'#4ade80');gr.addColorStop(1,'#15803d');}
       else    {gr.addColorStop(0,'#dc2626');gr.addColorStop(1,'#f87171');}
       ctx.fillStyle=gr; ctx.fillRect(cX,bTop,cWid,bH);
-      ctx.strokeStyle=bull?'rgba(74,222,128,.8)':'rgba(248,113,113,.8)';
+      ctx.strokeStyle=bull?'rgba(74,222,128,.8)':'rgba(239,68,68,.8)';
       ctx.lineWidth=.6; ctx.strokeRect(cX,bTop,cWid,bH);
     }
   });
@@ -8163,9 +8163,9 @@ function renderFractalChart(d){
   // LG zone mini-box (2% of range)
   const lgBoxH = Math.max(6, range*0.02 / (yMax-yMin) * cH);
   const lgBoxY = d.bullish ? lgY2 : lgY2-lgBoxH;
-  ctx.fillStyle='rgba(240,192,96,.18)';
+  ctx.fillStyle='rgba(245,200,106,.18)';
   ctx.fillRect(LEFT, lgBoxY, cW, lgBoxH);
-  ctx.strokeStyle='rgba(240,192,96,.7)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(245,200,106,.7)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
   ctx.beginPath(); ctx.moveTo(LEFT, lgY2); ctx.lineTo(W-PRICE_W, lgY2); ctx.stroke();
 
   // LG circle marker
@@ -8173,22 +8173,22 @@ function renderFractalChart(d){
   ctx.fillStyle='#f0c060';
   ctx.beginPath(); ctx.arc(lgX, lgY2, 4.5, 0, Math.PI*2); ctx.fill();
   ctx.shadowBlur=0;
-  ctx.strokeStyle='rgba(240,192,96,.8)'; ctx.lineWidth=1.5;
+  ctx.strokeStyle='rgba(245,200,106,.8)'; ctx.lineWidth=1.5;
   ctx.beginPath(); ctx.arc(lgX, lgY2, 7, 0, Math.PI*2); ctx.stroke();
 
   // LG pill on right axis
   drawPill(ctx, W-PRICE_W+2, lgY2-8, 'LG  '+fmtPrice(d.lgLevel),
-    'rgba(240,192,96,.95)', 'rgba(240,192,96,.15)', PRICE_W-4, 16);
+    'rgba(245,200,106,.95)', 'rgba(245,200,106,.15)', PRICE_W-4, 16);
 
   // LG label
-  ctx.fillStyle='rgba(240,192,96,.85)';
+  ctx.fillStyle='rgba(245,200,106,.85)';
   ctx.font='bold 8px Inter,sans-serif'; ctx.textAlign='left';
   ctx.fillText('LG', lgX+10, d.bullish ? lgY2-2 : lgY2+10);
 
   // ── Connection arrow: LG → BOS (shows the 2-step path) ───────
   // Curved arrow from LG to BOS level — "price sweeps LG then explodes"
   if(d.lgIdx < d.bosIdx){
-    ctx.strokeStyle='rgba(240,192,96,.25)'; ctx.lineWidth=1; ctx.setLineDash([2,4]);
+    ctx.strokeStyle='rgba(245,200,106,.25)'; ctx.lineWidth=1; ctx.setLineDash([2,4]);
     ctx.beginPath();
     ctx.moveTo(lgX, lgY2);
     // Control point curves up toward the BOS
@@ -8204,7 +8204,7 @@ function renderFractalChart(d){
   candles.forEach((c,i)=>{
     const v=Math.abs(c.c-c.o)*800+100; const bull=c.c>=c.o;
     const vh=Math.max(1,(v/maxV)*14);
-    ctx.fillStyle=bull?'rgba(74,222,128,.25)':'rgba(248,113,113,.2)';
+    ctx.fillStyle=bull?'rgba(74,222,128,.25)':'rgba(239,68,68,.2)';
     ctx.fillRect(LEFT+i*bw+bw*.08, H-PAD_B+4, bw*.84, vh);
   });
 
@@ -8223,9 +8223,9 @@ function renderFractalChart(d){
   // BOS legend
   ctx.fillStyle=wpCol; ctx.fillText('● BOS / '+wpLabel, LEFT+2, PAD_T-2);
   // LG legend
-  ctx.fillStyle='rgba(240,192,96,.7)'; ctx.fillText('● LG', LEFT+2+90, PAD_T-2);
+  ctx.fillStyle='rgba(245,200,106,.7)'; ctx.fillText('● LG', LEFT+2+90, PAD_T-2);
   // Zone
-  ctx.fillStyle=d.bullish?'rgba(74,222,128,.6)':'rgba(248,113,113,.6)';
+  ctx.fillStyle=d.bullish?'rgba(74,222,128,.6)':'rgba(239,68,68,.6)';
   ctx.fillText('■ '+d.zone, LEFT+2+120, PAD_T-2);
 }
 
@@ -8393,7 +8393,7 @@ function buildFractalReveal(correct, perfect, pts, correctPrice, userPrice, leve
   const lessonPool = lessons[mode];
   const lesson = lessonPool[Math.floor(Math.random()*lessonPool.length)];
   document.getElementById('fr-lesson').innerHTML = `
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(147,83,255,.6);margin-bottom:6px">LECCIÓN FRACTAL</div>
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(139,92,246,.6);margin-bottom:6px">LECCIÓN FRACTAL</div>
     <div style="font-size:13px;color:var(--text2);line-height:1.7;font-style:italic">"${lesson}"</div>`;
 }
 
@@ -8695,12 +8695,12 @@ function drawPort24hChart(){
   // Background
   const grad = ctx.createLinearGradient(0,0,0,H);
   grad.addColorStop(0, '#120d22');
-  grad.addColorStop(1, '#06040f');
+  grad.addColorStop(1, '#09070F');
   ctx.fillStyle = grad;
   ctx.fillRect(0,0,W,H);
 
   // Grid
-  ctx.strokeStyle = 'rgba(45,31,85,.3)';
+  ctx.strokeStyle = 'rgba(170,120,255,.3)';
   ctx.lineWidth = 0.5;
   for(let i=0; i<=3; i++){
     const y = (i/3)*H;
@@ -8713,7 +8713,7 @@ function drawPort24hChart(){
   const chg = ((lastC - firstC) / firstC) * 100;
   const isUp = chg >= 0;
   const lineColor = isUp ? '#4ade80' : '#f87171';
-  const fillColor = isUp ? 'rgba(74,222,128,.15)' : 'rgba(248,113,113,.15)';
+  const fillColor = isUp ? 'rgba(74,222,128,.15)' : 'rgba(239,68,68,.15)';
 
   // Area
   const cw = W / candles.length;
@@ -8758,7 +8758,7 @@ function drawPort24hChart(){
   ctx.globalAlpha = 1;
 
   // Change % overlay
-  ctx.fillStyle = isUp ? 'rgba(74,222,128,.7)' : 'rgba(248,113,113,.7)';
+  ctx.fillStyle = isUp ? 'rgba(74,222,128,.7)' : 'rgba(239,68,68,.7)';
   ctx.font = 'bold 11px JetBrains Mono';
   ctx.textAlign = 'right';
   ctx.fillText((isUp?'+':'') + chg.toFixed(2) + '%', W-4, 14);
@@ -8767,7 +8767,7 @@ function drawPort24hChart(){
   if(all.length > viewSize){
     const barW = W * (viewSize / all.length);
     const barX = W * (port24hViewStart / all.length);
-    ctx.fillStyle = 'rgba(147,83,255,.3)';
+    ctx.fillStyle = 'rgba(139,92,246,.3)';
     ctx.fillRect(barX, H-2, barW, 2);
   }
 
@@ -8900,7 +8900,7 @@ function portRenderHeader(){
     }
   }
   const cpEl = document.getElementById('port-pnl-closed');
-  if(cpEl){ cpEl.textContent='$'+(PORT.closedPnl>=0?'+':'')+PORT.closedPnl.toFixed(2)+' cerrado'; cpEl.style.color=PORT.closedPnl>=0?'rgba(74,222,128,.6)':'rgba(248,113,113,.6)'; }
+  if(cpEl){ cpEl.textContent='$'+(PORT.closedPnl>=0?'+':'')+PORT.closedPnl.toFixed(2)+' cerrado'; cpEl.style.color=PORT.closedPnl>=0?'rgba(74,222,128,.6)':'rgba(239,68,68,.6)'; }
   const balEl = document.getElementById('port-balance-sm');
   if(balEl) balEl.textContent='$'+PORT.balance.toLocaleString('en-US',{maximumFractionDigits:0});
   const fmEl = document.getElementById('port-free-margin');
@@ -9047,7 +9047,7 @@ function portCalcPreview(){
   if(!usdSize||usdSize<=0){ if(prev) prev.style.display='none'; return; }
   if(prev) prev.style.display='';
 
-  const row=(lbl,val,col='')=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(45,31,85,.3)"><span style="color:var(--text3)">${lbl}</span><strong style="font-family:'JetBrains Mono',monospace;${col?'color:'+col:''}">${val}</strong></div>`;
+  const row=(lbl,val,col='')=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(170,120,255,.3)"><span style="color:var(--text3)">${lbl}</span><strong style="font-family:'JetBrains Mono',monospace;${col?'color:'+col:''}">${val}</strong></div>`;
   const pContent = document.getElementById('port-preview-content');
   if(pContent) pContent.innerHTML =
     row('Precio de entrada',   fmtPrice(price)) +
@@ -9224,12 +9224,12 @@ function drawPosChart(canvasId, pos){
 
   // ── BG ──
   const bg=ctx.createLinearGradient(0,0,0,H);
-  bg.addColorStop(0,'#0e0a1e'); bg.addColorStop(1,'#06040f');
+  bg.addColorStop(0,'#0e0a1e'); bg.addColorStop(1,'#09070F');
   ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
   // ── price axis ──
   ctx.fillStyle='rgba(8,5,18,.8)'; ctx.fillRect(W-PRICE_W,0,PRICE_W,H);
-  ctx.strokeStyle='rgba(45,31,85,.7)'; ctx.lineWidth=.5;
+  ctx.strokeStyle='rgba(170,120,255,.7)'; ctx.lineWidth=.5;
   ctx.beginPath(); ctx.moveTo(W-PRICE_W,0); ctx.lineTo(W-PRICE_W,H); ctx.stroke();
 
   // ── TP zone (green fill above entry for long) ──
@@ -9256,16 +9256,16 @@ function drawPosChart(canvasId, pos){
   if(sl){
     const entryY=toY(entry), slY=toY(sl);
     const grad=ctx.createLinearGradient(0,bull?entryY:slY,0,bull?slY:entryY);
-    grad.addColorStop(0,'rgba(248,113,113,.04)'); grad.addColorStop(1,'rgba(248,113,113,.18)');
+    grad.addColorStop(0,'rgba(239,68,68,.04)'); grad.addColorStop(1,'rgba(239,68,68,.18)');
     ctx.fillStyle=grad;
     ctx.fillRect(LEFT, Math.min(entryY,slY), cW, Math.abs(entryY-slY));
     // SL line
     const slYc=toY(sl);
-    ctx.strokeStyle='rgba(248,113,113,.7)'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.strokeStyle='rgba(239,68,68,.7)'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
     ctx.beginPath(); ctx.moveTo(LEFT,slYc); ctx.lineTo(W-PRICE_W,slYc); ctx.stroke();
     ctx.setLineDash([]);
     // SL pill
-    ctx.fillStyle='rgba(248,113,113,.85)';
+    ctx.fillStyle='rgba(239,68,68,.85)';
     ctx.beginPath(); ctx.roundRect?ctx.roundRect(W-PRICE_W+1,slYc-7,PRICE_W-2,13,3):ctx.rect(W-PRICE_W+1,slYc-7,PRICE_W-2,13);
     ctx.fill();
     ctx.fillStyle='#fff'; ctx.font='bold 8px JetBrains Mono,monospace'; ctx.textAlign='center';
@@ -9274,12 +9274,12 @@ function drawPosChart(canvasId, pos){
 
   // ── Entry line ──
   const entY=toY(entry);
-  ctx.strokeStyle='rgba(147,83,255,.6)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.strokeStyle='rgba(139,92,246,.6)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
   ctx.beginPath(); ctx.moveTo(LEFT,entY); ctx.lineTo(W-PRICE_W,entY); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle='rgba(147,83,255,.9)'; ctx.font='bold 8px JetBrains Mono,monospace'; ctx.textAlign='center';
+  ctx.fillStyle='rgba(139,92,246,.9)'; ctx.font='bold 8px JetBrains Mono,monospace'; ctx.textAlign='center';
   // small entry label
-  ctx.fillStyle='rgba(147,83,255,.5)';
+  ctx.fillStyle='rgba(139,92,246,.5)';
   ctx.fillText(fmtPrice(entry), W-PRICE_W+1+(PRICE_W-2)/2, entY-2);
 
   // ── Price fill under curve ──
@@ -9288,7 +9288,7 @@ function drawPosChart(canvasId, pos){
   const lineCol = winning ? '#4ade80' : '#f87171';
   const fillStart = toY(entry);
   const fillGrad=ctx.createLinearGradient(0,0,0,H);
-  fillGrad.addColorStop(0, winning?'rgba(74,222,128,.25)':'rgba(248,113,113,.25)');
+  fillGrad.addColorStop(0, winning?'rgba(74,222,128,.25)':'rgba(239,68,68,.25)');
   fillGrad.addColorStop(1,'rgba(0,0,0,0)');
   ctx.beginPath();
   pts.forEach((v,i)=>i===0?ctx.moveTo(toX(i),toY(v)):ctx.lineTo(toX(i),toY(v)));
@@ -9337,7 +9337,7 @@ function portRenderPositions(){
   }
   el.innerHTML = PORT.positions.map(pos=>{
     const pnlCol = pos.pnl>=0?'var(--green)':'var(--red)';
-    const dirBg  = pos.dir==='long'?'rgba(74,222,128,.12)':'rgba(248,113,113,.12)';
+    const dirBg  = pos.dir==='long'?'rgba(74,222,128,.12)':'rgba(239,68,68,.12)';
     const dirCol = pos.dir==='long'?'var(--green)':'var(--red)';
     const pnlPct = pos.pnlPct||0;
     const chartId = `pos-chart-${pos.id}`;
@@ -9351,14 +9351,14 @@ function portRenderPositions(){
         <div style="height:100%;width:${pct}%;background:${pos.pnl>=0?'var(--green)':'var(--red)'};border-radius:2px;transition:width .5s"></div>
       </div>`;
     }
-    return `<div data-pos-id="${pos.id}" style="background:var(--panel);border:1px solid ${pos.pnl>=0?'rgba(74,222,128,.2)':'rgba(248,113,113,.15)'};border-left:3px solid ${dirCol};border-radius:var(--r2);margin:8px 16px;overflow:hidden">
+    return `<div data-pos-id="${pos.id}" style="background:var(--panel);border:1px solid ${pos.pnl>=0?'rgba(74,222,128,.2)':'rgba(239,68,68,.15)'};border-left:3px solid ${dirCol};border-radius:var(--r2);margin:8px 16px;overflow:hidden">
       <!-- HEADER -->
       <div style="padding:12px 12px 6px;display:flex;justify-content:space-between;align-items:flex-start">
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-family:'Cinzel',serif;font-size:15px;font-weight:700">${pos.sym}</span>
           <span style="padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;background:${dirBg};color:${dirCol}">${pos.dir==='long'?'▲ LONG':'▼ SHORT'}</span>
-          ${pos.leverage>1?`<span style="padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;background:rgba(147,83,255,.15);color:var(--violet3)">${pos.leverage}×</span>`:''}
-          ${pos.trailing?`<span style="padding:2px 6px;border-radius:4px;font-size:9px;background:rgba(147,83,255,.08);color:var(--violet3)">Trail</span>`:''}
+          ${pos.leverage>1?`<span style="padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;background:rgba(139,92,246,.15);color:var(--violet3)">${pos.leverage}×</span>`:''}
+          ${pos.trailing?`<span style="padding:2px 6px;border-radius:4px;font-size:9px;background:rgba(139,92,246,.08);color:var(--violet3)">Trail</span>`:''}
         </div>
         <div style="text-align:right">
           <div class="pos-pnl-val" style="font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;color:${pnlCol}">${pos.pnl>=0?'+':''}$${pos.pnl.toFixed(2)}</div>
@@ -9375,13 +9375,13 @@ function portRenderPositions(){
       ${progressBar ? '<div style="padding:0 12px">'+progressBar+'</div>' : ''}
 
       <!-- MINI CHART -->
-      <div style="position:relative;margin:2px 0;background:rgba(6,4,15,.4)">
+      <div style="position:relative;margin:2px 0;background:rgba(9,7,15,.4)">
         <canvas id="${chartId}" height="72" style="width:100%;display:block"></canvas>
       </div>
 
       <!-- SL/TP LABELS -->
       <div style="padding:6px 12px;display:flex;gap:6px;flex-wrap:wrap">
-        ${pos.sl?`<span style="color:var(--red);background:rgba(248,113,113,.08);padding:2px 8px;border-radius:4px;border:1px solid rgba(248,113,113,.2);font-size:10px;font-family:'JetBrains Mono',monospace">SL ${fmtPrice(pos.sl)}</span>`:`<span style="color:rgba(248,113,113,.4);background:rgba(248,113,113,.04);padding:2px 8px;border-radius:4px;font-size:10px">Sin SL ⚠</span>`}
+        ${pos.sl?`<span style="color:var(--red);background:rgba(239,68,68,.08);padding:2px 8px;border-radius:4px;border:1px solid rgba(239,68,68,.2);font-size:10px;font-family:'JetBrains Mono',monospace">SL ${fmtPrice(pos.sl)}</span>`:`<span style="color:rgba(239,68,68,.4);background:rgba(239,68,68,.04);padding:2px 8px;border-radius:4px;font-size:10px">Sin SL ⚠</span>`}
         ${pos.tp?`<span style="color:var(--green);background:rgba(74,222,128,.08);padding:2px 8px;border-radius:4px;border:1px solid rgba(74,222,128,.2);font-size:10px;font-family:'JetBrains Mono',monospace">TP ${fmtPrice(pos.tp)}</span>`:''}
         <span style="color:var(--text3);font-size:10px;margin-left:auto">${pos.openedDate||''} ${pos.openedAt}</span>
       </div>
@@ -9389,14 +9389,14 @@ function portRenderPositions(){
       <!-- MODIFY SL/TP + CLOSE -->
       <div style="padding:0 12px 10px;display:flex;gap:6px">
         <input type="number" placeholder="Nuevo SL" step="any"
-          style="flex:1;padding:7px 8px;background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);border-radius:6px;color:var(--red);font-size:11px;font-family:'JetBrains Mono',monospace;outline:none"
+          style="flex:1;padding:7px 8px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:6px;color:var(--red);font-size:11px;font-family:'JetBrains Mono',monospace;outline:none"
           onchange="portModify(${pos.id},'sl',this.value)">
         <input type="number" placeholder="Nuevo TP" step="any"
           style="flex:1;padding:7px 8px;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);border-radius:6px;color:var(--green);font-size:11px;font-family:'JetBrains Mono',monospace;outline:none"
           onchange="portModify(${pos.id},'tp',this.value)">
         <button onclick="portClose(${pos.id})"
-          style="padding:7px 14px;border-radius:6px;border:1px solid rgba(248,113,113,.5);background:rgba(248,113,113,.15);color:var(--red);font-size:12px;cursor:pointer;font-weight:700;flex-shrink:0;transition:all .2s"
-          onmouseover="this.style.background='rgba(248,113,113,.3)'" onmouseout="this.style.background='rgba(248,113,113,.15)'">
+          style="padding:7px 14px;border-radius:6px;border:1px solid rgba(239,68,68,.5);background:rgba(239,68,68,.15);color:var(--red);font-size:12px;cursor:pointer;font-weight:700;flex-shrink:0;transition:all .2s"
+          onmouseover="this.style.background='rgba(239,68,68,.3)'" onmouseout="this.style.background='rgba(239,68,68,.15)'">
           Cerrar
         </button>
       </div>
@@ -9420,8 +9420,8 @@ function portRenderHistorial(){
   el.innerHTML = PORT.history.map((h,i)=>{
     const pnlCol = h.pnl>=0?'var(--green)':'var(--red)';
     const pnlPct = (h.pnl/h.margin)*100;
-    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(45,31,85,.4)">
-      <div style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;background:${h.pnl>=0?'rgba(74,222,128,.12)':'rgba(248,113,113,.1)'};color:${pnlCol}">${h.dir==='long'?'▲':'▼'}</div>
+    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(170,120,255,.4)">
+      <div style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;background:${h.pnl>=0?'rgba(74,222,128,.12)':'rgba(239,68,68,.1)'};color:${pnlCol}">${h.dir==='long'?'▲':'▼'}</div>
       <div style="flex:1">
         <div style="font-weight:700;font-size:13px">${h.sym} <span style="font-size:10px;color:var(--text3);font-weight:400">×${h.qty?.toFixed(3)||'—'}</span></div>
         <div style="font-size:10px;color:var(--text3);margin-top:2px">${fmtPrice(h.entryPrice)} → ${fmtPrice(h.closePrice||h.currentPrice)} · ${h.reason||'Manual'} · ${h.closedAt}</div>
@@ -9472,8 +9472,8 @@ function portDrawEquityCurve(){
   const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
   const pts = PORT.equityCurve;
   if(pts.length<2){
-    ctx.fillStyle='rgba(147,83,255,.1)'; ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='rgba(147,83,255,.4)'; ctx.font='11px Inter,sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(139,92,246,.1)'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(139,92,246,.4)'; ctx.font='11px Inter,sans-serif'; ctx.textAlign='center';
     ctx.fillText('Sin datos suficientes todavía',W/2,H/2+4); return;
   }
   const mn=Math.min(...pts),mx=Math.max(...pts); const range=(mx-mn)||1;
@@ -9482,12 +9482,12 @@ function portDrawEquityCurve(){
   // BG
   ctx.fillStyle='#0a0718'; ctx.fillRect(0,0,W,H);
   // Grid
-  ctx.strokeStyle='rgba(45,31,85,.4)'; ctx.lineWidth=.5;
+  ctx.strokeStyle='rgba(170,120,255,.4)'; ctx.lineWidth=.5;
   ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
   // Fill
   const lastBull = pts[pts.length-1]>=50000;
   const fillGrad=ctx.createLinearGradient(0,0,0,H);
-  fillGrad.addColorStop(0,lastBull?'rgba(74,222,128,.3)':'rgba(248,113,113,.3)');
+  fillGrad.addColorStop(0,lastBull?'rgba(74,222,128,.3)':'rgba(239,68,68,.3)');
   fillGrad.addColorStop(1,'rgba(0,0,0,0)');
   ctx.beginPath(); ctx.moveTo(toX(0),H);
   pts.forEach((v,i)=>ctx.lineTo(toX(i),toY(v)));
@@ -9502,7 +9502,7 @@ function portDrawEquityCurve(){
   ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='left';
   ctx.fillStyle='rgba(180,150,255,.4)'; ctx.fillText('$50k',4,H-4);
   ctx.textAlign='right';
-  ctx.fillStyle=lastBull?'rgba(74,222,128,.7)':'rgba(248,113,113,.7)';
+  ctx.fillStyle=lastBull?'rgba(74,222,128,.7)':'rgba(239,68,68,.7)';
   ctx.fillText('$'+pts[pts.length-1].toLocaleString('en-US',{maximumFractionDigits:0}),W-4,12);
 }
 
@@ -9512,7 +9512,7 @@ function portDrawEquityCurve(){
 const GLOSARIO = [
   {abbr:'OB',full:'Order Block',en:'Bloque de Ordenes',cat:'poi',desc:'Zona donde las instituciones dejaron ordenes pendientes. Se forma antes de un movimiento impulsivo. El precio regresa a este nivel para ejecutar las ordenes restantes.',example:'<b>Ejemplo:</b> Vela bajista justo antes de un impulso alcista = OB alcista. El precio regresa a esa zona y reacciona al alza.',visual:`<div style="padding:10px 12px;font-size:11px;font-family:\'JetBrains Mono\',monospace;line-height:1.9"><span class="gv-up">▲▲▲</span> Impulso alcista<br><span style="background:rgba(74,222,128,.15);padding:1px 6px;border-radius:3px;color:var(--green)">█ OB Alcista</span> vela antes del impulso<br><span class="gv-dn">▼▼</span> Retroceso al OB → reaccion esperada</div>`},
   {abbr:'POI',full:'Point of Interest',en:'Punto de Interes',cat:'poi',desc:'Cualquier zona del chart donde esperamos una reaccion del precio. Puede ser un OB, una zona de oferta/demanda, un FVG, un nivel de liquidez, etc.',example:'<b>Tip T.N.S.V.T:</b> Un POI en HTF pesa mas que uno en LTF. Siempre alina los POI con la estructura mayor.',visual:null},
-  {abbr:'INF',full:'Ineficiencia del Precio',en:'Inefficiency / FVG',cat:'poi',desc:'Zona donde el precio se movio tan rapido que no hubo intercambio eficiente. El mercado tiende a volver a llenar esas ineficiencias.',example:'<b>FVG:</b> 3 velas — la wick superior de la vela 1 no toca la wick inferior de la vela 3. El gap entre ellas es la ineficiencia.',visual:`<div style="padding:10px 12px;font-size:11px;font-family:\'JetBrains Mono\',monospace;line-height:1.9">Vela 1: H=100 | Vela 3: L=105<br><span style="background:rgba(240,192,96,.15);padding:1px 6px;border-radius:3px;color:var(--gold)">GAP 100-105 = INEFICIENCIA</span><br>El precio tiende a regresar a este rango</div>`},
+  {abbr:'INF',full:'Ineficiencia del Precio',en:'Inefficiency / FVG',cat:'poi',desc:'Zona donde el precio se movio tan rapido que no hubo intercambio eficiente. El mercado tiende a volver a llenar esas ineficiencias.',example:'<b>FVG:</b> 3 velas — la wick superior de la vela 1 no toca la wick inferior de la vela 3. El gap entre ellas es la ineficiencia.',visual:`<div style="padding:10px 12px;font-size:11px;font-family:\'JetBrains Mono\',monospace;line-height:1.9">Vela 1: H=100 | Vela 3: L=105<br><span style="background:rgba(245,200,106,.15);padding:1px 6px;border-radius:3px;color:var(--gold)">GAP 100-105 = INEFICIENCIA</span><br>El precio tiende a regresar a este rango</div>`},
   {abbr:'TF',full:'Timeframe',en:'Temporalidad',cat:'tf',desc:'El periodo de tiempo que representa cada vela. Un TF de 1H = cada vela representa 1 hora de actividad de precio.',example:'<b>Regla basica:</b> Analisis en HTF → planificacion en MTF → entrada en LTF. Siempre de mayor a menor.',visual:`<div style="padding:10px 12px;font-size:11px;line-height:2"><span class="gv-gold">HTF:</span> Mensual, Semanal, Diario → direccion macro<br><span class="gv-vio">MTF:</span> 4H, 1H → estructura de trade<br><span class="gv-up">LTF:</span> 15M, 5M, 1M → entrada precisa</div>`},
   {abbr:'HTF',full:'Higher Timeframe',en:'Temporalidad Alta',cat:'tf',desc:'Temporalidad superior a la que usas para entrar. La estructura del HTF siempre manda sobre el LTF.',example:'<b>Regla T.N.S.V.T:</b> Nunca operes un setup LTF en contra de la direccion HTF. El fractal mayor siempre gana.',visual:null},
   {abbr:'LTF',full:'Lower Timeframe',en:'Temporalidad Baja',cat:'tf',desc:'Temporalidad inferior. Sirve para refinar la entrada, confirmar el setup y ajustar el SL con mas precision.',example:'<b>Ejemplo:</b> Analizas en 4H (HTF), ves un OB. Bajas a 15M (LTF) para esperar confirmacion antes de entrar.',visual:null},
@@ -9575,7 +9575,7 @@ function glosRender(){
   );
   const list=document.getElementById('glos-list'); if(!list)return;
   if(!items.length){ list.innerHTML=`<div style="padding:40px;text-align:center;color:var(--text3)">${t('glos.empty')}</div>`; return; }
-  const catCol={poi:'#60a5fa',tf:'#a78bfa',estructura:'#f0c060',entrada:'#4ade80',liquidez:'#38bdf8',misc:'#c8a0ff'};
+  const catCol={poi:'#60a5fa',tf:'#a78bfa',estructura:'#F5C86A',entrada:'#4ade80',liquidez:'#38bdf8',misc:'#B983FF'};
   list.innerHTML=items.map(g=>{
     const col=catCol[g.cat]||'var(--violet3)';
     const exp=glosExpanded.has(g.abbr);
@@ -9875,15 +9875,15 @@ async function checkGameUpdate(){
 function showGameUpdateBanner(info){
   const banner = document.createElement('div');
   banner.id = 'gameUpdateBanner';
-  banner.style.cssText = 'position:fixed; top:0; left:0; right:0; z-index:9999; background:linear-gradient(135deg,#4ade80,#16a34a); color:#06040f; padding:12px 14px; display:flex; align-items:center; gap:10px; box-shadow:0 4px 20px rgba(74,222,128,.4); font-family:Inter,sans-serif; font-size:13px;';
+  banner.style.cssText = 'position:fixed; top:0; left:0; right:0; z-index:9999; background:linear-gradient(135deg,#4ade80,#16a34a); color:#09070F; padding:12px 14px; display:flex; align-items:center; gap:10px; box-shadow:0 4px 20px rgba(74,222,128,.4); font-family:Inter,sans-serif; font-size:13px;';
   banner.innerHTML = `
     <div style="font-size:24px">🆕</div>
     <div style="flex:1; min-width:0">
       <div style="font-weight:700; font-size:14px">v${info.version} disponible</div>
       <div style="font-size:11px; opacity:.85">${info.sizeMb} MB · ${info.sha256 ? 'SHA: '+info.sha256.substring(0,10)+'…' : ''}</div>
     </div>
-    <button id="gameUpdateBtn" style="padding:6px 12px; background:#06040f; color:#4ade80; border:0; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer">⬇ Instalar</button>
-    <button id="gameUpdateDismiss" style="padding:6px 8px; background:transparent; color:#06040f; border:0; font-size:18px; cursor:pointer; line-height:1">×</button>
+    <button id="gameUpdateBtn" style="padding:6px 12px; background:#09070F; color:#4ade80; border:0; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer">⬇ Instalar</button>
+    <button id="gameUpdateDismiss" style="padding:6px 8px; background:transparent; color:#09070F; border:0; font-size:18px; cursor:pointer; line-height:1">×</button>
   `;
   document.body.appendChild(banner);
   document.getElementById('gameUpdateBtn').onclick = () => {
@@ -10136,7 +10136,7 @@ function obDemoTap(btn, type){
     fb.style.color='var(--green)'; fb.textContent='✓ ¡Así! Cuando acertás el mercado suma XP.';
     SFX.correct();
   } else if(type==='wrong'){
-    btn.style.boxShadow='0 0 20px rgba(248,113,113,.5)';
+    btn.style.boxShadow='0 0 20px rgba(239,68,68,.5)';
     fb.style.color='var(--red)'; fb.textContent='✗ El mercado fue al lado contrario — aprendizaje.';
     SFX.wrong();
   } else {
@@ -10565,7 +10565,7 @@ function fxWrong(){
 
 function fxSkip(){
   const {x,y} = getActionCenter();
-  scorePop(x, y-30, '—', 'rgba(200,160,255,.5)');
+  scorePop(x, y-30, '—', 'rgba(185,131,255,.5)');
 }
 
 function fxLoseLife(){
@@ -10993,7 +10993,7 @@ function fxTradeResult(pnl, direction, x, y){
     scorePop(cx, cy-60, '-$' + Math.abs(pnl).toFixed(2), '#f87171');
     if(typeof screenShake === 'function') screenShake();
   } else {
-    scorePop(cx, cy-60, '±$0', 'rgba(200,160,255,.6)');
+    scorePop(cx, cy-60, '±$0', 'rgba(185,131,255,.6)');
   }
 }
 
@@ -11254,7 +11254,7 @@ function maybeStartTorneoTour(){
   if(!ticker) return;
   const btn = document.createElement('button');
   btn.id = 'sound-toggle';
-  btn.style.cssText='flex-shrink:0;background:rgba(147,83,255,.15);border:1px solid rgba(147,83,255,.3);border-radius:20px;padding:3px 10px;color:#c8a0ff;font-size:12px;cursor:pointer;margin-left:auto;transition:all .2s;font-family:Inter,sans-serif';
+  btn.style.cssText='flex-shrink:0;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:3px 10px;color:#c8a0ff;font-size:12px;cursor:pointer;margin-left:auto;transition:all .2s;font-family:Inter,sans-serif';
   btn.textContent='🔊';
   btn.title='Sonido ON/OFF (long press = volumen)';
   btn.onclick=()=>{
@@ -11273,7 +11273,7 @@ function maybeStartTorneoTour(){
   volSlider.min = '0';
   volSlider.max = '100';
   volSlider.value = String(Math.round((typeof sfxVolume!=='undefined'?sfxVolume:1)*100));
-  volSlider.style.cssText='flex-shrink:0;width:60px;height:14px;-webkit-appearance:none;appearance:none;background:rgba(147,83,255,.2);border-radius:7px;outline:none;cursor:pointer;margin-left:4px';
+  volSlider.style.cssText='flex-shrink:0;width:60px;height:14px;-webkit-appearance:none;appearance:none;background:rgba(139,92,246,.2);border-radius:7px;outline:none;cursor:pointer;margin-left:4px';
   volSlider.title='Volumen SFX';
   volSlider.oninput = (e)=>{
     sfxVolume = e.target.value / 100;
