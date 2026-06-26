@@ -1,0 +1,62 @@
+/* LAYOUT — App shell, nav, ticker, screens container */
+/* TICKER */
+#ticker{
+  background:linear-gradient(90deg,var(--bg2),var(--panel),var(--bg2));
+  border-bottom:1px solid var(--border);
+  padding:6px 12px;
+  display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;
+  font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap;
+  flex-shrink:0;
+  position:fixed;top:0;left:0;right:0;z-index:50;
+}
+#ticker::-webkit-scrollbar{display:none}
+.tick-item{display:flex;gap:5px;align-items:center}
+.tick-sym{color:var(--text2);font-weight:500}
+.tick-price{color:var(--text);font-weight:600}
+.tick-chg{font-weight:500}
+.tick-chg.up{color:var(--green)}
+.tick-chg.dn{color:var(--red)}
+.tick-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse2 2s infinite}
+@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.4}}
+.lang-btn.active{color:var(--violet3)!important;background:rgba(147,83,255,.12)!important;box-shadow:0 0 8px rgba(147,83,255,.3)}
+.lang-btn:hover{color:var(--text)!important}
+
+/* MAIN CONTAINER */
+#app{position:fixed;top:30px;bottom:60px;left:0;right:0;overflow:hidden;z-index:1}
+
+/* SCREENS */
+.screen{
+  position:absolute;inset:0;overflow-y:auto;
+  display:none;flex-direction:column;
+  background:var(--bg);
+  padding-bottom:70px;z-index:2;
+}
+.screen.active{display:flex}
+body.has-bg .screen{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.87)}
+body.has-bg #perfil-header{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.95)}
+body.has-bg #ticker,
+body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
+
+
+/* PERFIL STICKY HEADER */
+#s-perfil{overflow-y:hidden;padding-bottom:0}
+#perfil-header{flex-shrink:0;position:sticky;top:0;z-index:52;background:var(--bg)}
+#perfil-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:70px}
+#perfil-body .perfil-tab-content{min-height:100%}
+
+/* BOTTOM NAV */
+#nav{
+  height:60px;background:var(--bg2);border-top:1px solid var(--border);
+  display:flex;align-items:stretch;flex-shrink:0;
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  box-shadow:0 -4px 20px rgba(0,0,0,.4);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;transition:all .2s;
+  color:var(--text3);font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
+  border:none;background:none;
+}
+.nav-btn svg{width:20px;height:20px;stroke-width:1.8}
+.nav-btn.active{color:var(--violet3)}
+.nav-btn.active svg{filter:drop-shadow(0 0 6px var(--violet))}

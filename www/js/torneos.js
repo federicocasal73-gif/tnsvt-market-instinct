@@ -120,10 +120,10 @@
   // DETAIL
   // ============================================================
   async function open(id) {
-    const screen = ensureScreen('s-torneo');
+    const screen = ensureScreen('s-torneos');
     if (!screen) return;
 
-    showScreen('s-torneo');
+    showScreen('s-torneos');
     screen.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando torneo...</div>';
 
     try {

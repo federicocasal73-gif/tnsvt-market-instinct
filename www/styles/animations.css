@@ -1,0 +1,121 @@
+/* ANIMATIONS — Microinteractions, keyframes, press/ripple/shimmer, flashes */
+
+/* Press effect for all interactive elements */
+.press{transition:transform 80ms cubic-bezier(.4,0,.2,1),box-shadow .25s,filter .25s}
+.press:active{transform:scale(.96)}
+
+/* Ripple effect on buttons */
+.ripple{position:relative;overflow:hidden}
+.ripple .ripple-wave{
+  position:absolute;border-radius:50%;transform:scale(0);
+  background:radial-gradient(circle,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 70%);
+  animation:ripple-grow 600ms ease-out forwards;pointer-events:none;
+}
+@keyframes ripple-grow{
+  0%{transform:scale(0);opacity:.6}
+  100%{transform:scale(2.5);opacity:0}
+}
+
+/* Pill selection bounce */
+@keyframes pill-bounce{
+  0%{transform:scale(1)}
+  30%{transform:scale(1.18)}
+  60%{transform:scale(.94)}
+  100%{transform:scale(1)}
+}
+.asset-pill.just-selected{animation:pill-bounce 320ms cubic-bezier(.34,1.56,.64,1)}
+
+/* Skeleton loader (shimmer) */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skeleton{
+  background:linear-gradient(90deg,rgba(147,83,255,.08) 0%,rgba(147,83,255,.22) 50%,rgba(147,83,255,.08) 100%);
+  background-size:200% 100%;
+  animation:shimmer 1.6s infinite linear;
+  border-radius:6px;color:transparent!important;
+  user-select:none;
+}
+
+/* Trade execution flash */
+@keyframes flash-long{
+  0%{background:rgba(74,222,128,0)}
+  20%{background:rgba(74,222,128,.35)}
+  100%{background:rgba(74,222,128,0)}
+}
+@keyframes flash-short{
+  0%{background:rgba(248,113,113,0)}
+  20%{background:rgba(248,113,113,.35)}
+  100%{background:rgba(248,113,113,0)}
+}
+.flash-long{animation:flash-long 600ms ease-out}
+.flash-short{animation:flash-short 600ms ease-out}
+
+/* Price tick animation */
+@keyframes tick-up{
+  0%{transform:translateY(0);color:var(--text)}
+  25%{transform:translateY(-3px);color:var(--green)}
+  100%{transform:translateY(0);color:var(--text)}
+}
+@keyframes tick-down{
+  0%{transform:translateY(0);color:var(--text)}
+  25%{transform:translateY(3px);color:var(--red)}
+  100%{transform:translateY(0);color:var(--text)}
+}
+.tick-up{animation:tick-up 280ms ease-out}
+.tick-down{animation:tick-down 280ms ease-out}
+
+/* P&L top bar glow */
+@keyframes pnl-glow-green{
+  0%,100%{box-shadow:0 0 0 rgba(74,222,128,0)}
+  50%{box-shadow:0 0 16px rgba(74,222,128,.55),inset 0 0 8px rgba(74,222,128,.15)}
+}
+@keyframes pnl-glow-red{
+  0%,100%{box-shadow:0 0 0 rgba(248,113,113,0)}
+  50%{box-shadow:0 0 16px rgba(248,113,113,.55),inset 0 0 8px rgba(248,113,113,.15)}
+}
+.pnl-glow-green{animation:pnl-glow-green 1.6s ease-in-out infinite}
+.pnl-glow-red{animation:pnl-glow-red 1.6s ease-in-out infinite}
+
+/* Burst particles (used by burstParticles via .burst-particle) */
+.burst-particle{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:9999;
+  animation:burst-fly 800ms cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes burst-fly{
+  0%{transform:translate(0,0) scale(1);opacity:1}
+  100%{transform:translate(var(--bx),var(--by)) scale(0);opacity:0}
+}
+
+/* Score pop-up */
+.score-pop{
+  position:fixed;font-weight:800;pointer-events:none;z-index:10000;
+  text-shadow:0 1px 3px rgba(0,0,0,.6);
+  animation:score-rise 900ms ease-out forwards;
+}
+@keyframes score-rise{
+  0%{transform:translate(-50%,-50%) scale(.5);opacity:0}
+  20%{transform:translate(-50%,-50%) scale(1.3);opacity:1}
+  100%{transform:translate(-50%,-150%) scale(.9);opacity:0}
+}
+
+/* Combo ring */
+.combo-ring{
+  position:fixed;border:3px solid;border-radius:50%;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  animation:ring-expand 600ms ease-out forwards;
+}
+@keyframes ring-expand{
+  0%{width:50px;height:50px;opacity:.9}
+  100%{width:300px;height:300px;opacity:0}
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+/* ============================================================

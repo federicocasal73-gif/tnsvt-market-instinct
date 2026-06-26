@@ -1,0 +1,30 @@
+/* DESIGN TOKENS */
+:root{
+  --bg:#06040f;
+  --bg2:#0d0a1a;
+  --bg3:#150f2a;
+  --panel:#1a1230;
+  --panel2:#211840;
+  --border:#2d1f55;
+  --violet:#9353ff;
+  --violet2:#7a3de0;
+  --violet3:#c8a0ff;
+  --gold:#f0c060;
+  --gold2:#d4a030;
+  --gold3:#fff0c0;
+  --green:#4ade80;
+  --red:#f87171;
+  --blue:#60a5fa;
+  --text:#e8e0ff;
+  --text2:#a090c0;
+  --text3:#6a5a8a;
+  --glow:rgba(147,83,255,0.3);
+  --glow-gold:rgba(240,192,96,0.25);
+  --r:clamp(10px,3.5vw,16px);
+  --r2:clamp(8px,2.5vw,12px);
+  --fs-sm:clamp(10px,2.8vw,13px);
+  --fs-base:clamp(12px,3vw,15px);
+  --fs-lg:clamp(14px,4vw,18px);
+  --fs-xl:clamp(18px,5vw,24px);
+  --fs-xxl:clamp(24px,7vw,32px);
+}

@@ -106,7 +106,7 @@
     if (screen) {
       screen.innerHTML =
         '<div style="padding:16px;background:var(--panel2);border-bottom:1px solid var(--border)">' +
-          '<button class="btn btn-ghost btn-sm" onclick="goScreen(\'s-torneo\')" style="margin-bottom:12px">← Volver</button>' +
+          '<button class="btn btn-ghost btn-sm" onclick="goScreen(\'s-torneos\')" style="margin-bottom:12px">← Volver</button>' +
           '<div style="font-family:Cinzel,serif;font-size:18px;font-weight:700;color:var(--gold)">' +
             '💳 Elegí método de pago' +
           '</div>' +
