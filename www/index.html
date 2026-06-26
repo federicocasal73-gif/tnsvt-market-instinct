@@ -10675,7 +10675,12 @@ function setupCoverflow(){
         _coverflowIndex = pos < 0
           ? Math.max(0, _coverflowIndex - 1)
           : Math.min(COVERFLOW_MODES.length - 1, _coverflowIndex + 1);
-        try { eval(action + '()'); } catch(e){}
+        // Re-render para que se vea la transición smooth ANTES de navegar
+        setupCoverflow();
+        // Delay para que la transición visual sea perceptible
+        setTimeout(()=>{
+          try { eval(action + '()'); } catch(e){}
+        }, 350);
         if(HAPTICS.success) HAPTICS.success();
       }
     };
