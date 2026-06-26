@@ -79,6 +79,8 @@ window.Router = {
 
     // post-init
     if (window.applyPro3DClass) setTimeout(applyPro3DClass, 50);
+    // Stop coverflow auto-rotation when leaving s-inicio; setupCoverflow re-starts it when entering
+    if (id !== 's-inicio' && window.stopCoverflowAuto) stopCoverflowAuto();
     if (id === 's-inicio' && window.setupCoverflow) setTimeout(setupCoverflow, 80);
     // Home-specific renderers
     if (id === 's-inicio') {
