@@ -100,6 +100,21 @@
   .ach-modal-prog-bar{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
   .ach-modal-prog-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--gold));border-radius:4px;transition:width .6s cubic-bezier(.16,1,.3,1)}
   .ach-modal-close{margin-top:14px;padding:10px 20px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;font-size:13px;font-weight:600}
+  /* My position pill in Liga */
+  .my-pos-pill{display:flex;align-items:center;gap:8px;margin:0 auto 12px;padding:8px 14px;background:linear-gradient(135deg,rgba(147,83,255,.12),rgba(240,192,96,.08));border:1px solid rgba(147,83,255,.3);border-radius:20px;font-size:12px;width:fit-content;animation:my-pos-in .5s cubic-bezier(.16,1,.3,1)}
+  @keyframes my-pos-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  .my-pos-label{color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:10px}
+  .my-pos-rank{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);line-height:1}
+  .my-pos-of{color:var(--text3);font-size:11px}
+  .my-pos-share{background:rgba(147,83,255,.15);border:1px solid rgba(147,83,255,.3);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .2s;flex-shrink:0}
+  .my-pos-share:active{transform:scale(.9)}
+  /* My position chip on home */
+  .home-rank-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:linear-gradient(135deg,rgba(147,83,255,.12),rgba(240,192,96,.08));border:1px solid rgba(147,83,255,.3);border-radius:14px;font-size:11px;color:var(--text);font-weight:600;cursor:pointer;transition:all .2s}
+  .home-rank-chip:active{transform:scale(.97)}
+  .home-rank-chip .hr-rank{color:var(--gold);font-family:'Cinzel',serif;font-weight:700}
+  /* Liga rank-row is-me highlight */
+  .rank-row.is-me{background:linear-gradient(90deg,rgba(147,83,255,.15),transparent);border-left:3px solid var(--violet);animation:me-glow 2s ease-in-out infinite}
+  @keyframes me-glow{0%,100%{box-shadow:inset 0 0 0 0 rgba(147,83,255,0)}50%{box-shadow:inset 4px 0 12px rgba(147,83,255,.4)}}
 </style>
 <script>
 window.onerror = function(msg, url, line, col, err) {
@@ -219,6 +234,7 @@ if('serviceWorker' in navigator){
       <span class="badge badge-rank">⚔ OPERADOR</span>
       <span class="badge badge-xp">✦ 2,340 XP</span>
       <span id="price-badge" class="badge badge-live">● LIVE</span>
+      <span class="home-rank-chip" onclick="goScreen('s-liga')"><span data-i18n="home.rank.label">RANK</span> <span class="hr-rank" id="home-rank-num">#--</span></span>
     </div>
     <div class="hero-xp-row">
       <div class="hero-xp-label"><span data-i18n="prof.progress">Progreso al siguiente rango</span><span>2,340 / 3,500</span></div>
@@ -1778,6 +1794,7 @@ const I18N = {
     'home.missions.title':'Misiones de Hoy','home.missions.all':'Ver todas →',
     'home.streak.days':'días','home.streak.best':'Mejor',
     'home.ach.title':'Logros','home.ach.all':'Ver todos →',
+    'home.rank.label':'RANK',
     'ach.progress':'Progreso','ach.unlockedOn':'Desbloqueado el',
     'home.feat.title':'Modo del Día','home.feat.players':'jugadores',
     'home.feat.renews':'Renueva en:',
@@ -1931,6 +1948,7 @@ const I18N = {
     'home.missions.title':'Today\'s Missions','home.missions.all':'See all →',
     'home.streak.days':'days','home.streak.best':'Best',
     'home.ach.title':'Achievements','home.ach.all':'See all →',
+    'home.rank.label':'RANK',
     'ach.progress':'Progress','ach.unlockedOn':'Unlocked on',
     'home.feat.title':'Mode of the Day','home.feat.players':'players','home.feat.renews':'Renews in:',
     'home.modes.title':'Play Now','home.modes.all':'All →',
@@ -4739,33 +4757,136 @@ async function loadTorneoWallet(){
 // ============================================================
 // LIGA
 // ============================================================
+const LIGA_BASE_TRADERS = [
+  {name:'CryptoSage',emoji:'🐳',baseXP:18420},
+  {name:'FractalKing',emoji:'🔮',baseXP:16300},
+  {name:'AlgoWolf',emoji:'🤖',baseXP:14100},
+  {name:'BullRunner',emoji:'🐂',baseXP:12900},
+  {name:'MarketFox',emoji:'🦊',baseXP:11700},
+  {name:'GoldHawk',emoji:'🦅',baseXP:10500},
+  {name:'SolHunter',emoji:'◎',baseXP:9400},
+  {name:'EtherLord',emoji:'Ξ',baseXP:8800},
+  {name:'ChartWhale',emoji:'🐋',baseXP:8200},
+  {name:'TradeWolf',emoji:'🐺',baseXP:7600},
+  {name:'NightOwl',emoji:'🦉',baseXP:7100},
+  {name:'PivotKing',emoji:'🎯',baseXP:6800},
+  {name:'BOShunter',emoji:'🔱',baseXP:6400},
+  {name:'SwingMaster',emoji:'🏌️',baseXP:6000},
+  {name:'SwingTrader',emoji:'🎢',baseXP:5700},
+  {name:'ScalpKing',emoji:'⚡',baseXP:5400},
+  {name:'BullNova',emoji:'💥',baseXP:5000},
+  {name:'Oráculo',emoji:'🔮',baseXP:4800},
+  {name:'DayTrader',emoji:'☀️',baseXP:4500},
+  {name:'PennyStock',emoji:'🪙',baseXP:4200},
+  {name:'AlphaSeeker',emoji:'🦁',baseXP:3900},
+  {name:'BetaTrader',emoji:'📊',baseXP:3600},
+  {name:'ThetaGang',emoji:'θ',baseXP:3400},
+  {name:'DeltaHunter',emoji:'Δ',baseXP:3100},
+  {name:'GammaSqueeze',emoji:'Γ',baseXP:2900},
+  {name:'RangePro',emoji:'🎚',baseXP:2700},
+  {name:'TrendLord',emoji:'📈',baseXP:2500},
+  {name:'ReversalKid',emoji:'🔄',baseXP:2300},
+  {name:'Breakout',emoji:'💎',baseXP:2150},
+  {name:'Pullback',emoji:'🔃',baseXP:2000},
+  {name:'LiqHunter',emoji:'💧',baseXP:1850},
+  {name:'OrderFlow',emoji:'🌊',baseXP:1700},
+  {name:'TapTrader',emoji:'🚰',baseXP:1600},
+  {name:'FibMaster',emoji:'🌀',baseXP:1500},
+  {name:'Ichimoku',emoji:'☁️',baseXP:1400},
+  {name:'Wyckoffian',emoji:'🐂',baseXP:1300},
+  {name:'VWAPgod',emoji:'📍',baseXP:1200},
+  {name:'RSItracker',emoji:'📉',baseXP:1100},
+  {name:'MACDking',emoji:'📶',baseXP:1000},
+  {name:'Bollinger',emoji:'🥯',baseXP:900},
+  {name:'ATRguru',emoji:'🎚',baseXP:800},
+  {name:'BBsqueeze',emoji:'🍋',baseXP:720},
+  {name:'Hodler',emoji:'💎',baseXP:650},
+  {name:'RektQueen',emoji:'👑',baseXP:580},
+  {name:'YOLOking',emoji:'🎰',baseXP:520},
+  {name:'NoobCoin',emoji:'🥚',baseXP:450},
+  {name:'PaperHand',emoji:'📄',baseXP:380},
+  {name:'BTCholder',emoji:'₿',baseXP:310},
+  {name:'DiamondH',emoji:'💎',baseXP:240},
+  {name:'ChartPadawan',emoji:'🌱',baseXP:150},
+];
+
+function xpToRank(xp){
+  if(xp>=10000) return 'ORÁCULO';
+  if(xp>=5000) return 'MAESTRO';
+  if(xp>=2000) return 'OPERADOR';
+  if(xp>=500) return 'APRENDIZ';
+  return 'INICIADO';
+}
+function xpToWins(xp){ return Math.floor(xp/65); }
+
+function buildLigaGlobal(){
+  const traders = LIGA_BASE_TRADERS.map(t=>({
+    name:t.name, emoji:t.emoji, score:t.baseXP,
+    rank:xpToRank(t.baseXP), wins:xpToWins(t.baseXP),
+    isMe:false
+  }));
+  // Insertar al usuario real basado en STATE.xp
+  const meXp = (typeof STATE !== 'undefined' && STATE.xp) ? STATE.xp : 2340;
+  traders.push({
+    name:'Tú', emoji:'🎯', score:meXp,
+    rank:xpToRank(meXp), wins:xpToWins(meXp),
+    isMe:true
+  });
+  // Sort desc por score
+  traders.sort((a,b)=>b.score - a.score);
+  // Re-asignar rank con posición
+  return traders.map((u,i)=>({ ...u, position:i+1 }));
+}
+
+function buildLigaSemanal(){
+  // Basado en XP total pero con factor semanal (ratio ~0.18 del total)
+  const traders = LIGA_BASE_TRADERS.map(t=>{
+    const weekScore = Math.floor(t.baseXP * 0.18) + Math.floor(Math.random()*200);
+    return {
+      name:t.name, emoji:t.emoji, score:weekScore,
+      rank:xpToRank(weekScore), wins:xpToWins(weekScore), isMe:false
+    };
+  });
+  const meXp = typeof STATE !== 'undefined' && STATE.xp ? STATE.xp : 2340;
+  const myWeek = Math.floor(meXp * 0.18);
+  traders.push({
+    name:'Tú', emoji:'🎯', score:myWeek,
+    rank:xpToRank(myWeek), wins:xpToWins(myWeek), isMe:true
+  });
+  traders.sort((a,b)=>b.score - a.score);
+  return traders.map((u,i)=>({ ...u, position:i+1 }));
+}
+
+function buildLigaDiaria(){
+  const seed = new Date().getDate();
+  const traders = LIGA_BASE_TRADERS.slice(0,20).map((t,i)=>{
+    const dScore = 800 + ((seed * (i+1) * 31) % 1500);
+    return {name:t.name, emoji:t.emoji, score:dScore, rank:xpToRank(dScore), wins:1, isMe:false};
+  });
+  const myDaily = typeof STATE !== 'undefined' && STATE.daily && STATE.daily.played ? (STATE.daily.result && STATE.daily.result.correct ? 2100 : 800) : 0;
+  traders.push({name:'Tú', emoji:'🎯', score:myDaily, rank:xpToRank(myDaily), wins:myDaily>0?1:0, isMe:true});
+  traders.sort((a,b)=>b.score - a.score);
+  return traders.map((u,i)=>({ ...u, position:i+1 }));
+}
+
 const LIGA_DATA = {
-  global:[
-    {name:'CryptoSage',emoji:'🐳',rank:'ORÁCULO',score:18420,wins:312},
-    {name:'FractalKing',emoji:'🔮',rank:'ORÁCULO',score:16300,wins:287},
-    {name:'AlgoWolf',emoji:'🤖',rank:'MAESTRO',score:14100,wins:243},
-    {name:'Tú (Trader)',emoji:'🎯',rank:'OPERADOR',score:2340,wins:31,isMe:true},
-    {name:'BullRunner',emoji:'🐂',rank:'OPERADOR',score:2100,wins:28},
-    {name:'MarketFox',emoji:'🦊',rank:'APRENDIZ',score:1800,wins:22},
-    {name:'SolTrader',emoji:'◎',rank:'APRENDIZ',score:1400,wins:18},
-    {name:'GoldHawk',emoji:'🥇',rank:'APRENDIZ',score:980,wins:12},
-  ],
-  semanal:[
-    {name:'AlgoWolf',emoji:'🤖',rank:'MAESTRO',score:3400,wins:48},
-    {name:'CryptoSage',emoji:'🐳',rank:'ORÁCULO',score:3100,wins:44},
-    {name:'Tú (Trader)',emoji:'🎯',rank:'OPERADOR',score:1240,wins:18,isMe:true},
-    {name:'FractalKing',emoji:'🔮',rank:'ORÁCULO',score:1100,wins:16},
-    {name:'BullRunner',emoji:'🐂',rank:'OPERADOR',score:900,wins:13},
-    {name:'MarketFox',emoji:'🦊',rank:'APRENDIZ',score:720,wins:10},
-  ],
-  diario:[
-    {name:'FractalKing',emoji:'🔮',rank:'ORÁCULO',score:2850,wins:1},
-    {name:'CryptoSage',emoji:'🐳',rank:'ORÁCULO',score:2700,wins:1},
-    {name:'Tú (Trader)',emoji:'🎯',rank:'OPERADOR',score:STATE.daily.result?.correct?2100:0,wins:STATE.daily.played?1:0,isMe:true},
-    {name:'AlgoWolf',emoji:'🤖',rank:'MAESTRO',score:1800,wins:1},
-    {name:'MarketFox',emoji:'🦊',rank:'APRENDIZ',score:1400,wins:1},
-  ],
+  global:buildLigaGlobal(),
+  semanal:buildLigaSemanal(),
+  diario:buildLigaDiaria(),
 };
+
+function refreshLigaData(){
+  LIGA_DATA.global = buildLigaGlobal();
+  LIGA_DATA.semanal = buildLigaSemanal();
+  LIGA_DATA.diario = buildLigaDiaria();
+}
+
+function getMyPosition(tab){
+  if(!tab) tab = STATE.liga.tab || 'global';
+  const data = LIGA_DATA[tab] || LIGA_DATA.global;
+  const me = data.find(u=>u.isMe);
+  return me ? { position:me.position, total:data.length, score:me.score } : null;
+}
 
 function initLiga(){
   ligaTab(STATE.liga.tab, document.querySelector('.tab.active'));
@@ -4773,6 +4894,7 @@ function initLiga(){
 
 function ligaTab(tab, btn){
   STATE.liga.tab = tab;
+  refreshLigaData();
   document.querySelectorAll('#s-liga .tab').forEach(t=>t.classList.remove('active'));
   if(btn) btn.classList.add('active');
   const statsTab = document.getElementById('liga-stats-tab');
@@ -4784,11 +4906,20 @@ function ligaTab(tab, btn){
   }
   statsTab.style.display='none'; podium.style.display='flex'; list.style.display='block';
   const data = LIGA_DATA[tab] || LIGA_DATA.global;
+  // "Tu posición" pill (top sticky area)
+  const myPos = getMyPosition(tab);
+  const meRow = myPos ? `
+    <div class="my-pos-pill" id="my-pos-pill-${tab}">
+      <span class="my-pos-label">Sos</span>
+      <span class="my-pos-rank">#${myPos.position}</span>
+      <span class="my-pos-of">de ${myPos.total}</span>
+      <button class="my-pos-share" onclick="shareMyRank('${tab}')">📤</button>
+    </div>` : '';
   // Podium top 3
   const top3 = data.slice(0,3);
   const podiumEl = document.getElementById('liga-podium');
   const order = [1,0,2]; // 2nd, 1st, 3rd
-  podiumEl.innerHTML = order.map(i=>{
+  podiumEl.innerHTML = meRow + order.map(i=>{
     const u = top3[i]; if(!u) return '';
     const barCls = ['p1','p2','p3'][i];
     const rankLabel = ['🥇','🥈','🥉'][i];
@@ -4800,9 +4931,12 @@ function ligaTab(tab, btn){
     </div>`;
   }).join('');
   // List from 4th
-  list.innerHTML = data.slice(3).map((u,i)=>`
+  // Insert "me" pinned row if not in top 3
+  const rest = data.slice(3);
+  const meInRest = rest.findIndex(u=>u.isMe);
+  let listHtml = rest.map((u,i)=>`
     <div class="rank-row ${u.isMe?'is-me':''}">
-      <div class="rank-pos">#${i+4}</div>
+      <div class="rank-pos ${u.position<=10?'top10':''}">#${u.position}</div>
       <div class="rank-avatar">${u.emoji}</div>
       <div class="rank-info">
         <div class="rank-name">${u.name}</div>
@@ -4810,6 +4944,31 @@ function ligaTab(tab, btn){
       </div>
       <div class="rank-score">${u.score.toLocaleString()}</div>
     </div>`).join('');
+  list.innerHTML = listHtml;
+  // Scroll into view of "me" if it's far down
+  if(meInRest >= 0){
+    setTimeout(()=>{
+      const meEl = list.querySelector('.rank-row.is-me');
+      if(meEl) meEl.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 200);
+  }
+}
+
+function shareMyRank(tab){
+  if(!tab) tab = STATE.liga.tab || 'global';
+  const pos = getMyPosition(tab);
+  if(!pos) return;
+  const txt = `🎯 Soy #${pos.position} de ${pos.total} en T.N.S.V.T Market Instinct (${tab.toUpperCase()})\n` +
+              `Rango: ${xpToRank(STATE.xp||0)} · ${(STATE.xp||0).toLocaleString()} XP\n` +
+              `¿Podés superarme? 📈`;
+  const url = 'https://tnsvt.game';
+  if(navigator.share){
+    navigator.share({title:'Mi rank en T.N.S.V.T', text:txt, url:url}).catch(()=>{});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(txt + ' ' + url).then(()=>{
+      if(typeof showToast === 'function') showToast('📋 Copiado al portapapeles');
+    });
+  }
 }
 
 function renderLigaStats(){
@@ -8705,6 +8864,13 @@ function updateXPDisplay(){
     else el.textContent='★ MÁXIMO';
   });
   document.querySelectorAll('.xp-bar-fill').forEach(el=>{ el.style.width=pct+'%'; });
+  // Update Liga rank chip + Liga data
+  if(typeof refreshLigaData === 'function') refreshLigaData();
+  const chip = document.getElementById('home-rank-num');
+  if(chip && typeof getMyPosition === 'function'){
+    const pos = getMyPosition('global');
+    if(pos) chip.textContent = '#'+pos.position;
+  }
 }
 function saveShop(){ try { localStorage.setItem('tnsvt_shop', JSON.stringify([...STATE.shopOwned])); } catch(e){} }
 
