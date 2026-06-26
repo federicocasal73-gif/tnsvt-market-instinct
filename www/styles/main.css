@@ -1103,7 +1103,7 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
   display:flex;align-items:center;justify-content:center;
 }
 .coverflow-card{
-  position:absolute;width:190px;padding:20px 16px;
+  position:absolute;left:50%;top:50%;width:190px;padding:20px 16px;
   background:var(--panel);border:1px solid var(--border);
   border-radius:var(--r2);text-align:center;
   cursor:pointer;user-select:none;
@@ -1111,19 +1111,19 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
   box-shadow:0 4px 20px rgba(0,0,0,.3);
 }
 .coverflow-card[data-coverflow-pos="0"]{
-  transform:scale(1) translateZ(20px);
+  transform:translate(-50%,-50%) scale(1) translateZ(20px);
   z-index:3;opacity:1;
   border-color:rgba(147,83,255,.4);
   box-shadow:0 8px 40px rgba(147,83,255,.25);
   animation:card-breathe 4s ease-in-out infinite;
 }
-@keyframes card-breathe{0%,100%{transform:scale(1) translateZ(20px)}50%{transform:scale(1.02) translateZ(24px)}}
+@keyframes card-breathe{0%,100%{transform:translate(-50%,-50%) scale(1) translateZ(20px)}50%{transform:translate(-50%,-50%) scale(1.02) translateZ(24px)}}
 .coverflow-card[data-coverflow-pos="-1"]{
-  transform:translateX(-140px) scale(.8) rotateY(12deg);
+  transform:translate(calc(-50% - 130px),-50%) scale(.8) rotateY(12deg);
   z-index:2;opacity:.5;filter:brightness(.6);
 }
 .coverflow-card[data-coverflow-pos="1"]{
-  transform:translateX(140px) scale(.8) rotateY(-12deg);
+  transform:translate(calc(-50% + 130px),-50%) scale(.8) rotateY(-12deg);
   z-index:2;opacity:.5;filter:brightness(.6);
 }
 .cf-emoji{font-size:36px;margin-bottom:6px}
@@ -1132,12 +1132,14 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
 .cf-action{font-size:10px;color:var(--violet3);margin-top:8px;text-transform:uppercase;letter-spacing:.5px}
 .coverflow-hint{text-align:center;font-size:11px;color:var(--text3);margin-bottom:4px}
 @media (pointer:coarse){
-  .coverflow-card[data-coverflow-pos="-1"]{transform:translateX(-110px) scale(.85) rotateY(10deg)}
-  .coverflow-card[data-coverflow-pos="1"]{transform:translateX(110px) scale(.85) rotateY(-10deg)}
+  .coverflow-card[data-coverflow-pos="-1"]{transform:translate(calc(-50% - 100px),-50%) scale(.85) rotateY(10deg)}
+  .coverflow-card[data-coverflow-pos="1"]{transform:translate(calc(-50% + 100px),-50%) scale(.85) rotateY(-10deg)}
 }
 
 /* Keep nav flat in 3D mode */
 body.pro3d #nav{transform-style:flat!important}
+body.pro3d .nav-btn,
+body.pro3d .nav-btn *{transform:none!important}
 
 /* Disable 3D on devices that prefer reduced motion */
 @media (prefers-reduced-motion:reduce){
