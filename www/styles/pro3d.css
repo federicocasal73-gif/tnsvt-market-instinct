@@ -73,7 +73,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
   z-index:3;opacity:1;
   border-color:rgba(147,83,255,.4);
   box-shadow:0 8px 40px rgba(147,83,255,.25);
+  animation:card-breathe 4s ease-in-out infinite;
 }
+@keyframes card-breathe{0%,100%{transform:scale(1) translateZ(20px)}50%{transform:scale(1.02) translateZ(24px)}}
 .coverflow-card[data-coverflow-pos="-1"]{
   transform:translateX(-140px) scale(.8) rotateY(12deg);
   z-index:2;opacity:.5;filter:brightness(.6);

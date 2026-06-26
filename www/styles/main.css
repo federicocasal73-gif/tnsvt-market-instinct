@@ -62,16 +62,30 @@ body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
 .nav-btn svg{width:20px;height:20px;stroke-width:1.8}
 .nav-btn.active{color:var(--violet3)}
 .nav-btn.active svg{filter:drop-shadow(0 0 6px var(--violet))}
+/* Skeleton loading */
+.skeleton{background:linear-gradient(90deg,var(--panel) 25%,rgba(255,255,255,.04) 50%,var(--panel) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.5s infinite;border-radius:var(--r);pointer-events:none}
+.skeleton-line{height:12px;width:100%;margin-bottom:8px}
+.skeleton-line.w60{width:60%}.skeleton-line.w40{width:40%}.skeleton-line.w80{width:80%}
+.skeleton-block{height:80px;width:100%;margin-bottom:12px}
+.skeleton-card{height:100px;width:100%;border-radius:var(--r2);margin-bottom:12px}
+@keyframes skeleton-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 /* Badge dot on nav */
 .nav-btn{position:relative}
 .nav-badge{
-  position:absolute;top:2px;right:50%;transform:translateX(16px);
-  width:8px;height:8px;border-radius:50%;
+  position:absolute;top:0;right:50%;transform:translateX(14px);
+  min-width:8px;height:8px;border-radius:50%;
   background:var(--gold);box-shadow:0 0 6px var(--gold);
-  animation:badge-pulse 1.5s ease-in-out infinite;
   pointer-events:none;z-index:2;
+  font-size:7px;font-weight:700;color:#06040f;line-height:8px;text-align:center;padding:0;
+}
+.nav-badge:empty{animation:badge-pulse 1.5s ease-in-out infinite}
+.nav-badge:not(:empty){
+  min-width:14px;height:14px;line-height:14px;border-radius:7px;
+  top:-4px;transform:translateX(12px);
+  animation:none;font-size:8px;
 }
 .nav-badge.daily{background:var(--violet3);box-shadow:0 0 6px var(--violet)}
+.nav-badge.daily:not(:empty){color:#fff}
 @keyframes badge-pulse{0%,100%{opacity:1;transform:translateX(16px) scale(1)}50%{opacity:.6;transform:translateX(16px) scale(.8)}}
 
 /* CARDS */
@@ -1101,7 +1115,9 @@ body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,19
   z-index:3;opacity:1;
   border-color:rgba(147,83,255,.4);
   box-shadow:0 8px 40px rgba(147,83,255,.25);
+  animation:card-breathe 4s ease-in-out infinite;
 }
+@keyframes card-breathe{0%,100%{transform:scale(1) translateZ(20px)}50%{transform:scale(1.02) translateZ(24px)}}
 .coverflow-card[data-coverflow-pos="-1"]{
   transform:translateX(-140px) scale(.8) rotateY(12deg);
   z-index:2;opacity:.5;filter:brightness(.6);
