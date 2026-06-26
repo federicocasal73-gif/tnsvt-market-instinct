@@ -41,11 +41,19 @@
   .splash-ring svg{animation:splash-spin 1.2s linear infinite}
   @keyframes splash-fade-in{to{opacity:1}}
   @keyframes splash-spin{to{transform:rotate(360deg)}}
-  /* Reduced motion */
+  /* Reduced motion (system) */
   @media (prefers-reduced-motion:reduce){
     .splash-blob,.splash-c,.splash-trend,.splash-title,.splash-sub,.splash-tagline,.splash-ring,.splash-ring svg{animation:none!important;opacity:1!important;transform:none!important}
     .splash-trend{stroke-dashoffset:0!important}
   }
+  /* Reduced motion (user setting via body.reduced-motion) */
+  body.reduced-motion *,.reduced-motion *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  body.reduced-motion * *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  /* Global focus visible (A11y keyboard) */
+  *:focus-visible{outline:2px solid var(--violet);outline-offset:2px;border-radius:4px}
+  button:focus-visible,.nav-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  /* Skip-to-main link (a11y) */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   /* Daily Streak indicator (home) */
   .ds-card{display:flex;align-items:center;gap:12px;margin:10px 16px 0;padding:10px 12px;background:linear-gradient(135deg,rgba(147,83,255,.08),rgba(240,192,96,.05));border:1px solid rgba(147,83,255,.25);border-radius:var(--r);cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1)}
   .ds-card:active{transform:scale(.98)}
@@ -100,6 +108,28 @@
   .ach-modal-prog-bar{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
   .ach-modal-prog-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--gold));border-radius:4px;transition:width .6s cubic-bezier(.16,1,.3,1)}
   .ach-modal-close{margin-top:14px;padding:10px 20px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;font-size:13px;font-weight:600}
+  /* Settings */
+  .set-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid var(--border);border-radius:14px;transition:border-color .2s}
+  .set-row:hover{border-color:rgba(147,83,255,.3)}
+  .set-info{flex:1;min-width:0}
+  .set-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--text)}
+  .set-desc{font-size:11px;color:var(--text3);margin-top:3px;line-height:1.4}
+  .set-toggle{
+    position:relative;width:54px;height:28px;border-radius:14px;
+    background:rgba(255,255,255,.06);border:1px solid var(--border);cursor:pointer;
+    transition:background .25s,border-color .25s;flex-shrink:0;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .set-toggle[data-on="1"],body.light .set-toggle[data-on="dark"]{background:linear-gradient(135deg,var(--violet),var(--violet2));border-color:rgba(147,83,255,.5);box-shadow:0 0 12px rgba(147,83,255,.3)}
+  .set-toggle-knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--text);transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .2s;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+  .set-toggle[data-on="1"] .set-toggle-knob,body.light .set-toggle[data-on="dark"] .set-toggle-knob{transform:translateX(26px);background:#fff}
+  .set-toggle-label{position:absolute;top:50%;right:8px;transform:translateY(-50%);font-size:14px;pointer-events:none}
+  .set-toggle[data-on="1"] .set-toggle-label,body.light .set-toggle[data-on="dark"] .set-toggle-label{right:auto;left:8px}
+  .set-lang-btn{flex:1;padding:10px;border-radius:10px;background:var(--panel);border:1px solid var(--border);color:var(--text);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s}
+  .set-lang-btn.active{background:linear-gradient(135deg,var(--violet),var(--violet2));border-color:var(--violet);color:#fff;box-shadow:0 2px 8px rgba(147,83,255,.3)}
+  .set-danger-btn{margin-top:14px;padding:12px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:10px;color:var(--red);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s}
+  .set-danger-btn:hover{background:rgba(248,113,113,.2)}
+  .set-danger-btn:active{transform:scale(.97)}
   /* My position pill in Liga */
   .my-pos-pill{display:flex;align-items:center;gap:8px;margin:0 auto 12px;padding:8px 14px;background:linear-gradient(135deg,rgba(147,83,255,.12),rgba(240,192,96,.08));border:1px solid rgba(147,83,255,.3);border-radius:20px;font-size:12px;width:fit-content;animation:my-pos-in .5s cubic-bezier(.16,1,.3,1)}
   @keyframes my-pos-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -113,8 +143,7 @@
   .home-rank-chip:active{transform:scale(.97)}
   .home-rank-chip .hr-rank{color:var(--gold);font-family:'Cinzel',serif;font-weight:700}
   /* Liga rank-row is-me highlight */
-  .rank-row.is-me{background:linear-gradient(90deg,rgba(147,83,255,.15),transparent);border-left:3px solid var(--violet);animation:me-glow 2s ease-in-out infinite}
-  @keyframes me-glow{0%,100%{box-shadow:inset 0 0 0 0 rgba(147,83,255,0)}50%{box-shadow:inset 4px 0 12px rgba(147,83,255,.4)}}
+.rank-row.is-me{background:linear-gradient(135deg,rgba(147,83,255,.22),rgba(240,192,96,.08));border:1.5px solid var(--violet);box-shadow:0 0 18px rgba(147,83,255,.3),inset 0 0 12px rgba(147,83,255,.08)}
   /* ============================================================
      TNSVT GLOW UP — estilos nuevos (Ritual, Cofradías, Sintonía)
      Pegado del bundle integration/new-styles.css. Todas las clases
@@ -154,6 +183,36 @@
   .gu-row-rank   { font-family:'JetBrains Mono',monospace; font-size:13px; width:18px; color:var(--text2); }
   .gu-row-av     { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
   .gu-num        { font-family:'JetBrains Mono',monospace; }
+  /* ============================================================
+     GLOW UP OLA 1 — Sistema de Top Bar reutilizable
+     Un header consistente para todas las screens (mismas reglas
+     que Ritual del Oráculo y Cofradías).
+     ============================================================ */
+  .gu-screen-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px 10px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(147,83,255,.05),transparent)}
+  .gu-screen-header.compact{padding:10px 14px 6px}
+  .gu-header-label{flex:1;min-width:0}
+  .gu-header-eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;line-height:1}
+  .gu-header-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:#fff;line-height:1.2;margin-top:4px;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .gu-header-sub{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.4}
+  .gu-header-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+  .gu-header-asset{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:14px;background:rgba(147,83,255,.12);border:1px solid rgba(147,83,255,.3);font-size:11px;font-weight:600;color:var(--violet3)}
+  .gu-header-status{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:600;letter-spacing:.3px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:var(--green)}
+  .gu-header-status.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:badge-pulse 1.5s ease-in-out infinite}
+  /* Glass card unificada (mejorada sobre .card existente) */
+  .card.gu-card{background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.25)}
+  /* Pill reutilizable */
+  .gu-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:18px;background:var(--panel);border:1px solid var(--border);font-size:12px;color:var(--text)}
+  .gu-pill-icon{font-size:16px}
+  .gu-pill-sub{font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase}
+  /* Action buttons Glow Up (estilo Sintonía) */
+  .gu-actions{display:flex;gap:10px;margin-top:14px}
+  .gu-action{flex:1;padding:15px;border-radius:14px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px;transition:transform .15s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+  .gu-action:active{transform:scale(.97)}
+  .gu-action.long{color:var(--bg);background:linear-gradient(135deg,var(--green),#16a34a);box-shadow:0 4px 18px rgba(74,222,128,.3)}
+  .gu-action.short{color:#fff;background:linear-gradient(135deg,var(--red),#b91c1c);box-shadow:0 4px 18px rgba(248,113,113,.3)}
+  .gu-action.skip{width:74px;background:var(--panel2);color:var(--text);border:1px solid var(--border);font-size:13px}
+  .gu-action.long:hover{box-shadow:0 6px 24px rgba(74,222,128,.5)}
+  .gu-action.short:hover{box-shadow:0 6px 24px rgba(248,113,113,.5)}
 </style>
 <script>
 window.onerror = function(msg, url, line, col, err) {
@@ -478,30 +537,29 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-classic">
 <div class="screen" id="s-classic">
-  <div class="game-hud">
-    <div class="hud-item">
-      <div class="hud-val" id="cl-score">0</div>
-      <div class="hud-lbl" data-i18n="hud.score">Score</div>
+  <div style="padding:8px 16px;display:flex;gap:6px;align-items:center;justify-content:space-between">
+    <div class="gu-pill" style="padding:5px 10px">
+      <span class="gu-pill-icon">💎</span>
+      <span class="gu-num" id="cl-score" style="font-size:14px;color:var(--gold);font-weight:700">0</span>
+      <span class="gu-pill-sub" data-i18n="hud.score">Score</span>
     </div>
-    <div class="hud-item">
-      <div id="cl-streak-badge" class="streak-badge" style="display:none">🔥 <span id="cl-streak-n">0</span></div>
-      <div class="hud-lbl" data-i18n="hud.streak">Racha</div>
+    <div id="cl-streak-badge" class="gu-pill" style="padding:5px 10px;display:none">
+      <span class="gu-pill-icon gu-flame">🔥</span>
+      <span class="gu-num" id="cl-streak-n" style="font-size:13px;color:var(--gold)">0</span>
     </div>
-    <div class="hud-item">
-      <div class="hud-val" id="cl-acc">—</div>
-      <div class="hud-lbl" data-i18n="hud.accuracy">Precisión</div>
+    <div class="gu-pill" style="padding:5px 10px">
+      <span class="gu-pill-sub" data-i18n="hud.accuracy">Prec</span>
+      <span class="gu-num" id="cl-acc" style="font-size:13px;color:var(--violet3)">—</span>
     </div>
-    <div class="hud-item">
-      <button class="btn btn-ghost btn-sm" onclick="goScreen('s-inicio')" data-i18n="ui.exit">✕ Salir</button>
-    </div>
+    <button class="gu-action skip" style="width:auto;padding:8px 12px;font-size:11px;flex:0" onclick="goScreen('s-inicio')" data-i18n="ui.exit">✕</button>
   </div>
 
-  <div style="padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between">
-    <div style="display:flex;align-items:center;gap:8px">
-      <span id="cl-asset-name" style="font-family:'Cinzel',serif;font-size:16px;font-weight:700"></span>
-      <span id="cl-live-badge" class="badge badge-live" style="display:none">● LIVE</span>
+  <div style="padding:4px 16px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:6px">
+      <span id="cl-asset-name" class="gu-num" style="font-size:13px;color:var(--text2);font-weight:600"></span>
+      <span id="cl-tf-label" class="gu-num" style="font-size:11px;color:var(--text3)"></span>
     </div>
-    <div id="cl-tf-label" style="font-size:12px;color:var(--text3)"></div>
+    <span id="cl-live-badge" class="gu-header-status live" style="display:none">LIVE</span>
   </div>
 
   <!-- ASSET PILLS -->
@@ -533,31 +591,31 @@ if('serviceWorker' in navigator){
 
   <!-- CHART -->
   <div style="padding:0 16px 8px">
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+    <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(147,83,255,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(147,83,255,.15)">
       <canvas id="classic-chart" height="260"></canvas>
     </div>
   </div>
 
   <!-- PRICE INFO -->
   <div style="padding:0 10px 4px;display:flex;gap:6px">
-    <div class="indicator" style="flex:1;padding:6px 8px">
+    <div class="indicator gu-card" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div class="ind-icon" style="font-size:14px">💰</div>
       <div><div class="ind-label" data-i18n="cs.price">Precio Actual</div><div class="ind-val" id="cl-current-price">—</div></div>
     </div>
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div class="ind-icon" id="cl-trend-icon">📊</div>
       <div><div class="ind-label" data-i18n="cs.trend">Tendencia</div><div class="ind-val" id="cl-trend">—</div></div>
     </div>
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div class="ind-icon">📐</div>
       <div><div class="ind-label" data-i18n="cs.change">Variación</div><div class="ind-val" id="cl-change">—</div></div>
     </div>
   </div>
 
-  <div class="action-row" style="padding:10px 12px">
-    <button class="action-btn action-long pro3d-trade-btn" onclick="classicPlay('long')" data-i18n="btn.long">▲ LONG</button>
-    <button class="action-btn action-skip" onclick="classicPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-    <button class="action-btn action-short pro3d-trade-btn" onclick="classicPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+  <div class="gu-actions" style="padding:10px 12px 14px">
+    <button class="gu-action long pro3d-trade-btn" onclick="classicPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="gu-action skip pro3d-trade-btn" onclick="classicPlay('skip')" data-i18n="btn.skip">SKIP</button>
+    <button class="gu-action short pro3d-trade-btn" onclick="classicPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 </div>
 </template>
@@ -565,55 +623,53 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-survival">
 <div class="screen" id="s-survival">
-  <div class="game-hud">
-    <div class="hud-item">
-      <div class="hud-val gold" id="sv-score">0</div>
-      <div class="hud-lbl" data-i18n="hud.score">Score</div>
+  <div style="padding:8px 16px;display:flex;gap:6px;align-items:center;justify-content:space-between">
+    <div class="gu-pill" style="padding:5px 10px">
+      <span class="gu-pill-icon">💎</span>
+      <span class="gu-num" id="sv-score" style="font-size:14px;color:var(--gold);font-weight:700">0</span>
+      <span class="gu-pill-sub" data-i18n="hud.score">Score</span>
     </div>
-    <div class="hud-item">
-      <div class="lives" id="sv-lives">
-        <span class="life">❤️</span><span class="life">❤️</span><span class="life">❤️</span>
-      </div>
-      <div class="hud-lbl" data-i18n="hud.lives">Vidas</div>
+    <div class="gu-pill" id="sv-lives" style="padding:5px 10px;background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)">
+      <span class="gu-pill-icon">❤️</span>
+      <span class="gu-pill-icon">❤️</span>
+      <span class="gu-pill-icon">❤️</span>
     </div>
-    <div class="hud-item">
-      <div class="hud-val" id="sv-round">1</div>
-      <div class="hud-lbl" data-i18n="hud.round">Ronda</div>
+    <div class="gu-pill" style="padding:5px 10px">
+      <span class="gu-pill-sub" data-i18n="hud.round">Ronda</span>
+      <span class="gu-num" id="sv-round" style="font-size:13px;color:var(--violet3)">1</span>
     </div>
-    <div class="hud-item">
-      <button class="btn btn-ghost btn-sm" onclick="goScreen('s-inicio')">✕</button>
-    </div>
+    <button class="gu-action skip" style="width:auto;padding:8px 12px;font-size:11px;flex:0" onclick="goScreen('s-inicio')">✕</button>
   </div>
 
-  <div style="padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between">
+  <div style="padding:4px 16px 8px;display:flex;align-items:center;justify-content:space-between">
     <div id="sv-diff-badge" class="diff-pill diff-easy">FÁCIL</div>
     <div style="font-size:13px;color:var(--text2)"><span data-i18n="cs.assets">Activos</span>: <strong id="sv-asset">BTC</strong></div>
   </div>
 
   <div style="padding:0 16px 8px">
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+    <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(248,113,113,.25);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(248,113,113,.12)">
       <canvas id="survival-chart" height="250"></canvas>
     </div>
   </div>
 
   <div style="padding:4px 16px 8px;display:flex;gap:8px">
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div><div class="ind-label" data-i18n="cs.trend">Tendencia</div><div class="ind-val" id="sv-trend">—</div></div>
     </div>
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div><div class="ind-label" data-i18n="cs.change">Variación</div><div class="ind-val" id="sv-change">—</div></div>
     </div>
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div><div class="ind-label" data-i18n="hud.streak">Racha</div><div class="ind-val" id="sv-streak">0 🔥</div></div>
     </div>
   </div>
 
-  <div style="padding:4px 16px 8px;background:var(--panel2);margin:0 16px;border-radius:var(--r2);font-size:12px;color:var(--text3);border:1px solid var(--border)" id="sv-hint"></div>
+  <div style="padding:8px 12px;margin:4px 16px 0;background:var(--panel2);border-radius:12px;font-size:12px;color:var(--text3);border:1px solid var(--border)" id="sv-hint"></div>
 
-  <div class="action-row">
-    <button class="action-btn action-long pro3d-trade-btn" onclick="survivalPlay('long')" data-i18n="btn.long">▲ LONG</button>
-    <button class="action-btn action-skip" onclick="survivalPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-    <button class="action-btn action-short pro3d-trade-btn" onclick="survivalPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+  <div class="gu-actions" style="padding:10px 12px 14px">
+    <button class="gu-action long pro3d-trade-btn" onclick="survivalPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="gu-action skip pro3d-trade-btn" onclick="survivalPlay('skip')" data-i18n="btn.skip">SKIP</button>
+    <button class="gu-action short pro3d-trade-btn" onclick="survivalPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 </div>
 </template>
@@ -621,41 +677,42 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-daily">
 <div class="screen" id="s-daily">
-  <div style="padding:20px 16px 16px;background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:6px">DAILY CHALLENGE</div>
-    <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700" id="dc-asset-title">BTC/USDT</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-      <span id="dc-played-badge" class="badge" style="display:none;background:rgba(74,222,128,.15);color:var(--green)">✓ Ya jugaste hoy</span>
-      <span style="font-size:12px;color:var(--text3)">Renueva en: <strong id="dc-countdown">--:--:--</strong></span>
+  <div style="padding:8px 16px;display:flex;gap:6px;align-items:center;justify-content:space-between">
+    <div class="gu-pill" style="padding:6px 11px;background:rgba(240,192,96,.12);border-color:rgba(240,192,96,.3)">
+      <span class="gu-pill-icon">📅</span>
+      <span class="gu-pill-sub" data-i18n="daily.renews">Renueva</span>
+      <span class="gu-num" id="dc-countdown" style="font-size:13px;color:var(--gold);font-weight:700">--:--:--</span>
     </div>
+    <div id="dc-played-badge" class="gu-header-status" style="display:none;background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.3);color:var(--green)">✓ YA JUGASTE</div>
   </div>
 
-  <div style="padding:0 16px 8px;margin-top:12px">
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+  <div style="padding:0 16px 8px;margin-top:8px">
+    <div id="dc-asset-title" style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);text-align:center;padding:6px 0 4px;letter-spacing:.5px"></div>
+    <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(240,192,96,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(240,192,96,.12)">
       <canvas id="daily-chart" height="250"></canvas>
     </div>
   </div>
 
   <div style="padding:4px 16px 8px;display:flex;gap:8px">
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div><div class="ind-label" data-i18n="cs.context">Contexto</div><div class="ind-val" id="dc-context">—</div></div>
     </div>
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div><div class="ind-label" data-i18n="cs.ratio">Ratio 5v</div><div class="ind-val" id="dc-ratio">—</div></div>
     </div>
-    <div class="indicator" style="flex:1">
+    <div class="indicator" style="flex:1;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:12px">
       <div><div class="ind-label" data-i18n="cs.pctChange">% Cambio</div><div class="ind-val" id="dc-change">—</div></div>
     </div>
   </div>
 
-  <div style="margin:0 16px 12px;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);font-size:12px;color:var(--text2)" data-i18n="daily.info">
+  <div style="margin:0 16px 12px;padding:12px;background:linear-gradient(135deg,rgba(26,18,48,.5),rgba(33,24,64,.3));border:1px solid var(--border);border-radius:12px;font-size:12px;color:var(--text2)">
     <strong style="color:var(--gold)">📊 El mismo chart para todos.</strong> Un solo intento por día. Tu decisión queda registrada en el ranking global.
   </div>
 
-  <div class="action-row" id="dc-action-row">
-    <button class="action-btn action-long pro3d-trade-btn" onclick="dailyPlay('long')" data-i18n="btn.long">▲ LONG</button>
-    <button class="action-btn action-skip" onclick="dailyPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-    <button class="action-btn action-short pro3d-trade-btn" onclick="dailyPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+  <div class="gu-actions" id="dc-action-row" style="padding:0 12px 14px">
+    <button class="gu-action long pro3d-trade-btn" onclick="dailyPlay('long')" data-i18n="btn.long">▲ LONG</button>
+    <button class="gu-action skip pro3d-trade-btn" onclick="dailyPlay('skip')" data-i18n="btn.skip">SKIP</button>
+    <button class="gu-action short pro3d-trade-btn" onclick="dailyPlay('short')" data-i18n="btn.short">▼ SHORT</button>
   </div>
 
   <!-- RANKING DAILY -->
@@ -668,10 +725,18 @@ if('serviceWorker' in navigator){
 <div class="screen" id="s-arena">
   <!-- LOBBY -->
   <div id="arena-lobby">
-    <div style="padding:20px 16px;text-align:center;border-bottom:1px solid var(--border)">
-      <div style="font-size:40px;margin-bottom:8px">⚔️</div>
-      <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;margin-bottom:4px" data-i18n="arena.title">Arena 1vs1</div>
-      <div style="font-size:13px;color:var(--text2)" data-i18n="arena.subtitle">Desafiá a traders reales. 5 rondas. El que más acierta, gana.</div>
+    <div style="padding:8px 16px;display:flex;gap:6px;align-items:center;justify-content:space-between">
+      <div class="gu-pill" style="padding:5px 10px;background:rgba(147,83,255,.12);border-color:rgba(147,83,255,.3)">
+        <span class="gu-pill-icon">⚔️</span>
+        <span class="gu-pill-sub">Ranking</span>
+        <span class="gu-num" style="font-size:13px;color:var(--violet3);font-weight:700">TOP 1%</span>
+      </div>
+      <button class="gu-action skip" style="width:auto;padding:8px 12px;font-size:11px;flex:0" onclick="goScreen('s-inicio')">✕</button>
+    </div>
+    <div style="padding:18px 16px;text-align:center">
+      <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:3px;margin-bottom:6px">· DESAFÍA ·</div>
+      <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="arena.title">Arena 1vs1</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.5" data-i18n="arena.subtitle">Desafiá a traders reales. 5 rondas. El que más acierta, gana.</div>
     </div>
     <div class="sec-hdr"><span class="sec-title" data-i18n="arena.pick">Elegí un Rival</span></div>
     <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px" id="rival-list"></div>
@@ -682,19 +747,22 @@ if('serviceWorker' in navigator){
 
   <!-- ARENA GAME -->
   <div id="arena-game" style="display:none;flex-direction:column;height:100%">
-    <div class="game-hud">
-      <div class="hud-item">
-        <div class="hud-val green" id="ar-my-score">0</div>
-        <div class="hud-lbl" data-i18n="hud.me">Yo</div>
+    <div style="padding:8px 16px;display:flex;gap:6px;align-items:center;justify-content:space-between">
+      <div class="gu-pill" style="padding:5px 10px;background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3)">
+        <span class="gu-pill-icon">🎯</span>
+        <span class="gu-num" id="ar-my-score" style="font-size:14px;color:var(--green);font-weight:700">0</span>
+        <span class="gu-pill-sub" data-i18n="hud.me">Yo</span>
       </div>
-      <div class="hud-item">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text3)"><span data-i18n="hud.round">Ronda</span> <span id="ar-round">1</span>/5</div>
-        <div id="ar-timer-val" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--text);text-align:center" class="hud-val">15</div>
-        <div class="hud-lbl" data-i18n="hud.timer">Timer</div>
+      <div class="gu-pill" style="padding:5px 10px;background:rgba(240,192,96,.1);border-color:rgba(240,192,96,.3)">
+        <span class="gu-pill-sub" data-i18n="hud.round">Ronda</span>
+        <span class="gu-num" id="ar-round" style="font-size:13px;color:var(--gold);font-weight:700">1</span>
+        <span style="color:var(--text3);font-size:11px">/5</span>
+        <span class="gu-num" id="ar-timer-val" style="font-size:14px;color:var(--text);font-weight:700;margin-left:4px">15</span>
       </div>
-      <div class="hud-item">
-        <div class="hud-val red" id="ar-rival-score">0</div>
-        <div class="hud-lbl" id="ar-rival-name-hud" data-i18n="hud.rival">Rival</div>
+      <div class="gu-pill" style="padding:5px 10px;background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)">
+        <span class="gu-pill-icon" id="ar-rival-avatar-mini">🤖</span>
+        <span class="gu-num" id="ar-rival-score" style="font-size:14px;color:var(--red);font-weight:700">0</span>
+        <span class="gu-pill-sub" id="ar-rival-name-hud">Rival</span>
       </div>
     </div>
     <div class="arena-vs">
@@ -714,14 +782,14 @@ if('serviceWorker' in navigator){
       </div>
     </div>
     <div style="padding:0 16px 8px">
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+      <div style="background:linear-gradient(135deg,rgba(26,18,48,.6),rgba(33,24,64,.4));border:1px solid rgba(147,83,255,.3);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(147,83,255,.15)">
         <canvas id="arena-chart" height="230"></canvas>
       </div>
     </div>
-    <div class="action-row" id="ar-actions">
-      <button class="action-btn action-long pro3d-trade-btn" onclick="arenaPlay('long')" data-i18n="btn.long">▲ LONG</button>
-      <button class="action-btn action-skip" onclick="arenaPlay('skip')" style="flex:.6" data-i18n="btn.skip">— Skip</button>
-      <button class="action-btn action-short pro3d-trade-btn" onclick="arenaPlay('short')" data-i18n="btn.short">▼ SHORT</button>
+    <div class="gu-actions" id="ar-actions" style="padding:0 12px 14px">
+      <button class="gu-action long pro3d-trade-btn" onclick="arenaPlay('long')" data-i18n="btn.long">▲ LONG</button>
+      <button class="gu-action skip pro3d-trade-btn" onclick="arenaPlay('skip')" data-i18n="btn.skip">SKIP</button>
+      <button class="gu-action short pro3d-trade-btn" onclick="arenaPlay('short')" data-i18n="btn.short">▼ SHORT</button>
     </div>
   </div>
 </div>
@@ -730,10 +798,11 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-historico">
 <div class="screen" id="s-historico">
-  <div style="padding:20px 16px 16px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:6px" data-i18n="mode.historico.name">MODO HISTÓRICO</div>
-    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;margin-bottom:4px" data-i18n="hist.title">Eventos Reales</div>
-    <div style="font-size:13px;color:var(--text2)" data-i18n="hist.subtitle">Viajá al pasado. Leé el chart como si fuera hoy.</div>
+  <div style="padding:18px 16px 14px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(96,165,250,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;left:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(96,165,250,.25),transparent 70%);pointer-events:none"></div>
+    <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;position:relative" data-i18n="mode.historico.name">· MODO HISTÓRICO ·</div>
+    <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,var(--blue),var(--violet3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative" data-i18n="hist.title">Eventos Reales</div>
+    <div style="font-size:12px;color:var(--text2);position:relative" data-i18n="hist.subtitle">Viajá al pasado. Leé el chart como si fuera hoy.</div>
   </div>
   <div style="padding:8px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none">
     <button class="btn btn-ghost btn-sm sf-active" onclick="histFilter('all',this)" id="hf-all">Todos</button>
@@ -781,13 +850,15 @@ if('serviceWorker' in navigator){
 <template id="tmpl-s-torneos">
 <div class="screen" id="s-torneos">
   <div id="torneo-lobby">
-    <div style="padding:16px;background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border);position:relative;overflow:hidden">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+    <div style="padding:16px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(240,192,96,.3);position:relative;overflow:hidden">
+      <div style="position:absolute;top:-30px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(240,192,96,.3),transparent 70%);pointer-events:none"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;position:relative">
         <div style="flex:1;min-width:0">
-          <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold)" data-i18n="tor.title">🏆 Torneos</div>
+          <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">· COMPETÍ ·</div>
+          <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--violet3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="tor.title">🏆 Torneos</div>
           <div style="font-size:11px;color:var(--text2);margin-top:2px" data-i18n="tor.subtitle">Competí por premios en USD reales</div>
         </div>
-        <div id="torneoWalletChip" style="text-align:right;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:6px 10px">
+        <div id="torneoWalletChip" style="text-align:right;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:14px;padding:6px 10px">
           <div style="font-size:8px;color:var(--text3);letter-spacing:1.5px">WALLET</div>
           <div id="torneoWalletBalance" style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--green)">$0.00</div>
         </div>
@@ -1160,11 +1231,14 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-liga">
 <div class="screen" id="s-liga">
-  <div style="padding:16px 16px 12px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;margin-bottom:6px" data-i18n="liga.subtitle">LIGA GLOBAL</div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700" data-i18n="liga.title">Rankings</div>
-      <span class="badge badge-live" data-i18n="liga.live">● EN VIVO</span>
+  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
+    <div style="position:relative">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px" data-i18n="liga.subtitle">· LIGA GLOBAL ·</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="liga.title">Rankings</div>
+        <span class="gu-header-status live" data-i18n="liga.live">● EN VIVO</span>
+      </div>
     </div>
   </div>
   <div class="tabs">
@@ -1193,13 +1267,14 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-perfil">
 <div class="screen" id="s-perfil">
-  <div id="perfil-header">
-    <div class="hero">
+  <div id="perfil-header" style="background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
+    <div class="hero" style="position:relative">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
         <div id="perfil-hero-av" class="avatar-frame" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--violet2));display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid rgba(147,83,255,.4);box-shadow:0 0 20px rgba(147,83,255,.3);flex-shrink:0;transition:all .3s"><span class="avatar-emoji">🎯</span></div>
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <div id="perfil-hero-name" style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Trader</div>
+            <div id="perfil-hero-name" style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Trader</div>
             <button class="btn btn-ghost btn-sm" onclick="editTraderName()" style="padding:4px 10px;font-size:11px;white-space:nowrap" data-i18n="prof.editName">✏️</button>
           </div>
           <div style="display:flex;gap:6px;margin-top:4px">
@@ -1217,7 +1292,8 @@ if('serviceWorker' in navigator){
       <div class="stat-box"><div class="stat-val" style="color:var(--green)">68%</div><div class="stat-lbl" data-i18n="prof.precision">Precisión</div></div>
       <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl" data-i18n="prof.rachaMax">Racha max</div></div>
     </div>
-    <button class="btn btn-ghost btn-sm" onclick="replayTutorial()" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px" data-i18n="prof.replayTutorial">📖 Ver tutorial de nuevo</button>
+    <button class="btn btn-ghost btn-sm" onclick="replayTutorial()" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px;background:linear-gradient(135deg,rgba(147,83,255,.1),rgba(240,192,96,.05));border:1px solid rgba(147,83,255,.25);color:var(--violet3)" data-i18n="prof.replayTutorial">📖 Ver tutorial de nuevo</button>
+    <button class="btn btn-ghost btn-sm" onclick="goScreen('s-settings')" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px;background:linear-gradient(135deg,rgba(96,165,250,.1),rgba(147,83,255,.05));border:1px solid rgba(96,165,250,.3);color:var(--blue)" data-i18n="prof.settings">⚙️ Configuración / Ajustes</button>
     <div class="tabs">
       <div class="tab active" id="tab-logros" onclick="perfilTab('logros',this)" data-i18n="prof.logros">Logros</div>
       <div class="tab" id="tab-historial" onclick="perfilTab('historial',this)" data-i18n="prof.historial">Historial</div>
@@ -1381,11 +1457,11 @@ if('serviceWorker' in navigator){
 <div class="screen" id="s-fractal">
   <!-- LOBBY -->
   <div id="fractal-lobby" style="overflow-y:auto;flex:1;padding-bottom:20px">
-    <div style="padding:20px 16px 16px;background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border);position:relative;overflow:hidden">
-      <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px" data-i18n="fr.theory">T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY</div>
-      <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--violet3);margin-bottom:6px" data-i18n="fr.title">Modo Fractal</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.6" data-i18n="fr.desc">El sistema analiza el chart con tu metodología.<br>Identificá BOS · LG · Zonas · Setup 2-Step.</div>
+    <div style="padding:20px 16px 16px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
+      <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(147,83,255,.45),transparent 70%);pointer-events:none;animation:gu-orbPulse 4s ease-in-out infinite"></div>
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;position:relative">· T.N.S.V.T — TWO-STEP MULTIFRACTAL THEORY ·</div>
+      <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative" data-i18n="fr.title">Modo Fractal</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6;position:relative" data-i18n="fr.desc">El sistema analiza el chart con tu metodología.<br>Identificá BOS · LG · Zonas · Setup 2-Step.</div>
     </div>
     <!-- SUB-MODES -->
     <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
@@ -1554,10 +1630,11 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-glosario">
 <div class="screen" id="s-glosario">
-  <div style="background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border);padding:18px 16px 14px;flex-shrink:0">
-    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:5px">T.N.S.V.T — EDUCACIÓN</div>
-    <div style="font-family:'Cinzel',serif;font-size:21px;font-weight:700;color:var(--text);margin-bottom:4px" data-i18n="glos.title">Conceptos Base</div>
-    <div style="font-size:12px;color:var(--text2)" data-i18n="glos.subtitle">Abreviaciones, estructura y lógica institucional del mercado</div>
+  <div style="background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);padding:18px 16px 14px;flex-shrink:0;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
+    <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:5px;position:relative">· T.N.S.V.T — EDUCACIÓN ·</div>
+    <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;margin-bottom:4px;background:linear-gradient(135deg,var(--violet3),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative" data-i18n="glos.title">Conceptos Base</div>
+    <div style="font-size:12px;color:var(--text2);position:relative" data-i18n="glos.subtitle">Abreviaciones, estructura y lógica institucional del mercado</div>
   </div>
   <!-- Search -->
   <div style="padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0">
@@ -1585,8 +1662,12 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-modos">
 <div class="screen" id="s-modos">
-  <div style="padding:20px 16px 12px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700" data-i18n="mode.all.title">Todos los Modos</div>
+  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
+    <div style="position:relative">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">· MODOS ·</div>
+      <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="mode.all.title">Todos los Modos</div>
+    </div>
   </div>
   <div id="modos-list" style="padding:12px 16px;display:flex;flex-direction:column;gap:8px"></div>
 </div>
@@ -1595,8 +1676,12 @@ if('serviceWorker' in navigator){
 
 <template id="tmpl-s-misiones">
 <div class="screen" id="s-misiones">
-  <div style="padding:20px 16px 12px;border-bottom:1px solid var(--border)">
-    <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700" data-i18n="mode.misiones.name">Misiones</div>
+  <div style="padding:16px 16px 12px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(74,222,128,.3);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(74,222,128,.25),transparent 70%);pointer-events:none"></div>
+    <div style="position:relative">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px">· RETOS ·</div>
+      <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--green),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="mode.misiones.name">Misiones</div>
+    </div>
   </div>
   <div class="tabs">
     <div class="tab active" onclick="misionTab('diarias',this)" data-i18n="mis.tab.daily">Diarias</div>
@@ -1612,12 +1697,12 @@ if('serviceWorker' in navigator){
 <div class="screen" id="s-portfolio">
 
   <!-- EQUITY HEADER -->
-  <div id="port-header" style="background:linear-gradient(135deg,var(--panel2),var(--panel));border-bottom:1px solid var(--border);padding:14px 16px 10px;flex-shrink:0">
+  <div id="port-header" style="background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);padding:14px 16px 10px;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,.25)">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
       <div>
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:3px">CUENTA DEMO — T.N.S.V.T</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;line-height:1" id="port-equity">$50,000.00</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px">Equity total</div>
+        <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">· CUENTA DEMO ·</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="port-equity">$50,000.00</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">Equity total</div>
       </div>
       <div style="text-align:right">
         <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700" id="port-pnl-total" style="color:var(--text)">$0.00</div>
@@ -1625,13 +1710,20 @@ if('serviceWorker' in navigator){
         <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-top:3px" id="port-pnl-closed" style="color:var(--text3)">$0.00 cerrado</div>
       </div>
     </div>
-    <!-- Equity bar -->
-    <div style="display:flex;gap:8px;font-size:10px;color:var(--text3);margin-bottom:5px">
-      <span>Balance: <strong id="port-balance-sm" style="color:var(--text);font-family:'JetBrains Mono',monospace">$50,000</strong></span>
-      <span>·</span>
-      <span>Libre: <strong id="port-free-margin" style="color:var(--green);font-family:'JetBrains Mono',monospace">$50,000</strong></span>
-      <span>·</span>
-      <span>Margen: <strong id="port-margin-used" style="color:var(--text3);font-family:'JetBrains Mono',monospace">$0</strong></span>
+    <!-- Equity pills -->
+    <div style="display:flex;gap:6px;margin-bottom:5px">
+      <div class="gu-pill" style="padding:4px 8px;font-size:10px;flex:1;justify-content:center">
+        <span class="gu-pill-sub" style="font-size:9px">Bal</span>
+        <span class="gu-num" id="port-balance-sm" style="color:var(--text);font-size:11px">$50,000</span>
+      </div>
+      <div class="gu-pill" style="padding:4px 8px;font-size:10px;flex:1;justify-content:center;background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3)">
+        <span class="gu-pill-sub" style="font-size:9px">Libre</span>
+        <span class="gu-num" id="port-free-margin" style="color:var(--green);font-size:11px">$50,000</span>
+      </div>
+      <div class="gu-pill" style="padding:4px 8px;font-size:10px;flex:1;justify-content:center">
+        <span class="gu-pill-sub" style="font-size:9px">Margen</span>
+        <span class="gu-num" id="port-margin-used" style="color:var(--text3);font-size:11px">$0</span>
+      </div>
     </div>
     <!-- Equity mini chart bar -->
     <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">
@@ -1987,29 +2079,182 @@ if('serviceWorker' in navigator){
 
 <!-- BOTTOM NAV -->
 <nav id="nav">
-  <button class="nav-btn active" onclick="goScreen('s-inicio')" id="nav-inicio">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  <button class="nav-btn active" onclick="goScreen('s-inicio')" id="nav-inicio" aria-label="Inicio / Home">
+    <svg class="nav-svg nav-svg-inicio" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Casa con techo, puerta, ventana y chimney humeante -->
+      <path d="M3 13l11-9 11 9v9.5a1.5 1.5 0 01-1.5 1.5H18v-7h-8v7H4.5A1.5 1.5 0 013 22.5V13z" fill="currentColor" fill-opacity="0.08"/>
+      <path d="M3 13l11-9 11 9"/>
+      <rect x="11.5" y="15" width="5" height="9" rx="0.5" fill="currentColor" fill-opacity="0.12"/>
+      <rect x="6" y="16" width="3" height="3" rx="0.3" fill="currentColor" fill-opacity="0.18"/>
+      <!-- Chimney con humo -->
+      <rect x="18" y="4" width="2.5" height="5" fill="currentColor" fill-opacity="0.15"/>
+      <path d="M19.2 3c-.3-.5-.2-1 .2-1.3M21 2c.3-.4.2-.9-.2-1.2M20 0c-.2-.4 0-.8.4-1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    </svg>
     <span data-i18n="nav.inicio">Inicio</span>
   </button>
-  <button class="nav-btn" onclick="goScreen('s-modos')" id="nav-modos">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    <span data-i18n="nav.modos">Modos</span>
+  <button class="nav-btn" onclick="goScreen('s-modos')" id="nav-modos" aria-label="Tienda y Modos">
+    <svg class="nav-svg nav-svg-modos" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Bolsa de compras con asa + $ symbol + sparkles -->
+      <path d="M5 9h18l-1.6 11.4a2 2 0 01-2 1.8H8.6a2 2 0 01-2-1.8L5 9z" fill="currentColor" fill-opacity="0.10"/>
+      <path d="M5 9l-1-3h20l-1 3"/>
+      <path d="M9 9V6.5a5 5 0 0110 0V9" fill="none" stroke-width="1.4"/>
+      <!-- $ symbol -->
+      <text x="14" y="17.5" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor" font-family="Cinzel,serif">$</text>
+      <!-- Sparkles -->
+      <path d="M3 5l.8 1.5L5 7l-1.2.5L3 9l-.8-1.5L1 7l1.2-.5L3 5z" fill="currentColor" fill-opacity="0.6"/>
+      <path d="M25 4l.5 1 1 .5-1 .5-.5 1-.5-1-1-.5 1-.5.5-1z" fill="currentColor" fill-opacity="0.5"/>
+      <path d="M26 14l.4.8.8.4-.8.4-.4.8-.4-.8-.8-.4.8-.4.4-.8z" fill="currentColor" fill-opacity="0.5"/>
+    </svg>
+    <span data-i18n="nav.modos">Tienda</span>
   </button>
-  <button class="nav-btn" onclick="startClassic()" id="nav-play">
-    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10" fill="rgba(147,83,255,.2)" stroke="rgba(147,83,255,.6)" stroke-width="1.5"/><polygon points="10,8 16,12 10,16" fill="var(--violet3)"/></svg>
+  <button class="nav-btn play-btn" onclick="startClassic()" id="nav-play" aria-label="Jugar Classic">
+    <svg class="nav-svg nav-svg-play" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Anillo exterior pulsante -->
+      <circle cx="14" cy="14" r="12" fill="currentColor" fill-opacity="0.06" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.5"/>
+      <!-- Círculo principal con gradiente -->
+      <circle cx="14" cy="14" r="9" fill="currentColor" fill-opacity="0.12" stroke-width="1.6"/>
+      <!-- Play triangle grande -->
+      <path d="M11 9.2l7 4.8-7 4.8V9.2z" fill="currentColor" stroke="none"/>
+      <!-- Dots orbitales -->
+      <circle cx="14" cy="2" r="0.9" fill="currentColor" opacity="0.7"/>
+      <circle cx="26" cy="14" r="0.9" fill="currentColor" opacity="0.7"/>
+      <circle cx="14" cy="26" r="0.9" fill="currentColor" opacity="0.7"/>
+      <circle cx="2" cy="14" r="0.9" fill="currentColor" opacity="0.7"/>
+    </svg>
     <span data-i18n="nav.jugar">Jugar</span>
   </button>
-  <button class="nav-btn" onclick="goScreen('s-liga')" id="nav-liga">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 21h8m-4-4v4m-7-4h14l-2-10H5L3 17zm4-10V4a1 1 0 011-1h8a1 1 0 011 1v3"/></svg>
-    <span data-i18n="nav.liga">Liga</span>
+  <button class="nav-btn" onclick="goScreen('s-liga')" id="nav-liga" aria-label="Ligas y Rankings">
+    <svg class="nav-svg nav-svg-liga" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Trofeo estilizado: copa + asas + base -->
+      <!-- Copa -->
+      <path d="M8 3h12v8a6 6 0 01-12 0V3z" fill="currentColor" fill-opacity="0.14"/>
+      <!-- Borde superior -->
+      <rect x="7" y="2" width="14" height="2.5" rx="0.6" fill="currentColor" fill-opacity="0.25"/>
+      <!-- Asas -->
+      <path d="M8 5h-1.5a3 3 0 000 6H8" fill="none"/>
+      <path d="M20 5h1.5a3 3 0 010 6H20" fill="none"/>
+      <!-- Tallo -->
+      <rect x="12" y="16" width="4" height="3" fill="currentColor" fill-opacity="0.3"/>
+      <!-- Base -->
+      <path d="M9 21h10l-1 3H10l-1-3z" fill="currentColor" fill-opacity="0.18"/>
+      <!-- Estrella dentro de la copa -->
+      <path d="M14 6l.8 1.7 1.8.1-1.4 1.1.5 1.7-1.7-.9-1.7.9.5-1.7-1.4-1.1 1.8-.1z" fill="currentColor" fill-opacity="0.9"/>
+      <!-- Sparkle superior -->
+      <path d="M14 1l.4 1 1 .3-1 .3-.4 1-.4-1-1-.3 1-.3.4-1z" fill="currentColor"/>
+    </svg>
+    <span data-i18n="nav.liga">Ligas</span>
   </button>
-  <button class="nav-btn" onclick="goScreen('s-perfil')" id="nav-perfil">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  <button class="nav-btn" onclick="goScreen('s-perfil')" id="nav-perfil" aria-label="Perfil">
+    <svg class="nav-svg nav-svg-perfil" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Anillo de glow exterior -->
+      <circle cx="14" cy="9" r="6.5" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.4"/>
+      <!-- Cabeza con sombra -->
+      <circle cx="14" cy="9" r="5" fill="currentColor" fill-opacity="0.15"/>
+      <circle cx="14" cy="9" r="5"/>
+      <!-- Brillo en la cabeza -->
+      <circle cx="12.5" cy="7.5" r="1" fill="currentColor" fill-opacity="0.4"/>
+      <!-- Cuerpo / hombros -->
+      <path d="M5 24v-1a6 6 0 016-6h6a6 6 0 016 6v1" fill="currentColor" fill-opacity="0.10"/>
+      <path d="M5 24v-1a6 6 0 016-6h6a6 6 0 016 6v1"/>
+      <!-- Estrella en el pecho -->
+      <path d="M14 18.5l.5 1.2 1.3.1-1 .8.4 1.2-1.2-.6-1.2.8 1-1-.1z" fill="currentColor" fill-opacity="0.7"/>
+    </svg>
     <span data-i18n="nav.perfil">Perfil</span>
   </button>
 </nav>
 
-<div id="toast-container"></div>
+<!-- SETTINGS SCREEN -->
+<template id="tmpl-s-settings">
+<div class="screen" id="s-settings">
+  <div style="padding:14px 16px;display:flex;gap:8px;align-items:center;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(147,83,255,.3);position:relative">
+    <button class="gu-action skip" style="width:auto;padding:8px 12px;font-size:11px;flex:0" onclick="goScreen('s-perfil')" aria-label="Volver">←</button>
+    <div style="flex:1">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)">· AJUSTES ·</div>
+      <div style="font-family:'Cinzel',serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="set.title">Configuración</div>
+    </div>
+  </div>
+
+  <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+    <!-- Theme -->
+    <div class="set-row">
+      <div class="set-info">
+        <div class="set-name" data-i18n="set.theme">Tema</div>
+        <div class="set-desc" data-i18n="set.theme.desc">Cambiar entre modo oscuro y claro</div>
+      </div>
+      <div class="set-toggle" id="set-theme-toggle" data-on="dark" onclick="toggleTheme()" role="switch" tabindex="0" aria-label="Cambiar tema">
+        <div class="set-toggle-knob"></div>
+        <span class="set-toggle-label" id="set-theme-label">🌙</span>
+      </div>
+    </div>
+
+    <!-- Sound -->
+    <div class="set-row">
+      <div class="set-info">
+        <div class="set-name" data-i18n="set.sound">Sonido</div>
+        <div class="set-desc" data-i18n="set.sound.desc">Efectos sonoros en el juego</div>
+      </div>
+      <div class="set-toggle" id="set-sound-toggle" data-on="1" onclick="toggleSetting('sound')" role="switch" tabindex="0" aria-label="Sonido">
+        <div class="set-toggle-knob"></div>
+      </div>
+    </div>
+
+    <!-- Haptics -->
+    <div class="set-row">
+      <div class="set-info">
+        <div class="set-name" data-i18n="set.haptics">Vibración</div>
+        <div class="set-desc" data-i18n="set.haptics.desc">Feedback táctil en botones</div>
+      </div>
+      <div class="set-toggle" id="set-haptics-toggle" data-on="1" onclick="toggleSetting('haptics')" role="switch" tabindex="0" aria-label="Vibración">
+        <div class="set-toggle-knob"></div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="set-row">
+      <div class="set-info">
+        <div class="set-name" data-i18n="set.notif">Notificaciones</div>
+        <div class="set-desc" data-i18n="set.notif.desc">Recordatorios del Daily Challenge</div>
+      </div>
+      <div class="set-toggle" id="set-notif-toggle" data-on="1" onclick="toggleSetting('notif')" role="switch" tabindex="0" aria-label="Notificaciones">
+        <div class="set-toggle-knob"></div>
+      </div>
+    </div>
+
+    <!-- Reduced motion -->
+    <div class="set-row">
+      <div class="set-info">
+        <div class="set-name" data-i18n="set.reduced">Movimiento reducido</div>
+        <div class="set-desc" data-i18n="set.reduced.desc">Desactivar animaciones decorativas</div>
+      </div>
+      <div class="set-toggle" id="set-motion-toggle" data-on="0" onclick="toggleSetting('motion')" role="switch" tabindex="0" aria-label="Movimiento reducido">
+        <div class="set-toggle-knob"></div>
+      </div>
+    </div>
+
+    <!-- Language -->
+    <div class="set-row" style="flex-direction:column;align-items:stretch;gap:10px">
+      <div class="set-info">
+        <div class="set-name" data-i18n="set.lang">Idioma</div>
+        <div class="set-desc" data-i18n="set.lang.desc">Interfaz en español o inglés</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button class="set-lang-btn" id="set-lang-es" onclick="setLanguage('es')">🇦🇷 Español</button>
+        <button class="set-lang-btn" id="set-lang-en" onclick="setLanguage('en')">🇺🇸 English</button>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <button class="set-danger-btn" onclick="resetSettings()" data-i18n="set.reset">↺ Restablecer configuración</button>
+
+    <div style="text-align:center;padding:14px 8px;color:var(--text3);font-size:11px;line-height:1.5">
+      <div style="font-family:'Cinzel',serif;letter-spacing:2px;margin-bottom:4px;color:var(--violet3)">T.N.S.V.T — MARKET INSTINCT</div>
+      v2.0 · Two-Step Multifractal Theory
+    </div>
+  </div>
+</div>
+</template>
+
+<div id="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script src="js/state.js"></script>
 <script src="js/router.js"></script>
@@ -2042,6 +2287,14 @@ const I18N = {
     'ritual.s2':'Leer 1 lección','ritual.s2d':'BOS · Break of Structure',
     'ritual.s3':'1 trade consciente','ritual.s3d':'Daily Challenge de hoy',
     'ritual.xp.to':'Hacia Leyenda','ritual.cta':'Completar el ritual →',
+    'prof.settings':'⚙️ Configuración / Ajustes',
+    'set.title':'Configuración','set.theme':'Tema','set.theme.desc':'Cambiar entre modo oscuro y claro',
+    'set.sound':'Sonido','set.sound.desc':'Efectos sonoros en el juego',
+    'set.haptics':'Vibración','set.haptics.desc':'Feedback táctil en botones',
+    'set.notif':'Notificaciones','set.notif.desc':'Recordatorios del Daily Challenge',
+    'set.reduced':'Movimiento reducido','set.reduced.desc':'Desactivar animaciones decorativas',
+    'set.lang':'Idioma','set.lang.desc':'Interfaz en español o inglés',
+    'set.reset':'↺ Restablecer configuración',
     'liga.tab.liga':'Liga','liga.tab.cof':'Cofradía','liga.tab.ret':'Retos',
     'liga.div':'División Oráculo','liga.asc':'zona de ascenso','liga.asc.label':'Zona de ascenso',
     'liga.war':'Guerra de Cofradías','liga.war.ends':'termina en 14h','liga.war.winning':'VAS GANANDO +6.2k',
@@ -2209,6 +2462,14 @@ const I18N = {
     'ritual.s2':'Read 1 lesson','ritual.s2d':'BOS · Break of Structure',
     'ritual.s3':'1 mindful trade','ritual.s3d':'Today\'s Daily Challenge',
     'ritual.xp.to':'Towards Legend','ritual.cta':'Complete ritual →',
+    'prof.settings':'⚙️ Settings',
+    'set.title':'Settings','set.theme':'Theme','set.theme.desc':'Switch between dark and light mode',
+    'set.sound':'Sound','set.sound.desc':'Sound effects in the game',
+    'set.haptics':'Haptics','set.haptics.desc':'Tactile feedback on buttons',
+    'set.notif':'Notifications','set.notif.desc':'Daily Challenge reminders',
+    'set.reduced':'Reduced motion','set.reduced.desc':'Disable decorative animations',
+    'set.lang':'Language','set.lang.desc':'Spanish or English interface',
+    'set.reset':'↺ Reset settings',
     'liga.tab.liga':'League','liga.tab.cof':'Guild','liga.tab.ret':'Quests',
     'liga.div':'Oracle Division','liga.asc':'promotion zone','liga.asc.label':'Promotion Zone',
     'liga.war':'Guild War','liga.war.ends':'ends in 14h','liga.war.winning':'YOU ARE WINNING +6.2k',
@@ -2604,8 +2865,10 @@ function goScreen(id){
   if(el) el.classList.add('active');
   STATE.screen = id;
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const navMap = {'s-inicio':'nav-inicio','s-ritual':'nav-inicio','s-modos':'nav-modos','s-sintonia':'nav-modos','s-liga':'nav-liga','s-cofradias':'nav-liga','s-perfil':'nav-perfil'};
+  const navMap = {'s-inicio':'nav-inicio','s-ritual':'nav-inicio','s-modos':'nav-modos','s-sintonia':'nav-modos','s-liga':'nav-liga','s-cofradias':'nav-liga','s-perfil':'nav-perfil','s-settings':'nav-perfil'};
   if(navMap[id]) document.getElementById(navMap[id])?.classList.add('active');
+  // Glow Up Ola 1 — inyectar top bar reutilizable
+  if(id !== 's-inicio' && typeof guSetScreenHeader === 'function') setTimeout(guSetScreenHeader, 10, id);
   // On-screen init
   if(id==='s-liga') initLiga();
   if(id==='s-modos') initModos();
@@ -2628,6 +2891,7 @@ function goScreen(id){
   if(id==='s-ritual'){ if(typeof renderRitual==='function') setTimeout(renderRitual,30); }
   if(id==='s-cofradias'){ if(typeof initCofradias==='function') setTimeout(initCofradias,30); }
   if(id==='s-sintonia'){ if(typeof renderSintonia==='function') setTimeout(function(){renderSintonia((typeof STATE!=='undefined'&&STATE.asset)||'BTC');},30); }
+  if(id==='s-settings'){ if(typeof initSettings==='function') setTimeout(initSettings,30); }
 }
 
 // VIP-gated wrapper. Use for screens that require VIP.
@@ -3385,7 +3649,7 @@ function updateClassicInfo(){
 
 function classicPlay(action){
   SFX.tap(); HAPTICS.tap();
-  const btnRow = document.querySelector('#s-classic .action-row') || document.getElementById('cl-actions');
+  const btnRow = document.querySelector('#s-classic .gu-actions');
   if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
   animateResultAndScore('classic-chart', classicCandles, action, (correct, result)=>{
     // ── Game logic ──
@@ -3490,7 +3754,7 @@ function survivalNextRound(){
 function survivalPlay(action){
   SFX.tap(); HAPTICS.tap();
   const prevLives = STATE.survival.lives;
-  const btnRow = document.getElementById('sv-actions');
+  const btnRow = document.querySelector('#s-survival .gu-actions');
   if(btnRow){ btnRow.style.pointerEvents = 'none'; btnRow.style.opacity = '0.5'; }
   animateResultAndScore('survival-chart', survivalCandles, action, (correct, result)=>{
     // ── Game logic ──
@@ -5193,6 +5457,62 @@ function nextSintoniaRound(){
     GU_STATE.round = 1;
     goScreen('s-modos');
   }
+}
+
+// ============================================================
+// GLOW UP OLA 1 — guSetScreenHeader() helper
+// Inyecta/actualiza el header Glow Up dentro del screen activo.
+// Uso: guSetScreenHeader({eyebrow, title, sub, asset, status, live})
+// ============================================================
+const GU_HEADERS = {
+  's-classic':   {eyebrow:'· TRADING ·',       title:'Clásico',         sub:'Long · Short · Wait — el juego base', asset:true,  status:'LIBRE',      live:true},
+  's-survival':  {eyebrow:'· SUPERVIVENCIA ·',  title:'Supervivencia',   sub:'3 vidas · dificultad creciente',       asset:true,  status:'INTENSO',    live:true},
+  's-daily':     {eyebrow:'· DIARIO ·',         title:'Daily Challenge', sub:'Un chart igual para todos · un solo intento', asset:true, status:'DIARIO', live:true},
+  's-arena':     {eyebrow:'· COMPETITIVO ·',    title:'Arena 1vs1',      sub:'Desafiá a otro trader en tiempo real',   asset:true,  status:'COMPETITIVO', live:true},
+  's-portfolio': {eyebrow:'· SIMULADOR ·',      title:'Portfolio',       sub:'$50,000 virtuales · opera con precios reales', asset:false, status:'PRÁCTICA', live:true},
+  's-fractal':   {eyebrow:'· METODOLOGÍA ·',    title:'Modo Fractal',    sub:'BOS · LG · Zonas · Setup 2-Step — T.N.S.V.T', asset:true, status:'VIP', live:false},
+  's-historico': {eyebrow:'· EDUCATIVO ·',      title:'Modo Histórico',  sub:'Eventos reales del mercado · aprendé del pasado', asset:false, status:'VIP', live:false},
+  's-torneos':   {eyebrow:'· SEMANAL ·',        title:'Torneos',         sub:'Competí por premios en USD reales',     asset:false, status:'VIP', live:true},
+  's-glosario':  {eyebrow:'· EDUCACIÓN ·',      title:'Glosario',        sub:'OB · POI · BOS · LG · EQH · TR · 30+ conceptos', asset:false, status:'LIBRE', live:false},
+  's-modos':     {eyebrow:'· MODOS ·',           title:'Todos los Modos', sub:'Elegí tu modo de juego',              asset:false, status:'', live:false},
+  's-misiones':  {eyebrow:'· RETOS ·',           title:'Misiones',         sub:'Retos diarios y semanales · XP extra',  asset:false, status:'XP', live:false},
+  's-liga':      {eyebrow:'· COMPETITIVO ·',    title:'Rankings',        sub:'Ranking global · compite por el podio', asset:false, status:'● EN VIVO', live:true},
+  's-perfil':    {eyebrow:'· PERFIL ·',         title:'Tu Perfil',       sub:'Tu progreso, logros y tienda',         asset:false, status:'', live:false},
+  's-ritual':    {eyebrow:'· MODOS ·',           title:'Ritual del Oráculo', sub:'Aterrizaje diario · ritual de 3 pasos',asset:false, status:'DIARIO', live:false},
+  's-cofradias': {eyebrow:'· SOCIAL ·',         title:'Cofradías & Ligas', sub:'Tu división · ladder · guerra entre cofradías', asset:false, status:'COMPETITIVO', live:true},
+  's-sintonia':  {eyebrow:'· NUEVO MODO ·',     title:'Sintonía',        sub:'¿Todos los marcos resuenan igual?',     asset:true,  status:'NUEVO', live:true},
+  's-settings':  {eyebrow:'· AJUSTES ·',        title:'Configuración',   sub:'Tema · sonido · vibración · idioma',   asset:false, status:'', live:false},
+};
+
+function guSetScreenHeader(id, opts){
+  const screen = document.getElementById(id);
+  if(!screen) return;
+  // remueve header previo si existe
+  const prev = screen.querySelector('.gu-screen-header');
+  if(prev) prev.remove();
+  // datos: opts > preset por id > fallback vacío
+  const data = Object.assign({}, GU_HEADERS[id] || {}, opts || {});
+  const eyebrow = data.eyebrow || '';
+  const title = data.title || '';
+  const sub = data.sub || '';
+  const asset = data.asset ? (data.assetName || ((typeof STATE!=='undefined' && STATE.asset) || 'BTC')) : null;
+  const status = data.status || '';
+  const live = !!data.live;
+  // build HTML
+  const html = `
+    <div class="gu-screen-header${data.compact ? ' compact' : ''}">
+      <div class="gu-header-label">
+        ${eyebrow ? `<div class="gu-header-eyebrow">${eyebrow}</div>` : ''}
+        <div class="gu-header-title">${title}</div>
+        ${sub ? `<div class="gu-header-sub">${sub}</div>` : ''}
+      </div>
+      <div class="gu-header-right">
+        ${asset ? `<div class="gu-header-asset">₿ <span>${asset}</span></div>` : ''}
+        ${status ? `<div class="gu-header-status${live ? ' live' : ''}">${status}</div>` : ''}
+      </div>
+    </div>`;
+  // inyectar al inicio del screen
+  screen.insertAdjacentHTML('afterbegin', html);
 }
 
 // ============================================================
@@ -7371,14 +7691,26 @@ function initModos(){
   const vip = isVipActive();
   list.innerHTML = ALL_MODES.map(m=>{
     const isLocked = m.vip && !vip;
+    // tier mapping
+    const tierClass = (m.tag||'').toLowerCase() === 'libre' ? 'tier-free'
+                    : (m.tag||'').toLowerCase() === 'intenso' ? 'tier-intense'
+                    : (m.tag||'').toLowerCase() === 'educación' || (m.tag||'').toLowerCase() === 'educativo' ? 'tier-edu'
+                    : m.vip ? 'tier-vip' : '';
+    const tagBg = m.vip ? 'background:linear-gradient(135deg,rgba(240,192,96,.15),rgba(212,160,48,.1));color:var(--gold);border:1px solid rgba(240,192,96,.4)'
+                  : (m.tagColor && m.tagColor.includes('green')) ? 'background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.3)'
+                  : (m.tagColor && m.tagColor.includes('red')) ? 'background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)'
+                  : (m.tagColor && m.tagColor.includes('violet')) ? 'background:rgba(147,83,255,.15);color:var(--violet3);border:1px solid rgba(147,83,255,.4)'
+                  : (m.tagColor && m.tagColor.includes('blue')) ? 'background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.3)'
+                  : (m.tagColor && m.tagColor.includes('gold')) ? 'background:rgba(240,192,96,.12);color:var(--gold);border:1px solid rgba(240,192,96,.3)'
+                  : `background:rgba(255,255,255,.06);color:${m.tagColor};border:1px solid var(--border)`;
     return `
-    <div class="mode-card" onclick="(${m.action})()" style="${isLocked?'opacity:.65;':''}">
+    <div class="mode-card ${tierClass} ${isLocked?'locked':''}" onclick="(${m.action})()">
       <div class="mode-icon">${m.emoji}</div>
       <div class="mode-info">
         <div class="mode-name">${m.name}${isLocked?' <span style="font-size:10px;color:var(--gold);margin-left:6px">🔒 VIP</span>':''}</div>
         <div class="mode-desc">${m.desc}</div>
         <div class="mode-meta">
-          <span class="mode-tag" style="background:rgba(255,255,255,.06);color:${m.tagColor}">${m.tag}</span>
+          <span class="mode-tag" style="${tagBg}">${m.tag}</span>
           ${isLocked?'<span class="mode-tag" style="background:linear-gradient(135deg,rgba(240,192,96,.25),rgba(212,160,48,.25));color:var(--gold);border:1px solid var(--gold)">👑 $9.99</span>':''}
         </div>
       </div>
@@ -9254,7 +9586,7 @@ function glosRender(){
     const exp=glosExpanded.has(g.abbr);
     const catKey = {poi:'glos.cat.poi',tf:'glos.cat.tf',estructura:'glos.cat.est',entrada:'glos.cat.ent',liquidez:'glos.cat.liq',misc:'glos.cat.misc'}[g.cat] || '';
     const catLabel = catKey ? t(catKey) : (CAT_LABELS[g.cat]||'');
-    return `<div class="glos-card${exp?' expanded':''}" id="gc-${g.abbr}" onclick="glosToggle('${g.abbr}')">
+    return `<div class="glos-card${exp?' expanded':''}" id="gc-${g.abbr}" data-cat="${g.cat}" onclick="glosToggle('${g.abbr}')">
       <div class="glos-header">
         <div class="glos-abbr" style="color:${col}">${g.abbr}</div>
         <div style="flex:1"><div class="glos-full">${g.full}</div><div class="glos-en">${g.en}</div></div>
@@ -9474,12 +9806,14 @@ function showResultOverlay(emoji, title, subtitle, backScreen, stats=[], callbac
   const el = document.createElement('div');
   el.className='result-overlay';
   el.innerHTML=`
-    <div class="result-emoji">${emoji}</div>
-    <div class="result-title">${title}</div>
-    <div class="result-subtitle">${subtitle}</div>
-    ${stats.length?`<div class="result-stats">${stats.map(s=>`<div class="rs-item"><div class="rs-val">${s.val}</div><div class="rs-lbl">${s.lbl}</div></div>`).join('')}</div>`:''}
-    <button class="btn btn-primary" style="margin-top:8px" onclick="this.parentElement.remove();${callback?'('+callback+')()':backScreen?'goScreen(\''+backScreen+'\')':''}">Continuar →</button>
-    ${backScreen&&!callback?`<button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="this.parentElement.remove();goScreen('s-inicio')">← Inicio</button>`:''}
+    <div class="result-card">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-title">${title}</div>
+      <div class="result-subtitle">${subtitle}</div>
+      ${stats.length?`<div class="result-stats">${stats.map(s=>`<div class="rs-item"><div class="rs-val">${s.val}</div><div class="rs-lbl">${s.lbl}</div></div>`).join('')}</div>`:''}
+      <button class="btn btn-primary" style="margin-top:6px;width:100%" onclick="this.closest('.result-overlay').remove();${callback?'('+callback+')()':backScreen?'goScreen(\''+backScreen+'\')':''}">Continuar →</button>
+      ${backScreen&&!callback?`<button class="btn btn-ghost btn-sm" style="margin-top:6px;width:100%" onclick="this.closest('.result-overlay').remove();goScreen('s-inicio')">← Inicio</button>`:''}
+    </div>
   `;
   document.body.appendChild(el);
   if(emoji==='🏆'||emoji==='👑') confetti();
@@ -9972,6 +10306,100 @@ function renderDayStreakHome(){
   if(card){ card.classList.toggle('ds-played', playedToday); }
 }
 function STREAK_TIETS_DAYS_FN(n){ return STREAK_TIERS_DAYS.find(t=>n>=t.min && n<=t.max); }
+
+// ============================================================
+// GLOW UP OLA 7 — Settings (theme + sound + haptics + notif + motion + lang)
+// ============================================================
+const SETTINGS_KEY = 'tnsvt_settings_v1';
+const DEFAULT_SETTINGS = {theme:'dark', sound:1, haptics:1, notif:1, motion:0, lang:'es'};
+function getSettings(){ try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}')); } catch(e){ return Object.assign({}, DEFAULT_SETTINGS); } }
+function saveSettings(s){ try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch(e){} }
+
+function applySettings(){
+  const s = getSettings();
+  document.body.classList.toggle('light', s.theme==='light');
+  document.body.classList.toggle('reduced-motion', !!s.motion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches));
+  window.soundEnabled = !!s.sound;
+  window.hapticsEnabled = !!s.haptics;
+  window.notifEnabled = !!s.notif;
+  if(typeof setLang === 'function' && window.I18N && window.I18N[s.lang]){
+    if(typeof currentLang !== 'undefined' && currentLang !== s.lang) setLang(s.lang);
+  }
+}
+
+function toggleSetting(key){
+  const s = getSettings();
+  if(key==='sound') s.sound = s.sound ? 0 : 1;
+  else if(key==='haptics') s.haptics = s.haptics ? 0 : 1;
+  else if(key==='notif') s.notif = s.notif ? 0 : 1;
+  else if(key==='motion') s.motion = s.motion ? 0 : 1;
+  else return;
+  saveSettings(s);
+  applySettings();
+  if(typeof showToast === 'function') showToast(key==='sound'?(s.sound?'🔊 Sonido activado':'🔇 Sonido desactivado'):key==='haptics'?(s.haptics?'📳 Vibración ON':'📳 Vibración OFF'):key==='notif'?(s.notif?'🔔 Notifs ON':'🔕 Notifs OFF'):(s.motion?'⏸ Movimiento reducido':'▶ Animaciones activadas'), s.motion?'info':'success');
+  const el = document.getElementById('set-'+key+'-toggle');
+  if(el) el.setAttribute('data-on', s[key] ? '1' : '0');
+  if(key==='sound' && s.sound && typeof SFX !== 'undefined' && SFX.tap) SFX.tap();
+  if(key==='haptics' && s.haptics && typeof HAPTICS !== 'undefined' && HAPTICS.tap) HAPTICS.tap();
+}
+
+function toggleTheme(){
+  const s = getSettings();
+  s.theme = s.theme==='dark' ? 'light' : 'dark';
+  saveSettings(s);
+  applySettings();
+  syncThemeToggleUI();
+  if(typeof showToast === 'function') showToast(s.theme==='dark'?'🌙 Modo oscuro':'☀️ Modo claro', 'info');
+}
+
+function syncThemeToggleUI(){
+  const s = getSettings();
+  const el = document.getElementById('set-theme-toggle');
+  const lbl = document.getElementById('set-theme-label');
+  if(el) el.setAttribute('data-on', s.theme==='light' ? '1' : '0');
+  if(lbl) lbl.textContent = s.theme==='dark' ? '🌙' : '☀️';
+}
+
+function setLanguage(lang){
+  const s = getSettings();
+  s.lang = lang;
+  saveSettings(s);
+  if(typeof setLang === 'function') setLang(lang);
+  syncLangUI();
+  if(typeof showToast === 'function') showToast(lang==='es'?'🇦🇷 Español':'🇺🇸 English', 'info');
+}
+
+function syncLangUI(){
+  const s = getSettings();
+  const es = document.getElementById('set-lang-es');
+  const en = document.getElementById('set-lang-en');
+  if(es) es.classList.toggle('active', s.lang==='es');
+  if(en) en.classList.toggle('active', s.lang==='en');
+}
+
+function resetSettings(){
+  try { localStorage.removeItem(SETTINGS_KEY); } catch(e){}
+  applySettings();
+  const s = getSettings();
+  ['sound','haptics','notif','motion'].forEach(k=>{
+    const el = document.getElementById('set-'+k+'-toggle');
+    if(el) el.setAttribute('data-on', s[k] ? '1' : '0');
+  });
+  syncThemeToggleUI();
+  syncLangUI();
+  if(typeof showToast === 'function') showToast('↺ Configuración restablecida', 'info');
+}
+
+function initSettings(){
+  applySettings();
+  const s = getSettings();
+  ['sound','haptics','notif','motion'].forEach(k=>{
+    const el = document.getElementById('set-'+k+'-toggle');
+    if(el) el.setAttribute('data-on', s[k] ? '1' : '0');
+  });
+  syncThemeToggleUI();
+  syncLangUI();
+}
 
 // ============================================================
 // ACHIEVEMENT HOME PREVIEW
@@ -11548,6 +11976,8 @@ async function bnCreatePayment(){
 }
 // Apply equipped background on load
 try { applyBackground(EQUIPPED.background); } catch(e){}
+// Apply settings (theme/sound/haptics/motion) on load
+try { applySettings(); } catch(e){}
 // Update XP display after loading state
 try { updateXPDisplay(); } catch(e){}
 // Unlock all + reset stats (every load)

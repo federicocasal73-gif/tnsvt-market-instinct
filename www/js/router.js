@@ -4,7 +4,7 @@
 window.Router = {
   current: null,
   history: [],
-  navMap: {'s-inicio':'nav-inicio','s-ritual':'nav-inicio','s-modos':'nav-modos','s-sintonia':'nav-modos','s-liga':'nav-liga','s-cofradias':'nav-liga','s-perfil':'nav-perfil'},
+  navMap: {'s-inicio':'nav-inicio','s-ritual':'nav-inicio','s-modos':'nav-modos','s-sintonia':'nav-modos','s-liga':'nav-liga','s-cofradias':'nav-liga','s-perfil':'nav-perfil','s-settings':'nav-perfil'},
 
   _ensureScreen(id) {
     var el = document.getElementById(id);
@@ -17,6 +17,10 @@ window.Router = {
   },
 
   _runScreenInit(id) {
+    // Glow Up Ola 1 — top bar reusable para todos los screens
+    if (id !== 's-inicio' && window.guSetScreenHeader) {
+      setTimeout(()=>guSetScreenHeader(id), 10);
+    }
     if (id === 's-liga')      { if (window.initLiga)      initLiga(); }
     else if (id === 's-modos') { if (window.initModos)    initModos(); }
     else if (id === 's-misiones') { if (window.initMisiones) initMisiones(); }
@@ -46,6 +50,7 @@ window.Router = {
     else if (id === 's-ritual') { if (window.renderRitual) setTimeout(renderRitual, 30); }
     else if (id === 's-cofradias') { if (window.initCofradias) setTimeout(initCofradias, 30); }
     else if (id === 's-sintonia') { if (window.renderSintonia) setTimeout(()=>renderSintonia((typeof STATE !== 'undefined' && STATE.asset) || 'BTC'), 30); }
+    else if (id === 's-settings') { if (window.initSettings) setTimeout(initSettings, 30); }
   },
 
   navigate(id, opts) {
