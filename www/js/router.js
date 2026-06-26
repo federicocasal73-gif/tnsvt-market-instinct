@@ -71,6 +71,9 @@ window.Router = {
     // screen init
     this._runScreenInit(id);
 
+    // apply i18n translations to cloned template
+    if (window.applyI18n) setTimeout(applyI18n, 0);
+
     // post-init
     if (window.applyPro3DClass) setTimeout(applyPro3DClass, 50);
     if (id === 's-inicio' && window.setupCoverflow) setTimeout(setupCoverflow, 80);
@@ -105,7 +108,12 @@ window.Router = {
       if (link) { e.preventDefault(); window.goScreen(link.getAttribute('data-nav')); }
     });
     // Navigate to initial screen (cloned from template)
-    self.navigate(startScreen || 's-inicio');
+    var navResult = self.navigate(startScreen || 's-inicio');
+    var dbg = document.getElementById('debug-diagnostics');
+    if (dbg) {
+      var afterEl = document.getElementById(startScreen || 's-inicio');
+      dbg.textContent += '\\n[Router] init done. screen=' + (startScreen || 's-inicio') + ' found=' + (afterEl ? 'YES' : 'NULL');
+    }
     console.log('[Router] Initialized');
   }
 };

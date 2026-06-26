@@ -24,9 +24,15 @@ window.onerror = function(msg, url, line, col, err) {
     if (!el) {
       const d = document.createElement('div');
       d.id = 'error-display';
-      d.style.cssText = 'position:fixed;bottom:70px;left:0;right:0;background:rgba(248,113,113,.95);color:#fff;padding:8px 12px;font-size:12px;z-index:9999;display:none;border-top:2px solid #f87171';
+      d.style.cssText = 'position:fixed;bottom:70px;left:0;right:0;background:rgba(248,113,113,.95);color:#fff;padding:8px 12px;font-size:12px;z-index:9999;display:block;border-top:2px solid #f87171';
+      d.textContent = '[ERROR] ' + (msg || '') + ' at line ' + (line || '?');
       document.body.appendChild(d);
+    } else {
+      el.style.display = 'block';
+      el.textContent = '[ERROR] ' + (msg || '') + ' at line ' + (line || '?');
     }
+    var dbg = document.getElementById('debug-diagnostics');
+    if (dbg) dbg.textContent += '\n[ERROR] ' + (msg || '') + ' line=' + line;
   } catch(e) {}
   return false;
 };
@@ -2199,9 +2205,9 @@ function goScreen(id){
   }
   if(id==='s-daily') initDaily();
   if(id==='s-arena') initArena();
-  if(id==='s-fractal'){ document.getElementById('fractal-lobby').style.display='block'; document.getElementById('fractal-game').style.display='none'; }
+  if(id==='s-fractal'){ var fl=document.getElementById('fractal-lobby');if(fl)fl.style.display='block'; var fg=document.getElementById('fractal-game');if(fg)fg.style.display='none'; }
   if(id==='s-glosario') initGlosario();
-  if(id==='s-torneos') { document.getElementById('torneo-lobby').style.display='';document.getElementById('torneo-game').style.display='none'; if(typeof loadActiveTorneos==='function') loadActiveTorneos(); const abtn=document.getElementById('admin-torneo-btn'); if(abtn) abtn.style.display=(TNSVT_CONFIG.enabled&&TNSVT_CONFIG.adminPassword)?'flex':'none'; const rbtn=document.getElementById('btn-resume-torneo'); if(rbtn) rbtn.style.display=torneoState.active?'block':'none'; }
+  if(id==='s-torneos') { var tl=document.getElementById('torneo-lobby');if(tl)tl.style.display='';var tg=document.getElementById('torneo-game');if(tg)tg.style.display='none'; if(typeof loadActiveTorneos==='function') loadActiveTorneos(); const abtn=document.getElementById('admin-torneo-btn'); if(abtn) abtn.style.display=(TNSVT_CONFIG.enabled&&TNSVT_CONFIG.adminPassword)?'flex':'none'; const rbtn=document.getElementById('btn-resume-torneo'); if(rbtn) rbtn.style.display=torneoState.active?'block':'none'; }
 }
 
 // VIP-gated wrapper. Use for screens that require VIP.
@@ -3176,7 +3182,7 @@ function updateDailyCountdown(){
     const m=Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
     const s=Math.floor((diff%60000)/1000).toString().padStart(2,'0');
     const str=`${h}:${m}:${s}`;
-    document.getElementById('dc-countdown').textContent=str;
+    const dc=document.getElementById('dc-countdown');if(dc)dc.textContent=str;
     const el=document.getElementById('daily-countdown');if(el)el.textContent='Renueva en: '+str;
   }
   tick(); setInterval(tick,1000);
@@ -6604,8 +6610,6 @@ function renderPlanes(){
     </div>
   </div>`;
 }
-
-}
 const ALL_MODES = [
   {name:'Classic Mode',   desc:'Long · Short · Wait — el juego base',              emoji:'📊', action:()=>startClassic(),        tag:'LIBRE',      tagColor:'var(--green)'},
   {name:'Survival',       desc:'3 vidas · dificultad creciente · rondas infinitas', emoji:'❤️', action:()=>startSurvival(),       tag:'INTENSO',    tagColor:'var(--red)'},
@@ -8703,11 +8707,13 @@ function showResultOverlay(emoji, title, subtitle, backScreen, stats=[], callbac
 // ============================================================
 // INIT
 // ============================================================
-fetchPrices();
-setInterval(fetchPrices, 30000);
-initModos();
-updateDailyCountdown();
-applyI18n();
+try {
+  fetchPrices();
+  setInterval(fetchPrices, 30000);
+  initModos();
+  updateDailyCountdown();
+  applyI18n();
+} catch(e){ console.error('Init error:', e); }
 
 // ============================================================
 // INIT CLASSIC on load

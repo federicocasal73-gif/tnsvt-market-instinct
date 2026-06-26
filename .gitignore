@@ -20,6 +20,9 @@ android/app/debug/
 keystore.properties
 google-services.json
 
+# Temp debug scripts
+www/*.py
+
 # Logs
 *.log
 npm-debug.log*
