@@ -4,7 +4,7 @@
 window.Router = {
   current: null,
   history: [],
-  navMap: {'s-inicio':'nav-inicio','s-modos':'nav-modos','s-liga':'nav-liga','s-perfil':'nav-perfil'},
+  navMap: {'s-inicio':'nav-inicio','s-ritual':'nav-inicio','s-modos':'nav-modos','s-sintonia':'nav-modos','s-liga':'nav-liga','s-cofradias':'nav-liga','s-perfil':'nav-perfil'},
 
   _ensureScreen(id) {
     var el = document.getElementById(id);
@@ -43,6 +43,9 @@ window.Router = {
       var rbtn = document.getElementById('btn-resume-torneo');
       if (rbtn) rbtn.style.display = (typeof torneoState !== 'undefined' && torneoState.active) ? 'block' : 'none';
     }
+    else if (id === 's-ritual') { if (window.renderRitual) setTimeout(renderRitual, 30); }
+    else if (id === 's-cofradias') { if (window.initCofradias) setTimeout(initCofradias, 30); }
+    else if (id === 's-sintonia') { if (window.renderSintonia) setTimeout(()=>renderSintonia((typeof STATE !== 'undefined' && STATE.asset) || 'BTC'), 30); }
   },
 
   navigate(id, opts) {
@@ -86,6 +89,7 @@ window.Router = {
     if (id === 's-inicio' && window.updateXPDisplay) setTimeout(updateXPDisplay, 30);
     // Home-specific renderers
     if (id === 's-inicio') {
+      if (window.renderRitual) setTimeout(renderRitual, 30);
       if (window.renderDayStreakHome) setTimeout(renderDayStreakHome, 30);
       if (window.renderHomeAchievements) setTimeout(renderHomeAchievements, 40);
     }

@@ -115,6 +115,45 @@
   /* Liga rank-row is-me highlight */
   .rank-row.is-me{background:linear-gradient(90deg,rgba(147,83,255,.15),transparent);border-left:3px solid var(--violet);animation:me-glow 2s ease-in-out infinite}
   @keyframes me-glow{0%,100%{box-shadow:inset 0 0 0 0 rgba(147,83,255,0)}50%{box-shadow:inset 4px 0 12px rgba(147,83,255,.4)}}
+  /* ============================================================
+     TNSVT GLOW UP — estilos nuevos (Ritual, Cofradías, Sintonía)
+     Pegado del bundle integration/new-styles.css. Todas las clases
+     nuevas prefijadas con gu-* para no colisionar con la app actual.
+     ============================================================ */
+  /* Keyframes */
+  @keyframes gu-ringSpin     { from { transform: rotate(0deg);   } to { transform: rotate(360deg); } }
+  @keyframes gu-ringSpinRev  { from { transform: rotate(360deg); } to { transform: rotate(0deg);   } }
+  @keyframes gu-orbPulse     { 0%,100% { box-shadow: 0 0 40px 6px rgba(147,83,255,.35), inset 0 0 30px rgba(240,192,96,.18); }
+                               50%     { box-shadow: 0 0 70px 14px rgba(147,83,255,.55), inset 0 0 44px rgba(240,192,96,.30); } }
+  @keyframes gu-flameFlick   { 0%,100% { transform: scale(1)    rotate(-2deg); filter: drop-shadow(0 0 6px #ff9500); }
+                               50%     { transform: scale(1.12) rotate( 2deg); filter: drop-shadow(0 0 12px #ffd700); } }
+  /* Oracle orb */
+  .gu-orb-wrap   { position:relative; width:230px; height:230px; display:flex; align-items:center; justify-content:center; }
+  .gu-ring       { position:absolute; border-radius:50%; }
+  .gu-ring.r1    { inset:0;    border:1px dashed rgba(240,192,96,.45); animation:gu-ringSpin   40s linear infinite; }
+  .gu-ring.r2    { inset:16px; border:1px solid  rgba(147,83,255,.40); animation:gu-ringSpinRev 30s linear infinite; }
+  .gu-ring.r3    { inset:30px; border:1px dashed rgba(200,160,255,.30); animation:gu-ringSpin   24s linear infinite; }
+  .gu-orb-core   { width:158px; height:158px; border-radius:50%;
+                   background:radial-gradient(circle at 35% 30%, #2a1d4e, var(--bg2) 75%);
+                   display:flex; flex-direction:column; align-items:center; justify-content:center;
+                   border:1px solid rgba(240,192,96,.30); animation:gu-orbPulse 4s ease-in-out infinite; }
+  .gu-flame      { animation:gu-flameFlick 1.6s ease-in-out infinite; }
+  /* Resonance radial */
+  .gu-reso       { position:relative; width:266px; height:266px; margin:0 auto; }
+  .gu-reso > div { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; }
+  .gu-reso-core  { background:radial-gradient(circle at 35% 30%, #2a1d4e, var(--bg2) 78%);
+                   border:1px solid rgba(240,192,96,.35); animation:gu-orbPulse 4s ease-in-out infinite;
+                   display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  /* Ladder row destacada (tú) */
+  .gu-row        { display:flex; align-items:center; gap:11px; border-radius:12px; padding:10px 12px;
+                   background:var(--panel); border:1px solid var(--border); }
+  .gu-row.promo  { border-color:rgba(74,222,128,.25); }
+  .gu-row.you    { padding:11px 12px; border:1.5px solid var(--violet);
+                   background:linear-gradient(135deg,rgba(147,83,255,.22),rgba(240,192,96,.08));
+                   box-shadow:0 0 18px rgba(147,83,255,.30); }
+  .gu-row-rank   { font-family:'JetBrains Mono',monospace; font-size:13px; width:18px; color:var(--text2); }
+  .gu-row-av     { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .gu-num        { font-family:'JetBrains Mono',monospace; }
 </style>
 <script>
 window.onerror = function(msg, url, line, col, err) {
@@ -249,6 +288,67 @@ if('serviceWorker' in navigator){
         <div class="ds-sub"><span data-i18n="home.streak.best">Mejor</span>: <span id="ds-longest">0</span></div>
       </div>
       <div class="ds-arrow">→</div>
+    </div>
+
+    <!-- GLOW UP: RITUAL DEL ORÁCULO (hero section) -->
+    <div style="padding:18px 16px 0;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+        <div>
+          <div style="font-size:11px; color:var(--text3); letter-spacing:1px; text-transform:uppercase;" data-i18n="ritual.greeting">Buenos días</div>
+          <div style="font-family:'Cinzel',serif; font-size:22px; font-weight:700; color:#fff; line-height:1.1; margin-top:2px;" id="gu-username-home">Trader</div>
+          <div class="badge badge-rank" style="margin-top:7px; letter-spacing:1px;">✦ <span data-i18n="ritual.rank">ORÁCULO</span></div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:10px 14px; border-radius:18px; background:var(--panel); border:1px solid var(--border);">
+          <span class="gu-flame" style="font-size:24px;">🔥</span>
+          <span class="gu-num" style="font-size:18px; color:var(--gold); line-height:1;" id="gu-streak-home">0</span>
+          <span style="font-size:8px; color:var(--text3); letter-spacing:1px; text-transform:uppercase;" data-i18n="ritual.days">días</span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; margin:22px 0 8px;">
+        <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; color:var(--text2); text-transform:uppercase; margin-bottom:16px;" data-i18n="ritual.oracle">· Oráculo del día ·</div>
+        <div class="gu-orb-wrap">
+          <div class="gu-ring r1"></div>
+          <div class="gu-ring r2"></div>
+          <div class="gu-ring r3"></div>
+          <div class="gu-orb-core">
+            <span style="font-size:30px; color:var(--gold3); text-shadow:0 0 16px var(--gold); line-height:1;">✝</span>
+            <div class="gu-num" style="font-size:13px; color:var(--green); margin-top:8px; letter-spacing:1px;" id="gu-energy-home">ALCISTA</div>
+            <div style="font-size:9px; color:var(--text3); margin-top:2px; letter-spacing:2px; text-transform:uppercase;" data-i18n="ritual.energy">Energía hoy</div>
+          </div>
+        </div>
+        <div style="font-family:'Cinzel',serif; font-style:italic; font-size:13px; color:var(--violet3); text-align:center; line-height:1.6; max-width:280px; margin-top:18px; text-shadow:0 0 10px rgba(147,83,255,.3);" id="gu-mantra-home">"El mercado respira con quien escucha. Hoy, la estructura favorece la paciencia."</div>
+      </div>
+      <div class="card" style="margin-top:18px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+          <span style="font-family:'Cinzel',serif; font-size:13px; color:var(--text); letter-spacing:1px;" data-i18n="ritual.daily">Ritual Diario</span>
+          <span class="gu-num" style="font-size:11px; color:var(--gold);"><span id="gu-ritual-done-home">2</span> / <span id="gu-ritual-total-home">3</span></span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div class="gu-ritual-step" data-done="1" style="display:flex; align-items:center; gap:12px;">
+            <span style="width:24px; height:24px; border-radius:8px; background:var(--green); color:var(--bg); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;">✓</span>
+            <div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:500;" data-i18n="ritual.s1">Meditar la vela</div><div style="font-size:11px; color:var(--text3);" data-i18n="ritual.s1d">Observa el gráfico 30s sin operar</div></div>
+            <span class="gu-num" style="font-size:11px; color:var(--gold);">+7</span>
+          </div>
+          <div class="gu-ritual-step" data-done="1" style="display:flex; align-items:center; gap:12px;">
+            <span style="width:24px; height:24px; border-radius:8px; background:var(--green); color:var(--bg); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;">✓</span>
+            <div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:500;" data-i18n="ritual.s2">Leer 1 lección</div><div style="font-size:11px; color:var(--text3);" data-i18n="ritual.s2d">BOS · Break of Structure</div></div>
+            <span class="gu-num" style="font-size:11px; color:var(--gold);">+13</span>
+          </div>
+          <div class="gu-ritual-step" data-done="0" style="display:flex; align-items:center; gap:12px;">
+            <span style="width:24px; height:24px; border-radius:8px; background:rgba(0,0,0,.4); border:1px solid var(--border); flex-shrink:0;"></span>
+            <div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:500;" data-i18n="ritual.s3">1 trade consciente</div><div style="font-size:11px; color:var(--text3);" data-i18n="ritual.s3d">Daily Challenge de hoy</div></div>
+            <span class="gu-num" style="font-size:11px; color:var(--gold);">+22</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <span style="font-size:11px; color:var(--text2); letter-spacing:1px; text-transform:uppercase;" data-i18n="ritual.xp.to">Hacia Leyenda</span>
+          <span class="gu-num" style="font-size:11px; color:var(--violet3);" id="gu-xp-label-home">0 / 22,000</span>
+        </div>
+        <div class="xp-bar-wrap"><div class="xp-bar-fill" style="width:0%;" id="gu-xp-fill-home"></div></div>
+      </div>
+      <button class="btn btn-gold" style="width:100%; margin-top:18px;" onclick="goScreen('s-daily')" data-i18n="ritual.cta">Completar el ritual →</button>
     </div>
   </div>
 
@@ -1137,6 +1237,146 @@ if('serviceWorker' in navigator){
 </template>
 
 
+<template id="tmpl-s-ritual">
+<div class="screen" id="s-ritual">
+  <div style="padding:18px 16px 24px;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+      <div>
+        <div style="font-size:11px; color:var(--text3); letter-spacing:1px; text-transform:uppercase;" data-i18n="ritual.greeting">Buenos días</div>
+        <div style="font-family:'Cinzel',serif; font-size:22px; font-weight:700; color:#fff; line-height:1.1; margin-top:2px;" id="gu-username">Trader</div>
+        <div class="badge badge-rank" style="margin-top:7px; letter-spacing:1px;">✦ ORÁCULO</div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:10px 14px; border-radius:18px; background:var(--panel); border:1px solid var(--border);">
+        <span class="gu-flame" style="font-size:24px;">🔥</span>
+        <span class="gu-num" style="font-size:18px; color:var(--gold); line-height:1;" id="gu-streak">0</span>
+        <span style="font-size:8px; color:var(--text3); letter-spacing:1px; text-transform:uppercase;" data-i18n="ritual.days">días</span>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:center; margin:22px 0 8px;">
+      <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; color:var(--text2); text-transform:uppercase; margin-bottom:16px;" data-i18n="ritual.oracle">· Oráculo del día ·</div>
+      <div class="gu-orb-wrap">
+        <div class="gu-ring r1"></div>
+        <div class="gu-ring r2"></div>
+        <div class="gu-ring r3"></div>
+        <div class="gu-orb-core">
+          <span style="font-size:30px; color:var(--gold3); text-shadow:0 0 16px var(--gold); line-height:1;">✝</span>
+          <div class="gu-num" style="font-size:13px; color:var(--green); margin-top:8px; letter-spacing:1px;" id="gu-energy">ALCISTA</div>
+          <div style="font-size:9px; color:var(--text3); margin-top:2px; letter-spacing:2px; text-transform:uppercase;" data-i18n="ritual.energy">Energía hoy</div>
+        </div>
+      </div>
+      <div style="font-family:'Cinzel',serif; font-style:italic; font-size:13px; color:var(--violet3); text-align:center; line-height:1.6; max-width:280px; margin-top:18px; text-shadow:0 0 10px rgba(147,83,255,.3);" id="gu-mantra">"El mercado respira con quien escucha. Hoy, la estructura favorece la paciencia."</div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+        <span style="font-family:'Cinzel',serif; font-size:13px; color:var(--text); letter-spacing:1px;" data-i18n="ritual.daily">Ritual Diario</span>
+        <span class="gu-num" style="font-size:11px; color:var(--gold);" id="gu-ritual-count">2 / 3</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;" id="gu-ritual-steps">
+        <div class="gu-ritual-step" data-done="1" style="display:flex; align-items:center; gap:12px;">
+          <span style="width:24px; height:24px; border-radius:8px; background:var(--green); color:var(--bg); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;">✓</span>
+          <div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:500;" data-i18n="ritual.s1">Meditar la vela</div><div style="font-size:11px; color:var(--text3);" data-i18n="ritual.s1d">Observa el gráfico 30s sin operar</div></div>
+          <span class="gu-num" style="font-size:11px; color:var(--gold);">+7</span>
+        </div>
+        <div class="gu-ritual-step" data-done="1" style="display:flex; align-items:center; gap:12px;">
+          <span style="width:24px; height:24px; border-radius:8px; background:var(--green); color:var(--bg); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;">✓</span>
+          <div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:500;" data-i18n="ritual.s2">Leer 1 lección</div><div style="font-size:11px; color:var(--text3);" data-i18n="ritual.s2d">BOS · Break of Structure</div></div>
+          <span class="gu-num" style="font-size:11px; color:var(--gold);">+13</span>
+        </div>
+        <div class="gu-ritual-step" data-done="0" style="display:flex; align-items:center; gap:12px;">
+          <span style="width:24px; height:24px; border-radius:8px; background:rgba(0,0,0,.4); border:1px solid var(--border); flex-shrink:0;"></span>
+          <div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:500;" data-i18n="ritual.s3">1 trade consciente</div><div style="font-size:11px; color:var(--text3);" data-i18n="ritual.s3d">Daily Challenge de hoy</div></div>
+          <span class="gu-num" style="font-size:11px; color:var(--gold);">+22</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+        <span style="font-size:11px; color:var(--text2); letter-spacing:1px; text-transform:uppercase;" data-i18n="ritual.xp.to">Hacia Leyenda</span>
+        <span class="gu-num" style="font-size:11px; color:var(--violet3);" id="gu-xp-label">0 / 22,000</span>
+      </div>
+      <div class="xp-bar-wrap"><div class="xp-bar-fill" style="width:0%;" id="gu-xp-fill"></div></div>
+    </div>
+    <button class="btn btn-gold" style="width:100%; margin-top:18px;" onclick="goScreen('s-daily')" data-i18n="ritual.cta">Completar el ritual →</button>
+  </div>
+</div>
+</template>
+
+
+<template id="tmpl-s-cofradias">
+<div class="screen" id="s-cofradias">
+  <div style="padding:16px 16px 24px;">
+    <div style="display:flex; gap:6px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:4px; margin-bottom:16px;" id="gu-liga-tabs">
+      <div class="gu-liga-tab active" data-tab="liga" style="flex:1; text-align:center; padding:8px; border-radius:8px; font-size:12px; font-weight:600; color:var(--bg); background:linear-gradient(135deg,var(--violet),var(--violet2)); letter-spacing:.5px;" data-i18n="liga.tab.liga">Liga</div>
+      <div class="gu-liga-tab" data-tab="cofradia" style="flex:1; text-align:center; padding:8px; border-radius:8px; font-size:12px; font-weight:600; color:var(--text2);" data-i18n="liga.tab.cof">Cofradía</div>
+      <div class="gu-liga-tab" data-tab="retos" style="flex:1; text-align:center; padding:8px; border-radius:8px; font-size:12px; font-weight:600; color:var(--text2);" data-i18n="liga.tab.ret">Retos</div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px; background:linear-gradient(135deg,rgba(147,83,255,.14),rgba(240,192,96,.06)); border:1px solid rgba(147,83,255,.3); border-radius:18px; padding:16px; margin-bottom:18px;">
+      <div style="width:58px; height:64px; flex-shrink:0; background:linear-gradient(135deg,var(--gold),var(--violet)); clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); display:flex; align-items:center; justify-content:center;">
+        <div style="width:50px; height:56px; background:var(--bg2); clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--gold3); text-shadow:0 0 10px var(--gold);">✦</div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-family:'Cinzel',serif; font-size:18px; font-weight:700; color:#fff;" data-i18n="liga.div">División Oráculo</div>
+        <div style="font-size:11px; color:var(--text2); margin-top:2px;">Estás <span style="color:var(--green); font-weight:600;">4°</span> de 30 · <span data-i18n="liga.asc">zona de ascenso</span></div>
+      </div>
+      <div style="text-align:center;"><div class="gu-num" style="font-size:20px; color:var(--gold); line-height:1;">2,140</div><div style="font-size:9px; color:var(--text3); letter-spacing:1px; text-transform:uppercase; margin-top:3px;" data-i18n="liga.xp.week">XP sem.</div></div>
+    </div>
+    <div style="font-size:10px; color:var(--green); letter-spacing:2px; text-transform:uppercase; margin:0 4px 7px; display:flex; align-items:center; gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);"></span><span data-i18n="liga.asc.label">Zona de ascenso</span></div>
+    <div style="display:flex; flex-direction:column; gap:6px;" id="gu-ladder">
+      <div class="gu-row promo"><span class="gu-row-rank" style="color:var(--gold);">1</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--gold),var(--gold2));">🐋</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">WhaleMind</div><div style="font-size:10px; color:var(--text3);">MAESTRO</div></div><span class="gu-num" style="font-size:12px; color:var(--violet3);">3,420</span></div>
+      <div class="gu-row promo"><span class="gu-row-rank">2</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--violet),#4a1a8a);">🦊</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">FoxScalper</div><div style="font-size:10px; color:var(--text3);">ESTRATEGA</div></div><span class="gu-num" style="font-size:12px; color:var(--violet3);">2,890</span></div>
+      <div class="gu-row promo"><span class="gu-row-rank">3</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--blue),#2563eb);">🦈</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">DeepShark</div><div style="font-size:10px; color:var(--text3);">ESTRATEGA</div></div><span class="gu-num" style="font-size:12px; color:var(--violet3);">2,510</span></div>
+      <div class="gu-row you"><span class="gu-row-rank" style="color:var(--gold);">4</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--gold),var(--violet)); box-shadow:0 0 10px rgba(240,192,96,.5);">✝</span><div style="flex:1;"><div style="font-size:13px; color:#fff; font-weight:700;">ADMIN01 <span style="font-size:10px; color:var(--gold);">(tú)</span></div><div style="font-size:10px; color:var(--violet3);">ORÁCULO</div></div><span class="gu-num" style="font-size:12px; color:var(--gold); font-weight:500;">2,140</span></div>
+      <div class="gu-row" style="opacity:.85;"><span class="gu-row-rank" style="color:var(--text3);">5</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--green),#16a34a);">🤖</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">AlgoBot_X</div><div style="font-size:10px; color:var(--text3);">OPERADOR</div></div><span class="gu-num" style="font-size:12px; color:var(--text2);">1,980</span></div>
+      <div class="gu-row" style="opacity:.85;"><span class="gu-row-rank" style="color:var(--text3);">6</span><span class="gu-row-av" style="background:linear-gradient(135deg,var(--red),#b91c1c);">🐂</span><div style="flex:1;"><div style="font-size:13px; color:var(--text); font-weight:600;">BullRun88</div><div style="font-size:10px; color:var(--text3);">OPERADOR</div></div><span class="gu-num" style="font-size:12px; color:var(--text2);">1,760</span></div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <span style="font-family:'Cinzel',serif; font-size:13px; color:var(--text); letter-spacing:.5px;">⚔ <span data-i18n="liga.war">Guerra de Cofradías</span></span>
+        <span style="font-size:10px; color:var(--text3);" data-i18n="liga.war.ends">termina en 14h</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="text-align:center; width:78px;"><div style="font-size:11px; color:var(--violet3); font-weight:600;">Cristo Íntegro</div><div class="gu-num" style="font-size:15px; color:#fff;">48.2k</div></div>
+        <div style="flex:1;"><div style="height:9px; border-radius:5px; background:rgba(255,255,255,.06); overflow:hidden; display:flex;"><div style="width:58%; background:linear-gradient(90deg,var(--violet),var(--violet3));"></div><div style="flex:1; background:linear-gradient(90deg,#3a2a1a,var(--gold2));"></div></div><div style="text-align:center; font-size:9px; color:var(--green); margin-top:5px; letter-spacing:1px;" data-i18n="liga.war.winning">VAS GANANDO +6.2k</div></div>
+        <div style="text-align:center; width:78px;"><div style="font-size:11px; color:var(--gold); font-weight:600;">Los Lobos</div><div class="gu-num" style="font-size:15px; color:#fff;">42.0k</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</template>
+
+
+<template id="tmpl-s-sintonia">
+<div class="screen" id="s-sintonia">
+  <div style="padding:16px 16px 24px;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:4px;">
+      <div>
+        <div style="font-family:'Cinzel',serif; font-size:24px; font-weight:700; color:#fff; line-height:1;" data-i18n="sin.title">Sintonía</div>
+        <div style="font-size:11px; color:var(--text2); margin-top:5px; max-width:200px; line-height:1.4;" data-i18n="sin.desc">¿Todos los marcos temporales resuenan en la misma dirección?</div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:8px 12px; border-radius:14px; background:var(--panel); border:1px solid var(--border);">
+        <span style="font-size:16px;">₿</span><span style="font-size:10px; color:var(--gold); font-weight:600;" id="gu-reso-asset">BTC</span>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:center; margin:18px 0 6px;">
+      <div class="gu-reso" id="gu-reso"></div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-top:6px;" id="gu-reso-legend"></div>
+    <div style="text-align:center; margin-top:18px; margin-bottom:12px;">
+      <div style="font-family:'Cinzel',serif; font-style:italic; font-size:13px; color:var(--violet3); line-height:1.5;" id="gu-reso-prompt">5 de 6 marcos en armonía alcista.<br>El 15M disuena. ¿Confías en la resonancia?</div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button style="flex:1; padding:15px; border-radius:14px; border:1px solid rgba(74,222,128,.4); cursor:pointer; font-family:'Inter',sans-serif; font-weight:700; font-size:15px; color:var(--bg); background:linear-gradient(135deg,var(--green),#16a34a); box-shadow:0 4px 18px rgba(74,222,128,.3); letter-spacing:.5px;" onclick="guSintoniaPlay('long')">▲ LONG</button>
+      <button class="btn-ghost" style="width:74px; padding:15px 0; border-radius:14px; font-weight:600; font-size:13px;" onclick="guSintoniaPlay('skip')">SKIP</button>
+      <button style="flex:1; padding:15px; border-radius:14px; border:1px solid rgba(248,113,113,.4); cursor:pointer; font-family:'Inter',sans-serif; font-weight:700; font-size:15px; color:#fff; background:linear-gradient(135deg,var(--red),#b91c1c); box-shadow:0 4px 18px rgba(248,113,113,.3); letter-spacing:.5px;" onclick="guSintoniaPlay('short')">▼ SHORT</button>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:center; gap:7px; margin-top:14px; font-size:11px; color:var(--text3);">
+      <span style="color:var(--gold);">✦</span> <span data-i18n="sin.bonus.hint">Acierto con armonía &gt;80% =</span> <span class="gu-num" style="color:var(--gold);">+37 XP</span> <span data-i18n="sin.bonus">bonus resonancia</span>
+    </div>
+  </div>
+</div>
+</template>
+
+
 <template id="tmpl-s-fractal">
 <div class="screen" id="s-fractal">
   <!-- LOBBY -->
@@ -1796,6 +2036,19 @@ const I18N = {
     'home.ach.title':'Logros','home.ach.all':'Ver todos →',
     'home.rank.label':'RANK',
     'ach.progress':'Progreso','ach.unlockedOn':'Desbloqueado el',
+    'ritual.greeting':'Buenos días','ritual.days':'días','ritual.oracle':'· Oráculo del día ·',
+    'ritual.energy':'Energía hoy','ritual.daily':'Ritual Diario','ritual.rank':'ORÁCULO',
+    'ritual.s1':'Meditar la vela','ritual.s1d':'Observa el gráfico 30s sin operar',
+    'ritual.s2':'Leer 1 lección','ritual.s2d':'BOS · Break of Structure',
+    'ritual.s3':'1 trade consciente','ritual.s3d':'Daily Challenge de hoy',
+    'ritual.xp.to':'Hacia Leyenda','ritual.cta':'Completar el ritual →',
+    'liga.tab.liga':'Liga','liga.tab.cof':'Cofradía','liga.tab.ret':'Retos',
+    'liga.div':'División Oráculo','liga.asc':'zona de ascenso','liga.asc.label':'Zona de ascenso',
+    'liga.war':'Guerra de Cofradías','liga.war.ends':'termina en 14h','liga.war.winning':'VAS GANANDO +6.2k',
+    'liga.xp.week':'XP sem.',
+    'sin.title':'Sintonía','sin.desc':'¿Todos los marcos temporales resuenan en la misma dirección?',
+    'sin.harmony':'Armonía','sin.bonus':'bonus resonancia',
+    'sin.bonus.hint':'Acierto con armonía >80% =',
     'home.feat.title':'Modo del Día','home.feat.players':'jugadores',
     'home.feat.renews':'Renueva en:',
     'home.modes.title':'Jugar Ahora','home.modes.all':'Todos →',
@@ -1950,6 +2203,19 @@ const I18N = {
     'home.ach.title':'Achievements','home.ach.all':'See all →',
     'home.rank.label':'RANK',
     'ach.progress':'Progress','ach.unlockedOn':'Unlocked on',
+    'ritual.greeting':'Good morning','ritual.days':'days','ritual.oracle':'· Daily Oracle ·',
+    'ritual.energy':'Energy today','ritual.daily':'Daily Ritual','ritual.rank':'ORACLE',
+    'ritual.s1':'Meditate the candle','ritual.s1d':'Watch the chart 30s without trading',
+    'ritual.s2':'Read 1 lesson','ritual.s2d':'BOS · Break of Structure',
+    'ritual.s3':'1 mindful trade','ritual.s3d':'Today\'s Daily Challenge',
+    'ritual.xp.to':'Towards Legend','ritual.cta':'Complete ritual →',
+    'liga.tab.liga':'League','liga.tab.cof':'Guild','liga.tab.ret':'Quests',
+    'liga.div':'Oracle Division','liga.asc':'promotion zone','liga.asc.label':'Promotion Zone',
+    'liga.war':'Guild War','liga.war.ends':'ends in 14h','liga.war.winning':'YOU ARE WINNING +6.2k',
+    'liga.xp.week':'week XP',
+    'sin.title':'Harmony','sin.desc':'Do all timeframes resonate in the same direction?',
+    'sin.harmony':'Harmony','sin.bonus':'resonance bonus',
+    'sin.bonus.hint':'Hit with harmony >80% =',
     'home.feat.title':'Mode of the Day','home.feat.players':'players','home.feat.renews':'Renews in:',
     'home.modes.title':'Play Now','home.modes.all':'All →',
     'tag.libre':'FREE','tag.intenso':'INTENSE','tag.diario':'DAILY','tag.competitivo':'COMPETITIVE',
@@ -2338,7 +2604,7 @@ function goScreen(id){
   if(el) el.classList.add('active');
   STATE.screen = id;
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const navMap = {'s-inicio':'nav-inicio','s-modos':'nav-modos','s-liga':'nav-liga','s-perfil':'nav-perfil'};
+  const navMap = {'s-inicio':'nav-inicio','s-ritual':'nav-inicio','s-modos':'nav-modos','s-sintonia':'nav-modos','s-liga':'nav-liga','s-cofradias':'nav-liga','s-perfil':'nav-perfil'};
   if(navMap[id]) document.getElementById(navMap[id])?.classList.add('active');
   // On-screen init
   if(id==='s-liga') initLiga();
@@ -2352,12 +2618,16 @@ function goScreen(id){
   // Phase 6 Feature 5: setup coverflow en lobby
   if(id === 's-inicio'){
     setTimeout(setupCoverflow, 80);
+    if(typeof renderRitual==='function') setTimeout(renderRitual, 30);
   }
   if(id==='s-daily') initDaily();
   if(id==='s-arena') initArena();
   if(id==='s-fractal'){ var fl=document.getElementById('fractal-lobby');if(fl)fl.style.display='block'; var fg=document.getElementById('fractal-game');if(fg)fg.style.display='none'; }
   if(id==='s-glosario') initGlosario();
   if(id==='s-torneos') { var tl=document.getElementById('torneo-lobby');if(tl)tl.style.display='';var tg=document.getElementById('torneo-game');if(tg)tg.style.display='none'; if(typeof loadActiveTorneos==='function') loadActiveTorneos(); const abtn=document.getElementById('admin-torneo-btn'); if(abtn) abtn.style.display=(TNSVT_CONFIG.enabled&&TNSVT_CONFIG.adminPassword)?'flex':'none'; const rbtn=document.getElementById('btn-resume-torneo'); if(rbtn) rbtn.style.display=torneoState.active?'block':'none'; }
+  if(id==='s-ritual'){ if(typeof renderRitual==='function') setTimeout(renderRitual,30); }
+  if(id==='s-cofradias'){ if(typeof initCofradias==='function') setTimeout(initCofradias,30); }
+  if(id==='s-sintonia'){ if(typeof renderSintonia==='function') setTimeout(function(){renderSintonia((typeof STATE!=='undefined'&&STATE.asset)||'BTC');},30); }
 }
 
 // VIP-gated wrapper. Use for screens that require VIP.
@@ -4755,6 +5025,177 @@ async function loadTorneoWallet(){
 
 // (old torneo functions replaced by portfolio version above)
 // ============================================================
+// GLOW UP — RITUAL DEL ORÁCULO (hero de inicio)
+// ============================================================
+function renderRitual(){
+  // Nombre del trader
+  const name = (STATE.user && STATE.user.name) || STATE.traderName || (typeof localStorage!=='undefined' && localStorage.getItem('tnsvt_name')) || 'Trader';
+  // Streak
+  const streak = (typeof STATE !== 'undefined' && STATE.streakDays) ? STATE.streakDays : 0;
+  // Energía: depende del daily
+  let energy = 'ALCISTA';
+  if(typeof STATE !== 'undefined' && STATE.daily && STATE.daily.played && STATE.daily.result){
+    energy = STATE.daily.result.correct ? 'ALCISTA' : 'BAJISTA';
+  }
+  // XP y label
+  const xpCur = (typeof STATE !== 'undefined' && STATE.xp) ? STATE.xp : 0;
+  const xpNext = 22000;
+  // Helper para setear en ambos: home y pantalla s-ritual
+  const sets = [
+    {name:'gu-username', streak:'gu-streak', energy:'gu-energy', xpLabel:'gu-xp-label', xpFill:'gu-xp-fill', done:'gu-ritual-done', total:'gu-ritual-total'},
+    {name:'gu-username-home', streak:'gu-streak-home', energy:'gu-energy-home', xpLabel:'gu-xp-label-home', xpFill:'gu-xp-fill-home', done:'gu-ritual-done-home', total:'gu-ritual-total-home'},
+  ];
+  sets.forEach(s=>{
+    const u = document.getElementById(s.name);
+    if(u) u.textContent = name;
+    const st = document.getElementById(s.streak);
+    if(st) st.textContent = streak;
+    const en = document.getElementById(s.energy);
+    if(en){
+      en.textContent = energy;
+      en.style.color = energy==='ALCISTA' ? 'var(--green)' : energy==='BAJISTA' ? 'var(--red)' : 'var(--gold)';
+    }
+    const lbl = document.getElementById(s.xpLabel);
+    if(lbl) lbl.textContent = xpCur.toLocaleString()+' / '+xpNext.toLocaleString();
+    const fill = document.getElementById(s.xpFill);
+    if(fill) fill.style.width = Math.min(100, xpCur/xpNext*100)+'%';
+    // Ritual step counter: cuenta pasos marcados data-done="1"
+    const allSteps = document.querySelectorAll('.gu-ritual-step');
+    let done = 0;
+    allSteps.forEach(step=>{ if(step.dataset && step.dataset.done==='1') done++; });
+    const dEl = document.getElementById(s.done);
+    const tEl = document.getElementById(s.total);
+    if(dEl) dEl.textContent = done;
+    if(tEl) tEl.textContent = allSteps.length;
+  });
+}
+
+// ============================================================
+// GLOW UP — COFRADÍAS & LIGAS
+// ============================================================
+function initCofradias(){
+  // Tabs interactivos
+  document.querySelectorAll('#gu-liga-tabs .gu-liga-tab').forEach(tab=>{
+    tab.onclick = ()=>{
+      document.querySelectorAll('#gu-liga-tabs .gu-liga-tab').forEach(t=>{
+        const on = t===tab;
+        t.style.color = on ? 'var(--bg)' : 'var(--text2)';
+        t.style.background = on ? 'linear-gradient(135deg,var(--violet),var(--violet2))' : 'transparent';
+      });
+    };
+  });
+}
+
+// ============================================================
+// GLOW UP — MODO SINTONÍA
+// ============================================================
+const GU_TF = ['1W','1D','4H','1H','15M','5M']; // exterior → interior
+const GU_STATE = {harmony:0, consensus:'long', round:1};
+
+function guTimeframeBias(asset, tf){
+  try {
+    const a = (typeof ASSETS !== 'undefined' && ASSETS[asset]) ? ASSETS[asset] : {base:50000, vol:.02};
+    const c = (typeof genCandles === 'function') ? genCandles(20, a.base, a.vol) : null;
+    if(!c) return {bias:'up', strength:.7};
+    const last = c[c.length-1].close;
+    const first = c[0].close;
+    const change = (last - first)/first;
+    const bias = change > 0.005 ? 'up' : change < -0.005 ? 'down' : 'flat';
+    const strength = Math.min(1, Math.abs(change)*30 + 0.4);
+    return {bias, strength};
+  } catch(e){ return {bias:'up', strength:.7}; }
+}
+
+function renderSintonia(asset){
+  asset = asset || ((typeof STATE !== 'undefined' && STATE.asset) || 'BTC');
+  const el = document.getElementById('gu-reso-asset');
+  if(el) el.textContent = asset;
+  const reso = document.getElementById('gu-reso');
+  if(!reso) return;
+  reso.innerHTML = '';
+  const sizes = [266,216,168,122,90,64];
+  let aligned = 0;
+  const biases = [];
+  GU_TF.forEach((tf,i)=>{
+    const {bias,strength} = guTimeframeBias(asset, tf);
+    biases.push({tf, bias, strength});
+    const color = bias==='up'?'var(--green)':bias==='down'?'var(--red)':'#ff9500';
+    if(bias==='up') aligned++;
+    const arc = Math.round(60 + strength*300);
+    const ring = document.createElement('div');
+    ring.style.cssText = `width:${sizes[i]}px;height:${sizes[i]}px;background:conic-gradient(from -90deg, ${color} 0deg ${arc}deg, rgba(255,255,255,.05) ${arc}deg 360deg);`;
+    reso.appendChild(ring);
+    if(i < GU_TF.length-1){
+      const hole = document.createElement('div');
+      const hs = (sizes[i+1] || 82) + 8;
+      hole.style.cssText = `width:${hs}px;height:${hs}px;background:var(--bg2);`;
+      reso.appendChild(hole);
+    }
+  });
+  // core hole + core
+  const coreHole = document.createElement('div');
+  coreHole.style.cssText = `width:90px;height:90px;background:var(--bg2);`;
+  reso.appendChild(coreHole);
+  const harmony = Math.round(aligned/GU_TF.length*100);
+  const core = document.createElement('div');
+  core.className = 'gu-reso-core';
+  core.style.cssText = 'width:82px;height:82px;';
+  core.innerHTML = `<span class="gu-num" style="font-size:22px;color:var(--green);line-height:1;text-shadow:0 0 12px rgba(74,222,128,.6)">${harmony}%</span><span style="font-size:8px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;margin-top:3px">${(typeof t==='function'?t('sin.harmony'):'Armonía')}</span>`;
+  reso.appendChild(core);
+  // leyenda
+  const legend = document.getElementById('gu-reso-legend');
+  if(legend){
+    legend.innerHTML = biases.map(b=>{
+      const arrow = b.bias==='up'?'▲':b.bias==='down'?'▼':'◆';
+      const color = b.bias==='up'?'var(--green)':b.bias==='down'?'var(--red)':'#ff9500';
+      return `<div style="display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px 9px"><span class="gu-num" style="font-size:10px;color:var(--text2)">${b.tf}</span><span style="margin-left:auto;color:${color};font-size:13px">${arrow}</span></div>`;
+    }).join('');
+  }
+  // prompt narrativo
+  const promptEl = document.getElementById('gu-reso-prompt');
+  if(promptEl){
+    const bulls = aligned;
+    const bears = GU_TF.length - aligned;
+    const direction = aligned > bears ? 'alcista' : aligned < bears ? 'bajista' : 'lateral';
+    const dissonant = biases.find(b=>b.bias !== (aligned > bears ? 'up' : 'down'));
+    promptEl.innerHTML = `${bulls} de ${GU_TF.length} marcos en armonía ${direction}.${dissonant?'<br>El '+dissonant.tf+' disuena. ¿Confías en la resonancia?':'<br>Todos resuenan en '+direction+'.'}`;
+  }
+  GU_STATE.harmony = harmony;
+  GU_STATE.consensus = aligned >= (GU_TF.length/2) ? 'long' : 'short';
+}
+
+function startSintonia(){
+  GU_STATE.round = 1;
+  renderSintonia((typeof STATE !== 'undefined' && STATE.asset) || 'BTC');
+  goScreen('s-sintonia');
+}
+
+function guSintoniaPlay(dir){
+  if(dir === 'skip'){ nextSintoniaRound(); return; }
+  const correct = dir === GU_STATE.consensus;
+  let xp = correct ? 15 : 1;
+  if(correct && GU_STATE.harmony > 80) xp += 37;
+  if(typeof addXP === 'function') addXP(xp);
+  if(typeof showToast === 'function'){
+    showToast(correct ? '✦ Resonancia +'+xp+' XP' : 'Disonancia… +1 XP', correct?'gold':'error');
+  }
+  if(typeof SFX !== 'undefined' && correct && SFX.correct) SFX.correct();
+  if(typeof HAPTICS !== 'undefined' && correct && HAPTICS.correct) HAPTICS.correct();
+  nextSintoniaRound();
+}
+
+function nextSintoniaRound(){
+  if(GU_STATE.round++ < 10){
+    renderSintonia((typeof STATE !== 'undefined' && STATE.asset) || 'BTC');
+  } else {
+    if(typeof confetti === 'function') confetti();
+    if(typeof showToast === 'function') showToast('🎯 Sintonía completa · +bonus', 'gold');
+    GU_STATE.round = 1;
+    goScreen('s-modos');
+  }
+}
+
+// ============================================================
 // LIGA
 // ============================================================
 const LIGA_BASE_TRADERS = [
@@ -6920,6 +7361,7 @@ const ALL_MODES = [
   {name:'Portfolio',      desc:'$50,000 virtuales · opera con precios reales',      emoji:'💼', action:()=>goScreen('s-portfolio'),tag:'SIMULADOR', tagColor:'var(--green)'},
   {name:'Modo Fractal',   desc:'BOS · LG · Zonas · Setup 2-Step — T.N.S.V.T',     emoji:'🔱', action:()=>vipGoScreen('s-fractal','Modo Fractal completo'), tag:'T.N.S.V.T',  tagColor:'#ffd700', vip:true},
   {name:'Glosario',       desc:'OB · POI · BOS · LG · EQH · TR · 30+ conceptos',  emoji:'📖', action:()=>goScreen('s-glosario'),tag:'EDUCACIÓN',  tagColor:'var(--blue)'},
+  {name:'Sintonía',       desc:'Lee la armonía de los 6 timeframes y apostá a la resonancia', emoji:'◎', action:()=>startSintonia(), tag:'NUEVO', tagColor:'var(--gold)'},
   {name:'Misiones',       desc:'Retos diarios y semanales · XP extra',             emoji:'🎯', action:()=>goScreen('s-misiones'),tag:'XP',         tagColor:'var(--violet3)'},
 ];
 
