@@ -10479,7 +10479,7 @@ function setupCoverflow(){
   const html = `
     <div class="coverflow-container" id="coverflow-container">
       ${COVERFLOW_MODES.map((m, i)=>`
-        <div class="coverflow-card" data-coverflow-pos="${i - _coverflowIndex}" data-mode="${m.id}" data-action="${m.action}">
+        <div class="coverflow-card${i === _coverflowIndex ? ' is-center' : ''}" data-coverflow-pos="${i - _coverflowIndex}" data-mode="${m.id}" data-action="${m.action}">
           <div class="cf-emoji">${m.emoji}</div>
           <div class="cf-title">${m.title}</div>
           <div class="cf-subtitle">${m.subtitle}</div>
