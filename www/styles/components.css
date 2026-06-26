@@ -364,7 +364,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 }
 .hero-title{font-family:'Cinzel',serif;font-size:11px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
 .hero-name{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--text);line-height:1.2}
-.hero-rank{display:flex;align-items:center;gap:8px;margin-top:8px}
+.hero-rank{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
 .hero-xp-row{margin-top:10px}
 .hero-xp-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px}
 

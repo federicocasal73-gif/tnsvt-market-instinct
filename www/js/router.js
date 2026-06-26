@@ -82,6 +82,8 @@ window.Router = {
     // Stop coverflow auto-rotation when leaving s-inicio; setupCoverflow re-starts it when entering
     if (id !== 's-inicio' && window.stopCoverflowAuto) stopCoverflowAuto();
     if (id === 's-inicio' && window.setupCoverflow) setTimeout(setupCoverflow, 80);
+    // Update XP/rank chip when entering home
+    if (id === 's-inicio' && window.updateXPDisplay) setTimeout(updateXPDisplay, 30);
     // Home-specific renderers
     if (id === 's-inicio') {
       if (window.renderDayStreakHome) setTimeout(renderDayStreakHome, 30);
