@@ -10598,7 +10598,7 @@ function toggleMusic(){
 const COVERFLOW_MODES = [
   { id:'s-classic',   action:'startClassic',  emoji:'📊', title:'Clásico',     subtitle:'Trading puro',     hint:'Tocá para jugar' },
   { id:'s-survival',  action:'startSurvival', emoji:'⚔️', title:'Supervivencia', subtitle:'Sin vidas extra',  hint:'Tocá para jugar' },
-  { id:'s-portfolio', action:"goScreen('s-portfolio')", emoji:'💼', title:'Portfolio', subtitle:'Sandbox $50K', hint:'Tocá para abrir' },
+  { id:'s-portfolio', action:'goScreenPortfolio', emoji:'💼', title:'Portfolio', subtitle:'Sandbox $50K', hint:'Tocá para abrir' },
 ];
 
 let _coverflowIndex = 1; // index 1 = center (Classic is center)
@@ -10627,6 +10627,10 @@ function startCoverflowAuto(){
 
 function stopCoverflowAuto(){
   if(_coverflowAutoTimer){ clearInterval(_coverflowAutoTimer); _coverflowAutoTimer = null; }
+}
+
+function goScreenPortfolio(){
+  try { goScreen('s-portfolio'); } catch(e){}
 }
 
 function setupCoverflow(){
@@ -10668,7 +10672,7 @@ function setupCoverflow(){
       if(HAPTICS.tap) HAPTICS.tap();
       if(pos === 0){
         // Center card → ejecutar acción
-        try { eval(action + '()'); } catch(e){}
+        try { (typeof window[action] === 'function') ? window[action]() : eval(action); } catch(e){ console.warn('coverflow action fail', e); }
         if(HAPTICS.success) HAPTICS.success();
       } else {
         // Side card → navegar directo (rotar + ejecutar acción)
@@ -10679,7 +10683,7 @@ function setupCoverflow(){
         setupCoverflow();
         // Delay para que la transición visual sea perceptible
         setTimeout(()=>{
-          try { eval(action + '()'); } catch(e){}
+          try { (typeof window[action] === 'function') ? window[action]() : eval(action); } catch(e){ console.warn('coverflow action fail', e); }
         }, 350);
         if(HAPTICS.success) HAPTICS.success();
       }
