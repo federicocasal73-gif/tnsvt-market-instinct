@@ -53,10 +53,21 @@ body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
 }
 .nav-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;cursor:pointer;transition:all .2s;
+  gap:3px;cursor:pointer;transition:color .2s,filter .2s;
   color:var(--text3);font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
   border:none;background:none;
 }
 .nav-btn svg{width:20px;height:20px;stroke-width:1.8}
 .nav-btn.active{color:var(--violet3)}
 .nav-btn.active svg{filter:drop-shadow(0 0 6px var(--violet))}
+/* Badge dot on nav */
+.nav-btn{position:relative}
+.nav-badge{
+  position:absolute;top:2px;right:50%;transform:translateX(16px);
+  width:8px;height:8px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 6px var(--gold);
+  animation:badge-pulse 1.5s ease-in-out infinite;
+  pointer-events:none;z-index:2;
+}
+.nav-badge.daily{background:var(--violet3);box-shadow:0 0 6px var(--violet)}
+@keyframes badge-pulse{0%,100%{opacity:1;transform:translateX(16px) scale(1)}50%{opacity:.6;transform:translateX(16px) scale(.8)}}

@@ -55,13 +55,24 @@ body.has-bg #nav{background:rgba(var(--bg-r),var(--bg-g),var(--bg-b),.92)}
 }
 .nav-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;cursor:pointer;transition:all .2s;
+  gap:3px;cursor:pointer;transition:color .2s,filter .2s;
   color:var(--text3);font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
   border:none;background:none;
 }
 .nav-btn svg{width:20px;height:20px;stroke-width:1.8}
 .nav-btn.active{color:var(--violet3)}
 .nav-btn.active svg{filter:drop-shadow(0 0 6px var(--violet))}
+/* Badge dot on nav */
+.nav-btn{position:relative}
+.nav-badge{
+  position:absolute;top:2px;right:50%;transform:translateX(16px);
+  width:8px;height:8px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 6px var(--gold);
+  animation:badge-pulse 1.5s ease-in-out infinite;
+  pointer-events:none;z-index:2;
+}
+.nav-badge.daily{background:var(--violet3);box-shadow:0 0 6px var(--violet)}
+@keyframes badge-pulse{0%,100%{opacity:1;transform:translateX(16px) scale(1)}50%{opacity:.6;transform:translateX(16px) scale(.8)}}
 
 /* CARDS */
 .card{
@@ -1021,7 +1032,9 @@ body.theme-changing{animation:theme-crossfade 400ms ease}
 body.pro3d{
   --pro-3d-perspective:1400px;
 }
-body.pro3d *{
+body.pro3d .pro3d-card,
+body.pro3d .coverflow-card,
+body.pro3d .flip-card{
   transform-style:preserve-3d;
 }
 
@@ -1070,8 +1083,49 @@ body.pro3d .glass-strong{
 .pro3d-toggle:hover{background:rgba(147,83,255,.25)}
 body.pro3d .pro3d-toggle{background:rgba(240,192,96,.2);border-color:rgba(240,192,96,.4);color:#f0c060}
 
+/* ── Coverflow Hero (3D mode only) ──────────────────────────── */
+.coverflow-container{
+  position:relative;height:220px;margin:12px 0 4px;
+  display:flex;align-items:center;justify-content:center;
+}
+.coverflow-card{
+  position:absolute;width:190px;padding:20px 16px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--r2);text-align:center;
+  cursor:pointer;user-select:none;
+  transition:all .4s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+}
+.coverflow-card[data-coverflow-pos="0"]{
+  transform:scale(1) translateZ(20px);
+  z-index:3;opacity:1;
+  border-color:rgba(147,83,255,.4);
+  box-shadow:0 8px 40px rgba(147,83,255,.25);
+}
+.coverflow-card[data-coverflow-pos="-1"]{
+  transform:translateX(-140px) scale(.8) rotateY(12deg);
+  z-index:2;opacity:.5;filter:brightness(.6);
+}
+.coverflow-card[data-coverflow-pos="1"]{
+  transform:translateX(140px) scale(.8) rotateY(-12deg);
+  z-index:2;opacity:.5;filter:brightness(.6);
+}
+.cf-emoji{font-size:36px;margin-bottom:6px}
+.cf-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700}
+.cf-subtitle{font-size:12px;color:var(--text2);margin-top:4px}
+.cf-action{font-size:10px;color:var(--violet3);margin-top:8px;text-transform:uppercase;letter-spacing:.5px}
+.coverflow-hint{text-align:center;font-size:11px;color:var(--text3);margin-bottom:4px}
+@media (pointer:coarse){
+  .coverflow-card[data-coverflow-pos="-1"]{transform:translateX(-110px) scale(.85) rotateY(10deg)}
+  .coverflow-card[data-coverflow-pos="1"]{transform:translateX(110px) scale(.85) rotateY(-10deg)}
+}
+
+/* Keep nav flat in 3D mode */
+body.pro3d #nav{transform-style:flat!important}
+
 /* Disable 3D on devices that prefer reduced motion */
 @media (prefers-reduced-motion:reduce){
-  body.pro3d *{transform:none!important}
+  body.pro3d .pro3d-card,
+  body.pro3d .coverflow-card{transform:none!important}
 }
 

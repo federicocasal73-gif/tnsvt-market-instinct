@@ -74,6 +74,9 @@ window.Router = {
     // apply i18n translations to cloned template
     if (window.applyI18n) setTimeout(applyI18n, 0);
 
+    // refresh nav badges
+    if (window.updateNavBadges) setTimeout(updateNavBadges, 0);
+
     // post-init
     if (window.applyPro3DClass) setTimeout(applyPro3DClass, 50);
     if (id === 's-inicio' && window.setupCoverflow) setTimeout(setupCoverflow, 80);
