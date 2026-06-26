@@ -411,9 +411,6 @@ if('serviceWorker' in navigator){
     </div>
   </div>
 
-  <!-- PHASE 6: COVERFLOW HERO (3D mode only) -->
-  <div id="coverflow-mount"></div>
-
   <!-- RECENT ACHIEVEMENTS (home) -->
   <div id="home-achievements"></div>
 
@@ -852,17 +849,17 @@ if('serviceWorker' in navigator){
   <div id="torneo-lobby">
     <div style="padding:16px;background:linear-gradient(135deg,rgba(26,18,48,.7),rgba(33,24,64,.5));border-bottom:1px solid rgba(240,192,96,.3);position:relative;overflow:hidden">
       <div style="position:absolute;top:-30px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(240,192,96,.3),transparent 70%);pointer-events:none"></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;position:relative">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;position:relative;flex-wrap:wrap">
         <div style="flex:1;min-width:0">
           <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">· COMPETÍ ·</div>
           <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--violet3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="tor.title">🏆 Torneos</div>
           <div style="font-size:11px;color:var(--text2);margin-top:2px" data-i18n="tor.subtitle">Competí por premios en USD reales</div>
         </div>
-        <div id="torneoWalletChip" style="text-align:right;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:14px;padding:6px 10px">
+        <div id="torneoWalletChip" style="text-align:right;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:14px;padding:5px 9px;flex-shrink:0;max-width:90px">
           <div style="font-size:8px;color:var(--text3);letter-spacing:1.5px">WALLET</div>
-          <div id="torneoWalletBalance" style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--green)">$0.00</div>
+          <div id="torneoWalletBalance" style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--green)">$0.00</div>
         </div>
-        <div id="admin-torneo-btn" style="display:none;text-align:center">
+        <div id="admin-torneo-btn" style="display:none;text-align:center;flex-shrink:0">
           <button onclick="goScreen('s-admin-torneos')" style="padding:4px 8px;background:rgba(168,160,200,.1);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:16px;cursor:pointer;line-height:1" title="Admin Torneos">⚙️</button>
         </div>
       </div>
@@ -1235,7 +1232,7 @@ if('serviceWorker' in navigator){
     <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(147,83,255,.3),transparent 70%);pointer-events:none"></div>
     <div style="position:relative">
       <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px" data-i18n="liga.subtitle">· LIGA GLOBAL ·</div>
-      <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--violet3),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-i18n="liga.title">Rankings</div>
         <span class="gu-header-status live" data-i18n="liga.live">● EN VIVO</span>
       </div>
@@ -2878,9 +2875,7 @@ function goScreen(id){
   if(id==='s-portfolio') initPortfolio();
   // Phase 6: re-tag any newly-rendered cards as pro3d
   setTimeout(applyPro3DClass, 50);
-  // Phase 6 Feature 5: setup coverflow en lobby
   if(id === 's-inicio'){
-    setTimeout(setupCoverflow, 80);
     if(typeof renderRitual==='function') setTimeout(renderRitual, 30);
   }
   if(id==='s-daily') initDaily();
@@ -11316,8 +11311,6 @@ function togglePro3D(){
   }
   if(SFX.modeToggle) SFX.modeToggle();
   if(HAPTICS.tap) HAPTICS.tap();
-  // Phase 6 Feature 5: refresh coverflow al togglear modo
-  setTimeout(setupCoverflow, 60);
 }
 function resetPro3DParallax(){
   document.querySelectorAll('.pro3d-card').forEach(c=>{
@@ -11460,138 +11453,8 @@ function toggleMusic(){
 })();
 
 // ============================================================
-// PHASE 6 EXPANDED: COVERFLOW + LIGHTING
+// PHASE 6 EXPANDED: (coverflow removed in Ola 9)
 // ============================================================
-
-// ── Feature 5: Coverflow Hero Cards ────────────────────────────
-// Top 3 main modes del lobby en efecto coverflow 3D
-const COVERFLOW_MODES = [
-  { id:'s-classic',   action:'startClassic',  emoji:'📊', title:'Clásico',     subtitle:'Trading puro',     hint:'Tocá para jugar' },
-  { id:'s-survival',  action:'startSurvival', emoji:'⚔️', title:'Supervivencia', subtitle:'Sin vidas extra',  hint:'Tocá para jugar' },
-  { id:'s-portfolio', action:'goScreenPortfolio', emoji:'💼', title:'Portfolio', subtitle:'Sandbox $50K', hint:'Tocá para abrir' },
-];
-
-let _coverflowIndex = 1; // index 1 = center (Classic is center)
-let _coverflowTouchStartX = 0;
-let _coverflowAutoTimer = null;
-const COVERFLOW_AUTO_MS = 3000;
-
-function coverflowReducedMotion(){
-  try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
-  catch(e){ return false; }
-}
-
-function startCoverflowAuto(){
-  stopCoverflowAuto();
-  if(!isPro3D()) return;
-  if(coverflowReducedMotion()) return;
-  if(typeof STATE !== 'undefined' && STATE.screen && STATE.screen !== 's-inicio') return;
-  if(typeof document !== 'undefined' && document.hidden) return;
-  _coverflowAutoTimer = setInterval(()=>{
-    if(typeof document !== 'undefined' && document.hidden) return;
-    if(typeof STATE !== 'undefined' && STATE.screen && STATE.screen !== 's-inicio'){ stopCoverflowAuto(); return; }
-    _coverflowIndex = (_coverflowIndex + 1) % COVERFLOW_MODES.length;
-    setupCoverflow();
-  }, COVERFLOW_AUTO_MS);
-}
-
-function stopCoverflowAuto(){
-  if(_coverflowAutoTimer){ clearInterval(_coverflowAutoTimer); _coverflowAutoTimer = null; }
-}
-
-function goScreenPortfolio(){
-  try { goScreen('s-portfolio'); } catch(e){}
-}
-
-function setupCoverflow(){
-  const mount = document.getElementById('coverflow-mount');
-  if(!mount) return;
-  // Solo en modo pro3d
-  if(!isPro3D()){
-    mount.innerHTML = '';
-    stopCoverflowAuto();
-    return;
-  }
-  // Render coverflow cards + dots indicator
-  const dotsHtml = COVERFLOW_MODES.map((m, i)=>`
-    <div class="coverflow-dot ${i === _coverflowIndex ? 'active' : ''}"></div>
-  `).join('');
-  const html = `
-    <div class="coverflow-container" id="coverflow-container">
-      ${COVERFLOW_MODES.map((m, i)=>`
-        <div class="coverflow-card${i === _coverflowIndex ? ' is-center' : ''}" data-coverflow-pos="${i - _coverflowIndex}" data-mode="${m.id}" data-action="${m.action}">
-          <div class="cf-emoji">${m.emoji}</div>
-          <div class="cf-title">${m.title}</div>
-          <div class="cf-subtitle">${m.subtitle}</div>
-          <div class="cf-action">${m.hint}</div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="coverflow-dots">${dotsHtml}</div>
-    <div class="coverflow-hint">‹ Tocá para jugar · Auto-rota ›</div>
-  `;
-  mount.innerHTML = html;
-  const cards = mount.querySelectorAll('.coverflow-card');
-  cards.forEach(card=>{
-    card.onclick = ()=>{
-      const pos = parseInt(card.dataset.coverflowPos);
-      const action = card.dataset.action;
-      // Stop auto-rotation on any interaction
-      stopCoverflowAuto();
-      if(SFX.tap) SFX.tap();
-      if(HAPTICS.tap) HAPTICS.tap();
-      if(pos === 0){
-        // Center card → ejecutar acción
-        try { (typeof window[action] === 'function') ? window[action]() : eval(action); } catch(e){ console.warn('coverflow action fail', e); }
-        if(HAPTICS.success) HAPTICS.success();
-      } else {
-        // Side card → navegar directo (rotar + ejecutar acción)
-        _coverflowIndex = pos < 0
-          ? Math.max(0, _coverflowIndex - 1)
-          : Math.min(COVERFLOW_MODES.length - 1, _coverflowIndex + 1);
-        // Re-render para que se vea la transición smooth ANTES de navegar
-        setupCoverflow();
-        // Delay para que la transición visual sea perceptible
-        setTimeout(()=>{
-          try { (typeof window[action] === 'function') ? window[action]() : eval(action); } catch(e){ console.warn('coverflow action fail', e); }
-        }, 350);
-        if(HAPTICS.success) HAPTICS.success();
-      }
-    };
-  });
-  // Swipe gesture (still enabled on touch, more discoverable now)
-  const container = mount.querySelector('#coverflow-container');
-  if(container){
-    container.addEventListener('touchstart', (e)=>{
-      _coverflowTouchStartX = e.touches[0].clientX;
-    }, {passive:true});
-    container.addEventListener('touchend', (e)=>{
-      const dx = (e.changedTouches[0].clientX - _coverflowTouchStartX);
-      if(Math.abs(dx) > 30){
-        stopCoverflowAuto();
-        const dir = dx > 0 ? -1 : 1;
-        _coverflowIndex = Math.max(0, Math.min(COVERFLOW_MODES.length-1, _coverflowIndex + dir));
-        setupCoverflow();
-        // Restart auto after 6s of inactivity following swipe
-        setTimeout(()=>{
-          if(typeof STATE !== 'undefined' && STATE.screen === 's-inicio' && isPro3D()) startCoverflowAuto();
-        }, 6000);
-      }
-    }, {passive:true});
-  }
-  // (Re)start auto-rotation when rendering covers the home
-  startCoverflowAuto();
-}
-
-// Visibility API — pause auto when tab/app loses focus
-if(typeof document !== 'undefined'){
-  document.addEventListener('visibilitychange', ()=>{
-    if(document.hidden){ stopCoverflowAuto(); }
-    else {
-      if(typeof STATE !== 'undefined' && STATE.screen === 's-inicio' && isPro3D()) startCoverflowAuto();
-    }
-  });
-}
 
 // ── Auto-tag main cards as pro3d-card + glass ─────────────────
 function applyPro3DClass(){

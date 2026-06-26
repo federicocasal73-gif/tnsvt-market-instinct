@@ -26,7 +26,7 @@
 
 /* SCREENS */
 .screen{
-  position:absolute;inset:0;overflow-y:auto;
+  position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
   display:none;flex-direction:column;
   background:var(--bg);
   padding-bottom:70px;z-index:2;
