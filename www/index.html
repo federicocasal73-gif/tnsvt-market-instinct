@@ -1003,6 +1003,7 @@ if('serviceWorker' in navigator){
       <div class="stat-box"><div class="stat-val" style="color:var(--green)">68%</div><div class="stat-lbl" data-i18n="prof.precision">Precisión</div></div>
       <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl" data-i18n="prof.rachaMax">Racha max</div></div>
     </div>
+    <button class="btn btn-ghost btn-sm" onclick="replayTutorial()" style="margin:8px 16px 0;width:calc(100% - 32px);font-size:12px" data-i18n="prof.replayTutorial">📖 Ver tutorial de nuevo</button>
     <div class="tabs">
       <div class="tab active" id="tab-logros" onclick="perfilTab('logros',this)" data-i18n="prof.logros">Logros</div>
       <div class="tab" id="tab-historial" onclick="perfilTab('historial',this)" data-i18n="prof.historial">Historial</div>
@@ -1538,7 +1539,8 @@ if('serviceWorker' in navigator){
   </div>
 </div>
 
-<!-- ONBOARDING -->
+<!-- ONBOARDING TEMPLATE -->
+<template id="tmpl-onboarding">
 <div id="onboarding">
   <!-- Slide 1: Bienvenida -->
   <div class="ob-slide active" id="ob-slide-1">
@@ -1624,6 +1626,7 @@ if('serviceWorker' in navigator){
     <button class="btn btn-gold btn-lg" style="width:100%;max-width:300px" onclick="obFinish()" data-i18n="ob.5.btn">🎯 ¡Empezar a jugar!</button>
   </div>
 </div>
+</template>
 
 <!-- A11Y announcer (screen reader live region) -->
 <div id="a11y-announcer" aria-live="polite" class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"></div>
@@ -1732,7 +1735,7 @@ const I18N = {
     // ── Perfil ──
     'prof.logros':'Logros','prof.historial':'Historial','prof.tienda':'Tienda','prof.planes':'Pro',
     'prof.sync':'⚡ Sync TNSVT','prof.parts':'Partidas','prof.precision':'Precisión','prof.rachaMax':'Racha max',
-    'prof.next':'Siguiente:','prof.progress':'Progreso al siguiente rango',
+    'prof.next':'Siguiente:','prof.progress':'Progreso al siguiente rango','prof.replayTutorial':'📖 Ver tutorial de nuevo',
     'prof.editName':'Editar nombre','prof.nameLabel':'Tu nombre de trader',
     // ── Tienda ──
     'shop.equip':'Equipar','shop.equipped':'Equipado ✓','shop.active':'✓ Activo','shop.buy':'$0.99',
@@ -1871,7 +1874,7 @@ const I18N = {
     'port.empty':'Last closed trades','port.custom':'Custom amount (1-1000 USD)',
     'prof.logros':'Achievements','prof.historial':'History','prof.tienda':'Shop','prof.planes':'Pro',
     'prof.sync':'⚡ Sync TNSVT','prof.parts':'Games','prof.precision':'Accuracy','prof.rachaMax':'Best streak',
-    'prof.next':'Next:','prof.progress':'Progress to next rank',
+    'prof.next':'Next:','prof.progress':'Progress to next rank','prof.replayTutorial':'📖 Replay tutorial',
     'prof.editName':'Edit name','prof.nameLabel':'Your trader name',
     'shop.equip':'Equip','shop.equipped':'Equipped ✓','shop.active':'✓ Active','shop.buy':'$0.99',
     'shop.locked':'🔒 VIP','shop.price':'$9.99','shop.tab.frames':'Frames','shop.tab.avatars':'Avatars',
@@ -9051,6 +9054,27 @@ function obFinish(){
   showToast('✦ ¡Bienvenido al arena, Trader!');
 }
 
+function replayTutorial(){
+  // Reset state
+  localStorage.removeItem('tnsv_onboarded');
+  obCurrent = 1;
+  // Remove existing onboarding if any
+  const existing = document.getElementById('onboarding');
+  if(existing){ existing.remove(); }
+  // Clone from template
+  const tmpl = document.getElementById('tmpl-onboarding');
+  if(!tmpl){ showToast('✗ Error: tutorial no disponible'); return; }
+  const clone = tmpl.content.cloneNode(true);
+  document.body.appendChild(clone);
+  // Apply i18n to the newly inserted slides
+  if(typeof applyI18n === 'function') applyI18n();
+  // Reset dots to slide 1
+  obUpdateDots();
+  if(SFX && SFX.tap) SFX.tap();
+  if(HAPTICS && HAPTICS.tap) HAPTICS.tap();
+  showToast('📖 Tutorial relanzado');
+}
+
 function obDemoTap(btn, type){
   SFX.tap(); HAPTICS.tap();
   const fb = document.getElementById('ob-demo-feedback');
@@ -9070,8 +9094,12 @@ function obDemoTap(btn, type){
 }
 
 // Check if already onboarded
-if(localStorage.getItem('tnsv_onboarded')){
-  document.getElementById('onboarding')?.remove();
+if(!localStorage.getItem('tnsv_onboarded')){
+  const tmpl = document.getElementById('tmpl-onboarding');
+  if(tmpl && !document.getElementById('onboarding')){
+    const clone = tmpl.content.cloneNode(true);
+    document.body.appendChild(clone);
+  }
 }
 
 // ============================================================
