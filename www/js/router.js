@@ -80,6 +80,11 @@ window.Router = {
     // post-init
     if (window.applyPro3DClass) setTimeout(applyPro3DClass, 50);
     if (id === 's-inicio' && window.setupCoverflow) setTimeout(setupCoverflow, 80);
+    // Home-specific renderers
+    if (id === 's-inicio') {
+      if (window.renderDayStreakHome) setTimeout(renderDayStreakHome, 30);
+      if (window.renderHomeAchievements) setTimeout(renderHomeAchievements, 40);
+    }
 
     // a11y
     var announcer = document.getElementById('a11y-announcer');

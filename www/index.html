@@ -46,6 +46,60 @@
     .splash-blob,.splash-c,.splash-trend,.splash-title,.splash-sub,.splash-tagline,.splash-ring,.splash-ring svg{animation:none!important;opacity:1!important;transform:none!important}
     .splash-trend{stroke-dashoffset:0!important}
   }
+  /* Daily Streak indicator (home) */
+  .ds-card{display:flex;align-items:center;gap:12px;margin:10px 16px 0;padding:10px 12px;background:linear-gradient(135deg,rgba(147,83,255,.08),rgba(240,192,96,.05));border:1px solid rgba(147,83,255,.25);border-radius:var(--r);cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1)}
+  .ds-card:active{transform:scale(.98)}
+  .ds-card.ds-played{border-color:rgba(74,222,128,.4);background:linear-gradient(135deg,rgba(74,222,128,.1),rgba(147,83,255,.05))}
+  .ds-icon{width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 12px rgba(147,83,255,.2)}
+  .ds-info{flex:1;min-width:0}
+  .ds-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:600}
+  .ds-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+  .ds-count-wrap{font-family:'Cinzel',serif;font-size:15px;color:var(--text);font-weight:700}
+  .ds-count-wrap .ds-d{font-size:10px;color:var(--text3);margin-left:2px;font-weight:400}
+  .ds-bar-wrap{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-bottom:4px}
+  .ds-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--violet),var(--gold));border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+  .ds-sub{font-size:10px;color:var(--text3)}
+  .ds-arrow{font-size:16px;color:var(--text3);flex-shrink:0}
+  /* Achievement home preview */
+  .ha-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px;font-size:11px;font-family:'Cinzel',serif;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase}
+  .ha-sec-hdr .ha-link{font-family:'Inter',sans-serif;font-size:11px;color:var(--violet3);text-transform:none;letter-spacing:0;cursor:pointer}
+  .ha-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 12px}
+  .ha-card{position:relative;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;transition:transform .2s, border-color .25s}
+  .ha-card:active{transform:scale(.97)}
+  .ha-card.ha-locked{opacity:.55}
+  .ha-card.ha-rarity-common{border-color:var(--border)}
+  .ha-card.ha-rarity-rare{border-color:rgba(96,165,250,.5)}
+  .ha-card.ha-rarity-epic{border-color:rgba(147,83,255,.5)}
+  .ha-card.ha-rarity-legendary{border-color:rgba(240,192,96,.6);background:linear-gradient(135deg,rgba(240,192,96,.08),var(--panel))}
+  .ha-emoji{font-size:26px;margin-bottom:4px;display:block}
+  .ha-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.2}
+  .ha-locked .ha-name{color:var(--text3)}
+  .ha-rarity-tag{position:absolute;top:6px;right:6px;font-size:8px;letter-spacing:.5px;padding:2px 5px;border-radius:6px;background:rgba(0,0,0,.35);color:var(--text2);text-transform:uppercase;font-weight:600}
+  .ha-rarity-common .ha-rarity-tag{color:var(--text3)}
+  .ha-rarity-rare .ha-rarity-tag{color:var(--blue)}
+  .ha-rarity-epic .ha-rarity-tag{color:var(--violet3)}
+  .ha-rarity-legendary .ha-rarity-tag{color:var(--gold)}
+  .ha-prog{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-top:6px}
+  .ha-prog-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--gold));border-radius:2px}
+  .ha-prog-text{font-size:9px;color:var(--text3);margin-top:3px}
+  /* Achievement detail modal */
+  .ach-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:950;display:flex;align-items:center;justify-content:center;padding:20px;animation:fade-in .2s}
+  .ach-modal-card{max-width:340px;width:100%;background:var(--panel);border:1px solid var(--violet);border-radius:18px;padding:24px;text-align:center;position:relative;animation:ach-modal-in .3s cubic-bezier(.16,1,.3,1)}
+  @keyframes ach-modal-in{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .ach-modal-emoji{font-size:64px;margin-bottom:8px}
+  .ach-modal-name{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px}
+  .ach-modal-desc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:14px}
+  .ach-modal-rarity{display:inline-block;padding:4px 12px;border-radius:12px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+  .ach-modal-rarity.common{background:rgba(106,90,138,.2);color:var(--text3)}
+  .ach-modal-rarity.rare{background:rgba(96,165,250,.15);color:var(--blue)}
+  .ach-modal-rarity.epic{background:rgba(147,83,255,.15);color:var(--violet3)}
+  .ach-modal-rarity.legendary{background:rgba(240,192,96,.15);color:var(--gold)}
+  .ach-modal-xp{font-size:14px;color:var(--gold);font-weight:700;margin-bottom:14px}
+  .ach-modal-prog-wrap{margin:14px 0;text-align:left}
+  .ach-modal-prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px}
+  .ach-modal-prog-bar{height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+  .ach-modal-prog-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--gold));border-radius:4px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+  .ach-modal-close{margin-top:14px;padding:10px 20px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--text);cursor:pointer;font-size:13px;font-weight:600}
 </style>
 <script>
 window.onerror = function(msg, url, line, col, err) {
@@ -170,10 +224,23 @@ if('serviceWorker' in navigator){
       <div class="hero-xp-label"><span data-i18n="prof.progress">Progreso al siguiente rango</span><span>2,340 / 3,500</span></div>
       <div class="xp-bar-wrap"><div class="xp-bar-fill" style="width:67%"></div></div>
     </div>
+    <!-- DAILY STREAK INDICATOR -->
+    <div id="ds-card" class="ds-card" onclick="goScreen('s-misiones')">
+      <div class="ds-icon"><span id="ds-emoji">🔥</span></div>
+      <div class="ds-info">
+        <div class="ds-top"><span class="ds-label" id="ds-label">En racha</span><span class="ds-count-wrap"><span id="ds-count">0</span> <span class="ds-d" data-i18n="home.streak.days">días</span></span></div>
+        <div class="ds-bar-wrap"><div id="ds-bar" class="ds-bar-fill"></div></div>
+        <div class="ds-sub"><span data-i18n="home.streak.best">Mejor</span>: <span id="ds-longest">0</span></div>
+      </div>
+      <div class="ds-arrow">→</div>
+    </div>
   </div>
 
   <!-- PHASE 6: COVERFLOW HERO (3D mode only) -->
   <div id="coverflow-mount"></div>
+
+  <!-- RECENT ACHIEVEMENTS (home) -->
+  <div id="home-achievements"></div>
 
   <!-- MISIONES RÁPIDAS -->
   <div class="sec-hdr"><span class="sec-title" data-i18n="home.missions.title">Misiones de Hoy</span><span class="sec-link" onclick="goScreen('s-misiones')" data-i18n="home.missions.all">Ver todas →</span></div>
@@ -1709,6 +1776,9 @@ const I18N = {
     // ── Inicio ──
     'home.subtitle':'T.N.S.V.T — Market Instinct','home.greet':'Hola, Trader ✦',
     'home.missions.title':'Misiones de Hoy','home.missions.all':'Ver todas →',
+    'home.streak.days':'días','home.streak.best':'Mejor',
+    'home.ach.title':'Logros','home.ach.all':'Ver todos →',
+    'ach.progress':'Progreso','ach.unlockedOn':'Desbloqueado el',
     'home.feat.title':'Modo del Día','home.feat.players':'jugadores',
     'home.feat.renews':'Renueva en:',
     'home.modes.title':'Jugar Ahora','home.modes.all':'Todos →',
@@ -1859,6 +1929,9 @@ const I18N = {
     'nav.inicio':'Home','nav.modos':'Modes','nav.jugar':'Play','nav.liga':'League','nav.perfil':'Profile',
     'home.subtitle':'T.N.S.V.T — Market Instinct','home.greet':'Hey, Trader ✦',
     'home.missions.title':'Today\'s Missions','home.missions.all':'See all →',
+    'home.streak.days':'days','home.streak.best':'Best',
+    'home.ach.title':'Achievements','home.ach.all':'See all →',
+    'ach.progress':'Progress','ach.unlockedOn':'Unlocked on',
     'home.feat.title':'Mode of the Day','home.feat.players':'players','home.feat.renews':'Renews in:',
     'home.modes.title':'Play Now','home.modes.all':'All →',
     'tag.libre':'FREE','tag.intenso':'INTENSE','tag.diario':'DAILY','tag.competitivo':'COMPETITIVE',
@@ -4765,27 +4838,27 @@ function renderLigaStats(){
 // PERFIL
 // ============================================================
 const ACHIEVEMENTS = [
-  {id:'first',       name:'Primer Trade',      desc:'Completá tu primera ronda',              emoji:'🎯', xp:25,   unlocked:true,  date:'1 Jun 2026'},
-  {id:'streak3',     name:'Triple Exacto',       desc:'Racha de 3 respuestas correctas',        emoji:'🔥', xp:50,  unlocked:true,  date:'3 Jun 2026'},
-  {id:'streak5',     name:'Llama Viva',          desc:'Racha de 5 en Classic Mode',             emoji:'⚡', xp:100,  unlocked:true,  date:'8 Jun 2026'},
-  {id:'survivor',    name:'Superviviente',       desc:'Terminar Survival en ronda 15+',          emoji:'❤️', xp:150,  unlocked:true,  date:'10 Jun 2026'},
-  {id:'daily7',      name:'Semana Completa',     desc:'7 Daily Challenges seguidos',            emoji:'📅', xp:250,  unlocked:false},
-  {id:'arena10',     name:'Gladiador',           desc:'10 victorias en Arena 1vs1',             emoji:'⚔️', xp:200,  unlocked:false},
-  {id:'torneo1',     name:'Campeón',             desc:'Ganar un Torneo Semanal',                emoji:'🏆', xp:500, unlocked:false},
-  {id:'hist',        name:'Historiador',         desc:'Completar todos los eventos históricos',  emoji:'📚', xp:300,  unlocked:false},
-  {id:'oracle',      name:'Oráculo',             desc:'Alcanzar el rango máximo',               emoji:'🔮', xp:1000, unlocked:false},
-  {id:'precision80', name:'Cirujano',             desc:'80% de precisión en 50 partidas',       emoji:'🎖', xp:400,  unlocked:false},
+  {id:'first',       name:'Primer Trade',       desc:'Completá tu primera ronda',              emoji:'🎯', xp:25,   unlocked:true,  date:'1 Jun 2026',  rarity:'common'},
+  {id:'streak3',     name:'Triple Exacto',      desc:'Racha de 3 respuestas correctas',        emoji:'🔥', xp:50,   unlocked:true,  date:'3 Jun 2026',  rarity:'common'},
+  {id:'streak5',     name:'Llama Viva',         desc:'Racha de 5 en Classic Mode',             emoji:'⚡', xp:100,  unlocked:true,  date:'8 Jun 2026',  rarity:'rare'},
+  {id:'survivor',    name:'Superviviente',      desc:'Terminar Survival en ronda 15+',         emoji:'❤️', xp:150,  unlocked:true,  date:'10 Jun 2026', rarity:'rare'},
+  {id:'daily7',      name:'Semana Completa',    desc:'7 Daily Challenges seguidos',            emoji:'📅', xp:250,  unlocked:false, progress:3, total:7,     rarity:'rare'},
+  {id:'arena10',     name:'Gladiador',          desc:'10 victorias en Arena 1vs1',             emoji:'⚔️', xp:200,  unlocked:false, progress:2, total:10,    rarity:'rare'},
+  {id:'torneo1',     name:'Campeón',            desc:'Ganar un Torneo Semanal',                emoji:'🏆', xp:500,  unlocked:false, progress:0, total:1,     rarity:'epic'},
+  {id:'hist',        name:'Historiador',        desc:'Completar todos los eventos históricos',  emoji:'📚', xp:300,  unlocked:false, progress:4, total:12,    rarity:'epic'},
+  {id:'oracle',      name:'Oráculo',            desc:'Alcanzar el rango máximo',               emoji:'🔮', xp:1000, unlocked:false, progress:0, total:1,     rarity:'legendary'},
+  {id:'precision80', name:'Cirujano',           desc:'80% de precisión en 50 partidas',        emoji:'🎖', xp:400,  unlocked:false, progress:32, total:50,   rarity:'epic'},
   // ── Logros extra (+10) ──
-  {id:'bos_first',   name:'Cazador de BOS',      desc:'Acertá 10 BOS en Modo Fractal',          emoji:'🔱', xp:300,  unlocked:false},
-  {id:'lg_master',   name:'Maestro del LG',      desc:'Acertá 10 LG consecutivos',              emoji:'🎯', xp:350,  unlocked:false},
-  {id:'zone_pro',    name:'Cartógrafo',           desc:'Marcá 25 zonas correctamente',           emoji:'🗺️', xp:250,  unlocked:false},
-  {id:'streak10',    name:'Imparable',            desc:'Racha de 10 respuestas correctas',      emoji:'⚡⚡', xp:250,  unlocked:false},
-  {id:'trader_rich', name:'Ballena',              desc:'+$1000 P&L en Portfolio',                emoji:'🐋', xp:450,  unlocked:false},
-  {id:'all_assets',  name:'Polímata',             desc:'Operá los 10 activos al menos 1 vez',   emoji:'🌐', xp:200,  unlocked:false},
-  {id:'all_modes',   name:'Versátil',             desc:'Probá todos los modos de juego',        emoji:'🎮', xp:300,  unlocked:false},
-  {id:'speed_demon', name:'Speed Trader',         desc:'10 decisiones en menos de 5s en Arena', emoji:'⏱️', xp:225,  unlocked:false},
-  {id:'win_streak5', name:'Rey de la Racha',      desc:'5 victorias consecutivas en Arena',     emoji:'👑', xp:400,  unlocked:false},
-  {id:'no_skip_streak', name:'Decisor',           desc:'20 trades sin usar Skip',               emoji:'💯', xp:275,  unlocked:false},
+  {id:'bos_first',   name:'Cazador de BOS',     desc:'Acertá 10 BOS en Modo Fractal',          emoji:'🔱', xp:300,  unlocked:false, progress:1, total:10,    rarity:'epic'},
+  {id:'lg_master',   name:'Maestro del LG',     desc:'Acertá 10 LG consecutivos',              emoji:'🎯', xp:350,  unlocked:false, progress:0, total:10,    rarity:'epic'},
+  {id:'zone_pro',    name:'Cartógrafo',         desc:'Marcá 25 zonas correctamente',           emoji:'🗺️', xp:250,  unlocked:false, progress:8, total:25,    rarity:'rare'},
+  {id:'streak10',    name:'Imparable',          desc:'Racha de 10 respuestas correctas',       emoji:'⚡⚡', xp:250, unlocked:false, progress:5, total:10,    rarity:'rare'},
+  {id:'trader_rich', name:'Ballena',            desc:'+$1000 P&L en Portfolio',                emoji:'🐋', xp:450,  unlocked:false, progress:120, total:1000, rarity:'epic'},
+  {id:'all_assets',  name:'Polímata',           desc:'Operá los 10 activos al menos 1 vez',    emoji:'🌐', xp:200,  unlocked:false, progress:6, total:10,    rarity:'rare'},
+  {id:'all_modes',   name:'Versátil',           desc:'Probá todos los modos de juego',         emoji:'🎮', xp:300,  unlocked:false, progress:4, total:7,     rarity:'rare'},
+  {id:'speed_demon', name:'Speed Trader',       desc:'10 decisiones en menos de 5s en Arena', emoji:'⏱️', xp:225, unlocked:false, progress:0, total:10,    rarity:'rare'},
+  {id:'win_streak5', name:'Rey de la Racha',    desc:'5 victorias consecutivas en Arena',      emoji:'👑', xp:400,  unlocked:false, progress:1, total:5,     rarity:'epic'},
+  {id:'no_skip_streak', name:'Decisor',         desc:'20 trades sin usar Skip',                emoji:'💯', xp:275,  unlocked:false, progress:8, total:20,    rarity:'rare'},
 ];
 
 const HIST_RECORDS = [
@@ -6613,13 +6686,21 @@ function renderLogros(){
       const descI18n = t('ach.'+a.id.split('_')[0]+(a.id.includes('_')?('_'+a.id.split('_').slice(1).join('_')):'')+'.desc');
       const name = (nameI18n && !nameI18n.startsWith('ach.')) ? nameI18n : a.name;
       const desc = (descI18n && !descI18n.startsWith('ach.')) ? descI18n : a.desc;
+      const locked = !a.unlocked;
+      const prog = a.progress||0, tot = a.total||1;
+      const pct = Math.min(100, Math.round(prog/tot*100));
+      const rarity = a.rarity || 'common';
       return `
-      <div style="background:var(--panel);border:1px solid ${a.unlocked?'rgba(147,83,255,.4)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;opacity:${a.unlocked?1:.45};transition:all .2s">
-        <div style="font-size:28px;margin-bottom:8px;${a.unlocked?'filter:drop-shadow(0 0 8px rgba(240,192,96,.4))':''}">${a.emoji}</div>
-        <div style="font-weight:700;font-size:13px;margin-bottom:3px;color:${a.unlocked?'var(--text)':'var(--text3)'}">${name}</div>
+      <div class="ha-card ${locked?'ha-locked':''} ha-rarity-${rarity}" onclick="showAchDetail('${a.id}')" style="text-align:center;padding:14px">
+        <span class="ha-rarity-tag">${rarity}</span>
+        <span class="ha-emoji" style="font-size:28px;margin-bottom:8px;display:block">${locked?'🔒':a.emoji}</span>
+        <div style="font-weight:700;font-size:13px;margin-bottom:3px;color:${locked?'var(--text3)':'var(--text)'}">${name}</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:6px;line-height:1.4">${desc}</div>
-        ${a.unlocked
-          ? `<div style="font-size:10px;color:var(--gold);font-weight:600">✦ +${a.xp} XP · ${a.date}</div>`
+        ${locked && prog>0 ? `
+          <div class="ha-prog"><div class="ha-prog-fill" style="width:${pct}%"></div></div>
+          <div class="ha-prog-text">${prog} / ${tot}</div>
+        ` : a.unlocked
+          ? `<div style="font-size:10px;color:var(--gold);font-weight:600">✦ +${a.xp} XP${a.date?' · '+a.date:''}</div>`
           : `<div style="font-size:10px;color:var(--text3)">${t('hist.locked')}</div>`}
       </div>`;
     }).join('')}
@@ -8594,6 +8675,10 @@ function glosRender(){
 function addXP(amount){
   STATE.xp += amount;
   try { localStorage.setItem('tnsvt_xp', STATE.xp); } catch(e){}
+  // Register daily streak on any XP gain (means user played a round)
+  if(amount > 0 && typeof registerDayPlayed === 'function'){
+    try { registerDayPlayed(); } catch(e){}
+  }
   const r = RANKS.slice().reverse().find(r=>STATE.xp>=r.min);
   if(r && r.name !== STATE.rank){
     STATE.rank=r.name;
@@ -9191,6 +9276,163 @@ function showMultiplierPopup(streak){
 function resetStreakBar(){
   updateStreakBar(0);
   if(streakBarTimeout) clearTimeout(streakBarTimeout);
+}
+
+// ============================================================
+// DAILY STREAK — racha de DÍAS consecutivos jugando
+// ============================================================
+const DAILY_STREAK_KEY = 'tnsvt_daily_streak_v1';
+const STREAK_TIERS_DAYS = [
+  {min:1,  max:2,  label:'Empezando',         color:'#a78bfa', emoji:'🌱'},
+  {min:3,  max:6,  label:'En racha',          color:'#f87171', emoji:'🔥'},
+  {min:7,  max:13, label:'Semana imparable',  color:'#f0c060', emoji:'⚡'},
+  {min:14, max:29, label:'Dedicado',           color:'#c8a0ff', emoji:'✦'},
+  {min:30, max:99, label:'Legendario',         color:'#ffd700', emoji:'👑'},
+  {min:100,max:99999,label:'Inmortal',        color:'#ff6b9d', emoji:'🏆'},
+];
+function getDayStreakTier(n){ return STREAK_TIERS_DAYS.slice().reverse().find(t=>n>=t.min) || STREAK_TIERS_DAYS[0]; }
+function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function daysBetween(d1, d2){ return Math.floor((new Date(d2)-new Date(d1))/(1000*60*60*24)); }
+function getDayStreak(){
+  try { return JSON.parse(localStorage.getItem(DAILY_STREAK_KEY)) || {count:0, lastDate:null, longest:0}; }
+  catch(e){ return {count:0, lastDate:null, longest:0}; }
+}
+function saveDayStreak(s){ try { localStorage.setItem(DAILY_STREAK_KEY, JSON.stringify(s)); } catch(e){} }
+
+// Llamar cuando el usuario juega al menos 1 ronda (cualquier modo)
+function registerDayPlayed(){
+  const today = todayKey();
+  const s = getDayStreak();
+  if(s.lastDate === today) return s; // ya jugó hoy
+  const prevCount = s.count;
+  if(s.lastDate){
+    const diff = daysBetween(s.lastDate, today);
+    if(diff === 1) s.count = (s.count || 0) + 1;         // día consecutivo
+    else if(diff > 1) s.count = 1;                       // rompió racha, empezar de nuevo
+  } else {
+    s.count = 1;
+  }
+  s.lastDate = today;
+  s.longest = Math.max(s.longest || 0, s.count);
+  saveDayStreak(s);
+  // Si subió de tier o llegó a milestone, celebrar
+  const newTier = getDayStreakTier(s.count);
+  if(s.count === 3 || s.count === 7 || s.count === 14 || s.count === 30 || s.count === 100){
+    setTimeout(()=>{
+      showToast(`${newTier.emoji} ¡${s.count} días seguidos! ${newTier.label}`);
+      confetti();
+      if(SFX.levelUp) SFX.levelUp();
+      if(HAPTICS.levelUp) HAPTICS.levelUp();
+    }, 800);
+  }
+  return s;
+}
+
+function renderDayStreakHome(){
+  const s = getDayStreak();
+  const tier = getDayStreakTier(s.count);
+  const today = todayKey();
+  const playedToday = s.lastDate === today;
+  const countEl = document.getElementById('ds-count');
+  const labelEl = document.getElementById('ds-label');
+  const emojiEl = document.getElementById('ds-emoji');
+  const ringEl = document.getElementById('ds-ring');
+  const barEl = document.getElementById('ds-bar');
+  const longEl = document.getElementById('ds-longest');
+  if(!countEl) return;
+  countEl.textContent = s.count;
+  if(labelEl){ labelEl.textContent = tier.label; labelEl.style.color = tier.color; }
+  if(emojiEl){ emojiEl.textContent = tier.emoji; }
+  if(longEl){ longEl.textContent = s.longest || s.count; }
+  // Progress bar dentro del tier actual (hacia el próximo)
+  const cur = tier;
+  const next = STREAK_TIETS_DAYS_FN ? STREAK_TIETS_DAYS_FN(s.count+1) : null;
+  if(barEl){
+    if(s.count >= 100){
+      barEl.style.width = '100%';
+      barEl.style.background = 'linear-gradient(90deg,#ff6b9d,#ffd700)';
+    } else {
+      const nextTier = STREAK_TIERS_DAYS.find(t=>t.min > s.count) || cur;
+      const span = nextTier.min - cur.min;
+      const into = s.count - cur.min + 1;
+      const pct = Math.min(100, Math.round(into / span * 100));
+      barEl.style.width = pct + '%';
+    }
+  }
+  // Visualmente marcado como "played today"
+  const card = document.getElementById('ds-card');
+  if(card){ card.classList.toggle('ds-played', playedToday); }
+}
+function STREAK_TIETS_DAYS_FN(n){ return STREAK_TIERS_DAYS.find(t=>n>=t.min && n<=t.max); }
+
+// ============================================================
+// ACHIEVEMENT HOME PREVIEW
+// ============================================================
+function renderHomeAchievements(){
+  const el = document.getElementById('home-achievements');
+  if(!el) return;
+  // Mostrar: 3 más recientes desbloqueados + 3 más cerca de desbloquear
+  const unlocked = ACHIEVEMENTS.filter(a=>a.unlocked).slice(-3).reverse();
+  const lockedNear = ACHIEVEMENTS
+    .filter(a=>!a.unlocked && a.progress && a.total)
+    .sort((a,b)=>(b.progress/b.total) - (a.progress/a.total))
+    .slice(0,3);
+  const items = [...unlocked.map(a=>({a, kind:'unlocked'})), ...lockedNear.map(a=>({a, kind:'locked'}))];
+  if(items.length === 0){ el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div class="ha-sec-hdr">
+      <span data-i18n="home.ach.title">Logros</span>
+      <span class="ha-link" onclick="goScreen('s-perfil')" data-i18n="home.ach.all">Ver todos →</span>
+    </div>
+    <div class="ha-grid">
+      ${items.map(({a})=>{
+        const locked = !a.unlocked;
+        const prog = a.progress || 0;
+        const tot = a.total || 1;
+        const pct = Math.min(100, Math.round(prog/tot*100));
+        return `
+        <div class="ha-card ${locked?'ha-locked':''} ha-rarity-${a.rarity||'common'}" onclick="showAchDetail('${a.id}')">
+          <span class="ha-rarity-tag">${a.rarity||'common'}</span>
+          <span class="ha-emoji">${locked?'🔒':a.emoji}</span>
+          <div class="ha-name">${a.name}</div>
+          ${locked ? `
+            <div class="ha-prog"><div class="ha-prog-fill" style="width:${pct}%"></div></div>
+            <div class="ha-prog-text">${prog} / ${tot}</div>
+          ` : `<div class="ha-prog-text" style="color:var(--gold);font-weight:600">✦ +${a.xp} XP</div>`}
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function showAchDetail(id){
+  const a = ACHIEVEMENTS.find(x=>x.id===id);
+  if(!a) return;
+  if(SFX && SFX.tap) SFX.tap();
+  if(HAPTICS && HAPTICS.tap) HAPTICS.tap();
+  const locked = !a.unlocked;
+  const prog = a.progress || 0;
+  const tot = a.total || 1;
+  const pct = Math.min(100, Math.round(prog/tot*100));
+  const wrap = document.createElement('div');
+  wrap.className = 'ach-modal';
+  wrap.onclick = (e)=>{ if(e.target===wrap) wrap.remove(); };
+  wrap.innerHTML = `
+    <div class="ach-modal-card">
+      <div class="ach-modal-emoji">${locked?'🔒':a.emoji}</div>
+      <div class="ach-modal-name">${a.name}</div>
+      <div class="ach-modal-rarity ${a.rarity||'common'}">${a.rarity||'common'}</div>
+      <div class="ach-modal-desc">${a.desc}</div>
+      ${locked && prog>0 ? `
+        <div class="ach-modal-prog-wrap">
+          <div class="ach-modal-prog-label"><span data-i18n="ach.progress">Progreso</span><span>${prog} / ${tot}</span></div>
+          <div class="ach-modal-prog-bar"><div class="ach-modal-prog-fill" style="width:${pct}%"></div></div>
+        </div>
+      ` : ''}
+      <div class="ach-modal-xp">${locked?'🔒': '✦ +'+a.xp+' XP'}</div>
+      ${a.unlocked && a.date ? `<div style="font-size:11px;color:var(--text3);margin-bottom:10px">${t('ach.unlockedOn')} ${a.date}</div>` : ''}
+      <button class="ach-modal-close" onclick="this.closest('.ach-modal').remove()">Cerrar</button>
+    </div>`;
+  document.body.appendChild(wrap);
 }
 
 // ============================================================
